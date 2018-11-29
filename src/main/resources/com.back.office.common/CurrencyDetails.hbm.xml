@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.CurrencyDetails" table="currencyDetails" catalog="">
+        <id name="currencyCodeId" type="java.lang.Integer">
+            <column name="currencyCodeId" />
+            <generator class="identity" />
+        </id>
+        <property name="currencyCode" type="java.lang.String">
+            <column name="currencyCode" length="100" />
+        </property>
+        <property name="currencyDesc" type="java.lang.String">
+            <column name="currencyDesc" length="100" />
+        </property>
+        <property name="currencyRate" type="java.lang.Float">
+            <column name="currencyRate"  />
+        </property>
+        <property name="currencyType" type="java.lang.String">
+            <column name="currencyType" length="30" />
+        </property>
+        <property name="priorityOrder" type="java.lang.String">
+            <column name="priorityOrder" length="10"/>
+        </property>
+        <property name="effectiveDate" type="java.lang.String">
+            <column name="effectiveDate"  length="30"/>
+        </property>
+    </class>
+</hibernate-mapping>

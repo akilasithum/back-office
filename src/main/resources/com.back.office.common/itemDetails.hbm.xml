@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.ItemDetails" table="itemdetails" catalog="">
+        <id name="itemId" type="java.lang.Integer">
+            <column name="itemId" />
+            <generator class="identity" />
+        </id>
+        <property name="itemName" type="java.lang.String">
+            <column name="itemName" length="100" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" length="10" />
+        </property>
+        <property name="category" type="java.lang.String">
+            <column name="category"  length="30"/>
+        </property>
+        <property name="catalogue" type="java.lang.String">
+            <column name="catalogue" length="30" />
+        </property>
+        <property name="weight" type="java.lang.Float">
+        <column name="weight"/>
+    </property>
+        <property name="costCurrency" type="java.lang.String">
+            <column name="costCurrency"  length="30"/>
+        </property>
+        <property name="costPrice" type="java.lang.Float">
+            <column name="costPrice"/>
+        </property>
+        <property name="baseCurrency" type="java.lang.String">
+            <column name="baseCurrency"  length="30"/>
+        </property>
+        <property name="basePrice" type="java.lang.Float">
+            <column name="basePrice"/>
+        </property>
+        <property name="activateDate" type="java.lang.String">
+            <column name="activateDate"  length="30"/>
+        </property>
+    </class>
+</hibernate-mapping>
