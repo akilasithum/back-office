@@ -45,6 +45,23 @@ public class BackOfficeUtils {
         return iconMap;
     }
 
+    public static List<String> getSetupMap(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Aircraft Type");
+        menuItems.add("Flight Number");
+        menuItems.add("Currency");
+        menuItems.add("Create Items");
+        menuItems.add("Equipment Types");
+        menuItems.add("Assign Items");
+        menuItems.add("Create Kit Codes");
+        menuItems.add( "Staff");
+        menuItems.add("CC Black List");
+        menuItems.add("CC Number Range");
+        menuItems.add("Promotions");
+        menuItems.add("Update Inventory");
+        return menuItems;
+    }
+
     public static boolean isInteger(String val){
         try{
             int intVal = Integer.parseInt(val);

@@ -3,16 +3,15 @@ package com.back.office;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-import com.back.office.ui.AirCraftTypeView;
-import com.back.office.ui.CurrencyView;
-import com.back.office.ui.Dashboard;
-import com.back.office.ui.ItemView;
+import com.back.office.ui.*;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.*;
@@ -21,9 +20,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -32,7 +29,7 @@ import java.util.Map;
  * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be 
  * overridden to add component to the user interface and initialize non-component functionality.
  */
-@Theme("valo")
+@Theme("tests-valo-dark")
 @Widgetset("com.back.office.MyAppWidgetset")
 @StyleSheet("valo-theme-ui.css")
 public class MyUI extends UI {
@@ -93,12 +90,11 @@ public class MyUI extends UI {
         root.setWidth("100%");
         navigator = new Navigator(this, viewDisplay);
         navigator.addView("common", Dashboard.class);
-
-        navigator.addView("aircraft-type", AirCraftTypeView.class);
-        navigator.addView("currency", CurrencyView.class);
-        navigator.addView("create-items", ItemView.class);
-        /*navigator.addView("login", LoginPage.class);
-        navigator.addView("flight-number", ButtonsAndLinks.class);
+        navigator.addView("Aircraft Type", AirCraftTypeView.class);
+        navigator.addView("Currency", CurrencyView.class);
+        navigator.addView("Create Items", ItemView.class);
+        navigator.addView("login", LoginPage.class);
+        /*navigator.addView("flight-number", ButtonsAndLinks.class);
         navigator.addView("equipment-types", ComboBoxes.class);
         navigator.addView("assign-items", CheckBoxes.class);
         navigator.addView("create-kit-codes", Sliders.class);
@@ -122,13 +118,6 @@ public class MyUI extends UI {
 
         root.addMenu(buildMenu());
         addStyleName(ValoTheme.UI_WITH_MENU);
-
-        String f = Page.getCurrent().getUriFragment();
-        if (f == null || f.equals("")) {
-            navigator.navigateTo("common");
-        }
-
-        navigator.setErrorView(Dashboard.class);
 
         navigator.addViewChangeListener(new ViewChangeListener() {
 
@@ -162,6 +151,30 @@ public class MyUI extends UI {
             }
         });
 
+        String f = Page.getCurrent().getUriFragment();
+
+        if(getSession().getAttribute("userName") == null || getSession().getAttribute("userName").toString().isEmpty()){
+            root.removeComponent(root.getComponent(0));
+            getUI().getNavigator().navigateTo("login");
+        }
+        else {
+            if (f == null || f.equals("") || f.equals("!login")) {
+                navigator.navigateTo("common");
+            }
+        }
+
+        navigator.setErrorView(Dashboard.class);
+
+    }
+
+    public void navigate(){
+        if(root.getComponentCount() == 1){
+            root.addComponent(menu,0);
+        }
+    }
+
+    public boolean isLoggedIn(){
+        return getSession() != null && getSession().getAttribute("userName") != null;
     }
 
     private boolean browserCantRenderFontsConsistently() {
@@ -177,6 +190,71 @@ public class MyUI extends UI {
                 .getWebBrowser().getBrowserMajorVersion() <= 9);
     }
 
+    Tree buitTreeMenu(){
+        Tree tree = new Tree();
+        tree.setImmediate(true);
+        tree.setContainerDataSource(getContainer());
+        tree.setItemCaptionPropertyId("displayName");
+        tree.setNullSelectionAllowed(false);
+        tree.setWidth("100%");
+        tree.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                Object value = event.getProperty().getValue();
+                if (value instanceof String && !Arrays.asList(GROUP_ORDER).contains(value)) {
+                   navigator.navigateTo(value.toString());
+                } else {
+                    for(int i=0;i<GROUP_ORDER.length;i++){
+                        tree.collapseItem(GROUP_ORDER[i]);
+                    }
+                    tree.expandItemsRecursively(value);
+                }
+            }
+        });
+        tree.setItemIcon("dashboard",FontAwesome.DASHBOARD);
+        tree.setItemIcon("setup",FontAwesome.CREDIT_CARD);
+        return tree;
+    }
+
+    private static final String[] GROUP_CAPTIONS= {"Dashboard", "Authorization",
+            "Setup", "Uploads", "Generate XML", "Bond Reports", "Sales Report",
+            "Analysis", "Special Reports", "Pre Order Management", "CRM" };
+    private static final String[] GROUP_ORDER = {"dashboard", "authorization",
+            "setup", "uploads", "generateXML", "bondReports", "alesReport",
+            "analysis", "specialReports", "preOrderManagement", "CRM" };
+
+    private HierarchicalContainer getContainer() {
+
+        HierarchicalContainer hierarchicalContainer = new HierarchicalContainer();
+        hierarchicalContainer.addContainerProperty("displayName", String.class,
+                "");
+        hierarchicalContainer.addContainerProperty("searchName", String.class,
+                "");
+
+        for (int i = 0; i < GROUP_CAPTIONS.length; i++) {
+            String group = GROUP_ORDER[i];
+            String groupName = GROUP_CAPTIONS[i];
+            Item groupItem = hierarchicalContainer.addItem(group);
+            groupItem.getItemProperty("displayName").setValue(groupName);
+            groupItem.getItemProperty("searchName").setValue(groupName);
+            List<String> list = new ArrayList<>();
+            if(groupName.equals("Setup")){
+                list = BackOfficeUtils.getSetupMap();
+            }
+            for (String itemName : list) {
+                Item testItem = hierarchicalContainer.addItem(itemName);
+                testItem.getItemProperty("displayName").setValue(itemName);
+                testItem.getItemProperty("searchName").setValue(
+                        groupName + " " + itemName);
+
+                hierarchicalContainer.setParent(itemName, group);
+                hierarchicalContainer.setChildrenAllowed(itemName, false);
+            }
+
+        }
+
+        return hierarchicalContainer;
+    }
 
     CssLayout buildMenu() {
         // Add items
@@ -235,55 +313,7 @@ public class MyUI extends UI {
         menu.addComponent(settings);
 
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
-        menu.addComponent(menuItemsLayout);
-
-        Label label = null;
-        int count = -1;
-        for (final Map.Entry<String, String> item : menuItems.entrySet()) {
-            if (item.getKey().equals("aircraft-type")) {
-                label = new Label("Setup", ContentMode.HTML);
-                label.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
-                label.addStyleName(ValoTheme.LABEL_H4);
-                label.setSizeUndefined();
-                menuItemsLayout.addComponent(label);
-            }
-            if (item.getKey().equals("panels")) {
-                label.setValue(label.getValue()
-                        + " <span class=\"valo-menu-badge\">" + count
-                        + "</span>");
-                count = 0;
-                label = new Label("Containers", ContentMode.HTML);
-                label.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
-                label.addStyleName(ValoTheme.LABEL_H4);
-                label.setSizeUndefined();
-                menuItemsLayout.addComponent(label);
-            }
-            if (item.getKey().equals("calendar")) {
-                label.setValue(label.getValue()
-                        + " <span class=\"valo-menu-badge\">" + count
-                        + "</span>");
-                count = 0;
-                label = new Label("Other", ContentMode.HTML);
-                label.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
-                label.addStyleName(ValoTheme.LABEL_H4);
-                label.setSizeUndefined();
-                menuItemsLayout.addComponent(label);
-            }
-            Button b = new Button(item.getValue(), new Button.ClickListener() {
-                @Override
-                public void buttonClick(ClickEvent event) {
-                    navigator.navigateTo(item.getKey());
-                }
-            });
-            b.setHtmlContentAllowed(true);
-            b.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-            b.setIcon(BackOfficeUtils.getIconMap().get(item.getKey()));
-            menuItemsLayout.addComponent(b);
-            count++;
-        }
-        /*label.setValue(label.getValue() + " <span class=\"valo-menu-badge\">"
-                + count + "</span>");*/
-
+        menu.addComponent(buitTreeMenu());
         return menu;
     }
 
