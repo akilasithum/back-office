@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.Flights" table="flights" catalog="">
+        <id name="flightId" type="java.lang.Integer">
+            <column name="flightId" />
+            <generator class="identity" />
+        </id>
+        <property name="flightName" type="java.lang.String">
+            <column name="flightName" length="20" />
+        </property>
+        <property name="flightFrom" type="java.lang.String">
+            <column name="flightFrom" length="50" />
+        </property>
+        <property name="flightTo" type="java.lang.String">
+            <column name="flightTo" length="50" />
+        </property>
+        <property name="noOfSectors" type="java.lang.Integer">
+            <column name="noOfSectors"  />
+        </property>
+    </class>
+</hibernate-mapping>

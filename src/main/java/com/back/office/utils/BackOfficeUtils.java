@@ -29,31 +29,29 @@ public class BackOfficeUtils {
 
     public static Map<String, FontAwesome> getIconMap(){
         Map<String, FontAwesome> iconMap = new HashMap<>();
-        iconMap.put("common", FontAwesome.DASHBOARD);
-        iconMap.put("aircraft-type", FontAwesome.PLANE);
-        iconMap.put("flight-number", FontAwesome.PAPER_PLANE);
-        iconMap.put("currency", FontAwesome.MONEY);
-        iconMap.put("create-items", FontAwesome.SHOPPING_BAG);
-        iconMap.put("equipment-types", FontAwesome.SHOPPING_CART);
-        iconMap.put("assign-items", FontAwesome.PENCIL);
-        iconMap.put("create-kit-codes", FontAwesome.ANCHOR);
-        iconMap.put("staff", FontAwesome.SMILE_O);
-        iconMap.put("cc-black-list", FontAwesome.CREDIT_CARD);
-        iconMap.put("cc-number-range", FontAwesome.CREDIT_CARD_ALT);
-        iconMap.put("promotions", FontAwesome.FOLDER);
-        iconMap.put("update-inventory", FontAwesome.UPLOAD);
+        iconMap.put("dashboard", FontAwesome.DASHBOARD);
+        iconMap.put("authorization", FontAwesome.LOCK);
+        iconMap.put("setup", FontAwesome.COG);
+        iconMap.put("uploads", FontAwesome.UPLOAD);
+        iconMap.put("generateXML", FontAwesome.MAP);
+        iconMap.put("bondReports", FontAwesome.FLAG);
+        iconMap.put("salesReport", FontAwesome.BALANCE_SCALE);
+        iconMap.put("analysis", FontAwesome.BAR_CHART);
+        iconMap.put("specialReports", FontAwesome.MONEY);
+        iconMap.put("preOrderManagement", FontAwesome.TRUCK);
+        iconMap.put("CRM", FontAwesome.USER);
         return iconMap;
     }
 
     public static List<String> getSetupMap(){
         List<String> menuItems = new ArrayList<>();
         menuItems.add("Aircraft Type");
-        menuItems.add("Flight Number");
+        menuItems.add("Flight Details");
         menuItems.add("Currency");
         menuItems.add("Create Items");
+        menuItems.add("Create Kit Codes");
         menuItems.add("Equipment Types");
         menuItems.add("Assign Items");
-        menuItems.add("Create Kit Codes");
         menuItems.add( "Staff");
         menuItems.add("CC Black List");
         menuItems.add("CC Number Range");

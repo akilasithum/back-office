@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.EquipmentDetails" table="equipment_details" catalog="">
+        <id name="equipmentId" type="java.lang.Integer">
+            <column name="equipmentId" />
+            <generator class="identity" />
+        </id>
+        <property name="packType" type="java.lang.String">
+            <column name="packType" length="50" />
+        </property>
+        <property name="packDescription" type="java.lang.String">
+            <column name="packDescription" length="100" />
+        </property>
+        <property name="equipmentType" type="java.lang.String">
+            <column name="equipmentType" length="30" />
+        </property>
+        <property name="kitCode" type="java.lang.String">
+            <column name="kitCode" length="50"/>
+        </property>
+        <property name="noOfDrawers" type="java.lang.Integer">
+            <column name="noOfDrawers"  />
+        </property>
+    </class>
+</hibernate-mapping>

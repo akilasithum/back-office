@@ -14,5 +14,10 @@
         <mapping resource="com.back.office.common/AircraftDetails.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/CurrencyDetails.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/itemDetails.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/kitCodes.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/equipmentType.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/cartItems.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/flights.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/sectors.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

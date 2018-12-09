@@ -10,6 +10,23 @@
 	border-radius: 0 0 0 4px;
 }
 
+.layout-with-border {
+	border: 1px solid black;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 15px;
+	border-radius: 5px;
+}
+
+.add-button-margin {
+	 margin-top: 24px;
+ }
+
+.left-right-margin {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
 .valothemeui #themeSelect:before {
 	content: "Theme:";
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.CartItems" table="cart_items" catalog="">
+        <id name="cartItemId" type="java.lang.Integer">
+            <column name="cartItemId" />
+            <generator class="identity" />
+        </id>
+        <property name="itemId" type="java.lang.Integer">
+            <column name="itemId" />
+        </property>
+        <property name="itemName" type="java.lang.String">
+            <column name="itemName" length="100" />
+        </property>
+        <property name="packType" type="java.lang.String">
+            <column name="packType" length="50" />
+        </property>
+        <property name="drawerName" type="java.lang.String">
+            <column name="drawerName" length="50"/>
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity"  />
+        </property>
+        <filter name="packTypeFilter"
+                condition=":packType=packType"/>
+        <filter name="drawerFilter"
+                condition=":drawerName=drawerName"/>
+    </class>
+    <filter-def name="packTypeFilter">
+        <filter-param name="packType" type="java.lang.String"/>
+    </filter-def>
+    <filter-def name="drawerFilter">
+        <filter-param name="drawerName" type="java.lang.String"/>
+    </filter-def>
+</hibernate-mapping>

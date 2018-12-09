@@ -6,22 +6,27 @@ import com.vaadin.event.Action;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.tepi.filtertable.FilterTable;
 import org.vaadin.dialogs.ConfirmDialog;
 
 public abstract class CommonPageDetails extends VerticalLayout implements View {
 
     protected DBConnection connection;
+    protected VerticalLayout userFormLayout;
+    protected VerticalLayout mainTableLayout;
+    protected HorizontalLayout tableLayout;
     protected VerticalLayout mainUserInputLayout;
+    VerticalLayout headerLayout;
     protected Button addButton;
     protected Button resetButton;
-    protected Table detailsTable;
+    protected FilterTable detailsTable;
     protected String filterFieldStr;
     protected String className;
     protected String pageHeader;
     protected TextField idField;
+    protected HorizontalLayout buttonRow;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -38,17 +43,29 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
     protected void createMainLayout(){
 
         setSpacing(true);
+        headerLayout = new VerticalLayout();
+        headerLayout.setSizeFull();
+        addComponent(headerLayout);
         Label h1 = new Label(pageHeader);
         h1.addStyleName(ValoTheme.LABEL_H1);
-        addComponent(h1);
+        headerLayout.addComponent(h1);
+
+        userFormLayout = new VerticalLayout();
+        addComponent(userFormLayout);
+        userFormLayout.setStyleName("layout-with-border");
+        mainTableLayout = new VerticalLayout();
+        addComponent(mainTableLayout);
+        mainTableLayout.setStyleName("layout-with-border");
+        tableLayout = new HorizontalLayout();
+        tableLayout.setSizeFull();
 
         mainUserInputLayout = new VerticalLayout();
-        addComponent(mainUserInputLayout);
+        userFormLayout.addComponent(mainUserInputLayout);
 
-        HorizontalLayout buttonRow = new HorizontalLayout();
+        buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         buttonRow.setSpacing(true);
-        addComponent(buttonRow);
+        userFormLayout.addComponent(buttonRow);
 
         addButton = new Button("Add");
         addButton.addClickListener((Button.ClickListener) clickEvent -> insertDetails());
@@ -62,8 +79,6 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
 
         HorizontalLayout rowFilter = new HorizontalLayout();
         rowFilter.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        MarginInfo marginInfo = new MarginInfo(true,false,false,false);
-        rowFilter.setMargin(marginInfo);
         rowFilter.setSpacing(true);
 
         TextField filterFiled = new TextField();
@@ -81,12 +96,12 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
             }
         });
         rowFilter.addComponent(filterBtn);
-        addComponent(rowFilter);
-
-        detailsTable = new Table();
+        mainTableLayout.addComponent(rowFilter);
+        detailsTable = new FilterTable();
         detailsTable.setSelectable(true);
         detailsTable.setMultiSelect(false);
         detailsTable.setSortEnabled(true);
+        detailsTable.setFilterBarVisible(true);
         detailsTable.setColumnCollapsingAllowed(true);
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setPageLength(10);
@@ -95,7 +110,11 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         detailsTable.setSizeFull();
         detailsTable.addActionHandler(actionHandler);
 
-        addComponent(detailsTable);
+        mainTableLayout.addComponent(tableLayout);
+        tableLayout.addComponent(detailsTable);
+        setComponentAlignment(mainTableLayout,Alignment.MIDDLE_CENTER);
+        setComponentAlignment(userFormLayout,Alignment.MIDDLE_CENTER);
+        setComponentAlignment(headerLayout,Alignment.MIDDLE_CENTER);
 
     }
 
@@ -103,7 +122,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
 
     protected void deleteItem(Object target){
         if(target != null) {
-            boolean success = connection.deleteObjectHBM(Integer.parseInt(target.toString()), "com.back.office.common.ItemDetails");
+            boolean success = connection.deleteObjectHBM(Integer.parseInt(target.toString()), className);
             if(success){
                 Notification.show("Detail delete successfully");
                 IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
@@ -208,7 +227,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(object);
             if (newId != 0) {
-                Notification.show("Currency added successfully");
+                Notification.show(pageHeader +" added successfully");
                 updateTable(false,object,newId);
                 resetFields();
             } else {
@@ -217,7 +236,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         }
         else{
             connection.updateObjectHBM(object);
-            Notification.show("Currency updated successfully");
+            Notification.show(pageHeader + " updated successfully");
             updateTable(true,object,0);
             addButton.setCaption("Add");
             resetFields();

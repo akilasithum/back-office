@@ -6,8 +6,8 @@ public class Authentication {
     private String password;
 
     public Authentication() {
-        setUsername("myuser");
-        setPassword("mypass");
+        setUsername("admin");
+        setPassword("admin");
     }
 
     private void setUsername(String username) {

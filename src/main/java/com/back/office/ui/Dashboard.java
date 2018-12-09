@@ -1,7 +1,7 @@
 package com.back.office.ui;
 
-import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.*;
+//import com.vaadin.addon.charts.Chart;
+//import com.vaadin.addon.charts.model.*;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.VerticalLayout;
@@ -14,10 +14,10 @@ public class Dashboard extends VerticalLayout implements View {
 
     public Dashboard(){
         setMargin(true);
-        createCharts();
+        //createCharts();
     }
 
-    private void createCharts(){
+    /*private void createCharts(){
         Chart chart = new Chart(ChartType.COLUMN);
         Configuration conf = chart.getConfiguration();
         conf.setTitle("Total fruit consumption, grouped by gender");
@@ -50,6 +50,6 @@ public class Dashboard extends VerticalLayout implements View {
 
         chart.drawChart(conf);
         addComponent(chart);
-    }
+    }*/
 }
 

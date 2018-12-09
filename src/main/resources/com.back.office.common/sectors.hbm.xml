@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.Sector" table="sectors" catalog="">
+        <id name="sectorId" type="java.lang.Integer">
+            <column name="sectorId" />
+            <generator class="identity" />
+        </id>
+        <property name="flightId" type="java.lang.Integer">
+            <column name="flightId" />
+        </property>
+        <property name="sectorFrom" type="java.lang.String">
+            <column name="sectorFrom" length="30" />
+        </property>
+        <property name="sectorTo" type="java.lang.String">
+            <column name="sectorTo" length="50" />
+        </property>
+        <property name="sectorType" type="java.lang.String">
+            <column name="sectorType" length="50" />
+        </property>
+        <filter name="sectorFilter"
+                condition=":flightId=flightId"/>
+    </class>
+    <filter-def name="sectorFilter">
+        <filter-param name="flightId" type="java.lang.Integer"/>
+    </filter-def>
+</hibernate-mapping>

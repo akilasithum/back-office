@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.KitCodes" table="kitcodes" catalog="">
+        <id name="kitCodeId" type="java.lang.Integer">
+            <column name="kitCodeId" />
+            <generator class="identity" />
+        </id>
+        <property name="kitCode" type="java.lang.String">
+            <column name="kitCode" length="30" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="description" length="100" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" length="30" />
+        </property>
+        <property name="activateDate" type="java.lang.String">
+            <column name="activateDate" length="50"/>
+        </property>
+        <property name="noOfSeals" type="java.lang.Integer">
+            <column name="noOfSeals"  />
+        </property>
+        <property name="noOfEquipments" type="java.lang.Integer">
+            <column name="noOfEquipments"  />
+        </property>
+        <filter name="kitCodeFilter"
+                condition=":kitCode=kitCode"/>
+    </class>
+    <filter-def name="kitCodeFilter">
+        <filter-param name="kitCode" type="java.lang.String"/>
+    </filter-def>
+</hibernate-mapping>

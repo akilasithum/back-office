@@ -6,6 +6,7 @@ import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -68,13 +69,10 @@ public class ItemView extends CommonPageDetails {
         categoryFld = new ComboBox(CATEGORY);
         categoryFld.setNullSelectionAllowed(false);
         categoryFld.setRequired(true);
-        serviceTypeFld.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                if(serviceTypeFld.getValue() != null && !serviceTypeFld.getValue().toString().isEmpty()){
-                    categoryFld.removeAllItems();
-                    categoryFld.addItems(BackOfficeUtils.getCategoryFromServiceType(serviceTypeFld.getValue().toString()));
-                }
+        serviceTypeFld.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+            if(serviceTypeFld.getValue() != null && !serviceTypeFld.getValue().toString().isEmpty()){
+                categoryFld.removeAllItems();
+                categoryFld.addItems(BackOfficeUtils.getCategoryFromServiceType(serviceTypeFld.getValue().toString()));
             }
         });
         firstRow.addComponent(categoryFld);
@@ -83,6 +81,8 @@ public class ItemView extends CommonPageDetails {
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
         secondRow.setSizeFull();
+        MarginInfo marginInfo = new MarginInfo(true,false,true,false);
+        secondRow.setMargin(marginInfo);
         mainUserInputLayout.addComponent(secondRow);
 
         catelogFld = new TextField(CATELOGUE);
@@ -101,6 +101,8 @@ public class ItemView extends CommonPageDetails {
         thirdRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         thirdRow.setSpacing(true);
         thirdRow.setSizeFull();
+        MarginInfo marginInfo1 = new MarginInfo(false,false,true,false);
+        thirdRow.setMargin(marginInfo1);
         mainUserInputLayout.addComponent(thirdRow);
 
         costCurrencyFld = new ComboBox(COST_CURRENCY);
@@ -131,6 +133,7 @@ public class ItemView extends CommonPageDetails {
         basePriceFld.setRequired(true);
         thirdRow.addComponent(basePriceFld);
 
+        userFormLayout.setWidth("80%");
     }
 
     @Override

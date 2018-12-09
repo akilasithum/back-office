@@ -38,5 +38,10 @@
         <property name="activateDate" type="java.lang.String">
             <column name="activateDate"  length="30"/>
         </property>
+        <filter name="serviceTypeFilter"
+                condition=":serviceType=serviceType"/>
     </class>
+    <filter-def name="serviceTypeFilter">
+        <filter-param name="serviceType" type="java.lang.String"/>
+    </filter-def>
 </hibernate-mapping>

@@ -29,7 +29,7 @@ import java.util.*;
  * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be 
  * overridden to add component to the user interface and initialize non-component functionality.
  */
-@Theme("tests-valo-dark")
+@Theme("tests-valo-facebook")
 @Widgetset("com.back.office.MyAppWidgetset")
 @StyleSheet("valo-theme-ui.css")
 public class MyUI extends UI {
@@ -89,14 +89,16 @@ public class MyUI extends UI {
         setContent(root);
         root.setWidth("100%");
         navigator = new Navigator(this, viewDisplay);
-        navigator.addView("common", Dashboard.class);
+        navigator.addView("dashboard", Dashboard.class);
         navigator.addView("Aircraft Type", AirCraftTypeView.class);
         navigator.addView("Currency", CurrencyView.class);
         navigator.addView("Create Items", ItemView.class);
         navigator.addView("login", LoginPage.class);
-        /*navigator.addView("flight-number", ButtonsAndLinks.class);
-        navigator.addView("equipment-types", ComboBoxes.class);
-        navigator.addView("assign-items", CheckBoxes.class);
+        navigator.addView("Create Kit Codes", KitCodesView.class);
+        navigator.addView("Equipment Types", EquipmentTypeView.class);
+        navigator.addView("Assign Items", AssignItemView.class);
+        navigator.addView("Flight Details", FlightDetailsView.class);
+        /*navigator.addView("assign-items", AssignItemView.class);
         navigator.addView("create-kit-codes", Sliders.class);
         navigator.addView("staff", MenuBars.class);
         navigator.addView("cc-black-list", Panels.class);
@@ -159,7 +161,7 @@ public class MyUI extends UI {
         }
         else {
             if (f == null || f.equals("") || f.equals("!login")) {
-                navigator.navigateTo("common");
+                navigator.navigateTo("dashboard");
             }
         }
 
@@ -196,12 +198,11 @@ public class MyUI extends UI {
         tree.setContainerDataSource(getContainer());
         tree.setItemCaptionPropertyId("displayName");
         tree.setNullSelectionAllowed(false);
-        tree.setWidth("100%");
         tree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();
-                if (value instanceof String && !Arrays.asList(GROUP_ORDER).contains(value)) {
+                if (value instanceof String && !Arrays.asList(GROUP_WITH_CHILD).contains(value)) {
                    navigator.navigateTo(value.toString());
                 } else {
                     for(int i=0;i<GROUP_ORDER.length;i++){
@@ -211,8 +212,10 @@ public class MyUI extends UI {
                 }
             }
         });
-        tree.setItemIcon("dashboard",FontAwesome.DASHBOARD);
-        tree.setItemIcon("setup",FontAwesome.CREDIT_CARD);
+
+        for(Map.Entry<String,FontAwesome> icons : BackOfficeUtils.getIconMap().entrySet()){
+            tree.setItemIcon(icons.getKey(),icons.getValue());
+        }
         return tree;
     }
 
@@ -220,8 +223,11 @@ public class MyUI extends UI {
             "Setup", "Uploads", "Generate XML", "Bond Reports", "Sales Report",
             "Analysis", "Special Reports", "Pre Order Management", "CRM" };
     private static final String[] GROUP_ORDER = {"dashboard", "authorization",
-            "setup", "uploads", "generateXML", "bondReports", "alesReport",
+            "setup", "uploads", "generateXML", "bondReports", "salesReport",
             "analysis", "specialReports", "preOrderManagement", "CRM" };
+    private static final String[] GROUP_WITH_CHILD = { "authorization",
+            "setup", "uploads", "generateXML", "bondReports", "salesReport",
+            "analysis", "specialReports", "preOrderManagement" };
 
     private HierarchicalContainer getContainer() {
 
@@ -240,6 +246,9 @@ public class MyUI extends UI {
             List<String> list = new ArrayList<>();
             if(groupName.equals("Setup")){
                 list = BackOfficeUtils.getSetupMap();
+            }
+            if(groupName.equals("Dashboard") || groupName.equals("CRM")){
+                hierarchicalContainer.setChildrenAllowed(group, false);
             }
             for (String itemName : list) {
                 Item testItem = hierarchicalContainer.addItem(itemName);
@@ -263,9 +272,9 @@ public class MyUI extends UI {
         menuItems.put("flight-number", "Flight Number");
         menuItems.put("currency", "Currency");
         menuItems.put("create-items", "Create Items");
+        menuItems.put("create-kit-codes", "Create Kit Codes");
         menuItems.put("equipment-types", "Equipment Types");
         menuItems.put("assign-items", "Assign Items");
-        menuItems.put("create-kit-codes", "Create Kit Codes");
         menuItems.put("staff", "Staff");
         menuItems.put("cc-black-list", "CC Black List");
         menuItems.put("cc-number-range", "CC Number Range");
@@ -279,7 +288,7 @@ public class MyUI extends UI {
         menu.addComponent(top);
         menu.addComponent(createThemeSelect());
 
-        Button showMenu = new Button("Menu", new Button.ClickListener() {
+        /*Button showMenu = new Button("Menu", new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 if (menu.getStyleName().contains("valo-menu-visible")) {
@@ -293,7 +302,7 @@ public class MyUI extends UI {
         showMenu.addStyleName(ValoTheme.BUTTON_SMALL);
         showMenu.addStyleName("valo-menu-toggle");
         showMenu.setIcon(FontAwesome.LIST);
-        menu.addComponent(showMenu);
+        menu.addComponent(showMenu);*/
 
         Label title = new Label("<h3><strong>Porter AirLines</strong></h3>",
                 ContentMode.HTML);
@@ -307,7 +316,6 @@ public class MyUI extends UI {
                 new ClassResource("profile-pic-300px.jpg"),
                 null);
         settingsItem.addItem("Edit Profile", null);
-        settingsItem.addItem("Preferences", null);
         settingsItem.addSeparator();
         settingsItem.addItem("Sign Out", null);
         menu.addComponent(settings);

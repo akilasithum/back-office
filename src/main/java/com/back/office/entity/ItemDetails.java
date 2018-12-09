@@ -100,4 +100,9 @@ public class ItemDetails {
     public void setActivateDate(String activateDate) {
         this.activateDate = activateDate;
     }
+
+    @Override
+    public String toString(){
+        return itemName;
+    }
 }

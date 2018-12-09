@@ -1,12 +1,10 @@
 package com.back.office.db;
 
-import com.back.office.entity.AircraftDetails;
-import com.back.office.entity.CurrencyDetails;
-import com.back.office.entity.ItemDetails;
+import com.back.office.entity.*;
 import com.back.office.persistence.HibernateUtil;
+import org.hibernate.Filter;
 import org.hibernate.classic.Session;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class DBConnection {
@@ -132,6 +130,77 @@ public class DBConnection {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             return session.createCriteria(ItemDetails.class).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<KitCodes> getAllKitCodes(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            return session.createCriteria(KitCodes.class).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<?> getAllValues(String className){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            return session.createCriteria(Class.forName(className)).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List getServiceTypeFromKitCode(String kitCode){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.enableFilter("kitCodeFilter").setParameter("kitCode", kitCode);
+            session.beginTransaction();
+            return session.createCriteria(KitCodes.class).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List getItemsFromServiceType(String serviceType){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.enableFilter("serviceTypeFilter").setParameter("serviceType", serviceType);
+            session.beginTransaction();
+            return session.createCriteria(ItemDetails.class).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List getFilterList(String filterName,String fieldName,Integer fieldValue,String className){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.enableFilter(filterName).setParameter(fieldName, fieldValue);
+            session.beginTransaction();
+            return session.createCriteria(Class.forName(className)).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List getItemsFromServiceType(String cartName,String drawer){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.enableFilter("packTypeFilter").setParameter("packType", cartName);
+            session.enableFilter("drawerFilter").setParameter("drawerName", drawer);
+            session.beginTransaction();
+            return session.createCriteria(CartItems.class).list();
         } catch (Exception e) {
             return null;
         }

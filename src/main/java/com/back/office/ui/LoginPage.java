@@ -4,18 +4,11 @@ import com.back.office.MyUI;
 import com.back.office.utils.Authentication;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Page;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 
 public class LoginPage extends VerticalLayout implements View {
     private static final long serialVersionUID = 1L;
@@ -24,10 +17,21 @@ public class LoginPage extends VerticalLayout implements View {
 
     public LoginPage(){
 
+        VerticalLayout mainLayout = new VerticalLayout();
+        addComponent(mainLayout);
+        mainLayout.setSizeFull();
+        mainLayout.setMargin(true);
+        setSpacing(true);
         AUTH = new Authentication();
         Panel panel = new Panel("Login");
         panel.setSizeUndefined();
-        addComponent(panel);
+        Image logo = new Image();
+        logo.setSource(new ClassResource("logo.png"));
+        logo.setWidth(370, Unit.PIXELS);
+        logo.setHeight(130, Unit.PIXELS);
+        mainLayout.addComponent(logo);
+        mainLayout.setSpacing(true);
+        mainLayout.addComponent(panel);
 
 
         FormLayout content = new FormLayout();
@@ -36,7 +40,7 @@ public class LoginPage extends VerticalLayout implements View {
         PasswordField password = new PasswordField("Password");
         content.addComponent(password);
 
-        Button send = new Button("Enter");
+        Button send = new Button("Login");
         send.addClickListener(new ClickListener() {
             private static final long serialVersionUID = 1L;
 
@@ -57,7 +61,9 @@ public class LoginPage extends VerticalLayout implements View {
         content.setSizeUndefined();
         content.setMargin(true);
         panel.setContent(content);
-        setComponentAlignment(panel, Alignment.MIDDLE_CENTER);
+        mainLayout.setComponentAlignment(logo,Alignment.MIDDLE_CENTER);
+        mainLayout.setComponentAlignment(panel,Alignment.MIDDLE_CENTER);
+        setComponentAlignment(mainLayout, Alignment.MIDDLE_CENTER);
 
     }
 
