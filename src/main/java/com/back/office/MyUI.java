@@ -98,9 +98,9 @@ public class MyUI extends UI {
         navigator.addView("Equipment Types", EquipmentTypeView.class);
         navigator.addView("Assign Items", AssignItemView.class);
         navigator.addView("Flight Details", FlightDetailsView.class);
+        navigator.addView("Staff", UserDetailsView.class);
         /*navigator.addView("assign-items", AssignItemView.class);
         navigator.addView("create-kit-codes", Sliders.class);
-        navigator.addView("staff", MenuBars.class);
         navigator.addView("cc-black-list", Panels.class);
         navigator.addView("cc-number-range", Trees.class);
         navigator.addView("promotions", Tables.class);

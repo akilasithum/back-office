@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.User" table="users" catalog="">
+        <id name="userId" type="java.lang.Integer">
+            <column name="userId" />
+            <generator class="identity" />
+        </id>
+        <property name="staffId" type="java.lang.Integer">
+            <column name="staffId"  />
+        </property>
+        <property name="staffName" type="java.lang.String">
+            <column name="staffName" length="50" />
+        </property>
+        <property name="displayName" type="java.lang.String">
+            <column name="displayName" length="50" />
+        </property>
+        <property name="position" type="java.lang.String">
+            <column name="position" length="50"/>
+        </property>
+        <property name="department" type="java.lang.String">
+            <column name="department"  length="50"/>
+        </property>
+        <property name="active" type="java.lang.Boolean">
+            <column name="isActive"  />
+        </property>
+    </class>
+</hibernate-mapping>

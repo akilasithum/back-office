@@ -19,5 +19,6 @@
         <mapping resource="com.back.office.common/cartItems.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/flights.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/sectors.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/user.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>
