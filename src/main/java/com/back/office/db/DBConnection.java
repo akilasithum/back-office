@@ -2,9 +2,16 @@ package com.back.office.db;
 
 import com.back.office.entity.*;
 import com.back.office.persistence.HibernateUtil;
+import com.back.office.ui.salesReports.CategorySalesView;
+import org.hibernate.Criteria;
 import org.hibernate.Filter;
 import org.hibernate.classic.Session;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DBConnection {
@@ -26,6 +33,14 @@ public class DBConnection {
         session.getTransaction().commit();
         session.close();
         return id;
+    }
+
+    public void insertMultlipleEntities(List<Object> details){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(details);
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void updateObjectHBM(Object details){
@@ -71,6 +86,20 @@ public class DBConnection {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Object object =  session.get(Class.forName(type), id);
+            session.delete(object);
+            session.getTransaction().commit();
+            session.close();
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteObjectHBM(Object object){
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
             session.delete(object);
             session.getTransaction().commit();
             session.close();
@@ -204,6 +233,81 @@ public class DBConnection {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public List getSalesDetails(Date flightFromDate,Date flightToDate,String category,String serviceType,String flightFrom,
+                                String flightTo,String sifNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(SalesDetails.class);
+        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        if(category != null && !category.isEmpty()){
+            criteria.add(Restrictions.eq("category", category));
+        }
+        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
+            criteria.add(Restrictions.eq("serviceType", serviceType));
+        }
+        if(flightFrom != null && !flightFrom.isEmpty()){
+            criteria.add(Restrictions.eq("flightFrom", flightFrom));
+        }
+        if(flightTo != null && !flightTo.isEmpty()){
+            criteria.add(Restrictions.eq("flightTo", flightTo));
+        }
+        if(sifNo != null && !sifNo.isEmpty()){
+            criteria.add(Restrictions.eq("sifNo", Integer.parseInt(sifNo)));
+        }
+        return criteria.list();
+    }
+
+    public List getFlightPaymentDetails(Date flightFromDate,Date flightToDate,String serviceType,String flightNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(FlightPaymentDetails.class);
+        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
+            criteria.add(Restrictions.eq("serviceType", serviceType));
+        }
+        if(flightNo != null && !flightNo.isEmpty()){
+            criteria.add(Restrictions.eq("flightNo", flightNo));
+        }
+        return criteria.list();
+    }
+
+    public List getCategorySalesDetails(Date flightFromDate,Date flightToDate,String serviceType){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(CategorySalesDetails.class);
+        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        if(serviceType != null && !serviceType.isEmpty()){
+            criteria.add(Restrictions.eq("serviceType", serviceType));
+        }
+        ProjectionList projList = Projections.projectionList();
+        projList.add(Projections.sum("quantity"),"quantity");
+        projList.add(Projections.sum("price"),"price");
+        projList.add(Projections.groupProperty("category"),"category");
+        //criteria.setProjection(projList);
+        return criteria.list();
+    }
+
+    public List getCategories(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(ItemDetails.class);
+        criteria.setProjection(Projections.distinct(Projections.property("category")));
+        return criteria.list();
+    }
+
+    private Date yesterday(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, - 1);
+        return cal.getTime();
+    }
+
+    private Date tommorow(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, + 1);
+        return cal.getTime();
     }
 }
 

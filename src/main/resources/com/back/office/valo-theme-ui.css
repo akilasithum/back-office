@@ -10,6 +10,24 @@
 	border-radius: 0 0 0 4px;
 }
 
+.myCustomUpload .v-button {
+	background: none;
+	border: 1px solid black;
+	height: auto;
+	padding: 0 !important;
+}
+
+.myCustomUpload .v-button .v-button-wrap {
+	height: auto;
+	background: none;
+	padding: 0 !important;
+}
+
+.myCustomUpload .v-button .v-button-wrap .v-button-caption {
+	height: auto;
+	padding: 2px;
+}
+
 .layout-with-border {
 	border: 1px solid black;
 	padding-left: 15px;

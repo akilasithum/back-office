@@ -6,7 +6,7 @@
     <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.password"></property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/flight_pos</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -20,5 +20,13 @@
         <mapping resource="com.back.office.common/flights.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/sectors.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/user.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/blackListCC.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/voucher.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/salesDetails.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/flightPaymentDetails.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/categorySales.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/userRole.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/permissionCodes.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/rolePermission.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

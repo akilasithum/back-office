@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.RolePermission" table="role_permissions" catalog="">
+        <id name="rolePermissionId" type="java.lang.Integer">
+            <column name="rolePermissionId" />
+            <generator class="identity" />
+        </id>
+        <property name="roleId" type="java.lang.Integer">
+            <column name="roleId" />
+        </property>
+        <property name="permissionCode" type="java.lang.Integer">
+            <column name="permissionCode" />
+        </property>
+        <filter name="roleIdFilter"
+                condition=":roleId=roleId"/>
+    </class>
+    <filter-def name="roleIdFilter">
+        <filter-param name="roleId" type="java.lang.Integer"/>
+    </filter-def>
+</hibernate-mapping>

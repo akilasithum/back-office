@@ -4,7 +4,18 @@ package com.back.office.ui;
 //import com.vaadin.addon.charts.model.*;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.demo.BarChartDemo1;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.vaadin.addon.JFreeChartWrapper;
 
 public class Dashboard extends VerticalLayout implements View {
     @Override
@@ -14,6 +25,7 @@ public class Dashboard extends VerticalLayout implements View {
 
     public Dashboard(){
         setMargin(true);
+        createChart();
         //createCharts();
     }
 
@@ -51,5 +63,62 @@ public class Dashboard extends VerticalLayout implements View {
         chart.drawChart(conf);
         addComponent(chart);
     }*/
+    private void createChart(){
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+        dataset.addValue( 15 , "schools" , "Jan" );
+        dataset.addValue( 30 , "schools" , "Feb" );
+        dataset.addValue( 60 , "schools" ,  "March" );
+        dataset.addValue( 100 , "schools" , "April" );
+        dataset.addValue( 90 , "schools" , "May" );
+        dataset.addValue( 80 , "schools" , "June" );
+        // Generate the graph
+
+        JFreeChart chart = ChartFactory.createLineChart("Monthly Sales", // Title
+                "Month", // x-axis Label
+                "Gross Amount $", // y-axis Label
+                dataset, // Dataset
+                PlotOrientation.VERTICAL, // Plot Orientation
+                false, // Show Legend
+                true, // Use tooltips
+                false // Configure chart to generate URLs?
+        );
+        final String fiat = "FIAT";
+        DefaultCategoryDataset dataset1 =
+                new DefaultCategoryDataset( );
+
+        dataset1.addValue( 300.0 , fiat , "DTF" );
+        dataset1.addValue( 200.0 , fiat , "BOB" );
+        dataset1.addValue( 25.0 , fiat , "VRT" );
+        dataset1.addValue( 150.0 , fiat , "POD" );
+        JFreeChart barChart = ChartFactory.createBarChart("Sales Summary", "Gross Amount $", "Sales Type",
+                dataset1, PlotOrientation.VERTICAL, false, true, true);
+
+        JFreeChartWrapper wrapper = new JFreeChartWrapper(chart){
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void attach() {
+                super.attach();
+                setResource("src", getSource());
+            }
+        };
+        JFreeChartWrapper wrapper1 = new JFreeChartWrapper(barChart){
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void attach() {
+                super.attach();
+                setResource("src", getSource());
+            }
+        };
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setSpacing(true);
+        layout.setSizeFull();
+        addComponent(layout);
+        wrapper.setWidth("80%");
+        wrapper.setHeight("70%");
+        wrapper1.setWidth("80%");
+        wrapper1.setHeight("70%");
+        layout.addComponent(wrapper);
+        layout.addComponent(wrapper1);
+    }
 }
 

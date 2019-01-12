@@ -2,6 +2,7 @@ package com.back.office.ui;
 
 import com.back.office.entity.KitCodes;
 import com.back.office.entity.User;
+import com.back.office.entity.UserRole;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
@@ -9,7 +10,9 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDetailsView extends CommonPageDetails {
 
@@ -19,6 +22,9 @@ public class UserDetailsView extends CommonPageDetails {
     private final String POSITION = "Position";
     private final String DEAPRTMENT = "Department";
     private final String STATUS = "Status";
+    private final String USER_ROLE = "User Role";
+    private Map<Integer,String> roleIdRoleNameMap;
+    private Map<String,Integer> roleNameRoleIdMap;
 
     protected TextField staffIdFld;
     protected TextField staffNameFld;
@@ -26,6 +32,7 @@ public class UserDetailsView extends CommonPageDetails {
     protected ComboBox positionComboBox;
     protected TextField departmentFld;
     protected CheckBox statusCheckBox;
+    protected ComboBox userRoleComboBox;
 
     public UserDetailsView(){
         super();
@@ -33,6 +40,15 @@ public class UserDetailsView extends CommonPageDetails {
 
     @Override
     protected void createMainLayout() {
+        roleIdRoleNameMap = new HashMap<>();
+        roleNameRoleIdMap = new HashMap<>();
+        List<UserRole> userRoles = (List<UserRole>)connection.getAllValues("com.back.office.entity.UserRole");
+        for(UserRole userRole : userRoles){
+            if(userRole.isActive()){
+                roleIdRoleNameMap.put(userRole.getRoleId(),userRole.getRoleName());
+                roleNameRoleIdMap.put(userRole.getRoleName(),userRole.getRoleId());
+            }
+        }
         super.createMainLayout();
         HorizontalLayout firstRow = new HorizontalLayout();
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
@@ -54,6 +70,13 @@ public class UserDetailsView extends CommonPageDetails {
         displayNameFld.setInputPrompt(DISPLAY_NAME);
         displayNameFld.setRequired(true);
         firstRow.addComponent(displayNameFld);
+
+        userRoleComboBox = new ComboBox(USER_ROLE);
+        userRoleComboBox.setInputPrompt(USER_ROLE);
+        userRoleComboBox.setRequired(true);
+        userRoleComboBox.setNullSelectionAllowed(false);
+        userRoleComboBox.addItems(roleIdRoleNameMap.values());
+        firstRow.addComponent(userRoleComboBox);
 
         HorizontalLayout secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
@@ -81,7 +104,7 @@ public class UserDetailsView extends CommonPageDetails {
         statusCheckBox = new CheckBox(STATUS, true);
         secondRow.addComponent(statusCheckBox);
 
-        userFormLayout.setWidth("60%");
+        userFormLayout.setWidth("70%");
         mainTableLayout.setWidth("70%");
         headerLayout.setWidth("70%");
 
@@ -93,6 +116,7 @@ public class UserDetailsView extends CommonPageDetails {
         container.addContainerProperty(STAFF_ID, Integer.class, null);
         container.addContainerProperty(STAFF_NAME, String.class, null);
         container.addContainerProperty(DISPLAY_NAME, String.class, null);
+        container.addContainerProperty(USER_ROLE, String.class, null);
         container.addContainerProperty(POSITION, String.class, null);
         container.addContainerProperty(DEAPRTMENT, String.class, null);
         container.addContainerProperty(STATUS, String.class, null);
@@ -103,6 +127,7 @@ public class UserDetailsView extends CommonPageDetails {
             item.getItemProperty(STAFF_ID).setValue(user.getStaffId());
             item.getItemProperty(STAFF_NAME).setValue(user.getStaffName());
             item.getItemProperty(DISPLAY_NAME).setValue(user.getDisplayName());
+            item.getItemProperty(USER_ROLE).setValue(roleIdRoleNameMap.get(user.getUserRoleId()));
             item.getItemProperty(POSITION).setValue(user.getPosition());
             item.getItemProperty(DEAPRTMENT).setValue(user.getDepartment());
             item.getItemProperty(STATUS).setValue(user.isActive() ? "Active" : "Not Active");
@@ -126,6 +151,7 @@ public class UserDetailsView extends CommonPageDetails {
             user.setPosition(positionComboBox.getValue().toString());
             user.setDepartment(departmentFld.getValue());
             user.setActive(statusCheckBox.getValue());
+            user.setUserRoleId(roleNameRoleIdMap.get(userRoleComboBox.getValue().toString()));
             addOrUpdateDetails(user);
 
         }
@@ -143,6 +169,7 @@ public class UserDetailsView extends CommonPageDetails {
             positionComboBox.setValue(item.getItemProperty(POSITION).getValue().toString());
             departmentFld.setValue(item.getItemProperty(DEAPRTMENT).getValue().toString());
             statusCheckBox.setValue(item.getItemProperty(STATUS).getValue().toString().equals("Active") ? true : false);
+            userRoleComboBox.setValue(item.getItemProperty(USER_ROLE).getValue().toString());
             addButton.setCaption("Edit");
         }
     }
@@ -170,6 +197,7 @@ public class UserDetailsView extends CommonPageDetails {
         item.getItemProperty(DISPLAY_NAME).setValue(user.getDisplayName());
         item.getItemProperty(POSITION).setValue(user.getPosition());
         item.getItemProperty(DEAPRTMENT).setValue(user.getDepartment());
+        item.getItemProperty(USER_ROLE).setValue(roleIdRoleNameMap.get(user.getUserRoleId()));
         item.getItemProperty(STATUS).setValue(user.isActive() ? "Active" : "Not Active");
     }
 }

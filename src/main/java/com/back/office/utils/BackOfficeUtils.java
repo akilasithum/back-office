@@ -1,5 +1,7 @@
 package com.back.office.utils;
 
+import com.back.office.db.DBConnection;
+import com.back.office.entity.PermissionCodes;
 import com.vaadin.server.FontAwesome;
 
 import java.text.ParseException;
@@ -8,6 +10,7 @@ import java.util.*;
 
 public class BackOfficeUtils {
 
+    protected static DBConnection connection = DBConnection.getInstance();
 
     public static String getCurrentDateAndTime(){
         return new SimpleDateFormat(Constants.DATE_TIME_FORMAT).format(new Date());
@@ -21,6 +24,11 @@ public class BackOfficeUtils {
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    public static String getDateFromDateTime(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format( date );
     }
 
     public static String getDateStringFromDate(Date date){
@@ -57,6 +65,28 @@ public class BackOfficeUtils {
         menuItems.add("CC Number Range");
         menuItems.add("Promotions");
         menuItems.add("Update Inventory");
+        menuItems.add("Vouchers");
+        return menuItems;
+    }
+
+    public static List<String> getSellsReportsMap(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Sales Details");
+        menuItems.add("Sales Summary by Flight");
+        menuItems.add("Sale by Category");
+        menuItems.add("Tender Summary");
+        menuItems.add("Sales by Sector");
+        menuItems.add("Sold out by Flight");
+        menuItems.add("Credit Card by Flight");
+        menuItems.add( "Credit Card Summary");
+        menuItems.add("Sales Tender Discrepancy");
+        return menuItems;
+    }
+
+    public static List<String> getAuthorizationMap(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Manage User Roles");
+        menuItems.add("Manage Users");
         return menuItems;
     }
 
@@ -112,6 +142,31 @@ public class BackOfficeUtils {
             categoryList.add("Gift Cards");
         }
         return categoryList;
+    }
+
+    public static String getServiceTypeFromServiceType(String serviceType){
+        switch (serviceType){
+            case "Buy on Board" : return "BOB";
+            case "Duty Paid" : return "DTP";
+            case "Duty Free" : return "DTF";
+            case "Virtual inventory" : return "VRT";
+            default: return null;
+        }
+    }
+
+    public static Map<String, Map<Integer, String>> getPermissionCodes(){
+            Map<String, Map<Integer, String>> funcAreasCodesMap = new HashMap<>();
+            List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllValues("com.back.office.entity.PermissionCodes");
+            for (PermissionCodes permissionCode : permissionCodes) {
+                if (funcAreasCodesMap.containsKey(permissionCode.getFuncArea())) {
+                    funcAreasCodesMap.get(permissionCode.getFuncArea()).put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
+                } else {
+                    Map<Integer, String> map = new HashMap<>();
+                    map.put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
+                    funcAreasCodesMap.put(permissionCode.getFuncArea(), map);
+                }
+            }
+            return funcAreasCodesMap;
     }
 }
 

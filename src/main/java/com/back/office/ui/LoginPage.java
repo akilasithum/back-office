@@ -5,6 +5,7 @@ import com.back.office.utils.Authentication;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ClassResource;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -51,6 +52,7 @@ public class LoginPage extends VerticalLayout implements View {
                     getSession().setAttribute("userName",username);
                     ((MyUI)getUI()).navigate();
                     getUI().getNavigator().navigateTo("common");
+                    Page.getCurrent().reload();
                 }else{
                     Notification.show("Invalid credentials", Notification.Type.ERROR_MESSAGE);
                 }

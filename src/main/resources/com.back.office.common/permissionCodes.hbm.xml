@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.PermissionCodes" table="permission_codes" catalog="">
+        <id name="permissionCode" type="java.lang.Integer">
+            <column name="permissionCode" />
+            <generator class="identity" />
+        </id>
+        <property name="displayName" type="java.lang.String">
+            <column name="displayName" length="100" />
+        </property>
+        <property name="funcArea" type="java.lang.String">
+            <column name="funcArea" length="100"/>
+        </property>
+    </class>
+</hibernate-mapping>

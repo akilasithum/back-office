@@ -9,6 +9,7 @@ public class User {
     private String position;
     private String department;
     private boolean active;
+    private int userRoleId;
 
     public int getUserId() {
         return userId;
@@ -64,5 +65,13 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public int getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(int userRoleId) {
+        this.userRoleId = userRoleId;
     }
 }

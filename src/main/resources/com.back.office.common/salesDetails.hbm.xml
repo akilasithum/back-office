@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.SalesDetails" table="sales_details_view" catalog="">
+        <id name="id" type="java.lang.String">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="itemName" type="java.lang.String">
+            <column name="itemName" length="100"/>
+        </property>
+        <property name="category" type="java.lang.String">
+            <column name="category" length="30" />
+        </property>
+        <property name="itemId" type="java.lang.Integer">
+            <column name="itemId"  />
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" />
+        </property>
+        <property name="costPrice" type="java.lang.Float">
+        <column name="costPrice" />
+        </property>
+        <property name="price" type="java.lang.Float">
+            <column name="price" />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
+        </property>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo" length="30" />
+        </property>
+        <property name="flightFrom" type="java.lang.String">
+            <column name="flightFrom" length="30" />
+        </property>
+        <property name="flightTo" type="java.lang.String">
+            <column name="flightTo" length="30" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" length="30" />
+        </property>
+        <property name="sifNo" type="java.lang.Integer">
+            <column name="sifNo" />
+        </property>
+
+        <filter name="serviceTypeFilter"
+                condition=":serviceType=serviceType"/>
+        <filter name="categoryFilter"
+                condition=":category=category"/>
+        <filter name="flightFromFilter"
+                condition=":flightFrom=flightFrom"/>
+        <filter name="flightToFilter"
+                condition=":flightTo=flightTo"/>
+        <filter name="flightDateFromFilter"
+                condition=":flightDate=flightDate"/>
+        <filter name="flightDateToFilter"
+                condition=":flightDate=>flightDate"/>
+    </class>
+    <filter-def name="serviceTypeFilter">
+        <filter-param name="serviceType" type="java.lang.String"/>
+    </filter-def>
+    <filter-def name="categoryFilter">
+        <filter-param name="category" type="java.lang.String"/>
+    </filter-def>
+    <filter-def name="flightFromFilter">
+        <filter-param name="flightFrom" type="java.lang.String"/>
+    </filter-def>
+    <filter-def name="flightToFilter">
+        <filter-param name="flightTo" type="java.lang.String"/>
+    </filter-def>
+    <filter-def name="flightDateFromFilter">
+        <filter-param name="flightDate" type="java.lang.String"/>
+    </filter-def>
+    <filter-def name="flightDateToFilter">
+        <filter-param name="flightDate" type="java.lang.String"/>
+    </filter-def>
+</hibernate-mapping>

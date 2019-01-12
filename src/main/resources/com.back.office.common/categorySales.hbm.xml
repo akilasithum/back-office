@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.CategorySalesDetails" table="sales_category_view" catalog="">
+        <id name="id" type="java.lang.String">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="itemId" type="java.lang.Integer">
+            <column name="itemId"/>
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" />
+        </property>
+        <property name="price" type="java.lang.Float">
+            <column name="price"  />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
+        </property>
+        <property name="category" type="java.lang.String">
+            <column name="category" length="30" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>

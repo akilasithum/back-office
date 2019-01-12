@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.FlightPaymentDetails" table="flight_payment_group_view" catalog="">
+        <id name="id" type="java.lang.String">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="orderId" type="java.lang.String">
+            <column name="orderId" length="30"/>
+        </property>
+        <property name="paymentType" type="java.lang.String">
+            <column name="paymentType" length="30" />
+        </property>
+        <property name="amount" type="java.lang.Float">
+            <column name="amount"  />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
+        </property>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo" length="30" />
+        </property>
+        <property name="discount" type="java.lang.Float">
+            <column name="discount" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>

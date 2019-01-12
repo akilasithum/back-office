@@ -3,7 +3,15 @@ package com.back.office;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
+import com.back.office.db.DBConnection;
+import com.back.office.entity.PermissionCodes;
+import com.back.office.entity.RolePermission;
 import com.back.office.ui.*;
+import com.back.office.ui.authorization.ManageRolesView;
+import com.back.office.ui.salesReports.CategorySalesView;
+import com.back.office.ui.salesReports.FlightPaymentDetailsView;
+import com.back.office.ui.salesReports.SalesDetailsView;
+import com.back.office.ui.uploads.UploadView;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Theme;
@@ -34,6 +42,7 @@ import java.util.*;
 @StyleSheet("valo-theme-ui.css")
 public class MyUI extends UI {
 
+    protected DBConnection connection;
     private static LinkedHashMap<String, String> themeVariants = new LinkedHashMap<String, String>();
     static {
         themeVariants.put(ValoTheme.THEME_NAME, "Valo");
@@ -70,6 +79,8 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+
+        connection = DBConnection.getInstance();
         if (request.getParameter("test") != null) {
 
             if (browserCantRenderFontsConsistently()) {
@@ -90,23 +101,24 @@ public class MyUI extends UI {
         root.setWidth("100%");
         navigator = new Navigator(this, viewDisplay);
         navigator.addView("dashboard", Dashboard.class);
-        navigator.addView("Aircraft Type", AirCraftTypeView.class);
-        navigator.addView("Currency", CurrencyView.class);
-        navigator.addView("Create Items", ItemView.class);
+        navigator.addView("AircraftType", AirCraftTypeView.class);
+        navigator.addView("Currency", CurerncyDetailsView.class);
+        navigator.addView("CreateItems", ItemView.class);
         navigator.addView("login", LoginPage.class);
-        navigator.addView("Create Kit Codes", KitCodesView.class);
-        navigator.addView("Equipment Types", EquipmentTypeView.class);
-        navigator.addView("Assign Items", AssignItemView.class);
-        navigator.addView("Flight Details", FlightDetailsView.class);
+        navigator.addView("CreateKitCodes", KitCodesView.class);
+        navigator.addView("EquipmentTypes", EquipmentTypeView.class);
+        navigator.addView("AssignItems", AssignItemView.class);
+        navigator.addView("FlightDetails", FlightDetailsView.class);
         navigator.addView("Staff", UserDetailsView.class);
-        /*navigator.addView("assign-items", AssignItemView.class);
-        navigator.addView("create-kit-codes", Sliders.class);
-        navigator.addView("cc-black-list", Panels.class);
-        navigator.addView("cc-number-range", Trees.class);
-        navigator.addView("promotions", Tables.class);
-        navigator.addView("update-inventory", SplitPanels.class);*/
-        /*navigator.addView("tabs", Tabsheets.class);
-        navigator.addView("accordions", Accordions.class);
+        navigator.addView("CCBlackList", BlackListCCView.class);
+        navigator.addView("Vouchers", VoucherView.class);
+        navigator.addView("SalesDetails", SalesDetailsView.class);
+        navigator.addView("SalesSummarybyFlight", FlightPaymentDetailsView.class);
+        navigator.addView("SalebyCategory", CategorySalesView.class);
+        navigator.addView("ManageUserRoles", ManageRolesView.class);
+        navigator.addView("ManageUsers", UserDetailsView.class);
+        navigator.addView("uploads", UploadView.class);
+        /*navigator.addView("accordions", Accordions.class);
         navigator.addView("colorpickers", ColorPickers.class);
         navigator.addView("selects", NativeSelects.class);
         navigator.addView("calendar", CalendarTest.class);
@@ -164,14 +176,20 @@ public class MyUI extends UI {
                 navigator.navigateTo("dashboard");
             }
         }
-
         navigator.setErrorView(Dashboard.class);
 
     }
 
+    private void getPermissionCodes(){
+        if(getSession().getAttribute("permissionCodes") == null) {
+            getSession().setAttribute("permissionCodes", BackOfficeUtils.getPermissionCodes());
+        }
+    }
+
     public void navigate(){
         if(root.getComponentCount() == 1){
-            root.addComponent(menu,0);
+            getPermissionCodes();
+            root.addComponent(buildMenu(),0);
         }
     }
 
@@ -226,7 +244,7 @@ public class MyUI extends UI {
             "setup", "uploads", "generateXML", "bondReports", "salesReport",
             "analysis", "specialReports", "preOrderManagement", "CRM" };
     private static final String[] GROUP_WITH_CHILD = { "authorization",
-            "setup", "uploads", "generateXML", "bondReports", "salesReport",
+            "setup", "generateXML", "bondReports", "salesReport",
             "analysis", "specialReports", "preOrderManagement" };
 
     private HierarchicalContainer getContainer() {
@@ -236,6 +254,20 @@ public class MyUI extends UI {
                 "");
         hierarchicalContainer.addContainerProperty("searchName", String.class,
                 "");
+        String userName = "";
+        if(getSession().getAttribute("userName") != null){
+            userName = getSession().getAttribute("userName").toString();
+        }
+        List<RolePermission> rolePermissions = connection.getFilterList("roleIdFilter","roleId",3,
+                "com.back.office.entity.RolePermission");
+        Map<String, Map<Integer, String>> funcAreasCodesMap = (Map<String, Map<Integer, String>>)getSession().getAttribute("permissionCodes");
+        if(funcAreasCodesMap == null){
+            return hierarchicalContainer;
+        }
+        List<Integer> userPermissions = new ArrayList<>();
+        for(RolePermission rolePermission : rolePermissions){
+            userPermissions.add(rolePermission.getPermissionCode());
+        }
 
         for (int i = 0; i < GROUP_CAPTIONS.length; i++) {
             String group = GROUP_ORDER[i];
@@ -247,19 +279,33 @@ public class MyUI extends UI {
             if(groupName.equals("Setup")){
                 list = BackOfficeUtils.getSetupMap();
             }
-            if(groupName.equals("Dashboard") || groupName.equals("CRM")){
+            else if(groupName.equals("Sales Report")){
+                list = BackOfficeUtils.getSellsReportsMap();
+            }
+            else if(groupName.equals("Authorization")){
+                list = BackOfficeUtils.getAuthorizationMap();
+            }
+            if(groupName.equals("Dashboard") || groupName.equals("CRM") || groupName.equals("Uploads")){
                 hierarchicalContainer.setChildrenAllowed(group, false);
             }
-            for (String itemName : list) {
-                Item testItem = hierarchicalContainer.addItem(itemName);
-                testItem.getItemProperty("displayName").setValue(itemName);
-                testItem.getItemProperty("searchName").setValue(
-                        groupName + " " + itemName);
-
-                hierarchicalContainer.setParent(itemName, group);
-                hierarchicalContainer.setChildrenAllowed(itemName, false);
+            Map<Integer,String> permissionMap = funcAreasCodesMap.get(groupName);
+            Map<String,Integer> reverseMap = new HashMap<>();
+            if(permissionMap != null) {
+                for (Map.Entry<Integer, String> map : permissionMap.entrySet()) {
+                    reverseMap.put(map.getValue(), map.getKey());
+                }
             }
-
+            for (String itemName : list) {
+                String name = itemName.replace(" ","");
+                if(reverseMap.isEmpty() || userPermissions.contains(reverseMap.get(name))) {
+                    Item testItem = hierarchicalContainer.addItem(itemName.replace(" ",""));
+                    testItem.getItemProperty("displayName").setValue(itemName);
+                    testItem.getItemProperty("searchName").setValue(
+                            groupName + " " + name);
+                    hierarchicalContainer.setParent(name, group);
+                    hierarchicalContainer.setChildrenAllowed(name, false);
+                }
+            }
         }
 
         return hierarchicalContainer;
@@ -286,7 +332,7 @@ public class MyUI extends UI {
         top.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         top.addStyleName(ValoTheme.MENU_TITLE);
         menu.addComponent(top);
-        menu.addComponent(createThemeSelect());
+        //menu.addComponent(createThemeSelect());
 
         /*Button showMenu = new Button("Menu", new Button.ClickListener() {
             @Override

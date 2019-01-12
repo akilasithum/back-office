@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.UserRole" table="user_roles" catalog="">
+        <id name="roleId" type="java.lang.Integer">
+            <column name="roleId" />
+            <generator class="identity" />
+        </id>
+        <property name="roleName" type="java.lang.String">
+            <column name="roleName" length="100" />
+        </property>
+        <property name="active" type="java.lang.Boolean">
+            <column name="isActive" />
+        </property>
+    </class>
+</hibernate-mapping>

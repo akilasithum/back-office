@@ -1,5 +1,8 @@
 package com.back.office.entity;
 
+import javax.xml.bind.annotation.*;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CurrencyDetails {
 
     private int currencyCodeId;

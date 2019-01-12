@@ -2412,8 +2412,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	border: 1px solid #303739;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	color: #cacecf;
 }
 
@@ -2573,8 +2573,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-contextmenu .gwt-MenuItem-selected {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: #e8f5f8;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
@@ -2756,13 +2756,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -2849,13 +2849,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
-	-webkit-box-shadow: inset 0 1px 2px #3ce0f5, inset 0 0 1px #21cde2, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #3ce0f5, inset 0 0 1px #21cde2, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
+	-webkit-box-shadow: inset 0 1px 2px #2bcced, inset 0 0 1px #1db5d3, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #2bcced, inset 0 0 1px #1db5d3, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0 20px;
 	font-weight: bold;
@@ -2897,13 +2897,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #2c9720;
-	background-image: -webkit-linear-gradient(top, #3dc02c 2%, #14570f 98%);
-	background-image: linear-gradient(to bottom,#3dc02c 2%, #14570f 98%);
-	-webkit-box-shadow: inset 0 1px 2px #6bd160, inset 0 0 1px #51c245, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #6bd160, inset 0 0 1px #51c245, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #31a323 2%, #23811a 98%);
+	background-image: linear-gradient(to bottom,#31a323 2%, #23811a 98%);
+	-webkit-box-shadow: inset 0 1px 2px #51bd45, inset 0 0 1px #42a638, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #51bd45, inset 0 0 1px #42a638, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -2938,13 +2938,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #ed473b;
-	background-image: -webkit-linear-gradient(top, #f46352 2%, #b7211c 98%);
-	background-image: linear-gradient(to bottom,#f46352 2%, #b7211c 98%);
-	-webkit-box-shadow: inset 0 1px 2px #f5998f, inset 0 0 1px #f47569, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #f5998f, inset 0 0 1px #f47569, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #ef4f42 2%, #db3a2f 98%);
+	background-image: linear-gradient(to bottom,#ef4f42 2%, #db3a2f 98%);
+	-webkit-box-shadow: inset 0 1px 2px #f18880, inset 0 0 1px #ef645b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #f18880, inset 0 0 1px #ef645b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -3234,8 +3234,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-checkbox > input ~ label:before, :root .tests-valo-dark .v-checkbox > input ~ label:after {
@@ -3263,13 +3263,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 7px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 20px;
@@ -3364,8 +3364,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-checkbox-small > input ~ label:before, :root .tests-valo-dark .v-checkbox-small > input ~ label:after {
@@ -3393,13 +3393,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 6px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 17px;
@@ -3494,8 +3494,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-checkbox-large > input ~ label:before, :root .tests-valo-dark .v-checkbox-large > input ~ label:after {
@@ -3523,13 +3523,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 8px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 24px;
@@ -3847,8 +3847,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-filterselect-suggestpopup .gwt-MenuItem-selected {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: #e8f5f8;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
@@ -3974,14 +3974,14 @@ div.v-layout.v-horizontal.v-widget {
 	-ms-user-select: none;
 	user-select: none;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	cursor: inherit;
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	text-shadow: inherit;
 	text-overflow: ellipsis;
 	border-radius: inherit;
@@ -3992,8 +3992,8 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-transition: none;
 	-moz-transition: none;
 	transition: none;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
 }
@@ -5503,8 +5503,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-grid-header .v-grid-cell {
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -5522,27 +5522,27 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-grid-footer .v-grid-cell {
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .tests-valo-dark .v-grid-header-deco {
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 }
 
 .tests-valo-dark .v-grid-footer-deco, .tests-valo-dark .v-grid-horizontal-scrollbar-deco {
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 }
 
 .tests-valo-dark .v-grid-row-selected  > .v-grid-cell {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: #bce6ee;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	border-color: #0c849c;
@@ -5684,8 +5684,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-grid-sidebar.v-contextmenu.closed {
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 }
 
 .tests-valo-dark .v-grid-scroller::-webkit-scrollbar {
@@ -6722,8 +6722,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-datefield-popup .v-datefield-calendarpanel-day.v-datefield-calendarpanel-day-selected, .tests-valo-dark .v-datefield-popup .v-datefield-calendarpanel-day.v-datefield-calendarpanel-day-selected:hover {
 	color: #bce6ee;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	border: none;
 	font-weight: 600;
 }
@@ -6915,8 +6915,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-datefield-calendarpanel-day.v-datefield-calendarpanel-day-selected, .tests-valo-dark .v-datefield-calendarpanel-day.v-datefield-calendarpanel-day-selected:hover {
 	color: #bce6ee;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	border: none;
 	font-weight: 600;
 }
@@ -7610,8 +7610,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-inline-datefield-calendarpanel-day.v-inline-datefield-calendarpanel-day-selected, .tests-valo-dark .v-inline-datefield-calendarpanel-day.v-inline-datefield-calendarpanel-day-selected:hover {
 	color: #bce6ee;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	border: none;
 	font-weight: 600;
 }
@@ -7797,13 +7797,13 @@ div.v-layout.v-horizontal.v-widget {
 	cursor: default;
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	text-align: left;
@@ -7879,13 +7879,13 @@ div.v-layout.v-horizontal.v-widget {
 	cursor: pointer;
 	border-radius: 0;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b;
 	background: transparent;
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -7952,8 +7952,8 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	background-color: #41494c;
-	background-image: -webkit-linear-gradient(bottom, #475053 2%, #373d40 98%);
-	background-image: linear-gradient(to top,#475053 2%, #373d40 98%);
+	background-image: -webkit-linear-gradient(bottom, #424b4e 2%, #3e4447 98%);
+	background-image: linear-gradient(to top,#424b4e 2%, #3e4447 98%);
 	color: #eceded;
 }
 
@@ -7977,13 +7977,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 0;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
-	-webkit-box-shadow: inset 0 1px 2px #3ce0f5, inset 0 0 1px #21cde2;
-	box-shadow: inset 0 1px 2px #3ce0f5, inset 0 0 1px #21cde2;
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
+	-webkit-box-shadow: inset 0 1px 2px #2bcced, inset 0 0 1px #1db5d3;
+	box-shadow: inset 0 1px 2px #2bcced, inset 0 0 1px #1db5d3;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	border-top-width: 0;
 	border-left-width: 0;
@@ -8091,8 +8091,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-menubar-popup .v-menubar-menuitem-selected {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: #e8f5f8;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
@@ -8251,8 +8251,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-radiobutton > input ~ label:before, :root .tests-valo-dark .v-radiobutton > input ~ label:after {
@@ -8280,13 +8280,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 7px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 20px;
@@ -8414,8 +8414,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-select-optiongroup-small .v-checkbox > input ~ label:before, :root .tests-valo-dark .v-select-optiongroup-small .v-checkbox > input ~ label:after {
@@ -8443,13 +8443,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 6px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 17px;
@@ -8543,8 +8543,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-select-optiongroup-small .v-radiobutton > input ~ label:before, :root .tests-valo-dark .v-select-optiongroup-small .v-radiobutton > input ~ label:after {
@@ -8572,13 +8572,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 6px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 17px;
@@ -8706,8 +8706,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-select-optiongroup-large .v-checkbox > input ~ label:before, :root .tests-valo-dark .v-select-optiongroup-large .v-checkbox > input ~ label:after {
@@ -8735,13 +8735,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 8px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 24px;
@@ -8835,8 +8835,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #303739;
 	-webkit-box-shadow: 0 0 3px 2px #07a9ca;
 	box-shadow: 0 0 3px 2px #07a9ca;
-	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	-webkit-box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: 0 0 3px 2px #07a9ca, inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 }
 
 :root .tests-valo-dark .v-select-optiongroup-large .v-radiobutton > input ~ label:before, :root .tests-valo-dark .v-select-optiongroup-large .v-radiobutton > input ~ label:after {
@@ -8864,13 +8864,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 8px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 0;
 	height: 24px;
@@ -9064,10 +9064,10 @@ div.v-layout.v-horizontal.v-widget {
 	bottom: 0;
 	left: 0;
 	background-color: #222;
-	background-image: -webkit-radial-gradient(50% 50%, circle, #222, black);
-	background-image: radial-gradient(  circle at 50% 50%, #222, black);
-	opacity: 0.4;
-	filter: alpha(opacity=40) ;
+	background-image: -webkit-radial-gradient(50% 50%, circle, #222, #030303);
+	background-image: radial-gradient(  circle at 50% 50%, #222, #030303);
+	opacity: 0.68;
+	filter: alpha(opacity=68) ;
 	-webkit-animation: valo-animate-in-fade 400ms 100ms backwards;
 	-moz-animation: valo-animate-in-fade 400ms 100ms backwards;
 	animation: valo-animate-in-fade 400ms 100ms backwards;
@@ -9346,8 +9346,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-window-bottom-toolbar.v-layout {
 	padding: 8px 13px;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #151819 0, #444d50 4px);
-	background-image: linear-gradient(to bottom,#151819 0, #444d50 4px);
+	background-image: -webkit-linear-gradient(top, #363d3f 0, #444d50 4px);
+	background-image: linear-gradient(to bottom,#363d3f 0, #444d50 4px);
 	border-top: 1px solid #3a4244;
 	border-radius: 0 0 10px 10px;
 }
@@ -9519,15 +9519,15 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-tree-node-selected:after {
 	opacity: 1;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	border: none;
 }
 
 .v-ie8 .tests-valo-dark .v-tree-node-selected {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 }
 
 .tests-valo-dark .v-tree-node-children {
@@ -9596,8 +9596,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-table-header-wrap, .tests-valo-dark .v-table-footer-wrap, .tests-valo-dark .v-table-header-drag {
 	border: 1px solid #303739;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	white-space: nowrap;
 	font-size: 14px;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
@@ -9733,19 +9733,19 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-table [class*="-row"].v-selected {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	background-origin: border-box;
 	color: #e8f5f8;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .tests-valo-dark .v-table [class*="-row"].v-selected  + .v-selected {
-	background: #036b90;
+	background: #0594b7;
 }
 
 .tests-valo-dark .v-table [class*="-row"].v-selected  + .v-selected td {
-	border-top-color: #036b90;
+	border-top-color: #0594b7;
 }
 
 .tests-valo-dark .v-table [class*="-row"].v-selected .v-table-cell-content {
@@ -9827,13 +9827,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	position: absolute;
 	z-index: 2;
@@ -10195,20 +10195,20 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	height: auto;
 	padding: 0;
 	border-radius: 0;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(left, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to right,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(left, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to right,#4c5659 2%, #373e41 98%);
 }
 
 .tests-valo-dark .v-splitpanel-horizontal  > div > .v-splitpanel-hsplitter div:before:after {
@@ -10255,13 +10255,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	height: auto;
 	padding: 0;
@@ -10308,20 +10308,20 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	height: auto;
 	padding: 0;
 	border-radius: 0;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(left, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to right,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(left, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to right,#4c5659 2%, #373e41 98%);
 }
 
 .tests-valo-dark .v-splitpanel-horizontal.large  > div > .v-splitpanel-hsplitter div:before:after {
@@ -10382,13 +10382,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, none;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, none;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	height: auto;
 	padding: 0;
@@ -10435,8 +10435,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	height: 10px;
 	background-color: #373d3f;
-	background-image: -webkit-linear-gradient(bottom, #4d5558 2%, #1a1c1d 98%);
-	background-image: linear-gradient(to top,#4d5558 2%, #1a1c1d 98%);
+	background-image: -webkit-linear-gradient(bottom, #3d4446 2%, #2d3133 98%);
+	background-image: linear-gradient(to top,#3d4446 2%, #2d3133 98%);
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -10447,8 +10447,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	height: inherit;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	
 	
 	border: 1px solid #303739;
@@ -10477,8 +10477,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	height: inherit;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	
 	
 	border: 1px solid #303739;
@@ -10547,8 +10547,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	height: 10px;
 	background-color: #373d3f;
-	background-image: -webkit-linear-gradient(bottom, #4d5558 2%, #1a1c1d 98%);
-	background-image: linear-gradient(to top,#4d5558 2%, #1a1c1d 98%);
+	background-image: -webkit-linear-gradient(bottom, #3d4446 2%, #2d3133 98%);
+	background-image: linear-gradient(to top,#3d4446 2%, #2d3133 98%);
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -10575,8 +10575,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	height: inherit;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	
 	
 	border: 1px solid #303739;
@@ -10616,13 +10616,13 @@ div.v-layout.v-horizontal.v-widget {
 	
 	border-radius: 10px;
 	border: 1px solid #303739;
-	border-top-color: #444d50;
-	border-bottom-color: #17191b;
+	border-top-color: #363d40;
+	border-bottom-color: #272c2e;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b, 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -10698,8 +10698,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-slider-vertical .v-slider-base {
 	background-color: #373d3f;
-	background-image: -webkit-linear-gradient(right, #4d5558 2%, #1a1c1d 98%);
-	background-image: linear-gradient(to left,#4d5558 2%, #1a1c1d 98%);
+	background-image: -webkit-linear-gradient(right, #3d4446 2%, #2d3133 98%);
+	background-image: linear-gradient(to left,#3d4446 2%, #2d3133 98%);
 	width: 6px;
 	height: 100% !important;
 	min-width: 0;
@@ -10721,8 +10721,8 @@ div.v-layout.v-horizontal.v-widget {
 	height: 101%;
 	margin-left: 0;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(left, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to right,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(left, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to right,#07b3d0 2%, #0594b7 98%);
 }
 
 .v-ie8 .tests-valo-dark .v-slider-vertical .v-slider-base:after {
@@ -11307,13 +11307,13 @@ div.v-layout.v-horizontal.v-widget {
 	line-height: 39px;
 	border-bottom: 1px solid #363d40;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #4a5458 2%, #394144 98%);
-	background-image: linear-gradient(to bottom,#4a5458 2%, #394144 98%);
+	background-image: -webkit-linear-gradient(top, #464f52 2%, #40484b 98%);
+	background-image: linear-gradient(to bottom,#464f52 2%, #40484b 98%);
 	color: #cacecf;
 	font-weight: 400;
 	font-size: 14px;
-	-webkit-box-shadow: inset 0 1px 2px #6b6b6b, inset 0 0 1px #54565a;
-	box-shadow: inset 0 1px 2px #6b6b6b, inset 0 0 1px #54565a;
+	-webkit-box-shadow: inset 0 1px 2px #666666, inset 0 0 1px #4f5154;
+	box-shadow: inset 0 1px 2px #666666, inset 0 0 1px #4f5154;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	border-radius: 9px 9px 0 0;
 }
@@ -11424,8 +11424,8 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #515c60 2%, #303639 98%);
-	background-image: linear-gradient(to bottom,#515c60 2%, #303639 98%);
+	background-image: -webkit-linear-gradient(top, #485154 2%, #3d4548 98%);
+	background-image: linear-gradient(to bottom,#485154 2%, #3d4548 98%);
 	overflow: hidden;
 }
 
@@ -11472,13 +11472,13 @@ div.v-layout.v-horizontal.v-widget {
 	line-height: 39px;
 	border-bottom: 1px solid #363d40;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #4a5458 2%, #394144 98%);
-	background-image: linear-gradient(to bottom,#4a5458 2%, #394144 98%);
+	background-image: -webkit-linear-gradient(top, #464f52 2%, #40484b 98%);
+	background-image: linear-gradient(to bottom,#464f52 2%, #40484b 98%);
 	color: #cacecf;
 	font-weight: 400;
 	font-size: 14px;
-	-webkit-box-shadow: inset 0 1px 2px #6b6b6b, inset 0 0 1px #54565a;
-	box-shadow: inset 0 1px 2px #6b6b6b, inset 0 0 1px #54565a;
+	-webkit-box-shadow: inset 0 1px 2px #666666, inset 0 0 1px #4f5154;
+	box-shadow: inset 0 1px 2px #666666, inset 0 0 1px #4f5154;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	display: block;
 	background: transparent;
@@ -11550,8 +11550,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-select-twincol select {
 	border: 1px solid #303739;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	color: #cacecf;
 }
 
@@ -11634,8 +11634,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-select select {
 	border: 1px solid #303739;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	color: #cacecf;
 }
 
@@ -12355,8 +12355,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .v-select select {
 	border: 1px solid #303739;
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
 	color: #cacecf;
 }
 
@@ -12511,10 +12511,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-richtextarea .gwt-RichTextToolbar {
 	background-color: #444d50;
-	background-image: -webkit-linear-gradient(top, #5f6b70 2%, #202426 98%);
-	background-image: linear-gradient(to bottom,#5f6b70 2%, #202426 98%);
-	-webkit-box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72;
-	box-shadow: inset 0 1px 2px #818181, inset 0 0 1px #6a6d72;
+	background-image: -webkit-linear-gradient(top, #4c5659 2%, #373e41 98%);
+	background-image: linear-gradient(to bottom,#4c5659 2%, #373e41 98%);
+	-webkit-box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b;
+	box-shadow: inset 0 1px 2px #6c6c6c, inset 0 0 1px #55585b;
 	border-bottom: 1px solid #303739;
 	color: #cacecf;
 }
@@ -12533,8 +12533,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .v-richtextarea .gwt-ToggleButton-down, .tests-valo-dark .v-richtextarea .gwt-ToggleButton-down-hovering {
 	background-color: #2d3234;
-	background-image: -webkit-linear-gradient(bottom, #313739 2%, #262a2b 98%);
-	background-image: linear-gradient(to top,#313739 2%, #262a2b 98%);
+	background-image: -webkit-linear-gradient(bottom, #2e3335 2%, #2a2f31 98%);
+	background-image: linear-gradient(to top,#2e3335 2%, #2a2f31 98%);
 }
 
 .tests-valo-dark .v-richtextarea .gwt-RichTextToolbar-top img {
@@ -13037,8 +13037,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .valo-menu {
 	height: 100%;
 	background-color: #141718;
-	background-image: -webkit-linear-gradient(right, black 0%, #141718 10px);
-	background-image: linear-gradient(to left,black 0%, #141718 10px);
+	background-image: -webkit-linear-gradient(right, #060707 0%, #141718 10px);
+	background-image: linear-gradient(to left,#060707 0%, #141718 10px);
 	color: #848e92;
 	font-size: 14px;
 	line-height: 32px;
@@ -13081,8 +13081,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .valo-menu-title {
 	line-height: 1.2;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: white;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
 	padding: 13px 20px;
@@ -13104,8 +13104,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .valo-menu-title .v-menubar-menuitem {
 	background: transparent;
-	-webkit-box-shadow: inset 0 1px 2px #3ce0f5, inset 0 0 1px #21cde2;
-	box-shadow: inset 0 1px 2px #3ce0f5, inset 0 0 1px #21cde2;
+	-webkit-box-shadow: inset 0 1px 2px #2bcced, inset 0 0 1px #1db5d3;
+	box-shadow: inset 0 1px 2px #2bcced, inset 0 0 1px #1db5d3;
 	text-shadow: inherit;
 	font-size: 16px;
 	border-color: inherit;
@@ -13269,8 +13269,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .tests-valo-dark .valo-menu-item.selected [class*="badge"] {
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: #bce6ee;
 }
 
@@ -13406,8 +13406,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 10px;
 	text-align: center;
 	background-color: #07a9ca;
-	background-image: -webkit-linear-gradient(top, #09cbdf 2%, #036b90 98%);
-	background-image: linear-gradient(to bottom,#09cbdf 2%, #036b90 98%);
+	background-image: -webkit-linear-gradient(top, #07b3d0 2%, #0594b7 98%);
+	background-image: linear-gradient(to bottom,#07b3d0 2%, #0594b7 98%);
 	color: white;
 	font-size: 27px;
 	line-height: 48px;
@@ -13583,8 +13583,8 @@ div.v-layout.v-horizontal.v-widget {
 .tests-valo-dark .valo-menu-responsive[width-range~="0-800px"] .valo-menuitems {
 	height: 100%;
 	background-color: #141718;
-	background-image: -webkit-linear-gradient(right, black 0%, #141718 10px);
-	background-image: linear-gradient(to left,black 0%, #141718 10px);
+	background-image: -webkit-linear-gradient(right, #060707 0%, #141718 10px);
+	background-image: linear-gradient(to left,#060707 0%, #141718 10px);
 	color: #848e92;
 	font-size: 14px;
 	line-height: 32px;
