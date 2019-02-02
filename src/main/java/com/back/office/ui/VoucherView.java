@@ -1,16 +1,21 @@
 package com.back.office.ui;
 
 import com.back.office.entity.BlackListCC;
-import com.back.office.entity.EquipmentDetails;
 import com.back.office.entity.Voucher;
 import com.back.office.utils.BackOfficeUtils;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.IndexedContainer;
+import com.back.office.utils.Constants;
+import com.vaadin.contextmenu.ContextMenu;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 public class VoucherView extends CommonPageDetails {
@@ -33,6 +38,9 @@ public class VoucherView extends CommonPageDetails {
     protected TextField rationDiscountFld;
     protected HorizontalLayout secondRow;
 
+    FilterGrid<Voucher> voucherGrid;
+    List<Voucher> voucherList;
+
     public VoucherView(){
         super();
     }
@@ -45,30 +53,29 @@ public class VoucherView extends CommonPageDetails {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
-        MarginInfo marginInfo = new MarginInfo(false,false,true,false);
-        firstRow.setMargin(marginInfo);
+        firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
         secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
         secondRow.setSizeFull();
-        secondRow.setMargin(marginInfo);
+        secondRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(secondRow);
 
         voucherNameFld = new TextField(VOUCHER_NAME);
-        voucherNameFld.setInputPrompt(VOUCHER_NAME);
-        voucherNameFld.setRequired(true);
+        voucherNameFld.setDescription(VOUCHER_NAME);
+        voucherNameFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(voucherNameFld);
+        voucherNameFld.addValueChangeListener(valueChangeEvent -> {isKeyFieldDirty = true;});
 
         voucherTypeComboBox = new ComboBox(VOUCHER_TYPE);
-        voucherTypeComboBox.setInputPrompt(VOUCHER_TYPE);
-        voucherTypeComboBox.addItem("Percentage");
-        voucherTypeComboBox.addItem("Ratio");
-        voucherTypeComboBox.setNullSelectionAllowed(false);
-        voucherTypeComboBox.setRequired(true);
+        voucherTypeComboBox.setDescription(VOUCHER_TYPE);
+        voucherTypeComboBox.setItems("Percentage","Ratio");
+        voucherTypeComboBox.setEmptySelectionAllowed(false);
+        voucherTypeComboBox.setRequiredIndicatorVisible(true);
         firstRow.addComponent(voucherTypeComboBox);
-        voucherTypeComboBox.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+        voucherTypeComboBox.addValueChangeListener(valueChangeEvent -> {
             secondRow.removeAllComponents();
             if(voucherTypeComboBox.getValue() != null && voucherTypeComboBox.getValue().equals("Percentage")){
                 addPercentageConditonLayout();
@@ -79,22 +86,61 @@ public class VoucherView extends CommonPageDetails {
         });
 
         activateDateFld = new DateField(ACTIVATE_DATE);
-        activateDateFld.setRequired(true);
+        activateDateFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(activateDateFld);
 
         endDateFld = new DateField(END_DATE);
-        endDateFld.setRequired(true);
+        endDateFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(endDateFld);
+
+        voucherGrid = new FilterGrid<>();
+        voucherGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        voucherGrid.setSizeFull();
+        tableLayout.addComponent(voucherGrid);
+        setDataInGrid();
+        GridContextMenu<Voucher> gridMenu = new GridContextMenu<>(voucherGrid);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
 
         userFormLayout.setWidth("70%");
         mainTableLayout.setWidth("70%");
         headerLayout.setWidth("70%");
     }
 
+    protected void deleteItem(Object target) {
+        if (target != null) {
+            Voucher voucher = (Voucher) target;
+            boolean success = connection.deleteObjectHBM(voucher.getVoucherId(), className);
+            if (success) {
+                BackOfficeUtils.showNotification("Success", "Voucher delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                voucherList.remove(target);
+                voucherGrid.setItems(voucherList);
+            } else {
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+            }
+        }
+    }
+
+    private void setDataInGrid(){
+        voucherList = (List<Voucher>)connection.getAllValues(className);
+        voucherGrid.setItems(voucherList);
+        voucherGrid.addColumn(Voucher::getVoucherName).setCaption(VOUCHER_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        voucherGrid.addColumn(Voucher::getVoucherType).setCaption(VOUCHER_TYPE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        voucherGrid.addColumn(Voucher::getAmount).setCaption(AMOUNT).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        voucherGrid.addColumn(Voucher::getDiscount).setCaption(DISCOUNT).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        voucherGrid.addColumn(Voucher::getActivateDate).setCaption(ACTIVATE_DATE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        voucherGrid.addColumn(Voucher::getEndDate).setCaption(END_DATE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+    }
+
     private void addPercentageConditonLayout(){
         discountFld = new TextField(DISCOUNT_PERCENTAGE);
-        discountFld.setInputPrompt(DISCOUNT_PERCENTAGE);
-        discountFld.setRequired(true);
+        discountFld.setDescription(DISCOUNT_PERCENTAGE);
+        discountFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(discountFld);
     }
 
@@ -104,44 +150,23 @@ public class VoucherView extends CommonPageDetails {
         secondRow.setMargin(marginInfo);
 
         amountFld = new TextField(AMOUNT);
-        amountFld.setInputPrompt(AMOUNT);
-        amountFld.setRequired(true);
+        amountFld.setDescription(AMOUNT);
+        amountFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(amountFld);
 
         rationDiscountFld = new TextField("Discount");
-        rationDiscountFld.setInputPrompt("Discount");
-        rationDiscountFld.setRequired(true);
+        rationDiscountFld.setDescription("Discount");
+        rationDiscountFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(rationDiscountFld);
     }
 
-    @Override
-    protected IndexedContainer generateContainer() {
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(VOUCHER_NAME, String.class, null);
-        container.addContainerProperty(VOUCHER_TYPE, String.class, null);
-        container.addContainerProperty(AMOUNT, Float.class, null);
-        container.addContainerProperty(DISCOUNT, String.class, null);
-        container.addContainerProperty(ACTIVATE_DATE, String.class, null);
-        container.addContainerProperty(END_DATE, String.class, null);
 
-        List<Voucher> voucherList = (List<Voucher>)connection.getAllValues(className);
-        for(Voucher voucher : voucherList){
-            Item item = container.addItem(voucher.getVoucherId());
-            item.getItemProperty(VOUCHER_NAME).setValue(voucher.getVoucherName());
-            item.getItemProperty(VOUCHER_TYPE).setValue(voucher.getVoucherType());
-            item.getItemProperty(AMOUNT).setValue(voucher.getAmount());
-            item.getItemProperty(DISCOUNT).setValue(voucher.getDiscount());
-            item.getItemProperty(ACTIVATE_DATE).setValue(voucher.getActivateDate());
-            item.getItemProperty(END_DATE).setValue(voucher.getEndDate());
-        }
-        return container;
-    }
 
     @Override
     protected void insertDetails() {
         String isValidated = validateFields();
         if(isValidated != null){
-            Notification.show(isValidated);
+            Notification.show(isValidated, Notification.Type.WARNING_MESSAGE);
         }
         else{
             int itemIdVal = (idField.getValue() == null || idField.getValue().isEmpty()) ? 0 : Integer.parseInt(idField.getValue());
@@ -150,8 +175,14 @@ public class VoucherView extends CommonPageDetails {
             voucher.setVoucherName(voucherNameFld.getValue());
             String voucherType = voucherTypeComboBox.getValue().toString();
             voucher.setVoucherType(voucherType);
-            voucher.setActivateDate(BackOfficeUtils.getDateStringFromDate(activateDateFld.getValue()));
-            voucher.setEndDate(BackOfficeUtils.getDateStringFromDate(endDateFld.getValue()));
+
+            Date date = Date.from(activateDateFld.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            String effectiveDateStr = BackOfficeUtils.getDateStringFromDate(date);
+            Date endDate = Date.from(endDateFld.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            String endDateStr = BackOfficeUtils.getDateStringFromDate(endDate);
+
+            voucher.setActivateDate(effectiveDateStr);
+            voucher.setEndDate(endDateStr);
             if(voucherType.equals("Percentage")){
                 voucher.setDiscount(discountFld.getValue());
             }
@@ -167,25 +198,30 @@ public class VoucherView extends CommonPageDetails {
     @Override
     protected void fillEditDetails(Object target) {
         if(target != null) {
-            IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-            Item item = container.getItem(target);
-            idField.setValue(target.toString());
-            voucherNameFld.setValue(item.getItemProperty(VOUCHER_NAME).getValue().toString());
-            String voucherType = item.getItemProperty(VOUCHER_TYPE).getValue().toString();
+            Voucher voucher = (Voucher) target;
+            idField.setValue(String.valueOf(voucher.getVoucherId()));
+            voucherNameFld.setValue(voucher.getVoucherName());
+            String voucherType = voucher.getVoucherType();
             voucherTypeComboBox.setValue(voucherType);
-            activateDateFld.setValue(BackOfficeUtils.convertStringToDate(item.getItemProperty(ACTIVATE_DATE).getValue().toString()));
-            endDateFld.setValue(BackOfficeUtils.convertStringToDate(item.getItemProperty(END_DATE).getValue().toString()));
+            Date input = BackOfficeUtils.convertStringToDate(voucher.getActivateDate());
+            Date endDate = BackOfficeUtils.convertStringToDate(voucher.getEndDate());
+            LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate endDateVal = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            activateDateFld.setValue(date);
+            endDateFld.setValue(endDateVal);
             secondRow.removeAllComponents();
             if(voucherTypeComboBox.getValue() != null && voucherTypeComboBox.getValue().equals("Percentage")){
                 addPercentageConditonLayout();
-                discountFld.setValue(item.getItemProperty(DISCOUNT).getValue().toString());
+                discountFld.setValue(String.valueOf(voucher.getDiscount()));
             }
             else{
                 addRatioConditionLayout();
-                rationDiscountFld.setValue(item.getItemProperty(DISCOUNT).getValue().toString());
-                amountFld.setValue(item.getItemProperty(AMOUNT).getValue().toString());
+                rationDiscountFld.setValue(voucher.getDiscount());
+                amountFld.setValue(String.valueOf(voucher.getAmount()));
             }
-            addButton.setCaption("Edit");
+            addButton.setCaption("Save");
+            editObj = voucher;
+            isKeyFieldDirty = false;
         }
     }
 
@@ -194,24 +230,25 @@ public class VoucherView extends CommonPageDetails {
         this.filterFieldStr = VOUCHER_NAME;
         this.pageHeader = "Voucher Details";
         this.className = "com.back.office.entity.Voucher";
+        this.keyFieldDBName = "voucherName";
+    }
+
+    @Override
+    protected TextField getKeyField() {
+        return voucherNameFld;
     }
 
     @Override
     protected void updateTable(boolean isEdit, Object details, int newId) {
         Voucher voucher = (Voucher) details;
-        IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-        Item item;
         if(isEdit){
-            item  = container.getItem(voucher.getVoucherId());
+            int index = voucherList.indexOf(editObj);
+            voucherList.remove(editObj);
+            voucherList.add(index,voucher);
         }
         else{
-            item  = container.addItem(newId);
+            voucherList.add(voucher);
         }
-        item.getItemProperty(VOUCHER_NAME).setValue(voucher.getVoucherName());
-        item.getItemProperty(VOUCHER_TYPE).setValue(voucher.getVoucherType());
-        item.getItemProperty(DISCOUNT).setValue(voucher.getDiscount());
-        item.getItemProperty(AMOUNT).setValue(voucher.getAmount());
-        item.getItemProperty(ACTIVATE_DATE).setValue(voucher.getActivateDate());
-        item.getItemProperty(END_DATE).setValue(voucher.getEndDate());
+        voucherGrid.setItems(voucherList);
     }
 }

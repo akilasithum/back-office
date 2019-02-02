@@ -3,7 +3,7 @@ package com.back.office;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-import com.back.office.db.DBConnection;
+/*import com.back.office.db.DBConnection;
 import com.back.office.entity.PermissionCodes;
 import com.back.office.entity.RolePermission;
 import com.back.office.ui.*;
@@ -11,6 +11,7 @@ import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.salesReports.CategorySalesView;
 import com.back.office.ui.salesReports.FlightPaymentDetailsView;
 import com.back.office.ui.salesReports.SalesDetailsView;
+import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.annotations.StyleSheet;
@@ -27,22 +28,17 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.melodion.Melodion;*/
 
 import java.util.*;
 
-/**
- * This UI is the application entry point. A UI may either represent a browser window 
- * (or tab) or some part of a html page where a Vaadin application is embedded.
- * <p>
- * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be 
- * overridden to add component to the user interface and initialize non-component functionality.
- */
-@Theme("tests-valo-facebook")
-@Widgetset("com.back.office.MyAppWidgetset")
-@StyleSheet("valo-theme-ui.css")
-public class MyUI extends UI {
 
-    protected DBConnection connection;
+/*@Theme("tests-valo-facebook")
+@Widgetset("com.back.office.MyAppWidgetset")
+@StyleSheet("valo-theme-ui.css")*/
+public class MyUI {
+
+    /*protected DBConnection connection;
     private static LinkedHashMap<String, String> themeVariants = new LinkedHashMap<String, String>();
     static {
         themeVariants.put(ValoTheme.THEME_NAME, "Valo");
@@ -65,6 +61,7 @@ public class MyUI extends UI {
     }
     private Navigator navigator;
     private LinkedHashMap<String, String> menuItems = new LinkedHashMap<String, String>();
+    private Button previousSelectedBtn;
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
@@ -118,19 +115,19 @@ public class MyUI extends UI {
         navigator.addView("ManageUserRoles", ManageRolesView.class);
         navigator.addView("ManageUsers", UserDetailsView.class);
         navigator.addView("uploads", UploadView.class);
-        /*navigator.addView("accordions", Accordions.class);
-        navigator.addView("colorpickers", ColorPickers.class);
+        navigator.addView("ErrorView", ErrorView.class);
+        *//*navigator.addView("colorpickers", ColorPickers.class);
         navigator.addView("selects", NativeSelects.class);
         navigator.addView("calendar", CalendarTest.class);
         navigator.addView("forms", Forms.class);
         navigator.addView("popupviews", PopupViews.class);
-        navigator.addView("dragging", Dragging.class);*/
-        /*if(VaadinSession.getCurrent().getAttribute("user") == null){
+        navigator.addView("dragging", Dragging.class);*//*
+        *//*if(VaadinSession.getCurrent().getAttribute("user") == null){
             navigator.navigateTo("login");
             return;
-        }*/
+        }*//*
 
-        root.addMenu(buildMenu());
+        //root.addMenu(buildNewMenu());
         addStyleName(ValoTheme.UI_WITH_MENU);
 
         navigator.addViewChangeListener(new ViewChangeListener() {
@@ -168,16 +165,16 @@ public class MyUI extends UI {
         String f = Page.getCurrent().getUriFragment();
 
         if(getSession().getAttribute("userName") == null || getSession().getAttribute("userName").toString().isEmpty()){
-            root.removeComponent(root.getComponent(0));
+            //root.removeComponent(root.getComponent(0));
             getUI().getNavigator().navigateTo("login");
         }
         else {
-            if (f == null || f.equals("") || f.equals("!login")) {
+            if (f == null || f.equals("") || !f.equals("login")) {
+                root.addMenu(buildMenu());
                 navigator.navigateTo("dashboard");
             }
         }
-        navigator.setErrorView(Dashboard.class);
-
+        navigator.setErrorView(ErrorView.class);
     }
 
     private void getPermissionCodes(){
@@ -187,15 +184,11 @@ public class MyUI extends UI {
     }
 
     public void navigate(){
-        if(root.getComponentCount() == 1){
             getPermissionCodes();
-            root.addComponent(buildMenu(),0);
-        }
+            root.addMenu(buildMenu());
+            navigator.navigateTo("dashboard");
     }
 
-    public boolean isLoggedIn(){
-        return getSession() != null && getSession().getAttribute("userName") != null;
-    }
 
     private boolean browserCantRenderFontsConsistently() {
         // PhantomJS renders font correctly about 50% of the time, so
@@ -212,6 +205,7 @@ public class MyUI extends UI {
 
     Tree buitTreeMenu(){
         Tree tree = new Tree();
+        tree.setWidth(250,Unit.PIXELS);
         tree.setImmediate(true);
         tree.setContainerDataSource(getContainer());
         tree.setItemCaptionPropertyId("displayName");
@@ -311,6 +305,43 @@ public class MyUI extends UI {
         return hierarchicalContainer;
     }
 
+    Accordion buildNewMenu(){
+
+        Accordion sample = new Accordion();
+        sample.setWidth(200.0f, Unit.PIXELS);
+
+        for (int i = 1; i < 8; i++) {
+            Button btn = new Button("Click Me");
+            //final Label label = new Label("al", ContentMode.HTML);
+            btn.setWidth(100.0f, Unit.PERCENTAGE);
+            btn.setIcon(FontAwesome.CIRCLE);
+            btn.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+            btn.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(ClickEvent clickEvent) {
+                    btn.removeStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+                    btn.addStyleName("borderless-colored-clicked");
+                    if(previousSelectedBtn != null) {
+                        previousSelectedBtn.removeStyleName("borderless-colored-clicked");
+                        previousSelectedBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+                    }
+                    previousSelectedBtn = btn;
+                }
+            });
+            final VerticalLayout layout = new VerticalLayout();
+            layout.addComponent(btn);
+            layout.addStyleName(ValoTheme.LAYOUT_WELL);
+            if(i == 1) {
+                sample.addTab(btn);
+
+            }else {
+                sample.addTab(layout, "Tab " + i);
+            }
+        }
+        //menu.addComponent(sample);
+        return sample;
+    }
+
     CssLayout buildMenu() {
         // Add items
         menuItems.put("common", "Dashboard");
@@ -334,7 +365,7 @@ public class MyUI extends UI {
         menu.addComponent(top);
         //menu.addComponent(createThemeSelect());
 
-        /*Button showMenu = new Button("Menu", new Button.ClickListener() {
+        *//*Button showMenu = new Button("Menu", new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 if (menu.getStyleName().contains("valo-menu-visible")) {
@@ -348,7 +379,7 @@ public class MyUI extends UI {
         showMenu.addStyleName(ValoTheme.BUTTON_SMALL);
         showMenu.addStyleName("valo-menu-toggle");
         showMenu.setIcon(FontAwesome.LIST);
-        menu.addComponent(showMenu);*/
+        menu.addComponent(showMenu);*//*
 
         Label title = new Label("<h3><strong>Porter AirLines</strong></h3>",
                 ContentMode.HTML);
@@ -390,5 +421,5 @@ public class MyUI extends UI {
             }
         });
         return ns;
-    }
+    }*/
 }

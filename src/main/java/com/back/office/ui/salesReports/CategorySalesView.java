@@ -2,15 +2,18 @@ package com.back.office.ui.salesReports;
 
 import com.back.office.entity.CategorySalesDetails;
 import com.back.office.utils.BackOfficeUtils;
-import com.vaadin.data.Container;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.back.office.utils.Constants;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.poi.ss.usermodel.Sheet;
+
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,7 @@ public class CategorySalesView extends ReportCommonView {
     protected DateField flightDateFromDateField;
     protected DateField flightDateToDateField;
     protected ComboBox serviceTypeComboBox;
+    protected Grid<CategorySalesDetails> detailsTable;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
@@ -46,44 +50,51 @@ public class CategorySalesView extends ReportCommonView {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
-        MarginInfo marginInfo = new MarginInfo(false,false,true,false);
-        firstRow.setMargin(marginInfo);
+        firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
+
+        Date date = new Date();
+        LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
-        flightDateFromDateField.setValue(new Date());
+        flightDateFromDateField.setValue(today);
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
-        flightDateToDateField.setValue(new Date());
+        flightDateToDateField.setValue(today);
         firstRow.addComponent(flightDateToDateField);
 
         serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
-        serviceTypeComboBox.setInputPrompt(SERVICE_TYPE);
-        serviceTypeComboBox.addItem("Duty Free");
-        serviceTypeComboBox.addItem("Duty Paid");
-        serviceTypeComboBox.addItem("Buy on Board");
-        serviceTypeComboBox.select("Duty Free");
-        serviceTypeComboBox.setNullSelectionAllowed(false);
+        serviceTypeComboBox.setDescription(SERVICE_TYPE);
+        serviceTypeComboBox.setItems("Duty Free","Duty Paid","Buy on Board");
+        serviceTypeComboBox.setSelectedItem("Duty Free");
+        serviceTypeComboBox.setEmptySelectionAllowed(false);
         firstRow.addComponent(serviceTypeComboBox);
-
+        detailsTable = new Grid<>();
+        detailsTable.setColumnReorderingAllowed(true);
+        detailsTable.setSizeFull();
+        tableLayout.addComponent(detailsTable);
         userFormLayout.setWidth("70%");
+        createShowTableHeader();
     }
 
     @Override
-    protected IndexedContainer generateContainer() {
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(CATEGORY, String.class, null);
-        container.addContainerProperty(QUANTITY, String.class, null);
-        container.addContainerProperty(QTY_PERCENTAGE, String.class, null);
-        container.addContainerProperty(RETAIL_AMOUNT, String.class, null);
-        container.addContainerProperty(RETAIL_AMOUNT_PERCENTAGE, String.class, null);
-        container.addContainerProperty(DISCOUNT, Float.class, null);
-        container.addContainerProperty(NET_AMOUNT, String.class, null);
-        container.addContainerProperty(NET_AMOUNT_PERCENTAGE, String.class, null);
-        return container;
+    protected Sheet getWorkbook(Sheet sheet) {
+        return null;
     }
 
+    private void createShowTableHeader(){
+        detailsTable.addColumn(CategorySalesDetails::getCategory).setCaption(CATEGORY);
+        detailsTable.addColumn(CategorySalesDetails::getQuantity).setCaption(QUANTITY);
+        detailsTable.addColumn(CategorySalesDetails::getItemId).setCaption(QTY_PERCENTAGE);
+        detailsTable.addColumn(CategorySalesDetails::getQuantity).setCaption(QUANTITY);
+        detailsTable.addColumn(CategorySalesDetails::getPrice).setCaption(RETAIL_AMOUNT);
+        detailsTable.addColumn(CategorySalesDetails::getPrice).setCaption(RETAIL_AMOUNT_PERCENTAGE);
+        detailsTable.addColumn(CategorySalesDetails::getFlightDate).setCaption(DISCOUNT);
+        //detailsTable.addColumn(CategorySalesDetails::get).setCaption(NET_AMOUNT);
+        //detailsTable.addColumn(CategorySalesDetails::getFlightFrom).setCaption(NET_AMOUNT_PERCENTAGE);
+    }
     @Override
     protected void defineStringFields() {
         this.pageHeader = "Sales by Category";
@@ -93,13 +104,14 @@ public class CategorySalesView extends ReportCommonView {
     @Override
     protected void showFilterData() {
         mainTableLayout.setVisible(true);
-        Container container = detailsTable.getContainerDataSource();
-        container.removeAllItems();
+
         String serviceType = BackOfficeUtils.getServiceTypeFromServiceType( serviceTypeComboBox.getValue().toString());
-        List<CategorySalesDetails> list = connection.getCategorySalesDetails(flightDateFromDateField.getValue(),flightDateToDateField.getValue(),
+        Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        List<CategorySalesDetails> list = connection.getCategorySalesDetails(dateFrom,dateTo,
                 serviceType);
-        String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(flightDateFromDateField.getValue()) +
-                " , To " + BackOfficeUtils.getDateFromDateTime(flightDateToDateField.getValue()) + " , " +
+        String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
+                " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
                 "Service Type = " + serviceTypeComboBox.getValue().toString();
         filterCriteriaText.setValue(outputStr);
         float totalQty = 0;
@@ -122,7 +134,7 @@ public class CategorySalesView extends ReportCommonView {
         int i = 1;
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        for(Map.Entry<String, Float> map : catQuantityMap.entrySet()){
+        /*for(Map.Entry<String, Float> map : catQuantityMap.entrySet()){
 
             float qtyPercentage = (map.getValue()/totalQty)*100;
             float totalPercentage = (catPriceMap.get(map.getKey())/totalPrice)*100;
@@ -146,21 +158,8 @@ public class CategorySalesView extends ReportCommonView {
         item.getItemProperty(RETAIL_AMOUNT_PERCENTAGE).setValue("100");
         item.getItemProperty(DISCOUNT).setValue(0.0f);
         item.getItemProperty(NET_AMOUNT).setValue(df.format(totalPrice));
-        item.getItemProperty(NET_AMOUNT_PERCENTAGE).setValue("100");
+        item.getItemProperty(NET_AMOUNT_PERCENTAGE).setValue("100");*/
 
-        /*for(CategorySalesDetails details : list){
-            float qty = Float.parseFloat(String.valueOf(details.getQuantity()));
-            float qtyPercentage = (qty/totalQty)*100;
-            float totalPercentage = (details.getPrice()/totalPrice)*100;
-            Item item = container.addItem(details.getId());
-            item.getItemProperty(CATEGORY).setValue(details.getCategory());
-            item.getItemProperty(QUANTITY).setValue(details.getQuantity());
-            item.getItemProperty(QTY_PERCENTAGE).setValue(qtyPercentage);
-            item.getItemProperty(RETAIL_AMOUNT).setValue(details.getPrice());
-            item.getItemProperty(RETAIL_AMOUNT_PERCENTAGE).setValue(totalPercentage);
-            item.getItemProperty(DISCOUNT).setValue(0.0f);
-            item.getItemProperty(NET_AMOUNT).setValue(details.getPrice());
-            item.getItemProperty(NET_AMOUNT_PERCENTAGE).setValue(totalPercentage);
-        }*/
+
     }
 }

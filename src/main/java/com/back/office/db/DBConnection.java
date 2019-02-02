@@ -6,6 +6,7 @@ import com.back.office.ui.salesReports.CategorySalesView;
 import org.hibernate.Criteria;
 import org.hibernate.Filter;
 import org.hibernate.classic.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -164,6 +165,17 @@ public class DBConnection {
         }
     }
 
+    public List<ItemDetails> getAllActiveItems(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            return session.createCriteria(ItemDetails.class).add(Restrictions.eq("deListed", "No")).   list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public List<KitCodes> getAllKitCodes(){
         try
         {
@@ -210,13 +222,26 @@ public class DBConnection {
         }
     }
 
-    public List getFilterList(String filterName,String fieldName,Integer fieldValue,String className){
+    public List getFilterList(String filterName,String fieldName,Integer fieldValue,String className,String orderByFeild){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.enableFilter(filterName).setParameter(fieldName, fieldValue);
             session.beginTransaction();
-            return session.createCriteria(Class.forName(className)).list();
+
+            return session.createCriteria(Class.forName(className)).addOrder(Order.asc(orderByFeild)).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List getUserRoleIds(String filterName,String fieldName,Integer fieldValue,String className){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.enableFilter(filterName).setParameter(fieldName, fieldValue);
+            session.beginTransaction();
+            return session.createCriteria(Class.forName(className)).setProjection(Projections.property("permissionCode")).list();
         } catch (Exception e) {
             return null;
         }
@@ -287,6 +312,41 @@ public class DBConnection {
         projList.add(Projections.groupProperty("category"),"category");
         //criteria.setProjection(projList);
         return criteria.list();
+    }
+
+    public List getSifDetails(Date flightFromDate,Date flightToDate){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(SIFDetails.class);
+        criteria.add(Restrictions.ge("downloaded", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("downloaded", tommorow(flightToDate)));
+        //criteria.setProjection(projList);
+        return criteria.list();
+    }
+
+    public List getItemCodesList(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(ItemDetails.class);
+        criteria.setProjection(Projections.distinct(Projections.property("itemCode")));
+        return criteria.list();
+    }
+
+    public List getCurrencyCodesList(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(CurrencyDetails.class);
+        criteria.setProjection(Projections.distinct(Projections.property("currencyCode")));
+        return criteria.list();
+    }
+
+    public List getKeyFieldList(String className,String keyField){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            Criteria criteria = session.createCriteria(Class.forName(className));
+            criteria.setProjection(Projections.distinct(Projections.property(keyField)));
+            return criteria.list();
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     public List getCategories(){

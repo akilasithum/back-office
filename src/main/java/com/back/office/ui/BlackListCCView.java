@@ -1,14 +1,16 @@
 package com.back.office.ui;
 
 import com.back.office.entity.BlackListCC;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.back.office.entity.User;
+import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.Constants;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class BlackListCCView extends CommonPageDetails {
 
     protected TextField cardNumberFld;
     protected ComboBox statusComboBox;
+
+    FilterGrid<BlackListCC> blackListCCGrid;
+    List<BlackListCC> blackListCCList;
 
     public BlackListCCView(){
         super();
@@ -31,53 +36,72 @@ public class BlackListCCView extends CommonPageDetails {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
         cardNumberFld = new TextField(CREDIT_CARD_NUMBER);
-        cardNumberFld.setInputPrompt(CREDIT_CARD_NUMBER);
-        cardNumberFld.setRequired(true);
+        cardNumberFld.setDescription(CREDIT_CARD_NUMBER);
+        cardNumberFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(cardNumberFld);
+        cardNumberFld.addValueChangeListener(valueChangeEvent -> {
+            isKeyFieldDirty = true;
+        });
 
         HorizontalLayout secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
         secondRow.setSizeFull();
-        MarginInfo marginInfo = new MarginInfo(true,false,true,false);
-        secondRow.setMargin(marginInfo);
+        secondRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(secondRow);
 
         statusComboBox = new ComboBox(STATUS);
-        statusComboBox.setInputPrompt(STATUS);
-        statusComboBox.addItem("Bank Black List");
-        statusComboBox.addItem("System Labeled Black List");
-        statusComboBox.setNullSelectionAllowed(false);
-        statusComboBox.setRequired(true);
+        statusComboBox.setDescription(STATUS);
+        statusComboBox.setItems("Bank Black List","System Labeled Black List");
+        statusComboBox.setEmptySelectionAllowed(false);
+        statusComboBox.setRequiredIndicatorVisible(true);
         secondRow.addComponent(statusComboBox);
+
+        blackListCCGrid = new FilterGrid<>();
+        blackListCCGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        blackListCCGrid.setSizeFull();
+        tableLayout.addComponent(blackListCCGrid);
+        setDataInGrid();
+        GridContextMenu<BlackListCC> gridMenu = new GridContextMenu<>(blackListCCGrid);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
+
         userFormLayout.setWidth("60%");
-        mainTableLayout.setWidth("60%");
+        mainTableLayout.setWidth("40%");
         headerLayout.setWidth("60%");
     }
 
-    @Override
-    protected IndexedContainer generateContainer() {
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(CREDIT_CARD_NUMBER, String.class, null);
-        container.addContainerProperty(STATUS, String.class, null);
-
-        List<BlackListCC> blackListCCS = (List<BlackListCC>)connection.getAllValues(className);
-        for(BlackListCC details : blackListCCS){
-            Item item = container.addItem(details.getCreditCardId());
-            item.getItemProperty(CREDIT_CARD_NUMBER).setValue(details.getCreditCardNumber());
-            item.getItemProperty(STATUS).setValue(details.getStatus());
+    protected void deleteItem(Object target) {
+        if (target != null) {
+            BlackListCC blackListCC = (BlackListCC) target;
+            boolean success = connection.deleteObjectHBM(blackListCC.getCreditCardId(), className);
+            if (success) {
+                BackOfficeUtils.showNotification("Success", "Credit card Entry delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                blackListCCList.remove(target);
+                blackListCCGrid.setItems(blackListCCList);
+            } else {
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+            }
         }
-        return container;
+    }
+
+    private void setDataInGrid(){
+        blackListCCList = ((List<BlackListCC>) connection.getAllValues(className));
+        blackListCCGrid.setItems(blackListCCList);
+        blackListCCGrid.addColumn(BlackListCC::getCreditCardNumber).setCaption(CREDIT_CARD_NUMBER).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        blackListCCGrid.addColumn(BlackListCC::getStatus).setCaption(STATUS).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
     }
 
     @Override
     protected void insertDetails() {
         String isValidated = validateFields();
         if(isValidated != null){
-            Notification.show(isValidated);
+            Notification.show(isValidated, Notification.Type.WARNING_MESSAGE);
         }
         else{
             int itemIdVal = (idField.getValue() == null || idField.getValue().isEmpty()) ? 0 : Integer.parseInt(idField.getValue());
@@ -93,12 +117,13 @@ public class BlackListCCView extends CommonPageDetails {
     @Override
     protected void fillEditDetails(Object target) {
         if(target != null) {
-            IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-            Item item = container.getItem(target);
-            idField.setValue(target.toString());
-            cardNumberFld.setValue(item.getItemProperty(CREDIT_CARD_NUMBER).getValue().toString());
-            statusComboBox.setValue(item.getItemProperty(STATUS).getValue());
-            addButton.setCaption("Edit");
+            BlackListCC blackListCC = (BlackListCC) target;
+            idField.setValue(String.valueOf(blackListCC.getCreditCardId()));
+            cardNumberFld.setValue(blackListCC.getCreditCardNumber());
+            statusComboBox.setValue(blackListCC.getStatus());
+            addButton.setCaption("Save");
+            editObj = blackListCC;
+            isKeyFieldDirty = false;
         }
     }
 
@@ -107,20 +132,25 @@ public class BlackListCCView extends CommonPageDetails {
         this.filterFieldStr = CREDIT_CARD_NUMBER;
         this.pageHeader = "Credit Card Black List Details";
         this.className = "com.back.office.entity.BlackListCC";
+        this.keyFieldDBName = "creditCardNumber";
+    }
+
+    @Override
+    protected TextField getKeyField() {
+        return cardNumberFld;
     }
 
     @Override
     protected void updateTable(boolean isEdit, Object details, int newId) {
         BlackListCC blackListCC = (BlackListCC) details;
-        IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-        Item item;
         if(isEdit){
-            item  = container.getItem(blackListCC.getCreditCardId());
+            int index = blackListCCList.indexOf(editObj);
+            blackListCCList.remove(editObj);
+            blackListCCList.add(index,blackListCC);
         }
         else{
-            item  = container.addItem(newId);
+            blackListCCList.add(blackListCC);
         }
-        item.getItemProperty(CREDIT_CARD_NUMBER).setValue(blackListCC.getCreditCardNumber());
-        item.getItemProperty(STATUS).setValue(blackListCC.getStatus());
+        blackListCCGrid.setItems(blackListCCList);
     }
 }

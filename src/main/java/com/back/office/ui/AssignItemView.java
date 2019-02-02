@@ -4,39 +4,54 @@ import com.back.office.db.DBConnection;
 import com.back.office.entity.*;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.data.HasValue;
+import com.vaadin.data.provider.Query;
 import com.vaadin.event.Action;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import org.tepi.filtertable.FilterTable;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.dialogs.ConfirmDialog;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AssignItemView extends VerticalLayout implements View {
 
     ComboBox packTypeComboBox;
     ComboBox drawerComboBox;
     ComboBox itemNameComboBox;
+    ComboBox itemCodeComboBox;
     TextField quantityFld;
     TextField cartItemId;
+
     Button addButton;
-    FilterTable cartItemsTable;
     protected VerticalLayout userFormLayout;
     protected VerticalLayout tableLayout;
     DBConnection connection;
+    protected Object editObj;
+    boolean isOneDropDownSelected = false;
 
     private final String PACK_TYPE = "Pack Type";
     private final String DRAWER_NAME = "Drawer";
     private final String ITEM_NAME = "Item Name";
+    private final String ITEM_CODE = "Item Code";
     private final String QUANTITY = "Quantity";
     private final String EQUIPMENT_DETAILS_CLASS_NAME = "com.back.office.entity.EquipmentDetails";
+
+    FilterGrid<CartItems> cartItemsGrid;
+    List<CartItems> cartItems;
+    Map<String,EquipmentDetails> equipmentDetailsMap = new HashMap<>();
+    List<ItemDetails> itemDetailsList;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -55,14 +70,14 @@ public class AssignItemView extends VerticalLayout implements View {
         headerLayout.setSizeFull();
         addComponent(headerLayout);
         headerLayout.setWidth("55%");
+        headerLayout.setMargin(Constants.noMargin);
         userFormLayout = new VerticalLayout();
         addComponent(userFormLayout);
-        userFormLayout.setStyleName("layout-with-border");
+        userFormLayout.setMargin(Constants.noMargin);
         tableLayout = new VerticalLayout();
         tableLayout.setSizeFull();
         addComponent(tableLayout);
-
-
+        tableLayout.setMargin(Constants.noMargin);
 
         setSpacing(true);
         Label h1 = new Label("Assign Items");
@@ -73,14 +88,16 @@ public class AssignItemView extends VerticalLayout implements View {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth(66.67f,Unit.PERCENTAGE);
+        firstRow.setMargin(Constants.noMargin);
         userFormLayout.addComponent(firstRow);
 
         packTypeComboBox = new ComboBox(PACK_TYPE);
-        packTypeComboBox.addItems(getPackTypesObjects());
-        packTypeComboBox.setNullSelectionAllowed(false);
-        packTypeComboBox.setRequired(true);
+        packTypeComboBox.setItems(getPackTypesObjects());
+        packTypeComboBox.setEmptySelectionAllowed(false);
+        packTypeComboBox.setRequiredIndicatorVisible(true);
         firstRow.addComponent(packTypeComboBox);
-        packTypeComboBox.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+        packTypeComboBox.addValueChangeListener(valueChangeEvent -> {
             if(packTypeComboBox.getValue() != null){
                 fillDrawerNames((EquipmentDetails)packTypeComboBox.getValue());
                 fillItemNames((EquipmentDetails)packTypeComboBox.getValue());
@@ -89,36 +106,56 @@ public class AssignItemView extends VerticalLayout implements View {
 
 
         drawerComboBox = new ComboBox(DRAWER_NAME);
-        drawerComboBox.setNullSelectionAllowed(false);
-        drawerComboBox.setRequired(true);
+        drawerComboBox.setEmptySelectionAllowed(false);
+        drawerComboBox.setRequiredIndicatorVisible(true);
         firstRow.addComponent(drawerComboBox);
-        drawerComboBox.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+        drawerComboBox.addValueChangeListener(valueChangeEvent -> {
             if(packTypeComboBox.getValue() != null && drawerComboBox.getValue() != null){
-                loadTable((EquipmentDetails)packTypeComboBox.getValue(),drawerComboBox.getValue().toString());
+                setDataInGrid((EquipmentDetails)packTypeComboBox.getValue(),drawerComboBox.getValue().toString());
             }
         });
 
         HorizontalLayout secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
-        MarginInfo marginInfo = new MarginInfo(true,false,true,false);
-        secondRow.setMargin(marginInfo);
+        secondRow.setMargin(Constants.noMargin);
         secondRow.setSizeFull();
 
+        itemCodeComboBox = new ComboBox(ITEM_CODE);
+        itemCodeComboBox.setEmptySelectionAllowed(false);
+        itemCodeComboBox.setRequiredIndicatorVisible(true);
+        secondRow.addComponent(itemCodeComboBox);
+        itemCodeComboBox.addValueChangeListener((HasValue.ValueChangeListener) valueChangeEvent -> {
+            if(!isOneDropDownSelected) {
+                isOneDropDownSelected = true;
+                itemNameComboBox.setValue(getItemNameFromItemCode(String.valueOf(valueChangeEvent.getValue())));
+            }
+            else {
+                isOneDropDownSelected = false;
+            }
+        });
+
         itemNameComboBox = new ComboBox(ITEM_NAME);
-        itemNameComboBox.setNullSelectionAllowed(false);
-        itemNameComboBox.setRequired(true);
+        itemNameComboBox.setEmptySelectionAllowed(false);
+        itemNameComboBox.setRequiredIndicatorVisible(true);
         secondRow.addComponent(itemNameComboBox);
+        itemNameComboBox.addValueChangeListener(valueChangeEvent -> {
+            if(!isOneDropDownSelected) {
+                isOneDropDownSelected = true;
+                if (valueChangeEvent.getValue() != null) {
+                    ItemDetails item = (ItemDetails) valueChangeEvent.getValue();
+                    itemCodeComboBox.setValue(item.getItemCode());
+                }
+            }
+            else {
+                isOneDropDownSelected = false;
+            }
+        });
 
         quantityFld = new TextField(QUANTITY);
-        quantityFld.setInputPrompt(QUANTITY);
-        quantityFld.setRequired(true);
+        quantityFld.setDescription(QUANTITY);
+        quantityFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(quantityFld);
-
-        addButton = new Button("Add");
-        addButton.setStyleName("add-button-margin");
-        addButton.addClickListener((Button.ClickListener) clickEvent -> insertCartItem());
-        secondRow.addComponent(addButton);
 
         cartItemId = new TextField("Cart Item Id");
         cartItemId.setVisible(false);
@@ -127,171 +164,152 @@ public class AssignItemView extends VerticalLayout implements View {
         userFormLayout.addComponent(secondRow);
         userFormLayout.setWidth("50%");
 
-        cartItemsTable = new FilterTable();
-        cartItemsTable.setSelectable(true);
-        cartItemsTable.setFilterBarVisible(true);
-        cartItemsTable.setMultiSelect(false);
-        cartItemsTable.setSortEnabled(true);
-        cartItemsTable.setColumnCollapsingAllowed(true);
-        cartItemsTable.setColumnReorderingAllowed(true);
-        cartItemsTable.setPageLength(10);
+        Button showAll = new Button("Show all cart items");
+        showAll.addClickListener((Button.ClickListener) event -> {
+            setDataInGrid(null,null);
+        });
 
-        IndexedContainer normalContainer = generateContainer();
-        cartItemsTable.setContainerDataSource(normalContainer);
-        cartItemsTable.setSizeFull();
-        cartItemsTable.addActionHandler(actionHandler);
-
+        addButton = new Button("Add");
+        addButton.setStyleName("add-button-margin");
+        addButton.addClickListener((Button.ClickListener) clickEvent -> insertCartItem());
         HorizontalLayout rowFilter = new HorizontalLayout();
         rowFilter.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         rowFilter.setSpacing(true);
-
-        TextField filterFiled = new TextField();
-        filterFiled.setInputPrompt("Filter by name");
-        rowFilter.addComponent(filterFiled);
-
-        Button filterBtn = new Button("Filter");
-        filterBtn.addClickListener((Button.ClickListener) clickEvent -> {
-            IndexedContainer container = (IndexedContainer)cartItemsTable.getContainerDataSource();
-            if(filterFiled.getValue() == null || filterFiled.getValue().isEmpty()) {
-                container.removeContainerFilters(ITEM_NAME);
-            }
-            else{
-                container.addContainerFilter(ITEM_NAME, filterFiled.getValue(), true, false);
-            }
-        });
-        Button showAll = new Button("Show all cart items");
-        showAll.addClickListener((Button.ClickListener) event -> {
-            loadTable(null,null);
-        });
-        rowFilter.addComponent(filterBtn);
+        rowFilter.addComponent(addButton);
         rowFilter.addComponent(showAll);
+        rowFilter.setMargin(Constants.noMargin);
         tableLayout.addComponent(rowFilter);
 
-        tableLayout.addComponent(cartItemsTable);
+        cartItemsGrid = new FilterGrid<>();
+        cartItemsGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        cartItemsGrid.setSizeFull();
+        tableLayout.addComponent(cartItemsGrid);
+        cartItemsGrid.addColumn(CartItems::getItemName).setCaption(ITEM_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        cartItemsGrid.addColumn(CartItems::getPackType).setCaption(PACK_TYPE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        cartItemsGrid.addColumn(CartItems::getDrawerName).setCaption(DRAWER_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        cartItemsGrid.addColumn(CartItems::getQuantity).setCaption(QUANTITY).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        GridContextMenu<CartItems> gridMenu = new GridContextMenu<>(cartItemsGrid);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
+
+
         tableLayout.setWidth("55%");
-        tableLayout.setStyleName("layout-with-border");
-        setComponentAlignment(tableLayout,Alignment.MIDDLE_CENTER);
-        setComponentAlignment(userFormLayout,Alignment.MIDDLE_CENTER);
-        setComponentAlignment(headerLayout,Alignment.MIDDLE_CENTER);
+        setComponentAlignment(tableLayout,Alignment.MIDDLE_LEFT);
+        setComponentAlignment(userFormLayout,Alignment.MIDDLE_LEFT);
+        setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
+    }
+    protected TextField getColumnFilterField() {
+        TextField filter = new TextField();
+        filter.setWidth("100%");
+        filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
+        return filter;
     }
 
-    Action.Handler actionHandler = new Action.Handler() {
-        private final Action editItem = new Action("Edit Cart Item" , FontAwesome.EDIT);
-        private final Action deleteItem = new Action("Delete Cart Item" , FontAwesome.REMOVE);
-        private final Action[] ACTIONS = new Action[] {editItem, deleteItem};
-
-        @Override
-        public void handleAction(Action action, Object sender, Object target) {
-            if(action.getCaption().equals("Edit Cart Item")){
-                fillEditDetails(target);
-            }
-            else if(action.getCaption().equals("Delete Cart Item")){
-                ConfirmDialog.show(getUI(), "Delete Cart Item", "Are you sure you want to delete Cart Item?",
-                        "Yes", "No", (ConfirmDialog.Listener) dialog -> {
-                            if(dialog.isConfirmed()){
-                                deleteItem(target);
-                            }
-                        });
-            }
+    private void updateGridBodyMenu(GridContextMenu.GridContextMenuOpenListener.GridContextMenuOpenEvent<?> event) {
+        event.getContextMenu().removeItems();
+        if (event.getItem() != null) {
+            event.getContextMenu().addItem("Edit item", VaadinIcons.EDIT, selectedItem -> {
+                fillEditDetails(event.getItem());
+            });
+            event.getContextMenu().addItem("Delete item", VaadinIcons.FOLDER_REMOVE, selectedItem -> {
+                deleteItemConfirmation(event.getItem());
+            });
         }
+    }
 
-        @Override
-        public Action[] getActions(Object target, Object sender) {
-            return ACTIONS;
-        }
-    };
+    private void deleteItemConfirmation(Object target){
+        ConfirmDialog.show(getUI(), "Delete row", "Are you sure you want to delete this row?",
+                "Yes", "No", new ConfirmDialog.Listener() {
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            deleteItem(target);
+                        }
+                    }
+                });
+    }
 
-    private void deleteItem(Object target){
-        if(target != null){
-            boolean success = connection.deleteObjectHBM(Integer.parseInt(target.toString()),EQUIPMENT_DETAILS_CLASS_NAME);
-            if(success){
-                Notification.show("Cart item delete successfully");
-                IndexedContainer container = (IndexedContainer) cartItemsTable.getContainerDataSource();
-                container.removeItem(target);
+    private void deleteItem(Object target) {
+        if (target != null) {
+            CartItems cartItem = (CartItems) target;
+
+            boolean success = connection.deleteObjectHBM(cartItem.getCartItemId(),
+                    "com.back.office.entity.CartItems");
+            if (success) {
+                BackOfficeUtils.showNotification("Success", "Item delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                cartItems.remove(target);
+                cartItemsGrid.setItems(cartItems);
+            } else {
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
             }
-            else {
-                Notification.show("Something wrong, please try again");
-            }
+
         }
     }
 
     private void fillEditDetails(Object target){
         if(target != null) {
-            IndexedContainer container = (IndexedContainer) cartItemsTable.getContainerDataSource();
-            Item item = container.getItem(target);
-            packTypeComboBox.setValue(item.getItemProperty(PACK_TYPE).getValue().toString());
-            drawerComboBox.setValue(item.getItemProperty(DRAWER_NAME).getValue());
-            List<ItemDetails> items = (List<ItemDetails>)itemNameComboBox.getItemIds();
+            CartItems cartItem = (CartItems) target;
+            packTypeComboBox.setValue( equipmentDetailsMap.get(cartItem.getPackType()));
+            drawerComboBox.setValue(cartItem.getDrawerName());
+            List<ItemDetails> items = (List<ItemDetails>)itemNameComboBox.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
             for(ItemDetails itemDetail : items){
-                if(itemDetail.getItemName().equals(item.getItemProperty(ITEM_NAME).getValue())){
+                if(itemDetail.getItemName().equals(cartItem.getItemName())){
                     itemNameComboBox.setValue(itemDetail);
                 }
             }
-            //itemNameComboBox.setValue(item.getItemProperty(ITEM_NAME).getValue());
-            quantityFld.setValue(item.getItemProperty(QUANTITY).getValue().toString());
-            cartItemId.setValue(target.toString());
-            addButton.setCaption("Edit");
+            quantityFld.setValue(String.valueOf(cartItem.getQuantity()));
+            cartItemId.setValue(String.valueOf(cartItem.getCartItemId()));
+            addButton.setCaption("Save");
+            editObj = cartItem;
         }
     }
 
-    private IndexedContainer generateContainer(){
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(ITEM_NAME, String.class, null);
-        container.addContainerProperty(PACK_TYPE, String.class, null);
-        container.addContainerProperty(DRAWER_NAME, String.class, null);
-        container.addContainerProperty(QUANTITY, Integer.class, null);
-        return container;
-    }
-
-    private void loadTable(EquipmentDetails equipmentDetails,String drawer){
-        IndexedContainer container = (IndexedContainer) cartItemsTable.getContainerDataSource();
-        container.removeAllItems();
-        List<CartItems> cartItems;
+    private void setDataInGrid(EquipmentDetails equipmentDetails,String drawer){
+        cartItems = new ArrayList<>();
+        cartItemsGrid.setItems(cartItems);
         if(equipmentDetails == null && drawer == null){
             cartItems = (List<CartItems>)connection.getAllValues("com.back.office.entity.CartItems");
         }
         else {
             cartItems = connection.getItemsFromServiceType(equipmentDetails.getPackType(), drawer);
         }
-        for(CartItems details : cartItems){
-            Item item = container.addItem(details.getCartItemId());
-            item.getItemProperty(ITEM_NAME).setValue(details.getItemName());
-            item.getItemProperty(PACK_TYPE).setValue(details.getPackType());
-            item.getItemProperty(DRAWER_NAME).setValue(details.getDrawerName());
-            item.getItemProperty(QUANTITY).setValue(details.getQuantity());
-        }
+        cartItemsGrid.setItems(cartItems);
     }
+
+
 
     private void insertCartItem(){
 
         int quantityInt = 0;
         Object packType = packTypeComboBox.getValue();
         if(packType == null){
-            Notification.show("Enter Pack Type");
+            Notification.show("Enter Pack Type", Notification.Type.WARNING_MESSAGE);
             packTypeComboBox.focus();
             return;
         }
         Object drawerName = drawerComboBox.getValue();
         if(drawerName == null){
-            Notification.show("Enter drawer");
+            Notification.show("Enter drawer", Notification.Type.WARNING_MESSAGE);
             drawerComboBox.focus();
             return;
         }
         Object itemName = itemNameComboBox.getValue();
         if(itemName == null){
-            Notification.show("Enter Item Name");
+            Notification.show("Enter Item Name", Notification.Type.WARNING_MESSAGE);
             itemNameComboBox.focus();
             return;
         }
         String quantity = quantityFld.getValue();
         if(quantity == null || quantity.isEmpty()){
-            Notification.show("Enter Quantity");
+            Notification.show("Enter Quantity", Notification.Type.WARNING_MESSAGE);
             quantityFld.focus();
             return;
         }
         else{
             if(!BackOfficeUtils.isInteger(quantity)) {
-                Notification.show("Quantity should be a number");
+                Notification.show("Quantity should be a number", Notification.Type.WARNING_MESSAGE);
                 quantityFld.focus();
                 return;
             }
@@ -306,50 +324,51 @@ public class AssignItemView extends VerticalLayout implements View {
         cartItem.setCartItemId(cartITemIdVal);
         cartItem.setPackType(packType.toString());
         cartItem.setDrawerName(drawerName.toString());
-        cartItem.setItemId(((ItemDetails)itemName).getItemId());
+        cartItem.setItemId(((ItemDetails)itemName).getItemCode());
         cartItem.setItemName(itemName.toString());
         cartItem.setQuantity(quantityInt);
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(cartItem);
             if (newId != 0) {
-                Notification.show("Cart item added successfully");
-                updateCartItems(false,cartItem,newId);
+                BackOfficeUtils.showNotification("Success","Cart item added successfully",VaadinIcons.CHECK_CIRCLE_O);
+                updateCartItems(false,cartItem);
                 resetFields();
             } else {
-                Notification.show("Something wrong, please try again");
+                BackOfficeUtils.showNotification("Error","Something wrong, please try again",VaadinIcons.CLOSE);
             }
         }
         else{
             connection.updateObjectHBM(cartItem);
-            Notification.show("Cart item updated successfully");
-            updateCartItems(true,cartItem,0);
+            BackOfficeUtils.showNotification("Success","Cart item updated successfully",VaadinIcons.CHECK_CIRCLE_O);
+            updateCartItems(true,cartItem);
             addButton.setCaption("Add");
             resetFields();
         }
 
     }
 
-    private void updateCartItems(boolean isEdit , CartItems cartItems, int newId){
-        IndexedContainer container = (IndexedContainer) cartItemsTable.getContainerDataSource();
-        Item item;
+    private void updateCartItems(boolean isEdit , CartItems details){
         if(isEdit){
-            item  = container.getItem(cartItems.getCartItemId());
+            int index = cartItems.indexOf(editObj);
+            cartItems.remove(editObj);
+            cartItems.add(index,details);
         }
         else{
-            item  = container.addItem(newId);
+            cartItems.add(details);
         }
-        item.getItemProperty(PACK_TYPE).setValue(cartItems.getPackType());
-        item.getItemProperty(DRAWER_NAME).setValue(cartItems.getDrawerName());
-        item.getItemProperty(ITEM_NAME).setValue(cartItems.getItemName());
-        item.getItemProperty(QUANTITY).setValue(cartItems.getQuantity());
+        cartItemsGrid.setItems(cartItems);
     }
 
     private List<EquipmentDetails> getPackTypesObjects(){
-        return (List<EquipmentDetails>)connection.getAllValues(EQUIPMENT_DETAILS_CLASS_NAME);
+         List<EquipmentDetails> details = (List<EquipmentDetails>)connection.getAllValues(EQUIPMENT_DETAILS_CLASS_NAME);
+         for(EquipmentDetails equipmentDetails : details){
+             equipmentDetailsMap.put(equipmentDetails.getPackType(),equipmentDetails);
+         }
+         return details;
     }
 
     private void fillDrawerNames(EquipmentDetails equipmentDetails){
-        drawerComboBox.removeAllItems();
+        drawerComboBox.setItems("");
         String prefix;
         if(equipmentDetails.getEquipmentType().equals("Containers")){
             prefix = "Container";
@@ -357,23 +376,40 @@ public class AssignItemView extends VerticalLayout implements View {
         else{
             prefix = "Drawer";
         }
+        List<String> list = new ArrayList<>();
         for(int i = 1; i<=equipmentDetails.getNoOfDrawers();i++){
-            drawerComboBox.addItem(prefix + "-" + i);
+            list.add(prefix + "-" + i);
         }
+        drawerComboBox.setItems(list);
     }
 
     private void fillItemNames(EquipmentDetails equipmentDetails){
-        itemNameComboBox.removeAllItems();
-        String kitCode = equipmentDetails.getKitCode();
-        List<KitCodes> kitCodesList = connection.getServiceTypeFromKitCode(kitCode);
-        if(kitCodesList != null && !kitCodesList.isEmpty()){
-            List<ItemDetails> items = connection.getItemsFromServiceType(kitCodesList.get(0).getServiceType());
-            itemNameComboBox.addItems(items);
+        itemNameComboBox.setItems("");
+        itemCodeComboBox.setItems("");
+        //String kitCode = equipmentDetails.getKitCode();
+        //List<KitCodes> kitCodesList = connection.getServiceTypeFromKitCode(kitCode);
+        //if(kitCodesList != null && !kitCodesList.isEmpty()){
+            //itemDetailsList = connection.getItemsFromServiceType(kitCodesList.get(0).getServiceType());
+            itemDetailsList = connection.getAllItems();
+            itemNameComboBox.setItems(itemDetailsList);
+            List<String> itemCodes = new ArrayList<>();
+            for(ItemDetails item : itemDetailsList){
+                itemCodes.add(item.getItemCode());
+            }
+            itemCodeComboBox.setItems(itemCodes);
+       // }
+    }
+
+    private String getItemNameFromItemCode(String itemCode){
+        for(ItemDetails details : itemDetailsList){
+            if(details.getItemCode().equals(itemCode)) return details.getItemName();
         }
+        return "";
     }
 
     private void resetFields(){
         itemNameComboBox.clear();
+        itemCodeComboBox.clear();
         quantityFld.clear();
     }
 }

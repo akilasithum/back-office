@@ -1,16 +1,22 @@
 package com.back.office.ui;
 
+import com.back.office.entity.AircraftDetails;
 import com.back.office.entity.EquipmentDetails;
 import com.back.office.entity.KitCodes;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.Constants;
+import com.vaadin.contextmenu.ContextMenu;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FileResource;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +27,17 @@ public class EquipmentTypeView extends CommonPageDetails {
     private final String EQUIPMENT_TYPE = "Equipment Type";
     private final String NO_OF_DRAWERS = "No of Drawers";
     private final String KIT_CODE = "Kit Code";
+    private final String NO_OF_SEALS = "No of Seals";
 
     protected TextField packTypeFld;
     protected TextField packDescFld;
     protected ComboBox equipmentTypeFld;
     protected TextField noOfDrawersFld;
-    private ComboBox kitCodeFld;
+    protected TextField noOfSealsFld;
+    protected HorizontalLayout imageLayout;
 
-
+    FilterGrid<EquipmentDetails> equipmentDetailsGrid;
+    List<EquipmentDetails> equipmentDetailsList;
 
     public EquipmentTypeView(){
         super();
@@ -38,90 +47,123 @@ public class EquipmentTypeView extends CommonPageDetails {
     protected void createMainLayout() {
         super.createMainLayout();
 
+        imageLayout = new HorizontalLayout();
+        imageLayout.setMargin(Constants.noMargin);
+        imageLayout.setSizeFull();
+        outerLayout.addComponent(imageLayout);
+        outerLayout.setExpandRatio(userFormLayout,0.6f);
+        outerLayout.setExpandRatio(imageLayout,0.4f);
+
         HorizontalLayout firstRow = new HorizontalLayout();
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
+        equipmentTypeFld = new ComboBox(EQUIPMENT_TYPE);
+        equipmentTypeFld.setDescription(EQUIPMENT_TYPE);
+        equipmentTypeFld.setItems("Half Cart","Full Cart","Containers");
+        equipmentTypeFld.setEmptySelectionAllowed(false);
+        equipmentTypeFld.setRequiredIndicatorVisible(true);
+        firstRow.addComponent(equipmentTypeFld);
+        equipmentTypeFld.addValueChangeListener(valueChangeEvent -> {
+            String val = String.valueOf(valueChangeEvent.getValue());
+            showCartImage(val);
+        });
+
         packTypeFld = new TextField(PACK_TYPE);
-        packTypeFld.setInputPrompt(PACK_TYPE);
-        packTypeFld.setRequired(true);
+        packTypeFld.setDescription(PACK_TYPE);
+        packTypeFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(packTypeFld);
+        packTypeFld.addValueChangeListener(valueChangeEvent -> {
+            isKeyFieldDirty = true;
+        });
 
         packDescFld = new TextField(PACK_DESC);
-        packDescFld.setInputPrompt(PACK_DESC);
+        packDescFld.setDescription(PACK_DESC);
         firstRow.addComponent(packDescFld);
-
-        equipmentTypeFld = new ComboBox(EQUIPMENT_TYPE);
-        equipmentTypeFld.setInputPrompt(EQUIPMENT_TYPE);
-        equipmentTypeFld.addItem("Half Cart");
-        equipmentTypeFld.addItem("Full Cart");
-        equipmentTypeFld.addItem("Containers");
-        equipmentTypeFld.setNullSelectionAllowed(false);
-        equipmentTypeFld.setRequired(true);
-        firstRow.addComponent(equipmentTypeFld);
-
 
         HorizontalLayout secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
         secondRow.setSizeFull();
-        MarginInfo marginInfo = new MarginInfo(true,false,true,false);
-        secondRow.setMargin(marginInfo);
+        secondRow.setMargin(Constants.noMargin);
+        secondRow.setWidth(66.67f,Unit.PERCENTAGE);
         mainUserInputLayout.addComponent(secondRow);
 
         noOfDrawersFld = new TextField(NO_OF_DRAWERS);
-        noOfDrawersFld.setInputPrompt(NO_OF_DRAWERS);
-        noOfDrawersFld.setRequired(true);
+        noOfDrawersFld.setDescription(NO_OF_DRAWERS);
+        noOfDrawersFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(noOfDrawersFld);
 
-        kitCodeFld = new ComboBox(KIT_CODE);
-        kitCodeFld.addItems(getKitCodesList());
-        kitCodeFld.setNullSelectionAllowed(false);
-        kitCodeFld.setRequired(true);
-        secondRow.addComponent(kitCodeFld);
-        userFormLayout.setWidth("60%");
+        /*kitCodeFld = new ComboBox(KIT_CODE);
+        kitCodeFld.setItems(getKitCodesList());
+        kitCodeFld.setEmptySelectionAllowed(false);
+        kitCodeFld.setRequiredIndicatorVisible(true);
+        secondRow.addComponent(kitCodeFld);*/
+
+        noOfSealsFld = new TextField(NO_OF_SEALS);
+        noOfSealsFld.setDescription(NO_OF_SEALS);
+        noOfSealsFld.setRequiredIndicatorVisible(true);
+        secondRow.addComponent(noOfSealsFld);
+
+        equipmentDetailsGrid = new FilterGrid<>();
+        equipmentDetailsGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        equipmentDetailsGrid.setSizeFull();
+        tableLayout.addComponent(equipmentDetailsGrid);
+        setDataInGrid();
+        GridContextMenu<EquipmentDetails> gridMenu = new GridContextMenu<>(equipmentDetailsGrid);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
+
         mainTableLayout.setWidth("70%");
         headerLayout.setWidth("70%");
     }
 
-    @Override
-    protected IndexedContainer generateContainer() {
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(PACK_TYPE, String.class, null);
-        container.addContainerProperty(PACK_DESC, String.class, null);
-        container.addContainerProperty(EQUIPMENT_TYPE, String.class, null);
-        container.addContainerProperty(NO_OF_DRAWERS, Integer.class, null);
-        container.addContainerProperty(KIT_CODE, String.class, null);
-
-        List<EquipmentDetails> equipmentDetails = (List<EquipmentDetails>)connection.getAllValues(className);
-        for(EquipmentDetails details : equipmentDetails){
-            Item item = container.addItem(details.getEquipmentId());
-            item.getItemProperty(PACK_TYPE).setValue(details.getPackType());
-            item.getItemProperty(PACK_DESC).setValue(details.getPackDescription());
-            item.getItemProperty(EQUIPMENT_TYPE).setValue(details.getEquipmentType());
-            item.getItemProperty(NO_OF_DRAWERS).setValue(details.getNoOfDrawers());
-            item.getItemProperty(KIT_CODE).setValue(details.getKitCode());
+    protected void deleteItem(Object target) {
+        if (target != null) {
+            EquipmentDetails aircraftDetail = (EquipmentDetails) target;
+            boolean success = connection.deleteObjectHBM(aircraftDetail.getEquipmentId(), className);
+            if (success) {
+                BackOfficeUtils.showNotification("Success", "Equipment type delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                equipmentDetailsList.remove(target);
+                equipmentDetailsGrid.setItems(equipmentDetailsList);
+            } else {
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+            }
         }
-        return container;
+    }
+
+    private void setDataInGrid(){
+        equipmentDetailsList = (List<EquipmentDetails>)connection.getAllValues(className);
+        equipmentDetailsGrid.setItems(equipmentDetailsList);
+        equipmentDetailsGrid.addColumn(EquipmentDetails::getEquipmentType).setCaption(EQUIPMENT_TYPE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        equipmentDetailsGrid.addColumn(EquipmentDetails::getPackType).setCaption(PACK_TYPE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        equipmentDetailsGrid.addColumn(EquipmentDetails::getPackDescription).setCaption(PACK_DESC).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        equipmentDetailsGrid.addColumn(EquipmentDetails::getNoOfDrawers).setCaption(NO_OF_DRAWERS).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        equipmentDetailsGrid.addColumn(EquipmentDetails::getNoOfSeals).setCaption(NO_OF_SEALS).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
     }
 
     @Override
     protected void insertDetails() {
         String isValidated = validateFields();
         if(isValidated != null){
-            Notification.show(isValidated);
+            Notification.show(isValidated, Notification.Type.WARNING_MESSAGE);
         }
         else{
             int itemIdVal = (idField.getValue() == null || idField.getValue().isEmpty()) ? 0 : Integer.parseInt(idField.getValue());
             EquipmentDetails itemDetails = new EquipmentDetails();
             itemDetails.setEquipmentId(itemIdVal);
-            itemDetails.setKitCode(kitCodeFld.getValue().toString());
             itemDetails.setEquipmentType(equipmentTypeFld.getValue().toString());
             itemDetails.setNoOfDrawers(Integer.parseInt(noOfDrawersFld.getValue()));
             itemDetails.setPackDescription(packDescFld.getValue());
             itemDetails.setPackType(packTypeFld.getValue());
+            itemDetails.setNoOfSeals(Integer.parseInt(noOfSealsFld.getValue()));
             addOrUpdateDetails(itemDetails);
 
         }
@@ -130,15 +172,16 @@ public class EquipmentTypeView extends CommonPageDetails {
     @Override
     protected void fillEditDetails(Object target) {
         if(target != null) {
-            IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-            Item item = container.getItem(target);
-            idField.setValue(target.toString());
-            kitCodeFld.setValue(item.getItemProperty(KIT_CODE).getValue().toString());
-            packTypeFld.setValue(item.getItemProperty(PACK_TYPE).getValue().toString());
-            packDescFld.setValue(item.getItemProperty(PACK_DESC).getValue().toString());
-            noOfDrawersFld.setValue(item.getItemProperty(NO_OF_DRAWERS).getValue().toString());
-            equipmentTypeFld.setValue(item.getItemProperty(EQUIPMENT_TYPE).getValue().toString());
-            addButton.setCaption("Edit");
+            EquipmentDetails equipmentDetails = (EquipmentDetails) target;
+            idField.setValue(String.valueOf(equipmentDetails.getEquipmentId()));
+            packTypeFld.setValue(equipmentDetails.getPackType());
+            packDescFld.setValue(equipmentDetails.getPackDescription());
+            noOfDrawersFld.setValue(String.valueOf(equipmentDetails.getNoOfDrawers()));
+            equipmentTypeFld.setValue(equipmentDetails.getEquipmentType());
+            noOfSealsFld.setValue(String.valueOf(equipmentDetails.getNoOfSeals()));
+            addButton.setCaption("Save");
+            editObj = equipmentDetails;
+            isKeyFieldDirty = false;
         }
     }
 
@@ -147,24 +190,26 @@ public class EquipmentTypeView extends CommonPageDetails {
         this.filterFieldStr = PACK_TYPE;
         this.pageHeader = "Equipment Details";
         this.className = "com.back.office.entity.EquipmentDetails";
+        this.keyFieldDBName = "packType";
     }
 
     @Override
     protected void updateTable(boolean isEdit, Object details, int newId) {
-        EquipmentDetails itemDetails = (EquipmentDetails) details;
-        IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-        Item item;
+        EquipmentDetails equipment = (EquipmentDetails) details;
         if(isEdit){
-            item  = container.getItem(itemDetails.getEquipmentId());
+            int index = equipmentDetailsList.indexOf(editObj);
+            equipmentDetailsList.remove(editObj);
+            equipmentDetailsList.add(index,equipment);
         }
         else{
-            item  = container.addItem(newId);
+            equipmentDetailsList.add(equipment);
         }
-        item.getItemProperty(KIT_CODE).setValue(itemDetails.getKitCode());
-        item.getItemProperty(PACK_TYPE).setValue(itemDetails.getPackType());
-        item.getItemProperty(PACK_DESC).setValue(itemDetails.getPackDescription());
-        item.getItemProperty(EQUIPMENT_TYPE).setValue(itemDetails.getEquipmentType());
-        item.getItemProperty(NO_OF_DRAWERS).setValue(itemDetails.getNoOfDrawers());
+        equipmentDetailsGrid.setItems(equipmentDetailsList);
+    }
+
+    @Override
+    protected TextField getKeyField() {
+        return packTypeFld;
     }
 
     private List<String> getKitCodesList(){
@@ -174,5 +219,12 @@ public class EquipmentTypeView extends CommonPageDetails {
             kitCodeList.add(kit.getKitCode());
         }
         return kitCodeList;
+    }
+
+    private void showCartImage(String type){
+        Image logo = new Image();
+        logo.setSource(new ClassResource(type+".jpg"));
+        imageLayout.removeAllComponents();
+        imageLayout.addComponent(logo);
     }
 }

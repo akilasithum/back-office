@@ -1,4 +1,6 @@
 package com.back.office.entity;
+import com.poiji.annotation.ExcelCellName;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -6,11 +8,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class EquipmentDetails {
 
     private int equipmentId;
+    @ExcelCellName("Pack Type")
     private String packType;
+    @ExcelCellName("Pack Description")
     private String packDescription;
+    @ExcelCellName("Equipment Type")
     private String equipmentType;
-    private String kitCode;
+    @ExcelCellName("No of Drawers")
     private int noOfDrawers;
+    @ExcelCellName("No of Seals")
+    private int noOfSeals;
 
     public int getEquipmentId() {
         return equipmentId;
@@ -44,20 +51,20 @@ public class EquipmentDetails {
         this.equipmentType = equipmentType;
     }
 
-    public String getKitCode() {
-        return kitCode;
-    }
-
-    public void setKitCode(String kitCode) {
-        this.kitCode = kitCode;
-    }
-
     public int getNoOfDrawers() {
         return noOfDrawers;
     }
 
     public void setNoOfDrawers(int noOfDrawers) {
         this.noOfDrawers = noOfDrawers;
+    }
+
+    public int getNoOfSeals() {
+        return noOfSeals;
+    }
+
+    public void setNoOfSeals(int noOfSeals) {
+        this.noOfSeals = noOfSeals;
     }
 
     @Override

@@ -1,19 +1,24 @@
 package com.back.office.ui;
 
 import com.back.office.db.DBConnection;
-import com.vaadin.data.util.IndexedContainer;
-import com.vaadin.event.Action;
+import com.back.office.entity.AircraftDetails;
+import com.back.office.utils.BackOfficeUtils;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import org.tepi.filtertable.FilterTable;
 import org.vaadin.dialogs.ConfirmDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CommonPageDetails extends VerticalLayout implements View {
 
     protected DBConnection connection;
+    protected HorizontalLayout outerLayout;
     protected VerticalLayout userFormLayout;
     protected VerticalLayout mainTableLayout;
     protected HorizontalLayout tableLayout;
@@ -21,12 +26,17 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
     VerticalLayout headerLayout;
     protected Button addButton;
     protected Button resetButton;
-    protected FilterTable detailsTable;
     protected String filterFieldStr;
     protected String className;
     protected String pageHeader;
     protected TextField idField;
     protected HorizontalLayout buttonRow;
+    protected Object editObj;
+
+    protected boolean isKeyFieldDirty = false;
+    protected List<String> keyFieldValues;
+    protected TextField keyField;
+    protected String keyFieldDBName;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -35,37 +45,42 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
 
     public CommonPageDetails(){
         connection = DBConnection.getInstance();
-        setMargin(true);
         defineStringFields();
         createMainLayout();
     }
 
     protected void createMainLayout(){
-
-        setSpacing(true);
+        keyFieldValues = (List<String>) connection.getKeyFieldList(className,keyFieldDBName);
+        MarginInfo marginInfo = new MarginInfo(false,false,false,false);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
         addComponent(headerLayout);
         Label h1 = new Label(pageHeader);
         h1.addStyleName(ValoTheme.LABEL_H1);
         headerLayout.addComponent(h1);
+        headerLayout.setMargin(marginInfo);
+
+        outerLayout = new HorizontalLayout();
+        outerLayout.setMargin(marginInfo);
+        outerLayout.setSizeFull();
+        addComponent(outerLayout);
 
         userFormLayout = new VerticalLayout();
-        addComponent(userFormLayout);
-        userFormLayout.setStyleName("layout-with-border");
+        outerLayout.addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         addComponent(mainTableLayout);
-        mainTableLayout.setStyleName("layout-with-border");
         tableLayout = new HorizontalLayout();
         tableLayout.setSizeFull();
 
         mainUserInputLayout = new VerticalLayout();
         userFormLayout.addComponent(mainUserInputLayout);
+        mainUserInputLayout.setMargin(marginInfo);
 
         buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         buttonRow.setSpacing(true);
         userFormLayout.addComponent(buttonRow);
+        userFormLayout.setMargin(marginInfo);
 
         addButton = new Button("Add");
         addButton.addClickListener((Button.ClickListener) clickEvent -> insertDetails());
@@ -82,56 +97,15 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         rowFilter.setSpacing(true);
 
         TextField filterFiled = new TextField();
-        filterFiled.setInputPrompt("Filter by " + filterFieldStr);
+        filterFiled.setCaption("Filter by " + filterFieldStr);
         rowFilter.addComponent(filterFiled);
 
-        Button filterBtn = new Button("Filter");
-        filterBtn.addClickListener((Button.ClickListener) clickEvent -> {
-            IndexedContainer container = (IndexedContainer)detailsTable.getContainerDataSource();
-            if(filterFiled.getValue() == null || filterFiled.getValue().isEmpty()) {
-                container.removeContainerFilters(filterFieldStr);
-            }
-            else{
-                container.addContainerFilter(filterFieldStr, filterFiled.getValue(), true, false);
-            }
-        });
-        rowFilter.addComponent(filterBtn);
-        mainTableLayout.addComponent(rowFilter);
-        detailsTable = new FilterTable();
-        detailsTable.setSelectable(true);
-        detailsTable.setMultiSelect(false);
-        detailsTable.setSortEnabled(true);
-        detailsTable.setFilterBarVisible(true);
-        detailsTable.setColumnCollapsingAllowed(true);
-        detailsTable.setColumnReorderingAllowed(true);
-        detailsTable.setPageLength(10);
-        IndexedContainer normalContainer = generateContainer();
-        detailsTable.setContainerDataSource(normalContainer);
-        detailsTable.setSizeFull();
-        detailsTable.addActionHandler(actionHandler);
-
         mainTableLayout.addComponent(tableLayout);
-        tableLayout.addComponent(detailsTable);
-        setComponentAlignment(mainTableLayout,Alignment.MIDDLE_CENTER);
-        setComponentAlignment(userFormLayout,Alignment.MIDDLE_CENTER);
-        setComponentAlignment(headerLayout,Alignment.MIDDLE_CENTER);
+        mainTableLayout.setMargin(marginInfo);
+        setComponentAlignment(mainTableLayout,Alignment.MIDDLE_LEFT);
+        setComponentAlignment(outerLayout,Alignment.MIDDLE_LEFT);
+        setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
 
-    }
-
-    protected abstract IndexedContainer generateContainer();
-
-    protected void deleteItem(Object target){
-        if(target != null) {
-            boolean success = connection.deleteObjectHBM(Integer.parseInt(target.toString()), className);
-            if(success){
-                Notification.show("Detail delete successfully");
-                IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-                container.removeItem(target);
-            }
-            else {
-                Notification.show("Something wrong, please try again");
-            }
-        }
     }
 
     protected abstract void insertDetails();
@@ -142,34 +116,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
 
     protected abstract void updateTable(boolean isEdit , Object details, int newId);
 
-    Action.Handler actionHandler = new Action.Handler() {
-        private final Action editItem = new Action("Edit row detail" , FontAwesome.EDIT);
-        private final Action deleteItem = new Action("Delete row detail" , FontAwesome.REMOVE);
-        private final Action[] ACTIONS = new Action[] {editItem, deleteItem};
-
-        @Override
-        public void handleAction(Action action, Object sender, Object target) {
-            if(action.getCaption().equals("Edit row detail")){
-                fillEditDetails(target);
-            }
-            else if(action.getCaption().equals("Delete row detail")){
-                ConfirmDialog.show(getUI(), "Delete", "Are you sure you want to delete this row?",
-                        "Yes", "No", new ConfirmDialog.Listener() {
-
-                            public void onClose(ConfirmDialog dialog) {
-                                if(dialog.isConfirmed()){
-                                    deleteItem(target);
-                                }
-                            }
-                        });
-            }
-        }
-
-        @Override
-        public Action[] getActions(Object target, Object sender) {
-            return ACTIONS;
-        }
-    };
+    protected abstract TextField getKeyField();
 
     protected void resetFields(){
         int componentCount = mainUserInputLayout.getComponentCount();
@@ -191,6 +138,10 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
 
     protected String validateFields(){
         int componentCount = mainUserInputLayout.getComponentCount();
+        if(keyFieldValues.contains(getKeyField().getValue()) && isKeyFieldDirty){
+            getKeyField().focus();
+            return filterFieldStr+" already used. Please use another value";
+        }
         for(int i = 0;i<componentCount;i++){
             if (mainUserInputLayout.getComponent(i) instanceof HorizontalLayout) {
                 HorizontalLayout layout = (HorizontalLayout) mainUserInputLayout.getComponent(i);
@@ -198,21 +149,21 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
                     Component component = layout.getComponent(j);
                     if(component instanceof TextField){
                         TextField textField = (TextField) component;
-                        if(textField.isRequired() && (textField.getValue() == null || textField.getValue().isEmpty())){
+                        if(textField.isRequiredIndicatorVisible() && (textField.getValue() == null || textField.getValue().isEmpty())){
                             textField.focus();
                             return textField.getCaption() + " is mandatory";
                         }
                     }
                     else if(component instanceof DateField){
                         DateField dateField = (DateField) component;
-                        if(dateField.isRequired() && dateField.getValue() == null){
+                        if(dateField.isRequiredIndicatorVisible() && dateField.getValue() == null){
                             dateField.focus();
                             return dateField.getCaption() + "is mandatory";
                         }
                     }
                     else if(component instanceof ComboBox){
                         ComboBox comboBox = (ComboBox) component;
-                        if(comboBox.isRequired() && comboBox.getValue() == null){
+                        if(comboBox.isRequiredIndicatorVisible() && comboBox.getValue() == null){
                             comboBox.focus();
                             return comboBox.getCaption() + " is mandatory";
                         }
@@ -220,6 +171,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
                 }
             }
         }
+        isKeyFieldDirty = false;
         return null;
     }
 
@@ -227,19 +179,47 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(object);
             if (newId != 0) {
-                Notification.show(pageHeader +" added successfully");
+                BackOfficeUtils.showNotification("Success", pageHeader +" added successfully", VaadinIcons.CHECK_CIRCLE_O);
                 updateTable(false,object,newId);
                 resetFields();
             } else {
-                Notification.show("Something wrong, please try again");
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
             }
         }
         else{
             connection.updateObjectHBM(object);
-            Notification.show(pageHeader + " updated successfully");
+            BackOfficeUtils.showNotification("Success", pageHeader +" updated successfully", VaadinIcons.CHECK_CIRCLE_O);
             updateTable(true,object,0);
             addButton.setCaption("Add");
             resetFields();
         }
     }
+
+    protected TextField getColumnFilterField() {
+        TextField filter = new TextField();
+        filter.setWidth("100%");
+        filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
+        return filter;
+    }
+
+    protected void updateGridBodyMenu(GridContextMenu.GridContextMenuOpenListener.GridContextMenuOpenEvent<?> event) {
+        event.getContextMenu().removeItems();
+        if (event.getItem() != null) {
+            event.getContextMenu().addItem("Edit row", VaadinIcons.EDIT, selectedItem -> {
+                fillEditDetails(event.getItem());
+            });
+            event.getContextMenu().addItem("Delete row", VaadinIcons.FOLDER_REMOVE, selectedItem -> {
+                ConfirmDialog.show(getUI(), "Delete row", "Are you sure you want to delete this row?",
+                        "Yes", "No", new ConfirmDialog.Listener() {
+                            public void onClose(ConfirmDialog dialog) {
+                                if (dialog.isConfirmed()) {
+                                    deleteItem(event.getItem());
+                                }
+                            }
+                });
+            });
+        }
+    }
+
+    protected abstract void deleteItem(Object item);
 }

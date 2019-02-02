@@ -3,8 +3,6 @@ package com.back.office.ui;
 import com.back.office.db.DBConnection;
 import com.back.office.entity.CurrencyDetails;
 import com.back.office.utils.BackOfficeUtils;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.Action;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -17,9 +15,9 @@ import org.vaadin.dialogs.ConfirmDialog;
 import java.util.Date;
 import java.util.List;
 
-public class CurrencyView extends VerticalLayout implements View {
+public class CurrencyView {
 
-    DBConnection connection;
+    /*DBConnection connection;
 
     private final String CURRENCY_CODE = "Currency Code";
     private final String CURRENCY_DESC = "Currency Description";
@@ -37,7 +35,8 @@ public class CurrencyView extends VerticalLayout implements View {
     TextField currencyCodeId;
     Button addButton;
     Button resetButton;
-    Table currencyDetailsTable;
+
+    
 
 
     @Override
@@ -65,17 +64,17 @@ public class CurrencyView extends VerticalLayout implements View {
         addComponent(firstRow);
 
         currencyCodeFld = new TextField(CURRENCY_CODE);
-        currencyCodeFld.setInputPrompt(CURRENCY_CODE);
-        currencyCodeFld.setRequired(true);
+        currencyCodeFld.setDescription(CURRENCY_CODE);
+        currencyCodeFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(currencyCodeFld);
 
         currencyDescFld = new TextField(CURRENCY_DESC);
-        currencyDescFld.setInputPrompt(CURRENCY_DESC);
+        currencyDescFld.setDescription(CURRENCY_DESC);
         firstRow.addComponent(currencyDescFld);
 
         currencyRateFld = new TextField(CURRENCY_RATE);
-        currencyRateFld.setInputPrompt(CURRENCY_RATE);
-        currencyRateFld.setRequired(true);
+        currencyRateFld.setDescription(CURRENCY_RATE);
+        currencyRateFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(currencyRateFld);
 
         HorizontalLayout secondRow = new HorizontalLayout();
@@ -85,25 +84,23 @@ public class CurrencyView extends VerticalLayout implements View {
         addComponent(secondRow);
 
         currencyTypeFld = new ComboBox(CURRENCY_TYPE);
-        currencyTypeFld.addItem("Cash");
-        currencyTypeFld.addItem("Voucher");
+        currencyTypeFld.setItems("Cash","Voucher");
         currencyTypeFld.setTextInputAllowed(false);
-        currencyTypeFld.setNullSelectionAllowed(false);
-        currencyTypeFld.select("Cash");
-        currencyTypeFld.setRequired(true);
+        currencyTypeFld.setTextInputAllowed(false);
+        currencyTypeFld.setSelectedItem("Cash");
+        currencyTypeFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(currencyTypeFld);
 
         priorityOrderFld = new ComboBox(PRIORITY_ORDER);
-        priorityOrderFld.addItem("Base");
-        priorityOrderFld.addItem("Standard");
+        priorityOrderFld.setItems("Base","Standard");
         priorityOrderFld.setTextInputAllowed(false);
-        priorityOrderFld.setNullSelectionAllowed(false);
-        priorityOrderFld.select("Base");
-        currencyTypeFld.setRequired(true);
+        priorityOrderFld.setTextInputAllowed(false);
+        priorityOrderFld.setSelectedItem("Base");
+        currencyTypeFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(priorityOrderFld);
 
         effectiveDateFld = new DateField(EFFECTIVE_DATE);
-        effectiveDateFld.setRequired(true);
+        effectiveDateFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(effectiveDateFld);
 
         HorizontalLayout buttonRow = new HorizontalLayout();
@@ -130,10 +127,10 @@ public class CurrencyView extends VerticalLayout implements View {
         rowFilter.setSpacing(true);
 
         TextField filterFiled = new TextField();
-        filterFiled.setInputPrompt("Filter by Currency Code");
+        filterFiled.setDescription("Filter by Currency Code");
         rowFilter.addComponent(filterFiled);
 
-        Button filterBtn = new Button("Filter");
+        *//*Button filterBtn = new Button("Filter");
         filterBtn.addClickListener((Button.ClickListener) clickEvent -> {
             IndexedContainer container = (IndexedContainer)currencyDetailsTable.getContainerDataSource();
             if(filterFiled.getValue() == null || filterFiled.getValue().isEmpty()) {
@@ -144,7 +141,7 @@ public class CurrencyView extends VerticalLayout implements View {
             }
         });
         rowFilter.addComponent(filterBtn);
-        addComponent(rowFilter);
+        addComponent(rowFilter);*//*
 
         currencyDetailsTable = new Table();
         currencyDetailsTable.setSelectable(true);
@@ -160,6 +157,8 @@ public class CurrencyView extends VerticalLayout implements View {
         currencyDetailsTable.addActionHandler(actionHandler);
 
         addComponent(currencyDetailsTable);
+
+
     }
 
     private IndexedContainer generateContainer(){
@@ -170,8 +169,8 @@ public class CurrencyView extends VerticalLayout implements View {
         container.addContainerProperty(CURRENCY_TYPE, String.class, null);
         container.addContainerProperty(PRIORITY_ORDER, String.class, null);
         container.addContainerProperty(EFFECTIVE_DATE, String.class, null);
-        List<CurrencyDetails> currencyDetails = connection.getAllCurrencies();
-        for(CurrencyDetails details : currencyDetails){
+        List<CurrencyDetails> equipmentDetailsList = connection.getAllCurrencies();
+        for(CurrencyDetails details : equipmentDetailsList){
             Item item = container.addItem(details.getCurrencyCodeId());
             item.getItemProperty(CURRENCY_CODE).setValue(details.getCurrencyCode());
             item.getItemProperty(CURRENCY_DESC).setValue(details.getCurrencyDesc());
@@ -320,5 +319,5 @@ public class CurrencyView extends VerticalLayout implements View {
         currencyDescFld.clear();
         currencyRateFld.clear();
         effectiveDateFld.clear();
-    }
+    }*/
 }

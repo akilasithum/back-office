@@ -8,8 +8,8 @@
             <column name="cartItemId" />
             <generator class="identity" />
         </id>
-        <property name="itemId" type="java.lang.Integer">
-            <column name="itemId" />
+        <property name="itemId" type="java.lang.String">
+            <column name="itemId" length="50"/>
         </property>
         <property name="itemName" type="java.lang.String">
             <column name="itemName" length="100" />

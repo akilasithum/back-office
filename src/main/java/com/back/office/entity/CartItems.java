@@ -17,7 +17,7 @@ import org.hibernate.annotations.*;
 public class CartItems {
 
     private int cartItemId;
-    private int itemId;
+    private String itemId;
     private String itemName;
     private String packType;
     private String drawerName;
@@ -31,11 +31,11 @@ public class CartItems {
         this.cartItemId = cartItemId;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 

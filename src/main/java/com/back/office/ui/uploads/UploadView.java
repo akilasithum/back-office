@@ -1,12 +1,14 @@
 package com.back.office.ui.uploads;
 
 import com.back.office.db.DBConnection;
+import com.back.office.entity.CurrencyDetails;
+import com.back.office.entity.ItemDetails;
+import com.back.office.utils.Constants;
 import com.back.office.xml.Currencies;
-import com.google.gson.reflect.TypeToken;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.poiji.bind.Poiji;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ClassResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
@@ -31,9 +33,11 @@ public class UploadView extends VerticalLayout implements View {
     private VerticalLayout tableLayout;
     private Button processButton;
     protected ComboBox uploadTypeComboBox;
+    protected ComboBox fileTypeComboBox;
     protected File tempFile;
     Upload uploadComponent;
-    Table detailsTable;
+    Grid<Object> detailsTable;
+    List uploadDataList;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -51,6 +55,7 @@ public class UploadView extends VerticalLayout implements View {
         setSpacing(true);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
+        headerLayout.setMargin(Constants.noMargin);
         addComponent(headerLayout);
         Label h1 = new Label("Upload Files");
         h1.addStyleName(ValoTheme.LABEL_H1);
@@ -58,39 +63,45 @@ public class UploadView extends VerticalLayout implements View {
 
         userFormLayout = new VerticalLayout();
         userFormLayout.setSpacing(true);
+        userFormLayout.setMargin(Constants.noMargin);
         addComponent(userFormLayout);
         tableLayout = new VerticalLayout();
+        tableLayout.setMargin(Constants.noMargin);
         addComponent(tableLayout);
         processButton = new Button("Process");
-        processButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                processFile();
-            }
-        });
+        processButton.addClickListener((Button.ClickListener) clickEvent -> processFile());
         tableLayout.setVisible(false);
         tableLayout.setSpacing(true);
 
+        fileTypeComboBox = new ComboBox("File Type");
+        fileTypeComboBox.setDescription("File Type");
+        fileTypeComboBox.setItems("XML","Excel");
+        fileTypeComboBox.setEmptySelectionAllowed(false);
+        fileTypeComboBox.setRequiredIndicatorVisible(true);
+        userFormLayout.addComponent(fileTypeComboBox);
+
         uploadTypeComboBox = new ComboBox("Entity Type");
-        uploadTypeComboBox.setInputPrompt("Entity Type");
-        uploadTypeComboBox.addItem("Aircraft Type");
-        uploadTypeComboBox.addItem("Currency");
-        uploadTypeComboBox.addItem("Create Items");
-        uploadTypeComboBox.addItem("Create Kit Codes");
-        uploadTypeComboBox.addItem("Equipment Types");
-        uploadTypeComboBox.addItem("CC Black List");
-        uploadTypeComboBox.addItem("Vouchers");
-        uploadTypeComboBox.setNullSelectionAllowed(false);
+        uploadTypeComboBox.setDescription("Entity Type");
+        uploadTypeComboBox.setItems("Aircraft Type","Currency","Create Items","Create Kit Codes","Equipment Types","CC Black List","Vouchers");
+        uploadTypeComboBox.setEmptySelectionAllowed(false);
+        uploadTypeComboBox.setRequiredIndicatorVisible(true);
         userFormLayout.addComponent(uploadTypeComboBox);
 
 
         List<String> allowedMimeTypes = new ArrayList<>();
         allowedMimeTypes.add("text/xml");
-        uploadComponent = new Upload("choose XML file",new Upload.Receiver() {
+        allowedMimeTypes.add("application/xls");
+        allowedMimeTypes.add("application/vnd.ms-excel");
+        allowedMimeTypes.add("application/octet-stream");
+
+        uploadComponent = new Upload("choose file",new Upload.Receiver() {
             @Override
             public OutputStream receiveUpload(String filename, String mimeType) {
                 try {
+                    String fileType = String.valueOf(fileTypeComboBox.getValue());
+                    if("XML".equals(fileType))
                     tempFile = File.createTempFile("temp", ".xml");
+                    else if("Excel".equals(fileType)) tempFile = File.createTempFile("temp", ".xlsx");
                     return new FileOutputStream(tempFile);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -123,42 +134,30 @@ public class UploadView extends VerticalLayout implements View {
         });
         uploadComponent.addFinishedListener((Upload.FinishedListener) finishedEvent -> {
             tableLayout.setVisible(true);
-            detailsTable.setContainerDataSource(generateContainer());
+            showData();
 
         });
-
         userFormLayout.addComponent(uploadComponent);
         uploadComponent.setButtonCaption("Upload File");
 
-        detailsTable = new Table();
-        detailsTable.setSelectable(true);
-        detailsTable.setMultiSelect(false);
-        detailsTable.setSortEnabled(true);
-        detailsTable.setColumnCollapsingAllowed(true);
-        detailsTable.setColumnReorderingAllowed(true);
-        detailsTable.setPageLength(10);
-        detailsTable.setSizeFull();
-        tableLayout.addComponent(detailsTable);
-        tableLayout.addComponent(processButton);
+
     }
 
     private void processFile(){
         try {
             String className = getEntityTypeClassNameMap().get(uploadTypeComboBox.getValue().toString());
             if(className != null && !className.isEmpty()) {
-                Class clz = Class.forName(className);
-                JAXBContext jc = JAXBContext.newInstance(Currencies.class);
-                Unmarshaller unmarshaller = jc.createUnmarshaller();
-                Object sc = unmarshaller.unmarshal(tempFile);
-                Method getList = clz.getDeclaredMethod("getList");
-                List list = (List) getList.invoke(sc);
-                for (Object object : list) {
+                for (Object object : uploadDataList) {
                     connection.insertObjectHBM(object);
                 }
+                Notification.show("Successfully updated.");
+                tableLayout.setVisible(false);
+                uploadTypeComboBox.clear();
             }
             else{
                 Notification.show("Not Implemented", "This file upload feature is not implemented.", Type.WARNING_MESSAGE);
             }
+            uploadDataList = null;
             tempFile.delete();
         }
         catch (Exception e){
@@ -167,52 +166,59 @@ public class UploadView extends VerticalLayout implements View {
         }
     }
 
-    private IndexedContainer generateContainer(){
-        try {
-            boolean isHeaderAdded = false;
-            IndexedContainer container = new IndexedContainer();
-            SAXReader reader = new SAXReader();
-            Document document = reader.read(tempFile);
-            Element root = document.getRootElement();
-            List<Element> elements = root.elements();
-            int i = 1;
-            for(Element element : elements){
-                List<Element> attributes = element.elements();
-                Item item = container.addItem(i);
-                if(!isHeaderAdded) {
-                    for (Element attr : attributes) {
-                        container.addContainerProperty(attr.getName(), String.class, null);
-                        item.getItemProperty(attr.getName()).setValue(attr.getStringValue());
-                    }
-                    isHeaderAdded = true;
-                }
-                else{
-                    for (Element attr : attributes) {
-                        item.getItemProperty(attr.getName()).setValue(attr.getStringValue());
-                    }
-                }
-                i++;
-            }
+    private void showData(){
+        String fileType = String.valueOf(fileTypeComboBox.getValue());
+        if("XML".equals(fileType)) {
+                try {
+                    String className = getEntityTypeClassNameMap().get(uploadTypeComboBox.getValue().toString());
+                    if (className != null && !className.isEmpty()) {
+                        Class clz = Class.forName(className);
+                        JAXBContext jc = JAXBContext.newInstance(clz);
+                        Unmarshaller unmarshaller = jc.createUnmarshaller();
+                        Object sc = unmarshaller.unmarshal(tempFile);
+                        Method getList = clz.getDeclaredMethod("getList");
+                        uploadDataList = (List) getList.invoke(sc);
 
-        return container;
+                        Class curClz = Class.forName(getEntityClassNameMap().get(uploadTypeComboBox.getValue().toString()));
+                        tableLayout.removeAllComponents();
+                        detailsTable = new Grid(curClz);
+                        detailsTable.setItems(uploadDataList);
+                        detailsTable.setSelectionMode(Grid.SelectionMode.SINGLE);
+                        detailsTable.setColumnReorderingAllowed(true);
+                        detailsTable.setSizeFull();
+                        tableLayout.addComponent(detailsTable);
+                        tableLayout.addComponent(processButton);
+                    } else {
+                        Notification.show("Not Implemented", "This file upload feature is not implemented.", Type.WARNING_MESSAGE);
+                    }
+                    //tempFile.delete();
+                } catch (Exception e) {
+                    Notification.show("Error", "Something wrong with the input file. Please check the file and upload again ", Type.WARNING_MESSAGE);
+                    tempFile.delete();
+                }
         }
-        catch (Exception e){
-            return null;
+        else if("Excel".equals(fileType)){
+            showExcelData();
         }
     }
-
-    public  String readStream(InputStream is) {
-        StringBuilder sb = new StringBuilder(512);
+    private void showExcelData(){
         try {
-            Reader r = new InputStreamReader(is, "UTF-8");
-            int c = 0;
-            while ((c = r.read()) != -1) {
-                sb.append((char) c);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            Class clz = Class.forName(getEntityClassNameMap().get(uploadTypeComboBox.getValue().toString()));
+            uploadDataList = Poiji.fromExcel(tempFile, clz);
+            tableLayout.removeAllComponents();
+            detailsTable = new Grid(clz);
+            detailsTable.setItems(uploadDataList);
+            detailsTable.setSelectionMode(Grid.SelectionMode.SINGLE);
+            detailsTable.setColumnReorderingAllowed(true);
+            detailsTable.setSizeFull();
+            tableLayout.addComponent(detailsTable);
+            tableLayout.addComponent(processButton);
+
+        } catch (ClassNotFoundException e) {
+            Notification.show("Something wrong with file. Please check and upload again",Type.WARNING_MESSAGE);
+            tempFile.delete();
         }
-        return sb.toString();
+
     }
 
     private Map<String,String> getEntityTypeClassNameMap(){
@@ -224,6 +230,19 @@ public class UploadView extends VerticalLayout implements View {
         map.put("Equipment Types","com.back.office.xml.Equipments");
         //map.put("CC Black List","com.back.office.entity.BlackListCC");
         map.put("Vouchers","com.back.office.xml.Vouchers");
+
+        return map;
+    }
+
+    private Map<String,String> getEntityClassNameMap(){
+        Map<String,String> map = new HashMap<>();
+        //map.put("Aircraft Type","com.back.office.entity.AircraftDetails");
+        map.put("Currency","com.back.office.entity.CurrencyDetails");
+        map.put("Create Items","com.back.office.entity.ItemDetails");
+        map.put("Create Kit Codes","com.back.office.entity.KitCodes");
+        map.put("Equipment Types","com.back.office.entity.EquipmentDetails");
+        //map.put("CC Black List","com.back.office.entity.BlackListCC");
+        map.put("Vouchers","com.back.office.entity.Voucher");
 
         return map;
     }

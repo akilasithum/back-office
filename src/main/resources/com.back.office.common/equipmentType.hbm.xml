@@ -17,11 +17,11 @@
         <property name="equipmentType" type="java.lang.String">
             <column name="equipmentType" length="30" />
         </property>
-        <property name="kitCode" type="java.lang.String">
-            <column name="kitCode" length="50"/>
-        </property>
         <property name="noOfDrawers" type="java.lang.Integer">
             <column name="noOfDrawers"  />
+        </property>
+        <property name="noOfSeals" type="java.lang.Integer">
+            <column name="noOfSeals"  />
         </property>
     </class>
 </hibernate-mapping>

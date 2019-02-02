@@ -28,5 +28,8 @@
         <mapping resource="com.back.office.common/userRole.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/permissionCodes.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/rolePermission.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/promotions.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/ccNumericRange.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/sifDetails.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

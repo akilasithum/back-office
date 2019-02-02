@@ -20,6 +20,9 @@
         <property name="sectorType" type="java.lang.String">
             <column name="sectorType" length="50" />
         </property>
+        <property name="flightType" type="java.lang.String">
+            <column name="flightType" length="50" />
+        </property>
         <filter name="sectorFilter"
                 condition=":flightId=flightId"/>
     </class>

@@ -1,9 +1,6 @@
 package com.back.office;
 
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -14,8 +11,8 @@ import com.vaadin.ui.themes.ValoTheme;
 public class ValoMenuLayout extends HorizontalLayout {
 
     CssLayout contentArea = new CssLayout();
-
     CssLayout menuArea = new CssLayout();
+    VerticalLayout separator = new VerticalLayout();
 
     public ValoMenuLayout() {
         setSizeFull();
@@ -25,9 +22,15 @@ public class ValoMenuLayout extends HorizontalLayout {
         contentArea.setPrimaryStyleName("valo-content");
         contentArea.addStyleName("v-scrollable");
         contentArea.setSizeFull();
-
+        separator.setWidth(100,Unit.PIXELS);
+        separator.addStyleName("backgroundColor");
+        separator.setSizeFull();
+        Button btn = new Button("a");
+        separator.addComponent(btn);
         addComponents(menuArea, contentArea);
         setExpandRatio(contentArea, 1);
+        contentArea.setWidth("95%");
+        setComponentAlignment(contentArea, Alignment.MIDDLE_CENTER);
     }
 
     public ComponentContainer getContentContainer() {

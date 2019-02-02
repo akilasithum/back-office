@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.SIFDetails" table="pos_sif_details" catalog="">
+        <id name="SIFNo" type="java.lang.Integer">
+            <column name="SIFNo" />
+            <generator class="identity" />
+        </id>
+        <property name="deviceId" type="java.lang.String">
+            <column name="deviceId" length="50"/>
+        </property>
+        <property name="downloaded" type="java.util.Date">
+            <column name="downloaded"  />
+        </property>
+        <property name="packedFor" type="java.lang.String">
+            <column name="packedFor" length="150" />
+        </property>
+        <property name="packedTime" type="java.util.Date">
+            <column name="packedTime"  />
+        </property>
+        <property name="crewOpenedTime" type="java.util.Date">
+            <column name="crewOpenedTime" />
+        </property>
+        <property name="crewClosedTime" type="java.util.Date">
+            <column name="crewClosedTime" />
+        </property>
+    </class>
+</hibernate-mapping>

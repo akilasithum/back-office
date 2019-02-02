@@ -3,7 +3,7 @@ package com.back.office.entity;
 public class User {
 
     private int userId;
-    private int staffId;
+    private String staffId;
     private String staffName;
     private String displayName;
     private String position;
@@ -19,11 +19,11 @@ public class User {
         this.userId = userId;
     }
 
-    public int getStaffId() {
+    public String getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(int staffId) {
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 

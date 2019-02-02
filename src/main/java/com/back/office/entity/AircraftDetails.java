@@ -5,11 +5,21 @@ public class AircraftDetails {
     private int aircraftId;
     private String aircraftName;
     private String galleyPosition;
-    private String equipmentType;
-    private int noOfFullCrts;
-    private int totalNoOfSeats;
     private boolean active;
     private String UpdateDateAndtime;
+    private String registrationNumber;
+    private int ecoClassSeatCount;
+    private int businessClassSeatCount;
+    private int frontFullCarts;
+    private int frontHalfCarts;
+    private int frontContainers;
+    private int middleFullCarts;
+    private int middleHalfCarts;
+    private int middleContainers;
+    private int rearFullCarts;
+    private int rearHalfCarts;
+    private int rearContainers;
+
 
     public int getAircraftId() {
         return aircraftId;
@@ -35,30 +45,6 @@ public class AircraftDetails {
         this.galleyPosition = galleyPosition;
     }
 
-    public String getEquipmentType() {
-        return equipmentType;
-    }
-
-    public void setEquipmentType(String equipmentType) {
-        this.equipmentType = equipmentType;
-    }
-
-    public int getNoOfFullCrts() {
-        return noOfFullCrts;
-    }
-
-    public void setNoOfFullCrts(int noOfFullCrts) {
-        this.noOfFullCrts = noOfFullCrts;
-    }
-
-    public int getTotalNoOfSeats() {
-        return totalNoOfSeats;
-    }
-
-    public void setTotalNoOfSeats(int totalNoOfSeats) {
-        this.totalNoOfSeats = totalNoOfSeats;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -73,5 +59,101 @@ public class AircraftDetails {
 
     public void setUpdateDateAndtime(String updateDateAndtime) {
         UpdateDateAndtime = updateDateAndtime;
+    }
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
+    public int getEcoClassSeatCount() {
+        return ecoClassSeatCount;
+    }
+
+    public void setEcoClassSeatCount(int ecoClassSeatCount) {
+        this.ecoClassSeatCount = ecoClassSeatCount;
+    }
+
+    public int getBusinessClassSeatCount() {
+        return businessClassSeatCount;
+    }
+
+    public void setBusinessClassSeatCount(int businessClassSeatCount) {
+        this.businessClassSeatCount = businessClassSeatCount;
+    }
+
+    public int getFrontFullCarts() {
+        return frontFullCarts;
+    }
+
+    public void setFrontFullCarts(int frontFullCarts) {
+        this.frontFullCarts = frontFullCarts;
+    }
+
+    public int getFrontHalfCarts() {
+        return frontHalfCarts;
+    }
+
+    public void setFrontHalfCarts(int frontHalfCarts) {
+        this.frontHalfCarts = frontHalfCarts;
+    }
+
+    public int getFrontContainers() {
+        return frontContainers;
+    }
+
+    public void setFrontContainers(int frontContainers) {
+        this.frontContainers = frontContainers;
+    }
+
+    public int getMiddleFullCarts() {
+        return middleFullCarts;
+    }
+
+    public void setMiddleFullCarts(int middleFullCarts) {
+        this.middleFullCarts = middleFullCarts;
+    }
+
+    public int getMiddleHalfCarts() {
+        return middleHalfCarts;
+    }
+
+    public void setMiddleHalfCarts(int middleHalfCarts) {
+        this.middleHalfCarts = middleHalfCarts;
+    }
+
+    public int getMiddleContainers() {
+        return middleContainers;
+    }
+
+    public void setMiddleContainers(int middleContainers) {
+        this.middleContainers = middleContainers;
+    }
+
+    public int getRearFullCarts() {
+        return rearFullCarts;
+    }
+
+    public void setRearFullCarts(int rearFullCarts) {
+        this.rearFullCarts = rearFullCarts;
+    }
+
+    public int getRearHalfCarts() {
+        return rearHalfCarts;
+    }
+
+    public void setRearHalfCarts(int rearHalfCarts) {
+        this.rearHalfCarts = rearHalfCarts;
+    }
+
+    public int getRearContainers() {
+        return rearContainers;
+    }
+
+    public void setRearContainers(int rearContainers) {
+        this.rearContainers = rearContainers;
     }
 }

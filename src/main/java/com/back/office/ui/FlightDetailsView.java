@@ -4,32 +4,42 @@ import com.back.office.entity.Flights;
 import com.back.office.entity.Sector;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.IndexedContainer;
-import com.vaadin.event.ItemClickEvent;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.tapio.googlemaps.GoogleMap;
+import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FlightDetailsView extends CommonPageDetails {
 
-    private final String FLIGHT_NAME = "Flight Name";
+    private final String FLIGHT_NAME = "Flight No";
     private final String FLIGHT_FROM = "Flight From";
     private final String FLIGHT_TO = "Flight To";
     private final String NO_OF_SECTORS = "Number of Sectors";
     private final String SECTOR_FROM = "Sector From";
     private final String SECTOR_TO = "Sector To";
     private final String SECTOR_TYPE = "Sector Type";
+    private final String FLIGHT_TYPE = "Flight Type";
 
     protected TextField flightNameFld;
     protected TextField flightFromFld;
     protected TextField flightToFld;
     protected ComboBox noOfSectorsComboBox;
     protected VerticalLayout sectorMainLayout;
-    protected Table sectorTable;
+    protected Grid<Sector> sectorTable;
+    private HorizontalLayout inputMapLayout;
+    HorizontalLayout imageLayout;
+
+    FilterGrid<Flights> flightsGrid;
+    List<Flights> flightsList;
 
     public FlightDetailsView(){
         super();
@@ -38,142 +48,174 @@ public class FlightDetailsView extends CommonPageDetails {
     @Override
     protected void createMainLayout() {
         super.createMainLayout();
+
+        imageLayout = new HorizontalLayout();
+        imageLayout.setSizeFull();
+        imageLayout.setMargin(Constants.leftMargin);
+        outerLayout.addComponent(imageLayout);
+        outerLayout.setExpandRatio(userFormLayout,0.55f);
+        outerLayout.setExpandRatio(imageLayout,0.45f);
+
         HorizontalLayout firstRow = new HorizontalLayout();
-        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.setWidth(66.67f,Unit.PERCENTAGE);
         mainUserInputLayout.addComponent(firstRow);
 
+        HorizontalLayout mainDetailsSecondRow = new HorizontalLayout();
+        mainDetailsSecondRow.setSizeFull();
+        mainDetailsSecondRow.setMargin(Constants.noMargin);
+        mainDetailsSecondRow.setWidth(66.67f,Unit.PERCENTAGE);
+        mainUserInputLayout.addComponent(mainDetailsSecondRow);
+
         sectorMainLayout = new VerticalLayout();
+        sectorMainLayout.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(sectorMainLayout);
 
         flightNameFld = new TextField(FLIGHT_NAME);
-        flightNameFld.setInputPrompt(FLIGHT_NAME);
-        flightNameFld.setRequired(true);
+        flightNameFld.setDescription(FLIGHT_NAME);
+        flightNameFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(flightNameFld);
-
-        flightFromFld = new TextField(FLIGHT_FROM);
-        flightFromFld.setInputPrompt(FLIGHT_FROM);
-        flightFromFld.setRequired(true);
-        firstRow.addComponent(flightFromFld);
-
-        flightToFld = new TextField(FLIGHT_TO);
-        flightToFld.setInputPrompt(FLIGHT_TO);
-        flightToFld.setRequired(true);
-        firstRow.addComponent(flightToFld);
+        flightNameFld.addValueChangeListener(valueChangeEvent -> {isKeyFieldDirty = true;});
 
         noOfSectorsComboBox = new ComboBox(NO_OF_SECTORS);
-        noOfSectorsComboBox.setInputPrompt(NO_OF_SECTORS);
-        noOfSectorsComboBox.addItem("2");
-        noOfSectorsComboBox.addItem("3");
-        noOfSectorsComboBox.addItem("4");
-        noOfSectorsComboBox.addItem("5");
-        noOfSectorsComboBox.setNullSelectionAllowed(false);
-        noOfSectorsComboBox.setRequired(true);
+        noOfSectorsComboBox.setDescription(NO_OF_SECTORS);
+        noOfSectorsComboBox.setItems("2","3","4","5");
+        noOfSectorsComboBox.setEmptySelectionAllowed(false);
+        noOfSectorsComboBox.setRequiredIndicatorVisible(true);
         noOfSectorsComboBox.setValue("2");
-        noOfSectorsComboBox.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+        noOfSectorsComboBox.addValueChangeListener(valueChangeEvent -> {
             addSectorLayout(Integer.parseInt(noOfSectorsComboBox.getValue().toString()));
         });
-
         firstRow.addComponent(noOfSectorsComboBox);
 
-        addSectorLayout(2);
-        buttonRow.setMargin(Constants.topMarginInfo);
+        flightFromFld = new TextField(FLIGHT_FROM);
+        flightFromFld.setDescription(FLIGHT_FROM);
+        flightFromFld.setRequiredIndicatorVisible(true);
+        mainDetailsSecondRow.addComponent(flightFromFld);
 
-        sectorTable = new Table();
-        sectorTable.setSelectable(true);
-        sectorTable.setMultiSelect(false);
-        sectorTable.setSortEnabled(true);
-        sectorTable.setPageLength(5);
-        IndexedContainer normalContainer = generateSectorContainer();
-        sectorTable.setContainerDataSource(normalContainer);
+        flightToFld = new TextField(FLIGHT_TO);
+        flightToFld.setDescription(FLIGHT_TO);
+        flightToFld.setRequiredIndicatorVisible(true);
+        mainDetailsSecondRow.addComponent(flightToFld);
+
+        addSectorLayout(2);
+
+        flightsGrid = new FilterGrid<>();
+        flightsGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        flightsGrid.setSizeFull();
+        tableLayout.addComponent(flightsGrid);
+        flightsGrid.addColumn(Flights::getFlightName).setCaption(FLIGHT_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightsGrid.addColumn(Flights::getFlightFrom).setCaption(FLIGHT_FROM).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightsGrid.addColumn(Flights::getFlightTo).setCaption(FLIGHT_TO).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightsGrid.addColumn(Flights::getNoOfSectors).setCaption(NO_OF_SECTORS).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        setDataInGrid();
+        GridContextMenu<Flights> gridMenu = new GridContextMenu<>(flightsGrid);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
+
+        sectorTable = new Grid<>();
         sectorTable.setSizeFull();
         sectorTable.setStyleName("left-right-margin");
         tableLayout.addComponent(sectorTable);
-        tableLayout.setExpandRatio(detailsTable,0.6F);
+        tableLayout.setExpandRatio(flightsGrid,0.6F);
         tableLayout.setExpandRatio(sectorTable,0.4F);
-        detailsTable.addItemClickListener((ItemClickEvent.ItemClickListener) event -> {
-            showAvailableSectors(event.getItemId().toString());
+
+        sectorTable.addColumn(Sector::getSectorFrom).setCaption(SECTOR_FROM);
+        sectorTable.addColumn(Sector::getSectorTo).setCaption(SECTOR_TO);
+        sectorTable.addColumn(Sector::getFlightType).setCaption(FLIGHT_TYPE);
+        sectorTable.addColumn(Sector::getSectorType).setCaption(SECTOR_TYPE);
+        flightsGrid.addItemClickListener(event -> {
+            sectorTable.setItems(showAvailableSectors(((Flights)event.getItem()).getFlightId()));
         });
 
-        userFormLayout.setWidth("70%");
         mainTableLayout.setWidth("80%");
         headerLayout.setWidth("70%");
+        googleMap();
     }
 
-    private void showAvailableSectors(String itemId){
-        List<Sector> sectors = connection.getFilterList("sectorFilter","flightId",Integer.parseInt(itemId),
-                "com.back.office.entity.Sector");
-        IndexedContainer container = (IndexedContainer)sectorTable.getContainerDataSource();
-        container.removeAllItems();
-
-        for(Sector sector : sectors){
-            Item item = container.addItem(sector.getSectorId());
-            item.getItemProperty(SECTOR_FROM).setValue(sector.getSectorFrom());
-            item.getItemProperty(SECTOR_TO).setValue(sector.getSectorTo());
-            item.getItemProperty(SECTOR_TYPE).setValue(sector.getSectorType());
-        }
+    private List<Sector> showAvailableSectors(int itemId){
+        List<Sector> sectors = connection.getFilterList("sectorFilter","flightId",itemId,
+                "com.back.office.entity.Sector","sectorId");
+        return sectors;
     }
 
     private void addSectorLayout(int index){
         sectorMainLayout.removeAllComponents();
         for(int i = 0;i<index;i++) {
-            HorizontalLayout sector1Layout = new HorizontalLayout();
+            VerticalLayout sector1Layout = new VerticalLayout();
+            sector1Layout.setMargin(Constants.noMargin);
             sector1Layout.setSizeFull();
-            sector1Layout.setMargin(Constants.topMarginInfo);
             sectorMainLayout.addComponent(sector1Layout, i);
+
+            HorizontalLayout firstRow = new HorizontalLayout();
+            firstRow.setSizeFull();
+            firstRow.setMargin(Constants.noMargin);
+            sector1Layout.addComponent(firstRow);
+
+            HorizontalLayout secondRow = new HorizontalLayout();
+            secondRow.setSizeFull();
+            secondRow.setWidth("66.67%");
+            secondRow.setMargin(Constants.noMargin);
+            sector1Layout.addComponent(secondRow);
+
             int sectorId = i+1;
             Label h1 = new Label("Sector " + sectorId);
             h1.addStyleName(ValoTheme.LABEL_H3);
-            sector1Layout.addComponent(h1);
+            firstRow.addComponent(h1);
 
             TextField sectorFromFld = new TextField("Sector From");
-            sectorFromFld.setInputPrompt("Sector From");
-            sector1Layout.addComponent(sectorFromFld);
+            sectorFromFld.setDescription("Sector From");
+            firstRow.addComponent(sectorFromFld);
 
             TextField sectorToFld = new TextField("Sector To");
-            sectorToFld.setInputPrompt("Sector To");
-            sector1Layout.addComponent(sectorToFld);
+            sectorToFld.setDescription("Sector To");
+            firstRow.addComponent(sectorToFld);
+
+            ComboBox flightType = new ComboBox("Flight Type");
+            flightType.setDescription("Flight Type");
+            flightType.setItems("Inbound","Outbound");
+            flightType.setEmptySelectionAllowed(false);
+            secondRow.addComponent(flightType);
 
             ComboBox sectorTypeComboBox = new ComboBox("Sector Type");
-            sectorTypeComboBox.setInputPrompt("Sector Type");
-            sectorTypeComboBox.addItem("International");
-            sectorTypeComboBox.addItem("Domestic");
-            sectorTypeComboBox.setNullSelectionAllowed(false);
-            sector1Layout.addComponent(sectorTypeComboBox);
+            sectorTypeComboBox.setDescription("Sector Type");
+            sectorTypeComboBox.setItems("International","Domestic");
+            sectorTypeComboBox.setEmptySelectionAllowed(false);
+            secondRow.addComponent(sectorTypeComboBox);
 
             TextField sectorIdFld = new TextField("Sector Id");
             sectorIdFld.setVisible(false);
-            sector1Layout.addComponent(sectorIdFld);
+            secondRow.addComponent(sectorIdFld);
         }
     }
 
-    @Override
-    protected IndexedContainer generateContainer() {
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(FLIGHT_NAME, String.class, null);
-        container.addContainerProperty(FLIGHT_FROM, String.class, null);
-        container.addContainerProperty(FLIGHT_TO, String.class, null);
-        container.addContainerProperty(NO_OF_SECTORS, Integer.class, null);
-
-        List<Flights> flights = (List<Flights>)connection.getAllValues(className);
-        for(Flights flight : flights){
-            Item item = container.addItem(flight.getFlightId());
-            item.getItemProperty(FLIGHT_NAME).setValue(flight.getFlightName());
-            item.getItemProperty(FLIGHT_FROM).setValue(flight.getFlightFrom());
-            item.getItemProperty(FLIGHT_TO).setValue(flight.getFlightTo());
-            item.getItemProperty(NO_OF_SECTORS).setValue(flight.getNoOfSectors());
+    protected void deleteItem(Object target){
+        if(target != null) {
+            Flights flight = (Flights) target;
+            boolean success = connection.deleteObjectHBM(flight.getFlightId(), className);
+            List<Sector> sectors = showAvailableSectors(flight.getFlightId());
+            for(Sector sector : sectors){
+                connection.deleteObjectHBM(sector.getSectorId(), "com.back.office.entity.Sector");
+            }
+            if(success){
+                BackOfficeUtils.showNotification("Success", "Detail delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                flightsList.remove(target);
+                flightsGrid.setItems(flightsList);
+                sectorTable.setItems(new Sector());
+            }
+            else {
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+            }
         }
-        return container;
     }
 
-    private IndexedContainer generateSectorContainer(){
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(SECTOR_FROM, String.class, null);
-        container.addContainerProperty(SECTOR_TO, String.class, null);
-        container.addContainerProperty(SECTOR_TYPE, String.class, null);
-
-        return container;
+    private void setDataInGrid(){
+        flightsList = (List<Flights>)connection.getAllValues(className);
+        flightsGrid.setItems(flightsList);
     }
 
     @Override
@@ -181,7 +223,7 @@ public class FlightDetailsView extends CommonPageDetails {
         String isValidated = validateFields();
         List<Sector> sectors = getSectors();
         if(isValidated != null){
-            Notification.show(isValidated);
+            Notification.show(isValidated, Notification.Type.WARNING_MESSAGE);
         }
         else if(sectors == null){
             Notification.show("Fill all the sector fields");
@@ -207,10 +249,11 @@ public class FlightDetailsView extends CommonPageDetails {
                     sector.setFlightId(newId);
                     connection.insertObjectHBM(sector);
                 }
-                Notification.show(pageHeader +" added successfully");
+                BackOfficeUtils.showNotification("Success", "Flight added successfully", VaadinIcons.CHECK_CIRCLE_O);
                 resetFields();
+                sectorTable.setItems(new Sector());
             } else {
-                Notification.show("Something wrong, please try again");
+                BackOfficeUtils.showNotification("Error","Something wrong, please try again",VaadinIcons.CLOSE);
             }
         }
         else{
@@ -218,10 +261,11 @@ public class FlightDetailsView extends CommonPageDetails {
             for(Sector sector : list){
                 connection.updateObjectHBM(sector);
             }
-            Notification.show(pageHeader + " updated successfully");
+            BackOfficeUtils.showNotification("Success", "Flight updated successfully", VaadinIcons.CHECK_CIRCLE_O);
             updateTable(true,object,0);
             addButton.setCaption("Add");
             resetFields();
+            sectorTable.setItems(new Sector());
         }
     }
 
@@ -230,11 +274,15 @@ public class FlightDetailsView extends CommonPageDetails {
         int sectorCount = sectorMainLayout.getComponentCount();
         List<Sector> sectors = new ArrayList<>();
         for(int i=0;i<sectorCount;i++){
-            HorizontalLayout layout = (HorizontalLayout)sectorMainLayout.getComponent(i);
-            String sectorFromVal = ((TextField)layout.getComponent(1)).getValue();
-            String sectorToVal = ((TextField)layout.getComponent(2)).getValue();
-            Object flightTypeVal = ((ComboBox)layout.getComponent(3)).getValue();
-            String sectorId = ((TextField)layout.getComponent(4)).getValue();
+            VerticalLayout layout = (VerticalLayout)sectorMainLayout.getComponent(i);
+            HorizontalLayout firstRow = (HorizontalLayout)layout.getComponent(0);
+            HorizontalLayout secondRow = (HorizontalLayout)layout.getComponent(1);
+
+            String sectorFromVal = ((TextField)firstRow.getComponent(1)).getValue();
+            String sectorToVal = ((TextField)firstRow.getComponent(2)).getValue();
+            Object flightType = ((ComboBox)secondRow.getComponent(0)).getValue();
+            Object sectorType = ((ComboBox)secondRow.getComponent(1)).getValue();
+            String sectorId = ((TextField)secondRow.getComponent(2)).getValue();
             Sector sector = new Sector();
             int itemIdVal = (sectorId== null || sectorId.isEmpty()) ? 0 : Integer.parseInt(sectorId);
             int flightId = (idField.getValue() == null || idField.getValue().isEmpty()) ? 0 : Integer.parseInt(idField.getValue());
@@ -244,7 +292,9 @@ public class FlightDetailsView extends CommonPageDetails {
             else  return null;
             if(sectorToVal != null && !sectorToVal.isEmpty()) sector.setSectorTo(sectorToVal);
             else return null;
-            if(flightTypeVal != null) sector.setSectorType(flightTypeVal.toString());
+            if(sectorType != null) sector.setSectorType(sectorType.toString());
+            else return null;
+            if(flightType != null) sector.setFlightType(flightType.toString());
             else return null;
             sectors.add(sector);
         }
@@ -254,26 +304,31 @@ public class FlightDetailsView extends CommonPageDetails {
     @Override
     protected void fillEditDetails(Object target) {
         if(target != null) {
-            IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-            Item item = container.getItem(target);
-            idField.setValue(target.toString());
-            flightNameFld.setValue(item.getItemProperty(FLIGHT_NAME).getValue().toString());
-            flightFromFld.setValue(item.getItemProperty(FLIGHT_TO).getValue().toString());
-            flightToFld.setValue(item.getItemProperty(FLIGHT_TO).getValue().toString());
-            noOfSectorsComboBox.setValue(item.getItemProperty(NO_OF_SECTORS).getValue().toString());
+            Flights flight = (Flights) target;
+            idField.setValue(String.valueOf(flight.getFlightId()));
+            flightNameFld.setValue(flight.getFlightName());
+            flightFromFld.setValue(flight.getFlightFrom());
+            flightToFld.setValue(flight.getFlightTo());
+            noOfSectorsComboBox.setValue(flight.getNoOfSectors());
 
-            IndexedContainer sectorContainer = (IndexedContainer) sectorTable.getContainerDataSource();
+            List<Sector> sectors = showAvailableSectors(flight.getFlightId());
             int i = 0;
-            for(Object obj : sectorContainer.getItemIds()){
-                Item item1 = sectorContainer.getItem(obj);
-                ((TextField)((HorizontalLayout)sectorMainLayout.getComponent(i)).getComponent(1)).setValue(item1.getItemProperty(SECTOR_FROM).getValue().toString());
-                ((TextField)((HorizontalLayout)sectorMainLayout.getComponent(i)).getComponent(2)).setValue(item1.getItemProperty(SECTOR_TO).getValue().toString());
-                ((ComboBox)((HorizontalLayout)sectorMainLayout.getComponent(i)).getComponent(3)).setValue(item1.getItemProperty(SECTOR_TYPE).getValue().toString());
-                ((TextField)((HorizontalLayout)sectorMainLayout.getComponent(i)).getComponent(4)).setValue(obj.toString());
+            for(Sector sector : sectors){
+
+                VerticalLayout layout =  (VerticalLayout)sectorMainLayout.getComponent(i);
+                HorizontalLayout firstRow = (HorizontalLayout)layout.getComponent(0);
+                HorizontalLayout secondRow = (HorizontalLayout)layout.getComponent(1);
+
+                ((TextField)(firstRow.getComponent(1))).setValue(sector.getSectorFrom());
+                ((TextField)firstRow.getComponent(2)).setValue(sector.getSectorTo());
+                ((ComboBox)secondRow.getComponent(0)).setValue(sector.getFlightType());
+                ((ComboBox)secondRow.getComponent(1)).setValue(sector.getSectorType());
+                ((TextField)secondRow.getComponent(2)).setValue(String.valueOf(sector.getSectorId()));
                 i++;
             }
-
-            addButton.setCaption("Edit");
+            editObj = flight;
+            addButton.setCaption("Save");
+            isKeyFieldDirty = false;
         }
     }
 
@@ -282,24 +337,21 @@ public class FlightDetailsView extends CommonPageDetails {
         this.filterFieldStr = FLIGHT_NAME;
         this.pageHeader = "Flight Details";
         this.className = "com.back.office.entity.Flights";
+        this.keyFieldDBName = "flightName";
     }
 
     @Override
     protected void updateTable(boolean isEdit, Object details, int newId) {
         Flights flights = (Flights) details;
-        IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-        Item item;
         if(isEdit){
-            item  = container.getItem(flights.getFlightId());
+            int index = flightsList.indexOf(editObj);
+            flightsList.remove(editObj);
+            flightsList.add(index,flights);
         }
         else{
-            item  = container.addItem(newId);
+            flightsList.add(flights);
         }
-        item.getItemProperty(FLIGHT_NAME).setValue(flights.getFlightName());
-        item.getItemProperty(FLIGHT_FROM).setValue(flights.getFlightFrom());
-        item.getItemProperty(FLIGHT_TO).setValue(flights.getFlightTo());
-        item.getItemProperty(NO_OF_SECTORS).setValue(flights.getNoOfSectors());
-        detailsTable.select(details);
+        flightsGrid.setItems(flightsList);
     }
 
     @Override
@@ -310,10 +362,46 @@ public class FlightDetailsView extends CommonPageDetails {
         noOfSectorsComboBox.setValue("2");
         int sectorCount = sectorMainLayout.getComponentCount();
         for(int i=0;i<sectorCount;i++){
-            HorizontalLayout layout =  (HorizontalLayout)sectorMainLayout.getComponent(i);
-            ((TextField) layout.getComponent(1)).clear();
-            ((TextField) layout.getComponent(2)).clear();
-            ((ComboBox) layout.getComponent(3)).clear();
+            VerticalLayout layout =  (VerticalLayout)sectorMainLayout.getComponent(i);
+            HorizontalLayout firstRow = (HorizontalLayout)layout.getComponent(0);
+            HorizontalLayout secondRow = (HorizontalLayout)layout.getComponent(1);
+            ((TextField) firstRow.getComponent(1)).clear();
+            ((TextField) firstRow.getComponent(2)).clear();
+            ((ComboBox) secondRow.getComponent(0)).clear();
+            ((ComboBox) secondRow.getComponent(1)).clear();
         }
+    }
+
+    @Override
+    protected TextField getKeyField() {
+        return flightNameFld;
+    }
+
+    private void googleMap(){
+        VerticalLayout layout = new VerticalLayout();
+        GoogleMap googleMap = new GoogleMap("AIzaSyAlyIX7vXwAqfZPZ3T4Gcck0jdEQOUk3tM", null, "english");
+        googleMap.setSizeFull();
+        googleMap.setWidth(90, Unit.PERCENTAGE);
+        googleMap.setHeight(500,Unit.PIXELS);
+        layout.setMargin(Constants.noMargin);
+        layout.setSizeFull();
+
+        googleMap.addMarker("Montreal", new LatLon(
+                45.466283, -73.745934), false, null);
+        GoogleMapMarker customMarker = new GoogleMapMarker("Torento", new LatLon(43.682496, -79.609814),false, null);
+        googleMap.addMarker(customMarker);
+        googleMap.setCenter(new LatLon( 43.682496, -79.609814));
+        List<LatLon> latLons = new ArrayList<>();
+        latLons.add(new LatLon(43.682496, -79.609814));
+        latLons.add(new LatLon(45.466283, -73.745934));
+        GoogleMapPolyline polyline = new GoogleMapPolyline(latLons);
+        polyline.setStrokeWeight(4);
+        polyline.setStrokeColor("red");
+        googleMap.addPolyline(polyline);
+        googleMap.setMinZoom(4);
+        googleMap.setMaxZoom(16);
+        googleMap.setZoom(6);
+        layout.addComponent(googleMap);
+        imageLayout.addComponent(layout);
     }
 }

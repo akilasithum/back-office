@@ -14,14 +14,41 @@
         <property name="galleyPosition" type="java.lang.String">
             <column name="galleyPosition" length="10" />
         </property>
-        <property name="equipmentType" type="java.lang.String">
-            <column name="equipmentType" length="30" />
+        <property name="registrationNumber" type="java.lang.String">
+            <column name="registrationNumber" length="30" />
         </property>
-        <property name="noOfFullCrts" type="java.lang.Integer">
-            <column name="noOfFullCarts" />
+        <property name="ecoClassSeatCount" type="java.lang.Integer">
+            <column name="ecoClassSeatCount" />
         </property>
-        <property name="totalNoOfSeats" type="java.lang.Integer">
-            <column name="totalNoOfSeats"  />
+        <property name="businessClassSeatCount" type="java.lang.Integer">
+            <column name="businessClassSeatCount"  />
+        </property>
+        <property name="frontFullCarts" type="java.lang.Integer">
+            <column name="frontFullCarts"  />
+        </property>
+        <property name="frontHalfCarts" type="java.lang.Integer">
+            <column name="frontHalfCarts"  />
+        </property>
+        <property name="frontContainers" type="java.lang.Integer">
+            <column name="frontContainers"  />
+        </property>
+        <property name="middleFullCarts" type="java.lang.Integer">
+            <column name="middleFullCarts"  />
+        </property>
+        <property name="middleHalfCarts" type="java.lang.Integer">
+            <column name="middleHalfCarts"  />
+        </property>
+        <property name="middleContainers" type="java.lang.Integer">
+            <column name="middleContainers"  />
+        </property>
+        <property name="rearFullCarts" type="java.lang.Integer">
+            <column name="rearFullCarts"  />
+        </property>
+        <property name="rearHalfCarts" type="java.lang.Integer">
+            <column name="rearHalfCarts"  />
+        </property>
+        <property name="rearContainers" type="java.lang.Integer">
+            <column name="rearContainers"  />
         </property>
         <property name="active" type="boolean">
             <column name="active" />

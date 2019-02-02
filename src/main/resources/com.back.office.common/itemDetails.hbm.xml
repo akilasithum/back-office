@@ -38,6 +38,28 @@
         <property name="activateDate" type="java.lang.String">
             <column name="activateDate"  length="30"/>
         </property>
+
+        <property name="itemCode" type="java.lang.String">
+            <column name="itemCode"  length="30"/>
+        </property>
+        <property name="secondCurrency" type="java.lang.String">
+            <column name="secondCurrency"  length="30"/>
+        </property>
+        <property name="secondPrice" type="java.lang.Float">
+            <column name="secondPrice" />
+        </property>
+        <property name="deListed" type="java.lang.String">
+            <column name="deListed"  length="10"/>
+        </property>
+        <property name="image" type="binary">
+            <column name="image" />
+        </property>
+        <property name="nfcId" type="java.lang.String">
+            <column name="nfcId"  length="50"/>
+        </property>
+        <property name="barcode" type="java.lang.String">
+            <column name="barcode"  length="50"/>
+        </property>
         <filter name="serviceTypeFilter"
                 condition=":serviceType=serviceType"/>
     </class>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.Promotion" table="promotions" catalog="">
+        <id name="promoId" type="java.lang.Integer">
+            <column name="promoId" />
+            <generator class="identity" />
+        </id>
+        <property name="promoName" type="java.lang.String">
+            <column name="promoName" length="50" />
+        </property>
+        <property name="itemCount" type="java.lang.Integer">
+            <column name="itemCount"  />
+        </property>
+        <property name="discount" type="java.lang.Float">
+            <column name="discount"  />
+        </property>
+        <property name="items" type="java.lang.String">
+            <column name="items" length="150" />
+        </property>
+        <property name="itemCodes" type="java.lang.String">
+            <column name="itemCodes" length="150" />
+        </property>
+        <property name="activateDate" type="java.util.Date">
+            <column name="activateDate"  />
+        </property>
+        <property name="endDate" type="java.util.Date">
+            <column name="endDate" />
+        </property>
+    </class>
+</hibernate-mapping>

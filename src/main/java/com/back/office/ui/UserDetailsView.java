@@ -1,14 +1,17 @@
 package com.back.office.ui;
 
-import com.back.office.entity.KitCodes;
 import com.back.office.entity.User;
 import com.back.office.entity.UserRole;
 import com.back.office.utils.BackOfficeUtils;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.back.office.utils.Constants;
+import com.vaadin.contextmenu.ContextMenu;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,9 @@ public class UserDetailsView extends CommonPageDetails {
     protected CheckBox statusCheckBox;
     protected ComboBox userRoleComboBox;
 
+    FilterGrid<User> userGrid;
+    List<User> userList;
+
     public UserDetailsView(){
         super();
     }
@@ -54,98 +60,113 @@ public class UserDetailsView extends CommonPageDetails {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
         staffIdFld = new TextField(STAFF_ID);
-        staffIdFld.setInputPrompt(STAFF_ID);
-        staffIdFld.setRequired(true);
+        staffIdFld.setDescription(STAFF_ID);
+        staffIdFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(staffIdFld);
+        staffIdFld.addValueChangeListener(valueChangeEvent -> {isKeyFieldDirty = true;});
 
         staffNameFld = new TextField(STAFF_NAME);
-        staffNameFld.setInputPrompt(STAFF_NAME);
-        staffNameFld.setRequired(true);
+        staffNameFld.setDescription(STAFF_NAME);
+        staffNameFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(staffNameFld);
 
         displayNameFld = new TextField(DISPLAY_NAME);
-        displayNameFld.setInputPrompt(DISPLAY_NAME);
-        displayNameFld.setRequired(true);
+        displayNameFld.setDescription(DISPLAY_NAME);
+        displayNameFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(displayNameFld);
 
         userRoleComboBox = new ComboBox(USER_ROLE);
-        userRoleComboBox.setInputPrompt(USER_ROLE);
-        userRoleComboBox.setRequired(true);
-        userRoleComboBox.setNullSelectionAllowed(false);
-        userRoleComboBox.addItems(roleIdRoleNameMap.values());
+        userRoleComboBox.setDescription(USER_ROLE);
+        userRoleComboBox.setRequiredIndicatorVisible(true);
+        userRoleComboBox.setEmptySelectionAllowed(false);
+        userRoleComboBox.setItems(roleIdRoleNameMap.values());
         firstRow.addComponent(userRoleComboBox);
 
         HorizontalLayout secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
         secondRow.setSizeFull();
-        MarginInfo marginInfo = new MarginInfo(true,false,true,false);
-        secondRow.setMargin(marginInfo);
+        secondRow.setWidth(75,Unit.PERCENTAGE);
+        secondRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(secondRow);
 
         positionComboBox = new ComboBox(POSITION);
-        positionComboBox.setInputPrompt(POSITION);
-        positionComboBox.addItem("SCC");
-        positionComboBox.addItem("ICC");
-        positionComboBox.addItem("CC");
-        positionComboBox.addItem("IT");
-        positionComboBox.setNullSelectionAllowed(false);
-        positionComboBox.setRequired(true);
+        positionComboBox.setDescription(POSITION);
+        positionComboBox.setItems("SCC","ICC","CC","IT");
+        positionComboBox.setEmptySelectionAllowed(false);
+        positionComboBox.setRequiredIndicatorVisible(true);
         secondRow.addComponent(positionComboBox);
 
         departmentFld = new TextField(DEAPRTMENT);
-        departmentFld.setInputPrompt(DEAPRTMENT);
-        departmentFld.setRequired(true);
+        departmentFld.setDescription(DEAPRTMENT);
+        departmentFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(departmentFld);
 
         statusCheckBox = new CheckBox(STATUS, true);
         secondRow.addComponent(statusCheckBox);
 
+        userGrid = new FilterGrid<>();
+        userGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        userGrid.setSizeFull();
+        tableLayout.addComponent(userGrid);
+        setDataInGrid();
+        GridContextMenu<User> gridMenu = new GridContextMenu<>(userGrid);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
+
         userFormLayout.setWidth("70%");
-        mainTableLayout.setWidth("70%");
+        mainTableLayout.setWidth("80%");
         headerLayout.setWidth("70%");
 
     }
 
-    @Override
-    protected IndexedContainer generateContainer() {
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(STAFF_ID, Integer.class, null);
-        container.addContainerProperty(STAFF_NAME, String.class, null);
-        container.addContainerProperty(DISPLAY_NAME, String.class, null);
-        container.addContainerProperty(USER_ROLE, String.class, null);
-        container.addContainerProperty(POSITION, String.class, null);
-        container.addContainerProperty(DEAPRTMENT, String.class, null);
-        container.addContainerProperty(STATUS, String.class, null);
-
-        List<User> users = (List<User>)connection.getAllValues(className);
-        for(User user : users){
-            Item item = container.addItem(user.getUserId());
-            item.getItemProperty(STAFF_ID).setValue(user.getStaffId());
-            item.getItemProperty(STAFF_NAME).setValue(user.getStaffName());
-            item.getItemProperty(DISPLAY_NAME).setValue(user.getDisplayName());
-            item.getItemProperty(USER_ROLE).setValue(roleIdRoleNameMap.get(user.getUserRoleId()));
-            item.getItemProperty(POSITION).setValue(user.getPosition());
-            item.getItemProperty(DEAPRTMENT).setValue(user.getDepartment());
-            item.getItemProperty(STATUS).setValue(user.isActive() ? "Active" : "Not Active");
+    protected void deleteItem(Object target) {
+        if (target != null) {
+            User user = (User) target;
+            boolean success = connection.deleteObjectHBM(user.getUserId(), className);
+            if (success) {
+                BackOfficeUtils.showNotification("Success", "User delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                userList.remove(target);
+                userGrid.setItems(userList);
+            } else {
+                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+            }
         }
-        return container;
+    }
+
+    private void setDataInGrid(){
+        userList = (List<User>)connection.getAllValues(className);
+        userGrid.setItems(userList);
+        userGrid.addColumn(User::getStaffId).setCaption(STAFF_ID).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        userGrid.addColumn(User::getStaffName).setCaption(STAFF_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        userGrid.addColumn(User::getDisplayName).setCaption(DISPLAY_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        userGrid.addColumn(User::getUserRoleId).setCaption(USER_ROLE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        userGrid.addColumn(User::getPosition).setCaption(POSITION).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        userGrid.addColumn(User::getDepartment).setCaption(DEAPRTMENT).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        userGrid.addColumn(bean->bean.isActive() ? "Active" : "Not Active").setCaption(STATUS).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
     }
 
     @Override
     protected void insertDetails() {
         String isValidated = validateFields();
         if(isValidated != null){
-            Notification.show(isValidated);
+            Notification.show(isValidated, Notification.Type.WARNING_MESSAGE);
         }
         else{
             int itemIdVal = (idField.getValue() == null || idField.getValue().isEmpty()) ? 0 : Integer.parseInt(idField.getValue());
             User user = new User();
             user.setUserId(itemIdVal);
-            user.setStaffId(Integer.valueOf(staffIdFld.getValue()));
+            user.setStaffId(staffIdFld.getValue());
             user.setStaffName(staffNameFld.getValue());
             user.setDisplayName(displayNameFld.getValue());
             user.setPosition(positionComboBox.getValue().toString());
@@ -153,25 +174,30 @@ public class UserDetailsView extends CommonPageDetails {
             user.setActive(statusCheckBox.getValue());
             user.setUserRoleId(roleNameRoleIdMap.get(userRoleComboBox.getValue().toString()));
             addOrUpdateDetails(user);
-
         }
     }
 
     @Override
     protected void fillEditDetails(Object target) {
         if(target != null) {
-            IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-            Item item = container.getItem(target);
-            idField.setValue(target.toString());
-            staffIdFld.setValue(item.getItemProperty(STAFF_ID).getValue().toString());
-            staffNameFld.setValue(item.getItemProperty(STAFF_NAME).getValue().toString());
-            displayNameFld.setValue(item.getItemProperty(DISPLAY_NAME).getValue().toString());
-            positionComboBox.setValue(item.getItemProperty(POSITION).getValue().toString());
-            departmentFld.setValue(item.getItemProperty(DEAPRTMENT).getValue().toString());
-            statusCheckBox.setValue(item.getItemProperty(STATUS).getValue().toString().equals("Active") ? true : false);
-            userRoleComboBox.setValue(item.getItemProperty(USER_ROLE).getValue().toString());
-            addButton.setCaption("Edit");
+            User user = (User) target;
+            idField.setValue(String.valueOf(user.getUserId()));
+            staffIdFld.setValue(String.valueOf(user.getStaffId()));
+            staffNameFld.setValue(user.getStaffName());
+            displayNameFld.setValue(user.getDisplayName());
+            positionComboBox.setValue(user.getPosition());
+            departmentFld.setValue(user.getDepartment());
+            statusCheckBox.setValue(user.isActive());
+            userRoleComboBox.setValue(roleIdRoleNameMap.get(user.getUserRoleId()));
+            addButton.setCaption("Save");
+            editObj = user;
+            isKeyFieldDirty = false;
         }
+    }
+
+    @Override
+    protected TextField getKeyField() {
+        return staffIdFld;
     }
 
     @Override
@@ -184,20 +210,14 @@ public class UserDetailsView extends CommonPageDetails {
     @Override
     protected void updateTable(boolean isEdit, Object details, int newId) {
         User user = (User) details;
-        IndexedContainer container = (IndexedContainer) detailsTable.getContainerDataSource();
-        Item item;
         if(isEdit){
-            item  = container.getItem(user.getUserId());
+            int index = userList.indexOf(editObj);
+            userList.remove(editObj);
+            userList.add(index,user);
         }
         else{
-            item  = container.addItem(newId);
+            userList.add(user);
         }
-        item.getItemProperty(STAFF_ID).setValue(user.getStaffId());
-        item.getItemProperty(STAFF_NAME).setValue(user.getStaffName());
-        item.getItemProperty(DISPLAY_NAME).setValue(user.getDisplayName());
-        item.getItemProperty(POSITION).setValue(user.getPosition());
-        item.getItemProperty(DEAPRTMENT).setValue(user.getDepartment());
-        item.getItemProperty(USER_ROLE).setValue(roleIdRoleNameMap.get(user.getUserRoleId()));
-        item.getItemProperty(STATUS).setValue(user.isActive() ? "Active" : "Not Active");
+        userGrid.setItems(userList);
     }
 }

@@ -20,11 +20,11 @@
         <property name="activateDate" type="java.lang.String">
             <column name="activateDate" length="50"/>
         </property>
-        <property name="noOfSeals" type="java.lang.Integer">
-            <column name="noOfSeals"  />
-        </property>
         <property name="noOfEquipments" type="java.lang.Integer">
             <column name="noOfEquipments"  />
+        </property>
+        <property name="packTypes" type="java.lang.String">
+            <column name="packTypes"  />
         </property>
         <filter name="kitCodeFilter"
                 condition=":kitCode=kitCode"/>

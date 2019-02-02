@@ -28,6 +28,13 @@
 	padding: 2px;
 }
 
+.buttonClicked
+{
+	font-weight: bold;
+	color:red;
+	background: red;
+}
+
 .layout-with-border {
 	border: 1px solid black;
 	padding-left: 15px;

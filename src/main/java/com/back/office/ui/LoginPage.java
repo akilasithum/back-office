@@ -1,5 +1,6 @@
 package com.back.office.ui;
 
+import com.back.office.HybridUI;
 import com.back.office.MyUI;
 import com.back.office.utils.Authentication;
 import com.vaadin.navigator.View;
@@ -50,9 +51,9 @@ public class LoginPage extends VerticalLayout implements View {
                 if(AUTH.authenticate(username.getValue(), password.getValue())){
                     VaadinSession.getCurrent().setAttribute("user", username.getValue());
                     getSession().setAttribute("userName",username);
-                    ((MyUI)getUI()).navigate();
-                    getUI().getNavigator().navigateTo("common");
-                    Page.getCurrent().reload();
+                    ((HybridUI)getUI()).navigate();
+                    //getUI().getNavigator().navigateTo("common");
+                    //Page.getCurrent().reload();
                 }else{
                     Notification.show("Invalid credentials", Notification.Type.ERROR_MESSAGE);
                 }

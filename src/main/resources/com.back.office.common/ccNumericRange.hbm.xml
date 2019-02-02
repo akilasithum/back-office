@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.CCNumericRange" table="cc_numeric_range" catalog="">
+        <id name="rangeId" type="java.lang.Integer">
+            <column name="rangeId" />
+            <generator class="identity" />
+        </id>
+        <property name="numaricRange" type="java.lang.String">
+            <column name="numaricRange" length="50" />
+        </property>
+        <property name="cardType" type="java.lang.String">
+            <column name="cardType" length="10" />
+        </property>
+        <property name="cardDesc" type="java.lang.String">
+            <column name="cardDesc" length="30" />
+        </property>
+        <property name="startRange" type="java.lang.String">
+            <column name="startRange" length="30" />
+        </property>
+        <property name="endRange" type="java.lang.String">
+            <column name="endRange" length="30" />
+        </property>
+        <property name="genralLimit" type="java.lang.Float">
+            <column name="genralLimit" />
+        </property>
+        <property name="authorizedLimit" type="java.lang.Float">
+            <column name="authorizedLimit" />
+        </property>
+    </class>
+</hibernate-mapping>

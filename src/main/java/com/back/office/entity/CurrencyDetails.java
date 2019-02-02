@@ -1,16 +1,28 @@
 package com.back.office.entity;
 
+
+
+import com.poiji.annotation.ExcelCell;
+import com.poiji.annotation.ExcelCellName;
+import com.poiji.annotation.ExcelRow;
+
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CurrencyDetails {
 
     private int currencyCodeId;
+    @ExcelCellName("Currency Code")
     private String currencyCode;
+    @ExcelCellName("Currency Description")
     private String currencyDesc;
+    @ExcelCellName("Currency Rate")
     private float currencyRate;
+    @ExcelCellName("Currency Type")
     private String currencyType;
+    @ExcelCellName("Priority Order")
     private String priorityOrder;
+    @ExcelCellName("Effective Date")
     private String effectiveDate;
 
     public int getCurrencyCodeId() {

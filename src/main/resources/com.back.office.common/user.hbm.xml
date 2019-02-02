@@ -8,7 +8,7 @@
             <column name="userId" />
             <generator class="identity" />
         </id>
-        <property name="staffId" type="java.lang.Integer">
+        <property name="staffId" type="java.lang.String">
             <column name="staffId"  />
         </property>
         <property name="staffName" type="java.lang.String">

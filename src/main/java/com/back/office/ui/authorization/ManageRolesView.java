@@ -1,25 +1,30 @@
 package com.back.office.ui.authorization;
 
 import com.back.office.db.DBConnection;
-import com.back.office.entity.PermissionCodes;
-import com.back.office.entity.RolePermission;
-import com.back.office.entity.UserRole;
+import com.back.office.entity.*;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.data.TreeData;
+import com.vaadin.data.provider.Query;
+import com.vaadin.data.provider.TreeDataProvider;
 import com.vaadin.event.Action;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.tools.ant.Project;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ManageRolesView extends VerticalLayout implements View {
 
@@ -31,11 +36,13 @@ public class ManageRolesView extends VerticalLayout implements View {
     TextField roleNameFld;
     CheckBox activeCheckBox;
     TextField roleIdHdnFld;
-    TreeTable permissionTable;
-    Table roleTable;
+    TreeGrid<PermissionCodes> permissionTable;
+    FilterGrid<UserRole> roleTable;
     Button addButton;
     Button clearButton;
     List<RolePermission> editRolePermissions;
+    List<UserRole> userRoleList;
+    private Object editObj;
 
     private static final String FUNC_AREA = "Functional Area";
     private static final String AUTHORIZAED = "Authorized";
@@ -58,18 +65,20 @@ public class ManageRolesView extends VerticalLayout implements View {
 
         outterLayout = new HorizontalLayout();
         outterLayout.setSizeFull();
+        outterLayout.setMargin(Constants.noMargin);
         outterLayout.setSpacing(true);
 
         availableRolesLayout = new VerticalLayout();
         availableRolesLayout.setSizeFull();
         availableRolesLayout.addComponent(getAvailableRolesTable());
         availableRolesLayout.setWidth("70%");
+        availableRolesLayout.setMargin(Constants.noMargin);
 
         mainLayout = new VerticalLayout();
         mainLayout.setCaption("Add User Role");
         mainLayout.setSizeFull();
-        mainLayout.setStyleName("layout-with-border");
-        //addComponent(mainLayout);
+        mainLayout.setMargin(Constants.noMargin);
+        addComponent(mainLayout);
         addComponent(h1);
 
         outterLayout.addComponent(availableRolesLayout);
@@ -79,11 +88,12 @@ public class ManageRolesView extends VerticalLayout implements View {
 
         formLayout = new HorizontalLayout();
         formLayout.setSizeFull();
+        formLayout.setMargin(Constants.noMargin);
         mainLayout.addComponent(formLayout);
 
         roleNameFld = new TextField(ROLE_NAME);
-        roleNameFld.setInputPrompt(ROLE_NAME);
-        roleNameFld.setRequired(true);
+        roleNameFld.setDescription(ROLE_NAME);
+        roleNameFld.setRequiredIndicatorVisible(true);
         formLayout.addComponent(roleNameFld);
 
         activeCheckBox = new CheckBox(ACTIVE, true);
@@ -92,15 +102,9 @@ public class ManageRolesView extends VerticalLayout implements View {
         roleIdHdnFld = new TextField();
         roleIdHdnFld.setVisible(false);
         formLayout.addComponent(roleIdHdnFld);
-        formLayout.setMargin(Constants.bottomMarginInfo);
+        formLayout.setMargin(Constants.noMargin);
 
-        permissionTable = new TreeTable();
-        permissionTable.setSelectable(true);
-        permissionTable.setMultiSelect(false);
-        permissionTable.setSortEnabled(true);
-        permissionTable.setColumnCollapsingAllowed(false);
-        permissionTable.setColumnReorderingAllowed(false);
-        permissionTable.setPageLength(10);
+        permissionTable = new TreeGrid<>();
         permissionTable.setSizeFull();
         generateContainer();
 
@@ -114,156 +118,176 @@ public class ManageRolesView extends VerticalLayout implements View {
         mainLayout.addComponent(buttonLayout);
         buttonLayout.addComponent(addButton);
         buttonLayout.addComponent(clearButton);
-        buttonLayout.setMargin(Constants.topMarginInfo);
-        buttonLayout.setMargin(Constants.topBottomMarginInfo);
+        buttonLayout.setMargin(Constants.noMargin);
         printInsertStatement();
     }
 
-    private Table getAvailableRolesTable(){
+    private FilterGrid getAvailableRolesTable(){
 
-        roleTable = new Table();
-        roleTable.setSelectable(true);
-        roleTable.setMultiSelect(false);
-        roleTable.setSortEnabled(true);
-        roleTable.setColumnCollapsingAllowed(false);
-        roleTable.setColumnReorderingAllowed(false);
-        roleTable.setPageLength(5);
-        roleTable.setContainerDataSource(getAvailableTableContainer());
+        roleTable = new FilterGrid();
+        roleTable.setSelectionMode(Grid.SelectionMode.SINGLE);
         roleTable.setSizeFull();
-        roleTable.addActionHandler(actionHandler);
+        userRoleList = (List<UserRole>)connection.getAllValues("com.back.office.entity.UserRole");
+        roleTable.setItems(userRoleList);
+        roleTable.addColumn(UserRole::getRoleName).setCaption(ROLE_NAME).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        roleTable.addColumn(bean -> bean.isActive() ? "Active" : "Not Active").setCaption(ACTIVE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        GridContextMenu<UserRole> gridMenu = new GridContextMenu<>(roleTable);
+        gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
         return roleTable;
     }
 
-    Action.Handler actionHandler = new Action.Handler() {
-        private final Action editItem = new Action("Edit user role" , FontAwesome.EDIT);
-        private final Action deleteItem = new Action("Delete user role" , FontAwesome.REMOVE);
-        private final Action[] ACTIONS = new Action[] {editItem, deleteItem};
-
-        @Override
-        public void handleAction(Action action, Object sender, Object target) {
-            if(action.getCaption().equals("Edit user role")){
-                editRole(target);
-            }
-            else if(action.getCaption().equals("Delete user role")){
-                ConfirmDialog.show(getUI(), "Delete", "Are you sure you want to delete this user role?",
+    protected void updateGridBodyMenu(GridContextMenu.GridContextMenuOpenListener.GridContextMenuOpenEvent<?> event) {
+        event.getContextMenu().removeItems();
+        if (event.getItem() != null) {
+            event.getContextMenu().addItem("Edit row", VaadinIcons.EDIT, selectedItem -> {
+                editRole(event.getItem());
+            });
+            event.getContextMenu().addItem("Delete row", VaadinIcons.FOLDER_REMOVE, selectedItem -> {
+                ConfirmDialog.show(getUI(), "Delete row", "Are you sure you want to delete this row?",
                         "Yes", "No", new ConfirmDialog.Listener() {
-
                             public void onClose(ConfirmDialog dialog) {
-                                if(dialog.isConfirmed()){
-                                    deleteRole(target);
+                                if (dialog.isConfirmed()) {
+                                    deleteRole(event.getItem());
                                 }
                             }
                         });
-            }
+            });
         }
+    }
 
-        @Override
-        public Action[] getActions(Object target, Object sender) {
-            return ACTIONS;
-        }
-    };
+    protected TextField getColumnFilterField() {
+        TextField filter = new TextField();
+        filter.setWidth("100%");
+        filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
+        return filter;
+    }
 
     private void editRole(Object target){
-
-        editRolePermissions = connection.getFilterList("roleIdFilter","roleId",Integer.parseInt(target.toString()),
+        UserRole userRole = (UserRole) target;
+        TreeDataProvider<PermissionCodes> dataProvider = (TreeDataProvider<PermissionCodes>) permissionTable.getDataProvider();
+        TreeData<PermissionCodes> data = dataProvider.getTreeData();
+        editRolePermissions = connection.getFilterList("roleIdFilter", "roleId",userRole.getRoleId(),
+                "com.back.office.entity.RolePermission","rolePermissionId");
+        List<Integer> codeList = connection.getUserRoleIds("roleIdFilter","roleId",userRole.getRoleId(),
                 "com.back.office.entity.RolePermission");
-        Item roleRow = roleTable.getItem(target);
-        roleNameFld.setValue(roleRow.getItemProperty(ROLE_NAME).getValue().toString());
-        activeCheckBox.setValue(roleRow.getItemProperty(ACTIVE).getValue().toString().equalsIgnoreCase("Active"));
-        for(RolePermission rolePermission : editRolePermissions){
-            Item item = permissionTable.getItem(rolePermission.getPermissionCode());
-            ((CheckBox)item.getItemProperty(AUTHORIZAED).getValue()).setValue(true);
+        data.clear();
+        roleNameFld.setValue(userRole.getRoleName());
+        activeCheckBox.setValue(userRole.isActive());
+        Map<String,Map<Integer,String>> funcAreasCodesMap = BackOfficeUtils.getPermissionCodes();
+        for(Map.Entry<String,Map<Integer,String>> funcAreaMap : funcAreasCodesMap.entrySet()){
+            PermissionCodes code = new PermissionCodes();
+            code.setDisplayName(funcAreaMap.getKey());
+            data.addItem(null, code);
+            for(Map.Entry<Integer,String> map : funcAreaMap.getValue().entrySet()){
+                PermissionCodes innerVal = new PermissionCodes();
+                innerVal.setDisplayName(map.getValue());
+                innerVal.setPermissionCode(map.getKey());
+                innerVal.setAuthorized(codeList.contains(map.getKey()));
+                data.addItem(code, innerVal);
+            }
         }
+        dataProvider.refreshAll();
         mainLayout.setCaption("Edit User Role");
-        addButton.setCaption("Edit");
-        roleIdHdnFld.setValue(target.toString());
+        addButton.setCaption("Save");
+        roleIdHdnFld.setValue(String.valueOf(userRole.getRoleId()));
+        editObj = userRole;
     }
 
     private void deleteRole(Object target) {
-        boolean success = connection.deleteObjectHBM(Integer.parseInt(target.toString()), "com.back.office.entity.UserRole");
-        editRolePermissions = connection.getFilterList("roleIdFilter", "roleId", Integer.parseInt(target.toString()),
-                "com.back.office.entity.RolePermission");
+        UserRole userRole = (UserRole) target;
+        boolean success = connection.deleteObjectHBM(userRole.getRoleId(), "com.back.office.entity.UserRole");
+        editRolePermissions = connection.getFilterList("roleIdFilter", "roleId",userRole.getRoleId(),
+                "com.back.office.entity.RolePermission","rolePermissionId");
         for (RolePermission rolePermission : editRolePermissions) {
             connection.deleteObjectHBM(rolePermission);
         }
         if (success) {
             Notification.show("User Role delete successfully");
-            IndexedContainer container = (IndexedContainer) roleTable.getContainerDataSource();
-            container.removeItem(target);
+            userRoleList.remove(userRole);
+            roleTable.setItems(userRoleList);
         } else {
             Notification.show("Something wrong, please try again");
         }
     }
 
-    private IndexedContainer getAvailableTableContainer(){
-        IndexedContainer container = new IndexedContainer();
-        container.addContainerProperty(ROLE_NAME, String.class, null);
-        container.addContainerProperty(ACTIVE, String.class, null);
-        List<UserRole> userRoles = (List<UserRole>)connection.getAllValues("com.back.office.entity.UserRole");
-        for(UserRole userRole : userRoles){
-            Item item = container.addItem(userRole.getRoleId());
-            item.getItemProperty(ROLE_NAME).setValue(userRole.getRoleName());
-            item.getItemProperty(ACTIVE).setValue(userRole.isActive() == true ? "Active" : "Not Active");
-        }
-        return container;
-    }
 
-    private IndexedContainer generateContainer(){
-        IndexedContainer container = new IndexedContainer();
-        permissionTable.addContainerProperty(FUNC_AREA, String.class, null);
-        permissionTable.addContainerProperty(AUTHORIZAED, CheckBox.class, null);
-        int i = 1;
+    private void generateContainer(){
+
+        List<String> menuItems = BackOfficeUtils.getMainMenuItems();
+        permissionTable.addColumn(PermissionCodes::getDisplayName).setCaption(FUNC_AREA);
+        permissionTable.addComponentColumn(permissionCode -> {
+            CheckBox chk=new CheckBox();
+            chk.addValueChangeListener(e->
+                    permissionCode.setAuthorized(e.getValue())
+            );
+            chk.setValue(permissionCode.isAuthorized());
+            if(menuItems.contains(permissionCode.getDisplayName())){
+                return null;
+            }
+            return chk;
+        }).setCaption(AUTHORIZAED);
+
+        TreeDataProvider<PermissionCodes> dataProvider = (TreeDataProvider<PermissionCodes>) permissionTable.getDataProvider();
+        TreeData<PermissionCodes> data = dataProvider.getTreeData();
         Map<String,Map<Integer,String>> funcAreasCodesMap = BackOfficeUtils.getPermissionCodes();
         for(Map.Entry<String,Map<Integer,String>> funcAreaMap : funcAreasCodesMap.entrySet()){
-            permissionTable.addItem(new Object[] {funcAreaMap.getKey(), null}, i);
-            int j = 100*i;
+            PermissionCodes code = new PermissionCodes();
+            code.setDisplayName(funcAreaMap.getKey());
+            data.addItem(null, code);
             for(Map.Entry<Integer,String> map : funcAreaMap.getValue().entrySet()){
-                CheckBox checkBox = new CheckBox();
-                permissionTable.addItem(new Object[] {map.getValue(), checkBox}, map.getKey());
-                permissionTable.setParent(map.getKey(),i);
-                permissionTable.setChildrenAllowed(map.getKey(),false);
-                j++;
+                PermissionCodes innerVal = new PermissionCodes();
+                innerVal.setDisplayName(map.getValue());
+                innerVal.setPermissionCode(map.getKey());
+                innerVal.setAuthorized(false);
+                data.addItem(code, innerVal);
             }
-            i++;
         }
-        return container;
+        dataProvider.refreshAll();
     }
 
     private void addUserRole(){
-        IndexedContainer container = (IndexedContainer) permissionTable.getContainerDataSource();
-        IndexedContainer roleContainer = (IndexedContainer) roleTable.getContainerDataSource();
-        List<Integer> menuItems = (List<Integer>)container.getItemIds();
+
+        TreeDataProvider<PermissionCodes> dataProvider = (TreeDataProvider<PermissionCodes>) permissionTable.getDataProvider();
+        TreeData<PermissionCodes> data = dataProvider.getTreeData();
+
+        List<String> menuItems = BackOfficeUtils.getMainMenuItems();
+
         String roleName = roleNameFld.getValue();
         boolean isActive = activeCheckBox.getValue();
         UserRole role = new UserRole();
         role.setRoleName(roleName);
         role.setActive(isActive);
         int roleId;
-        Item roleItem;
         if(addButton.getCaption().equalsIgnoreCase("Add")) {
             roleId = connection.insertObjectHBM(role);
-            roleItem = roleContainer.addItem(roleId);
+            role.setRoleId(roleId);
+            userRoleList.add(role);
         }
         else{
+            int index = userRoleList.indexOf(editObj);
+            userRoleList.remove(editObj);
             roleId = Integer.parseInt(roleIdHdnFld.getValue());
             role.setRoleId(roleId);
             connection.updateObjectHBM(role);
             for(RolePermission rolePermission : editRolePermissions){
                 connection.deleteObjectHBM(rolePermission);
             }
-            roleItem = roleContainer.getItem(roleId);
+            userRoleList.add(index,role);
         }
-        roleItem.getItemProperty(ROLE_NAME).setValue(roleNameFld.getValue());
-        roleItem.getItemProperty(ACTIVE).setValue(activeCheckBox.getValue() == true ? "Active" : "Not Active");
-        for(Integer menuItem :menuItems){
-            Item item = container.getItem(menuItem);
-            if(menuItem >= 100) {
-                boolean isSelected = ((CheckBox) item.getItemProperty(AUTHORIZAED).getValue()).getValue();
-                if(isSelected) {
-                    RolePermission rolePermission = new RolePermission();
-                    rolePermission.setRoleId(roleId);
-                    rolePermission.setPermissionCode(menuItem);
-                    connection.insertObjectHBM(rolePermission);
+        roleTable.setItems(userRoleList);
+
+        for(PermissionCodes menuItem :data.getRootItems()){
+            for(PermissionCodes permission : data.getChildren(menuItem)) {
+                if (!menuItems.contains(permission.getDisplayName())) {
+                    boolean isSelected = permission.isAuthorized();
+                    if (isSelected) {
+                        RolePermission rolePermission = new RolePermission();
+                        rolePermission.setRoleId(roleId);
+                        rolePermission.setPermissionCode(permission.getPermissionCode());
+                        connection.insertObjectHBM(rolePermission);
+                    }
                 }
             }
         }
@@ -275,14 +299,15 @@ public class ManageRolesView extends VerticalLayout implements View {
 
     private void clear(){
         roleNameFld.setValue("");
-        IndexedContainer container = (IndexedContainer)permissionTable.getContainerDataSource();
-        List<Integer> menuItems = (List<Integer>)container.getItemIds();
-        for(Integer menuItem :menuItems){
-            Item item = permissionTable.getItem(menuItem);
-            if(menuItem >= 100) {
-                ((CheckBox) item.getItemProperty(AUTHORIZAED).getValue()).setValue(false);
+        TreeDataProvider<PermissionCodes> dataProvider = (TreeDataProvider<PermissionCodes>) permissionTable.getDataProvider();
+        TreeData<PermissionCodes> data = dataProvider.getTreeData();
+
+        for(PermissionCodes menuItem :data.getRootItems()){
+            for(PermissionCodes permission : data.getChildren(menuItem)){
+                permission.setAuthorized(false);
             }
         }
+        dataProvider.refreshAll();
     }
 
     private void printInsertStatement(){

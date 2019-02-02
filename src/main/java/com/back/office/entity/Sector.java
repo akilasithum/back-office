@@ -7,6 +7,7 @@ public class Sector {
     private String sectorFrom;
     private String sectorTo;
     private String sectorType;
+    private String flightType;
 
     public int getSectorId() {
         return sectorId;
@@ -46,5 +47,13 @@ public class Sector {
 
     public void setSectorType(String sectorType) {
         this.sectorType = sectorType;
+    }
+
+    public String getFlightType() {
+        return flightType;
+    }
+
+    public void setFlightType(String flightType) {
+        this.flightType = flightType;
     }
 }

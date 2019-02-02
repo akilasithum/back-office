@@ -1,21 +1,48 @@
 package com.back.office.entity;
 
+import com.poiji.annotation.ExcelCellName;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ItemDetails {
     private int itemId;
+    @ExcelCellName("Item Description")
     private String itemName;
+    @ExcelCellName("Service Type")
     private String serviceType;
+    @ExcelCellName("Category")
     private String category;
+    @ExcelCellName("Catalogue No")
     private String catalogue;
+    @ExcelCellName("Weight (Grams)")
     private float weight;
+    @ExcelCellName("Cost Currency")
     private String costCurrency;
+    @ExcelCellName("Cost Price")
     private float costPrice;
+    @ExcelCellName("Base Currency")
     private String baseCurrency;
+    @ExcelCellName("Base Price")
     private float basePrice;
+    @ExcelCellName("Activate Date")
     private String activateDate;
+    @ExcelCellName("Item No")
+    private String itemCode;
+    @ExcelCellName("Second Currency")
+    private String secondCurrency;
+    @ExcelCellName("Second Price")
+    private float secondPrice;
+    @ExcelCellName("De listed")
+    private String deListed;
+    @ExcelCellName("RFID")
+    private String nfcId;
+    @ExcelCellName("Barcode")
+    private String barcode;
+
+
+    private byte[] image;
 
     public int getItemId() {
         return itemId;
@@ -103,6 +130,62 @@ public class ItemDetails {
 
     public void setActivateDate(String activateDate) {
         this.activateDate = activateDate;
+    }
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getSecondCurrency() {
+        return secondCurrency;
+    }
+
+    public void setSecondCurrency(String secondCurrency) {
+        this.secondCurrency = secondCurrency;
+    }
+
+    public float getSecondPrice() {
+        return secondPrice;
+    }
+
+    public void setSecondPrice(float secondPrice) {
+        this.secondPrice = secondPrice;
+    }
+
+    public String getDeListed() {
+        return deListed;
+    }
+
+    public void setDeListed(String deListed) {
+        this.deListed = deListed;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getNfcId() {
+        return nfcId;
+    }
+
+    public void setNfcId(String nfcId) {
+        this.nfcId = nfcId;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     @Override

@@ -5,6 +5,7 @@ public class PermissionCodes {
     private int permissionCode;
     private String displayName;
     private String funcArea;
+    private boolean authorized;
 
     public int getPermissionCode() {
         return permissionCode;
@@ -28,5 +29,13 @@ public class PermissionCodes {
 
     public void setFuncArea(String funcArea) {
         this.funcArea = funcArea;
+    }
+
+    public boolean isAuthorized() {
+        return authorized;
+    }
+
+    public void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
     }
 }
