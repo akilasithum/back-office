@@ -175,7 +175,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         return null;
     }
 
-    protected void addOrUpdateDetails(Object object){
+    protected void addOrUpdateDetails(Object object,int id){
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(object);
             if (newId != 0) {
@@ -187,7 +187,8 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
             }
         }
         else{
-            connection.updateObjectHBM(object);
+            connection.insertObjectHBM(object);
+            connection.updateRecordStatus(id,className);
             BackOfficeUtils.showNotification("Success", pageHeader +" updated successfully", VaadinIcons.CHECK_CIRCLE_O);
             updateTable(true,object,0);
             addButton.setCaption("Add");

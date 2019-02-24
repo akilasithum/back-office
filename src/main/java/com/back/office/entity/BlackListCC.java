@@ -5,6 +5,7 @@ public class BlackListCC {
     private int creditCardId;
     private String creditCardNumber;
     private String status;
+    private int recordStatus;
 
     public int getCreditCardId() {
         return creditCardId;
@@ -28,5 +29,13 @@ public class BlackListCC {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }

@@ -161,7 +161,7 @@ public class CCNumberRangeView extends CommonPageDetails {
             ccNumericRange.setEndRange(endRangeFld.getValue());
             ccNumericRange.setGenralLimit(Float.valueOf(generalCCLimitFld.getValue()));
             ccNumericRange.setAuthorizedLimit(Float.parseFloat(authorizedCCLimitFld.getValue()));
-            addOrUpdateDetails(ccNumericRange);
+            addOrUpdateDetails(ccNumericRange,itemIdVal);
         }
     }
 

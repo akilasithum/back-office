@@ -14,5 +14,8 @@
         <property name="active" type="java.lang.Boolean">
             <column name="isActive" />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus" />
+        </property>
     </class>
 </hibernate-mapping>

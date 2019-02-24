@@ -12,6 +12,15 @@ public class Voucher {
     private Float amount;
     private String activateDate;
     private String endDate;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getVoucherId() {
         return voucherId;

@@ -23,5 +23,8 @@
         <property name="noOfSeals" type="java.lang.Integer">
             <column name="noOfSeals"  />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
     </class>
 </hibernate-mapping>

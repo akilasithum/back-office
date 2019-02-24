@@ -12,6 +12,15 @@ public class Promotion {
     private String itemCodes;
     private Date activateDate;
     private Date endDate;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getPromoId() {
         return promoId;

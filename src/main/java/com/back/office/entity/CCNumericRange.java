@@ -10,6 +10,15 @@ public class CCNumericRange {
     private String endRange;
     private float genralLimit;
     private float authorizedLimit;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getRangeId() {
         return rangeId;

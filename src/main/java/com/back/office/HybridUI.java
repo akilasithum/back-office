@@ -179,7 +179,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         menuItems.add("Authorization");
         menuItems.add("Setup");
         menuItems.add("Uploads");
-        menuItems.add("Generate XML");
+        //menuItems.add("Generate XML");
         menuItems.add("Bond Reports");
         menuItems.add("Sales Report");
         menuItems.add("Analysis");

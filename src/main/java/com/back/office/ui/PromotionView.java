@@ -201,7 +201,7 @@ public class PromotionView extends CommonPageDetails {
             else {
                 return;
             }
-            addOrUpdateDetails(promotion);
+            addOrUpdateDetails(promotion,itemIdVal);
         }
     }
 

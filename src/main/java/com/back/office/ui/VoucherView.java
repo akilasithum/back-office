@@ -190,7 +190,7 @@ public class VoucherView extends CommonPageDetails {
                 voucher.setDiscount(rationDiscountFld.getValue());
                 voucher.setAmount(Float.parseFloat(amountFld.getValue()));
             }
-            addOrUpdateDetails(voucher);
+            addOrUpdateDetails(voucher,itemIdVal);
             secondRow.removeAllComponents();
         }
     }

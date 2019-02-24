@@ -109,7 +109,7 @@ public class BlackListCCView extends CommonPageDetails {
             blackListCC.setCreditCardId(itemIdVal);
             blackListCC.setCreditCardNumber(cardNumberFld.getValue());
             blackListCC.setStatus(statusComboBox.getValue().toString());
-            addOrUpdateDetails(blackListCC);
+            addOrUpdateDetails(blackListCC,itemIdVal);
 
         }
     }

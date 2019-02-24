@@ -10,6 +10,15 @@ public class Flights {
     private String flightTo;
     private int noOfSectors;
     private List<Sector> sectorList;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getFlightId() {
         return flightId;

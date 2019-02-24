@@ -213,7 +213,7 @@ public class KitCodesView extends CommonPageDetails {
             String packTypes = getPackTypesStr();
             if(packTypes != null){
                 itemDetails.setPackTypes(packTypes);
-                addOrUpdateDetails(itemDetails);
+                addOrUpdateDetails(itemDetails,itemIdVal);
             }
         }
     }

@@ -29,5 +29,11 @@
         <property name="userRoleId" type="java.lang.Integer">
             <column name="userRoleId"  />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="password"  length="50"/>
+        </property>
     </class>
 </hibernate-mapping>

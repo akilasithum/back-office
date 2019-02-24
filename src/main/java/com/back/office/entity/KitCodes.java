@@ -20,6 +20,15 @@ public class KitCodes {
     private int noOfEquipments;
     @ExcelCellName("Pack Types")
     private String packTypes;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getKitCodeId() {
         return kitCodeId;

@@ -10,6 +10,16 @@ public class User {
     private String department;
     private boolean active;
     private int userRoleId;
+    private int recordStatus;
+    private String password;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getUserId() {
         return userId;
@@ -73,5 +83,13 @@ public class User {
 
     public void setUserRoleId(int userRoleId) {
         this.userRoleId = userRoleId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

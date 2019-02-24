@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.back.office.entity.CurrencyDetails" table="currencyDetails" catalog="">
+    <class name="com.back.office.entity.CurrencyDetails" table="currencydetails" catalog="">
         <id name="currencyCodeId" type="java.lang.Integer">
             <column name="currencyCodeId" />
             <generator class="identity" />
@@ -25,6 +25,9 @@
         </property>
         <property name="effectiveDate" type="java.lang.String">
             <column name="effectiveDate"  length="30"/>
+        </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
         </property>
     </class>
 </hibernate-mapping>

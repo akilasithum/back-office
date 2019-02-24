@@ -146,7 +146,7 @@ public class UserDetailsView extends CommonPageDetails {
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         userGrid.addColumn(User::getDisplayName).setCaption(DISPLAY_NAME).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        userGrid.addColumn(User::getUserRoleId).setCaption(USER_ROLE).
+        userGrid.addColumn(bean-> roleIdRoleNameMap.get(bean.getUserRoleId())).setCaption(USER_ROLE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         userGrid.addColumn(User::getPosition).setCaption(POSITION).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
@@ -173,7 +173,8 @@ public class UserDetailsView extends CommonPageDetails {
             user.setDepartment(departmentFld.getValue());
             user.setActive(statusCheckBox.getValue());
             user.setUserRoleId(roleNameRoleIdMap.get(userRoleComboBox.getValue().toString()));
-            addOrUpdateDetails(user);
+            user.setPassword("12345");
+            addOrUpdateDetails(user,itemIdVal);
         }
     }
 
@@ -205,6 +206,7 @@ public class UserDetailsView extends CommonPageDetails {
         this.filterFieldStr = STAFF_ID;
         this.pageHeader = "Staff Details";
         this.className = "com.back.office.entity.User";
+        this.keyFieldDBName = "staffId";
     }
 
     @Override

@@ -26,5 +26,8 @@
         <property name="amount" type="java.lang.Float">
             <column name="amount" />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
     </class>
 </hibernate-mapping>

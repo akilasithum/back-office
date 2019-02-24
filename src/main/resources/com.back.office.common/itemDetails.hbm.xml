@@ -60,6 +60,9 @@
         <property name="barcode" type="java.lang.String">
             <column name="barcode"  length="50"/>
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
         <filter name="serviceTypeFilter"
                 condition=":serviceType=serviceType"/>
     </class>

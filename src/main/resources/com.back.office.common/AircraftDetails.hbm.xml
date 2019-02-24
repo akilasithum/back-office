@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.back.office.entity.AircraftDetails" table="aircraftDetails" catalog="">
+    <class name="com.back.office.entity.AircraftDetails" table="aircraftdetails" catalog="">
         <id name="aircraftId" type="java.lang.Integer">
             <column name="aircraftId" />
             <generator class="identity" />
@@ -55,6 +55,9 @@
         </property>
         <property name="updateDateAndtime" type="java.lang.String">
             <column name="UpdateDateAndtime" length="50" />
+        </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
         </property>
     </class>
 </hibernate-mapping>

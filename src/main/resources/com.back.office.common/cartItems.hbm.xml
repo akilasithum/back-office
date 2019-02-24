@@ -23,6 +23,9 @@
         <property name="quantity" type="java.lang.Integer">
             <column name="quantity"  />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
         <filter name="packTypeFilter"
                 condition=":packType=packType"/>
         <filter name="drawerFilter"

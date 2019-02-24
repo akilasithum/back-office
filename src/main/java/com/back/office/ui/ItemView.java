@@ -307,7 +307,7 @@ public class ItemView extends CommonPageDetails {
             itemDetails.setImage(previewField.getValue());
             itemDetails.setNfcId(NFCIdField.getValue());
             itemDetails.setBarcode(barCodeField.getValue());
-            addOrUpdateDetails(itemDetails);
+            addOrUpdateDetails(itemDetails,itemIdVal);
             previewField.setValue(null);
 
         }

@@ -369,6 +369,7 @@ public class AirCraftTypeView extends CommonPageDetails {
         }
         else{
             connection.updateObjectHBM(flightDetails);
+            connection.updateRecordStatus(aircraftIdVal,className);
             Notification.show("Aircraft updated successfully");
             updateTable(true,flightDetails,0);
             addButton.setCaption("Add");

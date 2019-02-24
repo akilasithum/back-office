@@ -119,7 +119,7 @@ public class CurerncyDetailsView extends CommonPageDetails {
     }
 
     private void setDataInGrid(){
-        currencyDetails = connection.getAllCurrencies();
+        currencyDetails = (List<CurrencyDetails>)connection.getAllValues(className);
         currencyGrid.setItems(currencyDetails);
         currencyGrid.addColumn(CurrencyDetails::getCurrencyCode).setCaption(CURRENCY_CODE).
         setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
@@ -148,14 +148,14 @@ public class CurerncyDetailsView extends CommonPageDetails {
             String val = idField.getValue();
             int currencyCodeIdVal = (val != null && !val.isEmpty())? Integer.parseInt(val) : 0;
             CurrencyDetails details = new CurrencyDetails();
-            details.setCurrencyCodeId(currencyCodeIdVal);
+            //details.setCurrencyCodeId(currencyCodeIdVal);
             details.setCurrencyCode(currencyCodeFld.getValue());
             details.setCurrencyDesc(currencyDescFld.getValue());
             details.setCurrencyRate(Float.parseFloat(currencyRateFld.getValue()));
             details.setCurrencyType(currencyTypeFld.getValue().toString());
             details.setPriorityOrder(priorityOrderFld.getValue().toString());
             details.setEffectiveDate(effectiveDateStr);
-            addOrUpdateDetails(details);
+            addOrUpdateDetails(details,currencyCodeIdVal);
         }
     }
 

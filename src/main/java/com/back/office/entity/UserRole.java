@@ -5,6 +5,7 @@ public class UserRole {
     private int roleId;
     private String roleName;
     private boolean active;
+    private int recordStatus;
 
     public int getRoleId() {
         return roleId;
@@ -28,5 +29,13 @@ public class UserRole {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }

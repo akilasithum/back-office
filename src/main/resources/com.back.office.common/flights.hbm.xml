@@ -20,5 +20,8 @@
         <property name="noOfSectors" type="java.lang.Integer">
             <column name="noOfSectors"  />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
     </class>
 </hibernate-mapping>

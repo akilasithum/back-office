@@ -18,6 +18,15 @@ public class EquipmentDetails {
     private int noOfDrawers;
     @ExcelCellName("No of Seals")
     private int noOfSeals;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getEquipmentId() {
         return equipmentId;

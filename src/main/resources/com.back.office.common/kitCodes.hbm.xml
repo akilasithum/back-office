@@ -26,6 +26,9 @@
         <property name="packTypes" type="java.lang.String">
             <column name="packTypes"  />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
         <filter name="kitCodeFilter"
                 condition=":kitCode=kitCode"/>
     </class>

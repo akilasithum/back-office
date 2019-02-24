@@ -24,6 +24,15 @@ public class CurrencyDetails {
     private String priorityOrder;
     @ExcelCellName("Effective Date")
     private String effectiveDate;
+    private int recordStatus;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getCurrencyCodeId() {
         return currencyCodeId;

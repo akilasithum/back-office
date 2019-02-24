@@ -29,5 +29,8 @@
         <property name="authorizedLimit" type="java.lang.Float">
             <column name="authorizedLimit" />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
     </class>
 </hibernate-mapping>

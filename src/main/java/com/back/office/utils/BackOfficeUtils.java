@@ -198,7 +198,7 @@ public class BackOfficeUtils {
 
     public static Map<String, Map<Integer, String>> getPermissionCodes(){
             Map<String, Map<Integer, String>> funcAreasCodesMap = new HashMap<>();
-            List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllValues("com.back.office.entity.PermissionCodes");
+            List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllPermissionCodes();
             for (PermissionCodes permissionCode : permissionCodes) {
                 if (funcAreasCodesMap.containsKey(permissionCode.getFuncArea())) {
                     funcAreasCodesMap.get(permissionCode.getFuncArea()).put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());

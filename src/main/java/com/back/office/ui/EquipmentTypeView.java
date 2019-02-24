@@ -164,7 +164,7 @@ public class EquipmentTypeView extends CommonPageDetails {
             itemDetails.setPackDescription(packDescFld.getValue());
             itemDetails.setPackType(packTypeFld.getValue());
             itemDetails.setNoOfSeals(Integer.parseInt(noOfSealsFld.getValue()));
-            addOrUpdateDetails(itemDetails);
+            addOrUpdateDetails(itemDetails,itemIdVal);
 
         }
     }

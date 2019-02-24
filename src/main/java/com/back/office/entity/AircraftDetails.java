@@ -19,6 +19,7 @@ public class AircraftDetails {
     private int rearFullCarts;
     private int rearHalfCarts;
     private int rearContainers;
+    private int recordStatus;
 
 
     public int getAircraftId() {
@@ -155,5 +156,13 @@ public class AircraftDetails {
 
     public void setRearContainers(int rearContainers) {
         this.rearContainers = rearContainers;
+    }
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }

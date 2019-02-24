@@ -29,5 +29,8 @@
         <property name="endDate" type="java.util.Date">
             <column name="endDate" />
         </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
     </class>
 </hibernate-mapping>

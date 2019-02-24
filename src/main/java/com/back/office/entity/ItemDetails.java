@@ -40,9 +40,16 @@ public class ItemDetails {
     private String nfcId;
     @ExcelCellName("Barcode")
     private String barcode;
-
-
+    private int recordStatus;
     private byte[] image;
+
+    public int getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(int recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
     public int getItemId() {
         return itemId;
@@ -187,6 +194,8 @@ public class ItemDetails {
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
+
+
 
     @Override
     public String toString(){
