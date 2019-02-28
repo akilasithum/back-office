@@ -6,23 +6,12 @@ import com.back.office.framework.MyImageUpload;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.contextmenu.GridContextMenu;
-import com.vaadin.event.selection.SelectionEvent;
-import com.vaadin.event.selection.SelectionListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
-import org.vaadin.easyuploads.ImagePreviewField;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.NClob;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -33,10 +22,8 @@ import java.util.List;
 public class ItemView extends CommonPageDetails {
 
     private final String ITEM_NAME = "Item Description";
-    private final String SERVICE_TYPE = "Service Type";
     private final String CATEGORY = "Category";
     private final String CATELOGUE = "Catalogue No";
-    private final String WEIGHT = "Weight (Grams)";
     private final String COST_CURRENCY = "Cost Currency";
     private final String COST_PRICE = "Cost Price";
     private final String BASE_CURRENCY = "Base Currency";
@@ -46,14 +33,10 @@ public class ItemView extends CommonPageDetails {
     private final String SECOND_CURRENCY = "Second Currency";
     private final String SECOND_PRICE = "Second Price";
     private final String DE_LISTED = "De listed";
-    private final String NFC_ID = "RFID";
-    private final String BARCODE = "Barcode";
 
     protected TextField itemNameFld;
-    protected ComboBox serviceTypeFld;
     protected ComboBox categoryFld;
     protected TextField catelogFld;
-    protected TextField weightFld;
     protected ComboBox costCurrencyFld;
     protected TextField costPriceFld;
     protected ComboBox baseCurrencyFld;
@@ -64,8 +47,6 @@ public class ItemView extends CommonPageDetails {
     protected TextField secondPriceFld;
     protected ComboBox deListed;
     protected MyImageUpload previewField;
-    protected TextField NFCIdField;
-    protected TextField barCodeField;
     HorizontalLayout imageLayout;
 
     FilterGrid<ItemDetails> itemDetailsFilterGrid;
@@ -96,20 +77,10 @@ public class ItemView extends CommonPageDetails {
         firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
-        serviceTypeFld = new ComboBox(SERVICE_TYPE);
-        serviceTypeFld.setItems("BOB","DTF","DTP","VRT");
-        serviceTypeFld.setEmptySelectionAllowed(false);
-        serviceTypeFld.setRequiredIndicatorVisible(true);
-        firstRow.addComponent(serviceTypeFld);
-
         categoryFld = new ComboBox(CATEGORY);
         categoryFld.setEmptySelectionAllowed(false);
         categoryFld.setRequiredIndicatorVisible(true);
-        serviceTypeFld.addValueChangeListener( valueChangeEvent -> {
-            if(serviceTypeFld.getValue() != null && !serviceTypeFld.getValue().toString().isEmpty()){
-                categoryFld.setItems(BackOfficeUtils.getCategoryFromServiceType(serviceTypeFld.getValue().toString()));
-            }
-        });
+        categoryFld.setItems("Bags","Upgrades","Compensation","Transport","Meals","Hotels","Excursions");
         firstRow.addComponent(categoryFld);
 
         itemCode = new TextField(ITEM_CODE);
@@ -125,6 +96,10 @@ public class ItemView extends CommonPageDetails {
         itemNameFld.setRequiredIndicatorVisible(true);
         firstRow.addComponent(itemNameFld);
 
+        catelogFld = new TextField(CATELOGUE);
+        catelogFld.setDescription(CATELOGUE);
+        firstRow.addComponent(catelogFld);
+
         HorizontalLayout secondRow = new HorizontalLayout();
         secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         secondRow.setSpacing(true);
@@ -132,17 +107,22 @@ public class ItemView extends CommonPageDetails {
         secondRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(secondRow);
 
-        catelogFld = new TextField(CATELOGUE);
-        catelogFld.setDescription(CATELOGUE);
-        secondRow.addComponent(catelogFld);
 
-        weightFld = new TextField(WEIGHT);
-        weightFld.setDescription(WEIGHT);
-        secondRow.addComponent(weightFld);
 
         activateDateFld = new DateField(ACTIVATE_DATE);
         activateDateFld.setRequiredIndicatorVisible(true);
         secondRow.addComponent(activateDateFld);
+
+        baseCurrencyFld = new ComboBox(BASE_CURRENCY);
+        baseCurrencyFld.setItems(getCurrencyDropDownValues());
+        baseCurrencyFld.setEmptySelectionAllowed(false);
+        baseCurrencyFld.setRequiredIndicatorVisible(true);
+        secondRow.addComponent(baseCurrencyFld);
+
+        basePriceFld = new TextField(BASE_PRICE);
+        basePriceFld.setDescription(COST_PRICE);
+        basePriceFld.setRequiredIndicatorVisible(true);
+        secondRow.addComponent(basePriceFld);
 
         deListed = new ComboBox(DE_LISTED);
         deListed.setItems("Yes","No");
@@ -158,17 +138,6 @@ public class ItemView extends CommonPageDetails {
         thirdRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(thirdRow);
 
-        baseCurrencyFld = new ComboBox(BASE_CURRENCY);
-        baseCurrencyFld.setItems(getCurrencyDropDownValues());
-        baseCurrencyFld.setEmptySelectionAllowed(false);
-        baseCurrencyFld.setRequiredIndicatorVisible(true);
-        thirdRow.addComponent(baseCurrencyFld);
-
-        basePriceFld = new TextField(BASE_PRICE);
-        basePriceFld.setDescription(COST_PRICE);
-        basePriceFld.setRequiredIndicatorVisible(true);
-        thirdRow.addComponent(basePriceFld);
-
         secondCurrencyFld = new ComboBox(SECOND_CURRENCY);
         secondCurrencyFld.setItems(getCurrencyDropDownValues());
         secondCurrencyFld.setEmptySelectionAllowed(false);
@@ -178,28 +147,14 @@ public class ItemView extends CommonPageDetails {
         secondPriceFld.setDescription(SECOND_PRICE);
         thirdRow.addComponent(secondPriceFld);
 
-        HorizontalLayout forthRow = new HorizontalLayout();
-        forthRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        forthRow.setSpacing(true);
-        forthRow.setSizeFull();
-        mainUserInputLayout.addComponent(forthRow);
-
         costCurrencyFld = new ComboBox(COST_CURRENCY);
         costCurrencyFld.setItems(getCurrencyDropDownValues());
         costCurrencyFld.setEmptySelectionAllowed(false);
-        forthRow.addComponent(costCurrencyFld);
+        thirdRow.addComponent(costCurrencyFld);
 
         costPriceFld = new TextField(COST_PRICE);
         costPriceFld.setDescription(COST_PRICE);
-        forthRow.addComponent(costPriceFld);
-
-        NFCIdField = new TextField(NFC_ID);
-        NFCIdField.setDescription(NFC_ID);
-        forthRow.addComponent(NFCIdField);
-
-        barCodeField = new TextField(BARCODE);
-        barCodeField.setDescription(BARCODE);
-        forthRow.addComponent(barCodeField);
+        thirdRow.addComponent(costPriceFld);
 
         previewField = new MyImageUpload();
         previewField.setAcceptFilter("image/*");
@@ -241,8 +196,6 @@ public class ItemView extends CommonPageDetails {
     private void setDataInGrid(){
         itemDetails = connection.getAllItems();
         itemDetailsFilterGrid.setItems(itemDetails);
-        itemDetailsFilterGrid.addColumn(ItemDetails::getServiceType).setCaption(SERVICE_TYPE).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getCategory).setCaption(CATEGORY).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemCode).setCaption(ITEM_CODE).
@@ -250,8 +203,6 @@ public class ItemView extends CommonPageDetails {
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemName).setCaption(ITEM_NAME).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getCatalogue).setCaption(CATELOGUE).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getWeight).setCaption(WEIGHT).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getCostCurrency).setCaption(COST_CURRENCY).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
@@ -269,10 +220,6 @@ public class ItemView extends CommonPageDetails {
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getActivateDate).setCaption(ACTIVATE_DATE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getNfcId).setCaption(NFC_ID).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getBarcode).setCaption(BARCODE).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
     }
 
     @Override
@@ -287,11 +234,8 @@ public class ItemView extends CommonPageDetails {
             itemDetails.setItemId(itemIdVal);
             itemDetails.setItemCode(itemCode.getValue());
             itemDetails.setItemName(itemNameFld.getValue());
-            itemDetails.setServiceType(serviceTypeFld.getValue().toString());
             itemDetails.setCategory(categoryFld.getValue().toString());
             itemDetails.setCatalogue(catelogFld.getValue());
-            String weight = weightFld.getValue();
-            itemDetails.setWeight(weight != null && !weight.isEmpty() ? Float.parseFloat(weightFld.getValue()) : 0);
             Date date = Date.from(activateDateFld.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             String effectiveDateStr = BackOfficeUtils.getDateStringFromDate(date);
             itemDetails.setActivateDate(effectiveDateStr);
@@ -305,8 +249,6 @@ public class ItemView extends CommonPageDetails {
             itemDetails.setSecondPrice(secondPriceFld.getValue() != null && !secondPriceFld.getValue().isEmpty() ? Float.parseFloat(secondPriceFld.getValue()) : 0);
             itemDetails.setDeListed(String.valueOf(deListed.getValue()));
             itemDetails.setImage(previewField.getValue());
-            itemDetails.setNfcId(NFCIdField.getValue());
-            itemDetails.setBarcode(barCodeField.getValue());
             addOrUpdateDetails(itemDetails,itemIdVal);
             previewField.setValue(null);
 
@@ -321,13 +263,11 @@ public class ItemView extends CommonPageDetails {
             idField.setValue(String.valueOf(itemDetails.getItemId()));
             itemCode.setValue(itemDetails.getItemCode());
             itemNameFld.setValue(itemDetails.getItemName());
-            serviceTypeFld.setValue(itemDetails.getServiceType());
             categoryFld.setValue(itemDetails.getCategory());
-            catelogFld.setValue(itemDetails.getCategory());
+            catelogFld.setValue(itemDetails.getCatalogue());
             Date input = BackOfficeUtils.convertStringToDate(itemDetails.getActivateDate());
             LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             activateDateFld.setValue(date);
-            weightFld.setValue(String.valueOf(itemDetails.getWeight()));
             costCurrencyFld.setValue(itemDetails.getCostCurrency());
             costPriceFld.setValue((String.valueOf(itemDetails.getCostPrice())).equals("0.0") ? "" : String.valueOf(itemDetails.getCostPrice()));
             baseCurrencyFld.setValue(itemDetails.getBaseCurrency());
@@ -336,8 +276,6 @@ public class ItemView extends CommonPageDetails {
             secondPriceFld.setValue((String.valueOf(itemDetails.getSecondPrice())).equals("0.0") ? "" : String.valueOf(itemDetails.getSecondPrice()));
             deListed.setValue(itemDetails.getDeListed());
             previewField.setValue(itemDetails.getImage());
-            NFCIdField.setValue(String.valueOf(itemDetails.getNfcId()));
-            barCodeField.setValue(String.valueOf(itemDetails.getBarcode()));
             addButton.setCaption("Save");
             editObj = itemDetails;
             isKeyFieldDirty = false;
