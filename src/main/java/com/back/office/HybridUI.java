@@ -6,6 +6,7 @@ import com.back.office.entity.CurrencyDetails;
 import com.back.office.entity.RolePermission;
 import com.back.office.ui.*;
 import com.back.office.ui.authorization.ManageRolesView;
+import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.salesReports.CategorySalesView;
 import com.back.office.ui.salesReports.FlightPaymentDetailsView;
@@ -44,6 +45,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     private List<String> menuItems;
     private DBConnection connection;
     private String previousPage;
+    private List<String> noPermissionNeededViews;
 
     @WebServlet(value = "/*", asyncSupported = true)
     @VaadinServletConfiguration(productionMode = true, ui = HybridUI.class)
@@ -83,6 +85,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("ErrorView", ErrorView.class);
         navigator.addView("CCNumberRange", CCNumberRangeView.class);
         navigator.addView("Flight-BondActivity", FlightBondActivityReportView.class);
+        navigator.addView("ViewandEditUser", ViewAndEditCurrentUserDetailsView.class);
 
         String f = Page.getCurrent().getUriFragment();
 
@@ -187,6 +190,9 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         menuItems.add("Pre Order Management");
         menuItems.add("CRM");
 
+        noPermissionNeededViews = new ArrayList<>();
+        noPermissionNeededViews.add("ViewandEditUser");
+
         List<String> noChildMenus = new ArrayList<>();
         noChildMenus.add("Uploads");
         noChildMenus.add("CRM");
@@ -239,7 +245,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                         }
                     }
                     String name = subMeu.replace(" ","");
-                    if(reverseMap.isEmpty() || userPermissions.contains(reverseMap.get(name))) {
+                    if(reverseMap.isEmpty() || userPermissions.contains(reverseMap.get(name)) || noPermissionNeededViews.contains(name)) {
                         mainMenu.add(HMButton.get()
                                 .withCaption(subMeu).withNavigateTo(subMeu.replace(" ","")));
                     }

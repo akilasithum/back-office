@@ -105,6 +105,7 @@ public class BackOfficeUtils {
         List<String> menuItems = new ArrayList<>();
         menuItems.add("Manage User Roles");
         menuItems.add("Manage Users");
+        menuItems.add("View and Edit User");
         return menuItems;
     }
 

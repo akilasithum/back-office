@@ -52,7 +52,7 @@ public class LoginPage extends VerticalLayout implements View {
             public void buttonClick(ClickEvent event) {
                 if(connection.isLoginSuccessful(username.getValue(), password.getValue())){
                     VaadinSession.getCurrent().setAttribute("user", username.getValue());
-                    getSession().setAttribute("userName",username);
+                    getSession().setAttribute("userName",username.getValue());
                     ((HybridUI)getUI()).navigate();
                     //getUI().getNavigator().navigateTo("common");
                     //Page.getCurrent().reload();
