@@ -57,6 +57,14 @@ public class MyImageUpload extends CustomField<byte[]> implements Upload.Receive
 
         });
         upload.addProgressListener((long readBytes, long contentLength) -> {
+            if(contentLength > 65535){
+                Notification.show("Image size should be less than 64KB");
+                upload.interruptUpload();
+                data = null;
+                fireValueChange();
+                updateDisplay();
+
+            }
             progress.setValue((float) readBytes / contentLength);
 
         });

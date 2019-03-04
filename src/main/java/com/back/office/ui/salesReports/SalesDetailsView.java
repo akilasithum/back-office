@@ -184,7 +184,7 @@ public class SalesDetailsView extends VerticalLayout implements View {
         detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY);
         detailsTable.addColumn(SalesDetails::getPrice).setCaption(GROSS_AMOUNT);
         detailsTable.addColumn(SalesDetails::getPrice).setCaption(TOTAL);
-        detailsTable.addColumn(SalesDetails::getFlightDate).setCaption(FLIGHT_DATE);
+        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
         detailsTable.addColumn(SalesDetails::getFlightNo).setCaption(FLIGHT_NAME);
         detailsTable.addColumn(SalesDetails::getFlightFrom).setCaption(FLIGHT_FROM);
         detailsTable.addColumn(SalesDetails::getFlightTo).setCaption(FLIGHT_TO);
@@ -193,7 +193,7 @@ public class SalesDetailsView extends VerticalLayout implements View {
 
     private List<String> getSectors(){
 
-        List<Sector> sectors = (List<Sector>)connection.getAllValues("com.back.office.entity.Sector");
+        List<Sector> sectors = (List<Sector>)connection.getSectors("com.back.office.entity.Sector");
         List<String> sectorsStrList  = new ArrayList<>();
         for(Sector sector : sectors){
             String sectorStr = sector.getSectorFrom() + "-" + sector.getSectorTo();

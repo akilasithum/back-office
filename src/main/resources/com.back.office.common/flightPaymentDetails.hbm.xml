@@ -3,14 +3,11 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.back.office.entity.FlightPaymentDetails" table="flight_payment_group_view" catalog="">
+    <class name="com.back.office.entity.FlightPaymentDetails" table="flight_sale_main_view" catalog="">
         <id name="id" type="java.lang.String">
             <column name="id" />
             <generator class="identity" />
         </id>
-        <property name="orderId" type="java.lang.String">
-            <column name="orderId" length="30"/>
-        </property>
         <property name="paymentType" type="java.lang.String">
             <column name="paymentType" length="30" />
         </property>

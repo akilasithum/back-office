@@ -2,6 +2,7 @@ package com.back.office.ui;
 
 import com.back.office.HybridUI;
 import com.back.office.MyUI;
+import com.back.office.db.DBConnection;
 import com.back.office.utils.Authentication;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -16,6 +17,7 @@ public class LoginPage extends VerticalLayout implements View {
     private static final long serialVersionUID = 1L;
     public static final String NAME = "";
     public static Authentication AUTH;
+    DBConnection connection;
 
     public LoginPage(){
 
@@ -34,7 +36,7 @@ public class LoginPage extends VerticalLayout implements View {
         mainLayout.addComponent(logo);
         mainLayout.setSpacing(true);
         mainLayout.addComponent(panel);
-
+        connection = DBConnection.getInstance();
 
         FormLayout content = new FormLayout();
         TextField username = new TextField("Username");
@@ -48,7 +50,7 @@ public class LoginPage extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                if(AUTH.authenticate(username.getValue(), password.getValue())){
+                if(connection.isLoginSuccessful(username.getValue(), password.getValue())){
                     VaadinSession.getCurrent().setAttribute("user", username.getValue());
                     getSession().setAttribute("userName",username);
                     ((HybridUI)getUI()).navigate();

@@ -150,6 +150,20 @@ public class DBConnection {
         }
     }
 
+    public boolean isLoginSuccessful(String userName,String password){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.eq("staffId", userName));
+            criteria.add(Restrictions.eq("password", password));
+            List retList =  criteria.list();
+            return retList != null && !retList.isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public List<ItemDetails> getAllActiveItems(){
         try
         {
@@ -193,6 +207,17 @@ public class DBConnection {
             Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(Class.forName(className));
             criteria.add(Restrictions.eq("recordStatus", 0));
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<?> getSectors(String className){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(Class.forName(className));
             return criteria.list();
         } catch (Exception e) {
             return null;

@@ -5,13 +5,12 @@ import java.util.Date;
 public class FlightPaymentDetails {
 
     private String id;
-    private String orderId;
-    private String paymentType;
     private float amount;
     private Date flightDate;
     private String flightNo;
-    private String serviceType;
     private Float discount;
+    private String serviceType;
+    private String paymentType;
 
     public String getId() {
         return id;
@@ -19,14 +18,6 @@ public class FlightPaymentDetails {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
     }
 
     public String getPaymentType() {

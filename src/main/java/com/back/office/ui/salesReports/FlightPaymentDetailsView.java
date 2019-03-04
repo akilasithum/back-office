@@ -1,5 +1,6 @@
 package com.back.office.ui.salesReports;
 
+import com.back.office.entity.FlightAmountSummary;
 import com.back.office.entity.FlightPaymentDetails;
 import com.back.office.entity.Flights;
 import com.back.office.entity.Sector;
@@ -12,9 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class FlightPaymentDetailsView extends ReportCommonView {
 
@@ -36,7 +35,7 @@ public class FlightPaymentDetailsView extends ReportCommonView {
     private final String DISCOUNT = "Discount";
     private final String NET_SALE = "Net Sale";
 
-    protected Grid<FlightPaymentDetails> detailsTable;
+    protected Grid<FlightAmountSummary> detailsTable;
 
     public FlightPaymentDetailsView(){
         super();
@@ -79,6 +78,7 @@ public class FlightPaymentDetailsView extends ReportCommonView {
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
         userFormLayout.setWidth("80%");
+        createShowTableHeader();
     }
 
     @Override
@@ -87,13 +87,14 @@ public class FlightPaymentDetailsView extends ReportCommonView {
     }
 
     private void createShowTableHeader(){
-        /*detailsTable.addColumn(FlightPaymentDetails::getFlightDate).setCaption(FLIGHT_DATE);
-        detailsTable.addColumn(FlightPaymentDetails::getAmount).setCaption(CASH);
-        detailsTable.addColumn(FlightPaymentDetails::g).setCaption(CREDIT_CARD);
-        detailsTable.addColumn(FlightPaymentDetails::getItemId).setCaption(VOUCHER);
-        detailsTable.addColumn(FlightPaymentDetails::getQuantity).setCaption(GROSS_SALE);
-        detailsTable.addColumn(FlightPaymentDetails::getPrice).setCaption(DISCOUNT);
-        detailsTable.addColumn(FlightPaymentDetails::getPrice).setCaption(NET_SALE);*/
+        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
+        detailsTable.addColumn(FlightAmountSummary::getFlightNo).setCaption(FLIGHT_NO);
+        detailsTable.addColumn(FlightAmountSummary::getCashAmount).setCaption(CASH);
+        detailsTable.addColumn(FlightAmountSummary::getCreditCardAmount).setCaption(CREDIT_CARD);
+        detailsTable.addColumn(FlightAmountSummary::getVoucherAmount).setCaption(VOUCHER);
+        detailsTable.addColumn(FlightAmountSummary::getGrossSale).setCaption(GROSS_SALE);
+        detailsTable.addColumn(FlightAmountSummary::getDiscount).setCaption(DISCOUNT);
+        detailsTable.addColumn(FlightAmountSummary::getNetSale).setCaption(NET_SALE);
 
     }
 
@@ -132,23 +133,52 @@ public class FlightPaymentDetailsView extends ReportCommonView {
         float voucherAmount = 0;
         float total = 0;
         Date flightDate = null;
+        Map<String,FlightAmountSummary> summaries = new HashMap<>();
         for(FlightPaymentDetails details : list){
-            if(details.getPaymentType().equalsIgnoreCase("Credit card"))creditCardAmount = details.getAmount();
-            else if(details.getPaymentType().equalsIgnoreCase("Cash"))cashAmount = details.getAmount();
-            else if(details.getPaymentType().equalsIgnoreCase("Voucher"))voucherAmount = details.getAmount();
-            if(details.getFlightNo().equals(flightNoStr)){
-                total += details.getAmount();
+            String key = details.getFlightNo()+details.getFlightDate();
+            String paymentMethod = details.getPaymentType();
+            if(summaries.containsKey(key)){
+                FlightAmountSummary summary = summaries.get(key);
+                if(paymentMethod.equals("Cash USD")){
+                    summary.setCashAmount(details.getAmount());
+                }
+                else if(paymentMethod.equals("Credit Card USD")){
+                    summary.setCreditCardAmount(details.getAmount());
+                }
+                else{
+                    summary.setVoucherAmount(details.getAmount());
+                }
+                Float discount = summary.getDiscount() + details.getDiscount();
+                Float netAmount = summary.getNetSale() + details.getDiscount() + details.getAmount();
+                Float grossAmount = summary.getGrossSale() + details.getAmount();
+                summary.setDiscount(discount);
+                summary.setNetSale(netAmount);
+                summary.setGrossSale(grossAmount);
+                summaries.put(key,summary);
+
             }
             else{
-                if(flightNoStr != ""){
-                    //showDataInTheTable(details.getId(),flightDate,flightNoStr,cashAmount,creditCardAmount,voucherAmount,total,0,total);
+                FlightAmountSummary summary = new FlightAmountSummary();
+                summary.setFlightNo(details.getFlightNo());
+                summary.setFlightDate(details.getFlightDate());
+                if(paymentMethod.equals("Cash USD")){
+                    summary.setCashAmount(details.getAmount());
                 }
-
-                flightNoStr = details.getFlightNo();
-                total = details.getAmount();
-                flightDate = details.getFlightDate();
+                else if(paymentMethod.equals("Credit Card USD")){
+                    summary.setCreditCardAmount(details.getAmount());
+                }
+                else{
+                    summary.setVoucherAmount(details.getAmount());
+                }
+                summary.setDiscount(details.getDiscount());
+                summary.setGrossSale(details.getAmount());
+                summary.setNetSale(details.getAmount() + details.getDiscount());
+                summaries.put(key,summary);
             }
+
+
         }
+        detailsTable.setItems(summaries.values());
        // if(list != null && !list.isEmpty())
         //showDataInTheTable("1",flightDate,flightNoStr,cashAmount,creditCardAmount,voucherAmount,total,0,total);
     }
