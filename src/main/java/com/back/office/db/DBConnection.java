@@ -315,6 +315,32 @@ public class DBConnection {
         return criteria.list();
     }
 
+    public User getCurrentUser(String userName){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("staffId", userName));
+        List userList = criteria.list();
+        if(userList != null && !userList.isEmpty()){
+            return (User) userList.get(0);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public String getRoleNameFromRoleId(int roleId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(UserRole.class);
+        criteria.add(Restrictions.eq("roleId", roleId));
+        List roleList = criteria.list();
+        if(roleList != null && !roleList.isEmpty()){
+            return ((UserRole) roleList.get(0)).getRoleName();
+        }
+        else {
+            return null;
+        }
+    }
+
     public List getItemCodesList(){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(ItemDetails.class);
