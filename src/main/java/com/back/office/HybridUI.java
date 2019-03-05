@@ -206,7 +206,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 //.withIcon(new ClassResource("logo.png")));
         //leftMenu.setStyleName("logo");
 
-        List<RolePermission> rolePermissions = connection.getFilterList("roleIdFilter","roleId",3,
+        int roleId = connection.getRoleIdFromStaffName(UI.getCurrent().getSession().getAttribute("userName").toString());
+        List<RolePermission> rolePermissions = connection.getFilterList("roleIdFilter","roleId",roleId,
                 "com.back.office.entity.RolePermission","permissionCode");
         Map<String, Map<Integer, String>> funcAreasCodesMap = (Map<String, Map<Integer, String>>)getSession().getAttribute("permissionCodes");
         List<Integer> userPermissions = new ArrayList<>();

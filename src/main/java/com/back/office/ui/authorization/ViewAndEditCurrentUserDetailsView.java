@@ -40,7 +40,10 @@ public class ViewAndEditCurrentUserDetailsView extends VerticalLayout implements
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        Object userName = UI.getCurrent().getSession().getAttribute("userName");
+        if(userName == null|| userName.toString().isEmpty()){
+            getUI().getNavigator().navigateTo("login");
+        }
     }
 
     public ViewAndEditCurrentUserDetailsView(){

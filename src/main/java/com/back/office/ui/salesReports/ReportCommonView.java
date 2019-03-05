@@ -34,7 +34,10 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
     protected CellStyle dateCellStyle;
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        Object userName = UI.getCurrent().getSession().getAttribute("userName");
+        if(userName == null|| userName.toString().isEmpty()){
+            getUI().getNavigator().navigateTo("login");
+        }
     }
 
     public ReportCommonView(){
