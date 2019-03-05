@@ -57,7 +57,10 @@ public class ManageRolesView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        Object userName = UI.getCurrent().getSession().getAttribute("userName");
+        if(userName == null|| userName.toString().isEmpty()){
+            getUI().getNavigator().navigateTo("login");
+        }
     }
     protected void createMainLayout() {
         Label h1 = new Label("Manage User Roles");

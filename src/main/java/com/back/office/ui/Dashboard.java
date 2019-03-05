@@ -6,6 +6,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -20,7 +21,10 @@ import org.vaadin.addon.JFreeChartWrapper;
 public class Dashboard extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        Object userName = UI.getCurrent().getSession().getAttribute("userName");
+        if(userName == null|| userName.toString().isEmpty()){
+            getUI().getNavigator().navigateTo("login");
+        }
     }
 
     public Dashboard(){

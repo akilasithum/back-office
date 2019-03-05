@@ -351,6 +351,19 @@ public class DBConnection {
         }
     }
 
+    public int getRoleIdFromStaffName(String staffName){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("staffName", staffName));
+        List roleList = criteria.list();
+        if(roleList != null && !roleList.isEmpty()){
+            return ((User) roleList.get(0)).getUserRoleId();
+        }
+        else {
+            return 0;
+        }
+    }
+
     public List getItemCodesList(){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(ItemDetails.class);

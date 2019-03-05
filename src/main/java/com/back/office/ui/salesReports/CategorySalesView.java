@@ -1,6 +1,7 @@
 package com.back.office.ui.salesReports;
 
 import com.back.office.entity.CategorySalesDetails;
+import com.back.office.entity.SalesByCategoryObj;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.shared.ui.MarginInfo;
@@ -24,7 +25,7 @@ public class CategorySalesView extends ReportCommonView {
     protected DateField flightDateFromDateField;
     protected DateField flightDateToDateField;
     protected ComboBox serviceTypeComboBox;
-    protected Grid<CategorySalesDetails> detailsTable;
+    protected Grid<SalesByCategoryObj> detailsTable;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
@@ -85,15 +86,14 @@ public class CategorySalesView extends ReportCommonView {
     }
 
     private void createShowTableHeader(){
-        detailsTable.addColumn(CategorySalesDetails::getCategory).setCaption(CATEGORY);
-        detailsTable.addColumn(CategorySalesDetails::getQuantity).setCaption(QUANTITY);
-        detailsTable.addColumn(CategorySalesDetails::getItemId).setCaption(QTY_PERCENTAGE);
-        detailsTable.addColumn(CategorySalesDetails::getQuantity).setCaption(QUANTITY);
-        detailsTable.addColumn(CategorySalesDetails::getPrice).setCaption(RETAIL_AMOUNT);
-        detailsTable.addColumn(CategorySalesDetails::getPrice).setCaption(RETAIL_AMOUNT_PERCENTAGE);
-        detailsTable.addColumn(CategorySalesDetails::getFlightDate).setCaption(DISCOUNT);
-        //detailsTable.addColumn(CategorySalesDetails::get).setCaption(NET_AMOUNT);
-        //detailsTable.addColumn(CategorySalesDetails::getFlightFrom).setCaption(NET_AMOUNT_PERCENTAGE);
+        detailsTable.addColumn(SalesByCategoryObj::getCategory).setCaption(CATEGORY);
+        detailsTable.addColumn(SalesByCategoryObj::getQuantity).setCaption(QUANTITY);
+        detailsTable.addColumn(SalesByCategoryObj::getQtyPercentage).setCaption(QTY_PERCENTAGE);
+        detailsTable.addColumn(SalesByCategoryObj::getRetailAmount).setCaption(RETAIL_AMOUNT);
+        detailsTable.addColumn(SalesByCategoryObj::getRetailAmountPercentage).setCaption(RETAIL_AMOUNT_PERCENTAGE);
+        detailsTable.addColumn(SalesByCategoryObj::getDiscount).setCaption(DISCOUNT);
+        detailsTable.addColumn(SalesByCategoryObj::getNetAmount).setCaption(NET_AMOUNT);
+        detailsTable.addColumn(SalesByCategoryObj::getNetAmountPercentage).setCaption(NET_AMOUNT_PERCENTAGE);
     }
     @Override
     protected void defineStringFields() {
