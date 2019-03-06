@@ -151,15 +151,17 @@ public class DBConnection {
     }
 
     public boolean isLoginSuccessful(String userName,String password){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(User.class);
             criteria.add(Restrictions.eq("staffId", userName));
             criteria.add(Restrictions.eq("password", password));
             List retList =  criteria.list();
+            session.close();
             return retList != null && !retList.isEmpty();
         } catch (Exception e) {
+            session.close();
             return false;
         }
     }
