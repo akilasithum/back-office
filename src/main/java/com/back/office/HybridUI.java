@@ -88,6 +88,16 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("ViewandEditUser", ViewAndEditCurrentUserDetailsView.class);
 
         String f = Page.getCurrent().getUriFragment();
+        String query = Page.getCurrent().getLocation().getQuery();
+        if(query != null && !query.isEmpty()){
+            String[] params = query.split("=");
+            if(params.length == 2 && params[0].equals("userName")){
+                getSession().setAttribute("userName",params[1]);
+                navigate();
+                return;
+            }
+        }
+
 
         getPage().addUriFragmentChangedListener(uriFragmentChangedEvent -> {
             String currentPage = uriFragmentChangedEvent.getUriFragment();
