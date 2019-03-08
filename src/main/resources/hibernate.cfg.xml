@@ -6,12 +6,23 @@
     <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <!--<property name="hibernate.connection.password">M7d4a63</property>-->
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.password">M7d4a63</property>
+        <!--<property name="hibernate.connection.password"></property>-->
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aerosky_ground</property>
-        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.username">remote</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="show_sql">true</property>
+
+        <property name="hibernate.
+connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.min_size">1</property>
+        <property name="hibernate.c3p0.max_size">100</property>
+        <property name="hibernate.c3p0.timeout">0</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">1000</property>
+        <property name="hibernate.c3p0.validate">true</property>
+
+
         <mapping resource="com.back.office.common/AircraftDetails.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/CurrencyDetails.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/itemDetails.hbm.xml"></mapping>
