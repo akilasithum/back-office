@@ -1,15 +1,18 @@
 package com.back.office.entity;
 
+import java.util.Date;
+
 public class SalesByCategoryObj {
 
     private String category;
     private Integer quantity;
-    private float qtyPercentage;
+    private String qtyPercentage;
     private float retailAmount;
     private float retailAmountPercentage;
     private float discount;
     private float netAmount;
-    private float netAmountPercentage;
+    private String netAmountPercentage;
+    private Date flightDate;
 
     public String getCategory() {
         return category;
@@ -27,11 +30,11 @@ public class SalesByCategoryObj {
         this.quantity = quantity;
     }
 
-    public float getQtyPercentage() {
+    public String getQtyPercentage() {
         return qtyPercentage;
     }
 
-    public void setQtyPercentage(float qtyPercentage) {
+    public void setQtyPercentage(String qtyPercentage) {
         this.qtyPercentage = qtyPercentage;
     }
 
@@ -67,11 +70,19 @@ public class SalesByCategoryObj {
         this.netAmount = netAmount;
     }
 
-    public float getNetAmountPercentage() {
+    public String getNetAmountPercentage() {
         return netAmountPercentage;
     }
 
-    public void setNetAmountPercentage(float netAmountPercentage) {
+    public void setNetAmountPercentage(String netAmountPercentage) {
         this.netAmountPercentage = netAmountPercentage;
+    }
+
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
     }
 }

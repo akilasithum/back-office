@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.CCByFlightObj" table="credit_card_by_flight_view" catalog="">
+        <id name="id" type="java.lang.String">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="creditCardNumber" type="java.lang.String">
+            <column name="creditCardNumber" length="30" />
+        </property>
+        <property name="amount" type="java.lang.Float">
+            <column name="amount"  />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
+        </property>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo" length="30" />
+        </property>
+        <property name="expireDate" type="java.lang.String">
+            <column name="expireDate" />
+        </property>
+        <property name="sifNo" type="java.lang.Integer">
+            <column name="sifNo" />
+        </property>
+    </class>
+</hibernate-mapping>

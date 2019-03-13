@@ -15,10 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CategorySalesView extends ReportCommonView {
 
@@ -89,9 +86,9 @@ public class CategorySalesView extends ReportCommonView {
         detailsTable.addColumn(SalesByCategoryObj::getCategory).setCaption(CATEGORY);
         detailsTable.addColumn(SalesByCategoryObj::getQuantity).setCaption(QUANTITY);
         detailsTable.addColumn(SalesByCategoryObj::getQtyPercentage).setCaption(QTY_PERCENTAGE);
-        detailsTable.addColumn(SalesByCategoryObj::getRetailAmount).setCaption(RETAIL_AMOUNT);
-        detailsTable.addColumn(SalesByCategoryObj::getRetailAmountPercentage).setCaption(RETAIL_AMOUNT_PERCENTAGE);
-        detailsTable.addColumn(SalesByCategoryObj::getDiscount).setCaption(DISCOUNT);
+        //detailsTable.addColumn(SalesByCategoryObj::getRetailAmount).setCaption(RETAIL_AMOUNT);
+        //detailsTable.addColumn(SalesByCategoryObj::getRetailAmountPercentage).setCaption(RETAIL_AMOUNT_PERCENTAGE);
+       // detailsTable.addColumn(SalesByCategoryObj::getDiscount).setCaption(DISCOUNT);
         detailsTable.addColumn(SalesByCategoryObj::getNetAmount).setCaption(NET_AMOUNT);
         detailsTable.addColumn(SalesByCategoryObj::getNetAmountPercentage).setCaption(NET_AMOUNT_PERCENTAGE);
     }
@@ -108,13 +105,48 @@ public class CategorySalesView extends ReportCommonView {
         String serviceType = BackOfficeUtils.getServiceTypeFromServiceType( serviceTypeComboBox.getValue().toString());
         Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        List<CategorySalesDetails> list = connection.getCategorySalesDetails(dateFrom,dateTo,
+        List<Object[]> payments = connection.getCategorySalesDetails(dateFrom,dateTo,
                 serviceType);
+        List<SalesByCategoryObj> salesByCategoryObjList = new ArrayList<>();
+
+        int qtyTotal = 0;
+        float amountTotal = 0;
+        for (Object[] payment : payments) {
+            qtyTotal += (Integer) payment[0];
+            amountTotal += (Float) payment[1];
+        }
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        for (Object[] payment : payments) {
+            SalesByCategoryObj obj = new SalesByCategoryObj();
+            int qty = (Integer) payment[0];
+            obj.setQuantity(qty);
+            float amount = (Float) payment[1];
+            obj.setNetAmount(amount);
+            String category = (String)payment[2];
+            obj.setCategory(category);
+            salesByCategoryObjList.add(obj);
+            float qtyPercentage = (Float.valueOf(String.valueOf(qty))/qtyTotal)*100;
+            obj.setQtyPercentage(df.format(qtyPercentage));
+            float totalPercentage = (amount/amountTotal)*100;
+            obj.setNetAmountPercentage(df.format(totalPercentage));
+        }
+        if(salesByCategoryObjList.size()>0) {
+            SalesByCategoryObj totalObj = new SalesByCategoryObj();
+            totalObj.setCategory("Total");
+            totalObj.setNetAmount(amountTotal);
+            totalObj.setNetAmountPercentage("100");
+            totalObj.setQtyPercentage("100");
+            totalObj.setQuantity(qtyTotal);
+            salesByCategoryObjList.add(totalObj);
+        }
+
+        detailsTable.setItems(salesByCategoryObjList);
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
                 "Service Type = " + serviceTypeComboBox.getValue().toString();
         filterCriteriaText.setValue(outputStr);
-        float totalQty = 0;
+        /*float totalQty = 0;
         int totalPrice = 0;
         Map<String,Float> catQuantityMap = new HashMap<>();
         Map<String,Float> catPriceMap = new HashMap<>();
@@ -133,7 +165,7 @@ public class CategorySalesView extends ReportCommonView {
         }
         int i = 1;
         DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
+        df.setMaximumFractionDigits(2);*/
         /*for(Map.Entry<String, Float> map : catQuantityMap.entrySet()){
 
             float qtyPercentage = (map.getValue()/totalQty)*100;

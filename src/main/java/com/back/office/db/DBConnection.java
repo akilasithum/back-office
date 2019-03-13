@@ -268,8 +268,8 @@ public class DBConnection {
                                 String flightTo,String sifNo){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(SalesDetails.class);
-        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
-        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
         if(category != null && !category.isEmpty()){
             criteria.add(Restrictions.eq("category", category));
         }
@@ -291,8 +291,8 @@ public class DBConnection {
     public List getFlightPaymentDetails(Date flightFromDate,Date flightToDate,String serviceType,String flightNo){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(FlightPaymentDetails.class);
-        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
-        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
         if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
             criteria.add(Restrictions.eq("serviceType", serviceType));
         }
@@ -302,11 +302,45 @@ public class DBConnection {
         return criteria.list();
     }
 
+    public List getTenderSummary(Date flightFromDate,Date flightToDate,String serviceType){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(TenderSummaryObj.class);
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
+        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
+            criteria.add(Restrictions.eq("serviceType", serviceType));
+        }
+
+        return criteria.list();
+    }
+
+    public List getCCbyFlight(Date flightDate,String sifNo,Object flightNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(CCByFlightObj.class);
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightDate)));
+        if(sifNo != null && !sifNo.isEmpty()){
+            criteria.add(Restrictions.eq("serviceType", sifNo));
+        }
+        if(flightNo != null && !flightNo.toString().isEmpty()){
+            criteria.add(Restrictions.eq("flightNo", flightNo.toString()));
+        }
+        return criteria.list();
+    }
+
+    public List getCreditCardSummary(Date flightFromDate,Date flightToDate){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(CCSummaryObj.class);
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
+        return criteria.list();
+    }
+
     public List getCategorySalesDetails(Date flightFromDate,Date flightToDate,String serviceType){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(CategorySalesDetails.class);
-        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
-        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
         if(serviceType != null && !serviceType.isEmpty()){
             criteria.add(Restrictions.eq("serviceType", serviceType));
         }
@@ -314,7 +348,7 @@ public class DBConnection {
         projList.add(Projections.sum("quantity"),"quantity");
         projList.add(Projections.sum("price"),"price");
         projList.add(Projections.groupProperty("category"),"category");
-        //criteria.setProjection(projList);
+        criteria.setProjection(projList);
         return criteria.list();
     }
 
