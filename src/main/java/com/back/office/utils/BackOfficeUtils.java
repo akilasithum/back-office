@@ -72,17 +72,17 @@ public class BackOfficeUtils {
 
     public static List<String> getSetupMap(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Aircraft Type");
+        //menuItems.add("Aircraft Type");
         menuItems.add("Flight Details");
         menuItems.add("Currency");
         menuItems.add("Create Items");
-        menuItems.add("Equipment Types");
-        menuItems.add("Assign Items");
-        menuItems.add("Create Kit Codes");
+        //menuItems.add("Equipment Types");
+        //menuItems.add("Assign Items");
+        //menuItems.add("Create Kit Codes");
         menuItems.add("CC Black List");
-        menuItems.add("CC Number Range");
+        //menuItems.add("CC Number Range");
         menuItems.add("Promotions");
-        menuItems.add("Update Inventory");
+        //menuItems.add("Update Inventory");
         menuItems.add("Vouchers");
         return menuItems;
     }
