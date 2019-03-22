@@ -44,7 +44,7 @@ public class BackOfficeUtils {
         iconMap.put("Dashboard", VaadinIcons.DASHBOARD);
         iconMap.put("Authorization", VaadinIcons.LOCK);
         iconMap.put("Setup", VaadinIcons.COG);
-        iconMap.put("Uploads", VaadinIcons.UPLOAD);
+        iconMap.put("File Transfer", VaadinIcons.UPLOAD);
         iconMap.put("Generate XML", VaadinIcons.MAP_MARKER);
         iconMap.put("Bond Reports", VaadinIcons.FLAG);
         iconMap.put("Sales Report", VaadinIcons.SCALE);
@@ -63,11 +63,9 @@ public class BackOfficeUtils {
             case "Authorization" : return getAuthorizationMap();
             case  "Sales Report" : return getSellsReportsMap();
             case  "Bond Reports" : return getBondReportsMap();
+            case "File Transfer" : return getFileTransferMap();
             default:return menuItems;
         }
-
-
-
     }
 
     public static List<String> getSetupMap(){
@@ -114,6 +112,13 @@ public class BackOfficeUtils {
         menuItems.add("Flight-Bond Activity");
         menuItems.add("Cart Usage");
         menuItems.add("HHC Status");
+        return menuItems;
+    }
+
+    public static List<String> getFileTransferMap(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Uploads");
+        menuItems.add("Downloads");
         return menuItems;
     }
 
