@@ -56,10 +56,12 @@ public class DBConnection {
             paramStr[0] = Integer.TYPE;
             Method status = clz.getDeclaredMethod("setRecordStatus",paramStr);
             status.invoke(obj,new Integer(1));
+            session.close();
             updateObjectHBM(obj);
 
 
         } catch (Exception e) {
+            session.close();
             e.printStackTrace();
         }
     }
@@ -115,25 +117,31 @@ public class DBConnection {
     }*/
 
     public List<AircraftDetails> getAllFlights(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(AircraftDetails.class);
             criteria.add(Restrictions.eq("recordStatus", 0));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List<CurrencyDetails> getAllCurrencies(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(CurrencyDetails.class);
             criteria.add(Restrictions.eq("recordStatus", 0));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
@@ -145,7 +153,9 @@ public class DBConnection {
             Criteria criteria = session.createCriteria(ItemDetails.class);
             criteria.add(Restrictions.eq("recordStatus", 0));
             criteria.addOrder(Order.asc("category"));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
             return null;
         }
@@ -168,88 +178,112 @@ public class DBConnection {
     }
 
     public List<ItemDetails> getAllActiveItems(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Criteria criteria = session.createCriteria(ItemDetails.class);
             criteria.add(Restrictions.eq("recordStatus", 0));
             criteria.add(Restrictions.eq("deListed", "No"));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List<KitCodes> getAllKitCodes(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(KitCodes.class);
             criteria.add(Restrictions.eq("recordStatus", 0));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List getAllPermissionCodes(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(PermissionCodes.class);
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List<?> getAllValues(String className){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(Class.forName(className));
             criteria.add(Restrictions.eq("recordStatus", 0));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List getFilterList(String filterName,String fieldName,Integer fieldValue,String className,String orderByFeild){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.enableFilter(filterName).setParameter(fieldName, fieldValue);
             session.beginTransaction();
-
-            return session.createCriteria(Class.forName(className)).addOrder(Order.asc(orderByFeild)).list();
+            Criteria criteria = session.createCriteria(Class.forName(className)).addOrder(Order.asc(orderByFeild));
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List getUserRoleIds(String filterName,String fieldName,Integer fieldValue,String className){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.enableFilter(filterName).setParameter(fieldName, fieldValue);
             session.beginTransaction();
-            return session.createCriteria(Class.forName(className)).setProjection(Projections.property("permissionCode")).list();
+            Criteria criteria = session.createCriteria(Class.forName(className)).setProjection(Projections.property("permissionCode"));
+            List list = criteria.list();
+            session.close();
+            return list;
+
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
 
     public List getItemsFromServiceType(String cartName,String drawer){
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try
         {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.enableFilter("packTypeFilter").setParameter("packType", cartName);
             session.enableFilter("drawerFilter").setParameter("drawerName", drawer);
             session.beginTransaction();
-            return session.createCriteria(CartItems.class).list();
+            Criteria criteria = session.createCriteria(CartItems.class);
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (Exception e) {
+            session.close();
             return null;
         }
     }
@@ -275,7 +309,9 @@ public class DBConnection {
         if(sifNo != null && !sifNo.isEmpty()){
             criteria.add(Restrictions.eq("sifNo", Integer.parseInt(sifNo)));
         }
-        return criteria.list();
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     public List getFlightPaymentDetails(Date flightFromDate,Date flightToDate,String serviceType,String flightNo){
@@ -289,7 +325,9 @@ public class DBConnection {
         if(flightNo != null && !flightNo.isEmpty()){
             criteria.add(Restrictions.eq("flightNo", flightNo));
         }
-        return criteria.list();
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     public List getCategorySalesDetails(Date flightFromDate,Date flightToDate,String serviceType){
@@ -305,7 +343,10 @@ public class DBConnection {
         projList.add(Projections.sum("price"),"price");
         projList.add(Projections.groupProperty("category"),"category");
         //criteria.setProjection(projList);
-        return criteria.list();
+        criteria.setProjection(projList);
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     public List getSifDetails(Date flightFromDate,Date flightToDate){
@@ -314,7 +355,9 @@ public class DBConnection {
         criteria.add(Restrictions.ge("downloaded", yesterday(flightFromDate)));
         criteria.add(Restrictions.le("downloaded", tommorow(flightToDate)));
         //criteria.setProjection(projList);
-        return criteria.list();
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     public User getCurrentUser(String userName){
@@ -322,6 +365,7 @@ public class DBConnection {
         Criteria criteria = session.createCriteria(User.class);
         criteria.add(Restrictions.eq("staffId", userName));
         List userList = criteria.list();
+        session.close();
         if(userList != null && !userList.isEmpty()){
             return (User) userList.get(0);
         }
@@ -335,6 +379,7 @@ public class DBConnection {
         Criteria criteria = session.createCriteria(UserRole.class);
         criteria.add(Restrictions.eq("roleId", roleId));
         List roleList = criteria.list();
+        session.close();
         if(roleList != null && !roleList.isEmpty()){
             return ((UserRole) roleList.get(0)).getRoleName();
         }
@@ -348,6 +393,7 @@ public class DBConnection {
         Criteria criteria = session.createCriteria(User.class);
         criteria.add(Restrictions.eq("staffName", staffName));
         List roleList = criteria.list();
+        session.close();
         if(roleList != null && !roleList.isEmpty()){
             return ((User) roleList.get(0)).getUserRoleId();
         }
@@ -360,14 +406,18 @@ public class DBConnection {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(ItemDetails.class);
         criteria.setProjection(Projections.distinct(Projections.property("itemCode")));
-        return criteria.list();
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     public List getCurrencyCodesList(){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(CurrencyDetails.class);
         criteria.setProjection(Projections.distinct(Projections.property("currencyCode")));
-        return criteria.list();
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     public List getKeyFieldList(String className,String keyField){
@@ -376,8 +426,11 @@ public class DBConnection {
         try {
             Criteria criteria = session.createCriteria(Class.forName(className));
             criteria.setProjection(Projections.distinct(Projections.property(keyField)));
-            return criteria.list();
+            List list = criteria.list();
+            session.close();
+            return list;
         } catch (ClassNotFoundException e) {
+            session.close();
             return null;
         }
     }
@@ -386,7 +439,9 @@ public class DBConnection {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(ItemDetails.class);
         criteria.setProjection(Projections.distinct(Projections.property("category")));
-        return criteria.list();
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
     private Date yesterday(Date date) {

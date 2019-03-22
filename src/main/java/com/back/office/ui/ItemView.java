@@ -80,7 +80,7 @@ public class ItemView extends CommonPageDetails {
         categoryFld = new ComboBox(CATEGORY);
         categoryFld.setEmptySelectionAllowed(false);
         categoryFld.setRequiredIndicatorVisible(true);
-        categoryFld.setItems("Bags","Upgrades","Compensation","Transport","Meals","Hotels","Excursions");
+        categoryFld.setItems("Bags","Upgrades","Compensation","Transport","Meals","Hotels","Excursions","Credit");
         firstRow.addComponent(categoryFld);
 
         itemCode = new TextField(ITEM_CODE);

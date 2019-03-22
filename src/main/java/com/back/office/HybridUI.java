@@ -80,7 +80,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("SalebyCategory", CategorySalesView.class);
         navigator.addView("ManageUserRoles", ManageRolesView.class);
         navigator.addView("ManageUsers", UserDetailsView.class);
-        navigator.addView("uploads", UploadView.class);
+        navigator.addView("Uploads", UploadView.class);
         navigator.addView("Promotions", PromotionView.class);
         navigator.addView("ErrorView", ErrorView.class);
         navigator.addView("CCNumberRange", CCNumberRangeView.class);
@@ -191,7 +191,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         menuItems = new ArrayList<>();
         menuItems.add("Authorization");
         menuItems.add("Setup");
-        menuItems.add("Uploads");
+        menuItems.add("File Transfer");
         //menuItems.add("Generate XML");
         menuItems.add("Bond Reports");
         menuItems.add("Sales Report");
