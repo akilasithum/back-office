@@ -8,6 +8,9 @@ import com.back.office.ui.*;
 import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
+import com.back.office.ui.dashboard.MainDashboard;
+import com.back.office.ui.dashboard.MainMenu;
+import com.back.office.ui.dashboard.SetupDashboardView;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
@@ -21,7 +24,6 @@ import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.JavaScript;
 import elemental.json.JsonArray;
-import kaesdingeling.hybridmenu.HybridMenu;
 import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.design.DesignItem;
@@ -32,7 +34,7 @@ import java.util.*;
 
 @SuppressWarnings("deprecation")
 
-@Theme("demo")
+@Theme("mytheme")
 @Widgetset("com.back.office.MyAppWidgetset")
 @Title("Porter - Back Office")
 @Push
@@ -44,6 +46,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     private DBConnection connection;
     private String previousPage;
     private List<String> noPermissionNeededViews;
+    private TopMenu topMenu = new TopMenu();
+    private VerticalLayout mainLayout;
 
     @WebServlet(value = "/*", asyncSupported = true)
     @VaadinServletConfiguration(productionMode = true, ui = HybridUI.class)
@@ -51,10 +55,10 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         private static final long serialVersionUID = -2926441566643769901L;
     }
 
-    private HybridMenu hybridMenu = null;
+    private MainMenu hybridMenu = null;
     @Override
     protected void init(VaadinRequest request) {
-        hybridMenu = HybridMenu.get()
+        hybridMenu = MainMenu.get()
                 .withNaviContent(new VerticalLayout())
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
                 .build();
@@ -62,7 +66,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         setContent(hybridMenu);
         navigator = new Navigator(this, hybridMenu.getNaviContent());
         navigator.addView("login", LoginPage.class);
-        navigator.addView("dashboard", Dashboard.class);
+        navigator.addView("dashboard", MainDashboard.class);
         navigator.addView("AircraftType", AirCraftTypeView.class);
         navigator.addView("Currency", CurerncyDetailsView.class);
         navigator.addView("CreateItems", ItemView.class);
@@ -87,6 +91,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("CreditCardSummary", CreditCardSummaryView.class);
         navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
         navigator.addView("TenderSummary",TenderSummaryView.class);
+
+        navigator.addView("setup", SetupDashboardView.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();
@@ -116,7 +122,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         else {
             if (f == null || f.equals("") || !f.equals("login")) {
                 buildTopOnlyMenu();
-                buildLeftMenu();
+                //buildLeftMenu();
             }
         }
         getUI().getNavigator().setErrorView(ErrorView.class);
@@ -135,7 +141,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     public void navigate(){
         getPermissionCodes();
         buildTopOnlyMenu();
-        buildLeftMenu();
+        //buildLeftMenu();
         previousPage = "login ok";
         navigator.navigateTo("dashboard");
     }
@@ -148,7 +154,6 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
 
     private void removeMenus(){
         hybridMenu.getTopMenu().removeAllComponents();
-        hybridMenu.getLeftMenu().removeAllComponents();
 
     }
 
@@ -160,11 +165,12 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         topMenu.add(HMButton.get()
                 .withIcon(VaadinIcons.HOME)
                 .withDescription("Home")
-                .withNavigateTo(Dashboard.class));
+                .withNavigateTo(MainDashboard.class));
 
-        hybridMenu.getNotificationCenter()
-                .setNotiButton(topMenu.add(HMButton.get()
-                        .withDescription("Notifications")));
+        topMenu.add(HMButton.get()
+                .withIcon(VaadinIcons.COMMENT_ELLIPSIS)
+                .withDescription("Messages")
+                .withNavigateTo(MainDashboard.class));
 
         topMenu.add(HMButton.get()
                 .withIcon(VaadinIcons.POWER_OFF)
@@ -187,7 +193,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 });
     }
 
-    private void buildLeftMenu() {
+    /*private void buildLeftMenu() {
 
         menuItems = new ArrayList<>();
         menuItems.add("Authorization");
@@ -226,10 +232,10 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
             userPermissions.add(rolePermission.getPermissionCode());
         }
 
-        /*hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
+        *//*hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
                 .withCaption("Dashboard")
                 .withIcon(VaadinIcons.HOME)
-                .withNavigateTo(Dashboard.class)));*/
+                .withNavigateTo(Dashboard.class)));*//*
         Map<String,VaadinIcons> iconsMap = BackOfficeUtils.getIconMap();
         for(String menu : menuItems){
             if(noChildMenus.contains(menu)){
@@ -284,9 +290,9 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .withCaption("Minimal")
                 .withIcon(VaadinIcons.COG)
                 .withClickListener(e -> hybridMenu.getLeftMenu().toggleSize()));
-    }
+    }*/
 
-    public HybridMenu getHybridMenu() {
+    public MainMenu getHybridMenu() {
         return hybridMenu;
     }
 

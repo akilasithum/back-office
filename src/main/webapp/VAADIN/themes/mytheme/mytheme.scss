@@ -35,4 +35,223 @@
   @include valo;
 
   // Insert your own theme rules here
+  .my-img-button {
+    cursor: pointer;
+    opacity: 0.85;
+  }
+
+
+  .myRootContent {
+    & > .v-expand {
+      @include hmTransition(padding-left 0.3s ease-in-out);
+      /* Left Menu */
+      .v-slot-leftMenu {
+        @include hmTransition(margin-left 0.3s ease-in-out);
+        margin-left: -250px !important;
+
+        .leftMenu {
+          @include hmTransition(width 0.3s ease-in-out);
+          width: 250px !important;
+
+          & > .v-expand > .v-slot {
+            height: auto !important;
+          }
+
+          &:not(.minimal) {
+            overflow: auto;
+          }
+
+          .v-slot-HMLabel > div {
+            width: 100%;
+
+            .v-caption {
+              text-align: center;
+              position: relative;
+              font-size: 20px;
+              padding: 10px;
+
+              &:after {
+                @include hmPos(absolute, null, null, 0, 0);
+                border-bottom: 1px solid;
+                content: '';
+                width: 100%;
+              }
+
+              .v-icon {
+                margin-right: 5px;
+                max-height: 32px;
+              }
+            }
+
+            .v-label {
+              display: none;
+            }
+          }
+
+          .HMButton {
+            @include hmTransition(background 0.3s, border-left 0.3s, height 0.5s);
+            border-left: 0 solid transparent;
+            background: transparent;
+            overflow: hidden;
+            cursor: pointer;
+            display: block;
+            padding: 8px 0;
+            height: 45px;
+
+            &.active {
+              border-left-width: 3px;
+            }
+
+            &:hover, &.active:hover {
+              border-left-width: 5px;
+            }
+          }
+
+          .HMButton-wrap {
+            @include hmTransition(border 0.3s);
+            @include hmPos(relative);
+            display: block;
+            z-index: 1000;
+
+            .v-icon {
+              @include hmPos(relative);
+              vertical-align: middle;
+              display: inline-block;
+              text-align: center;
+              margin-left: 10px;
+              width: 25px;
+            }
+
+            .HMButton-caption {
+              font-size: 17px;
+              vertical-align: middle;
+            }
+          }
+
+          .HMSubMenu {
+            & > .v-slot {
+              &:first-child .toolTip {
+                @include hmPos(absolute, 0, 5px);
+                @include hmSize(30px, 30px);
+
+                .v-icon {
+                  @include hmTransition(transform 0.3s ease-in-out);
+                  @include hmTransformRotate(0deg);
+                  @include hmSize(30px, 30px);
+                  line-height: 27px;
+                  margin: 0;
+                }
+              }
+
+              &:last-child > .v-verticallayout {
+                @include hmTransition(max-height 0.5s ease-in-out);
+                width: calc(100% - 24px) !important;
+                border-left: 1px solid transparent;
+                position: relative;
+                margin-left: 24px;
+                overflow: hidden;
+                display: block;
+                max-height: 0;
+              }
+            }
+
+            &.open > .v-slot {
+              &:first-child .toolTip .v-icon {
+                @include hmTransformRotate(-180deg);
+              }
+
+              &:last-child > .v-verticallayout {
+                max-height: 1000px !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    /* breadcrumbs */
+    .breadcrumbs {
+      padding: 15px 20px;
+
+      .v-slot {
+        width: auto !important;
+
+        .HMButton.clickable {
+          cursor: pointer;
+        }
+
+        .HMLabel {
+          display: none !important;
+        }
+      }
+    }
+
+    /* left menu minimal */
+    &.minimal {
+      overflow: inherit;
+
+      & > .v-expand {
+        padding-left: 50px !important;
+
+        .v-slot-leftMenu {
+          margin-left: -50px !important;
+
+          .leftMenu {
+            overflow: visible;
+            width: 50px !important;
+
+            .v-slot-HMLabel > div .v-caption .v-captiontext {
+              display: none;
+            }
+
+            .HMButton {
+              overflow: visible;
+
+              &:hover .HMButton-caption {
+                pointer-events: all !important;
+                opacity: 1 !important;
+                left: 45px !important;
+              }
+
+              .HMButton-wrap {
+                z-index: 100;
+
+                .v-icon {
+                  width: 100%;
+                  margin: 0;
+                }
+
+                .HMButton-caption {
+                  @include hmTransition(left 0.5s ease-in-out, opacity 0.5s ease-in-out);
+                  padding: 9px 13px 8px;
+                  top: calc(-50% + 5px);
+                  pointer-events: none;
+                  position: absolute;
+                  white-space: pre;
+                  z-index: 10000;
+                  height: 28px;
+                  left: -500px;
+                  opacity: 0;
+                  margin: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    /* content */
+    .v-slot-contentBox {
+      overflow-y: auto;
+
+      .contentBox {
+        padding: 0 !important;
+
+        & > .v-margin-top {
+          padding-top: 0 !important;
+        }
+      }
+    }
+  }
 }

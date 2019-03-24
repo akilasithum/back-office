@@ -15614,3 +15614,257 @@ div.v-layout.v-horizontal.v-widget {
 	width: 19px;
 	overflow: hidden;
 }
+
+.mytheme .my-img-button {
+	cursor: pointer;
+	opacity: 0.85;
+}
+
+.mytheme .myRootContent > .v-expand {
+	-webkit-transition: padding-left 0.3s ease-in-out;
+	-moz-transition: padding-left 0.3s ease-in-out;
+	-ms-transition: padding-left 0.3s ease-in-out;
+	-o-transition: padding-left 0.3s ease-in-out;
+	transition: padding-left 0.3s ease-in-out;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu {
+	-webkit-transition: margin-left 0.3s ease-in-out;
+	-moz-transition: margin-left 0.3s ease-in-out;
+	-ms-transition: margin-left 0.3s ease-in-out;
+	-o-transition: margin-left 0.3s ease-in-out;
+	transition: margin-left 0.3s ease-in-out;
+	margin-left: -250px !important;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu {
+	-webkit-transition: width 0.3s ease-in-out;
+	-moz-transition: width 0.3s ease-in-out;
+	-ms-transition: width 0.3s ease-in-out;
+	-o-transition: width 0.3s ease-in-out;
+	transition: width 0.3s ease-in-out;
+	width: 250px !important;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu > .v-expand > .v-slot {
+	height: auto !important;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu:not(.minimal) {
+	overflow: auto;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div {
+	width: 100%;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption {
+	text-align: center;
+	position: relative;
+	font-size: 20px;
+	padding: 10px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption:after {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	border-bottom: 1px solid;
+	content: "";
+	width: 100%;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption .v-icon {
+	margin-right: 5px;
+	max-height: 32px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-label {
+	display: none;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton {
+	-webkit-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	-moz-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	-ms-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	-o-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	transition: background 0.3s, border-left 0.3s, height 0.5s;
+	border-left: 0 solid transparent;
+	background: transparent;
+	overflow: hidden;
+	cursor: pointer;
+	display: block;
+	padding: 8px 0;
+	height: 45px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton.active {
+	border-left-width: 3px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton:hover, .mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton.active:hover {
+	border-left-width: 5px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton-wrap {
+	-webkit-transition: border 0.3s;
+	-moz-transition: border 0.3s;
+	-ms-transition: border 0.3s;
+	-o-transition: border 0.3s;
+	transition: border 0.3s;
+	position: relative;
+	display: block;
+	z-index: 1000;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton-wrap .v-icon {
+	position: relative;
+	vertical-align: middle;
+	display: inline-block;
+	text-align: center;
+	margin-left: 10px;
+	width: 25px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton-wrap .HMButton-caption {
+	font-size: 17px;
+	vertical-align: middle;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu > .v-slot:first-child .toolTip {
+	position: absolute;
+	top: 0;
+	right: 5px;
+	width: 30px;
+	height: 30px;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu > .v-slot:first-child .toolTip .v-icon {
+	-webkit-transition: transform 0.3s ease-in-out;
+	-moz-transition: transform 0.3s ease-in-out;
+	-ms-transition: transform 0.3s ease-in-out;
+	-o-transition: transform 0.3s ease-in-out;
+	transition: transform 0.3s ease-in-out;
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotate(0deg);
+	width: 30px;
+	height: 30px;
+	line-height: 27px;
+	margin: 0;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu > .v-slot:last-child > .v-verticallayout {
+	-webkit-transition: max-height 0.5s ease-in-out;
+	-moz-transition: max-height 0.5s ease-in-out;
+	-ms-transition: max-height 0.5s ease-in-out;
+	-o-transition: max-height 0.5s ease-in-out;
+	transition: max-height 0.5s ease-in-out;
+	width: calc(100% - 24px) !important;
+	border-left: 1px solid transparent;
+	position: relative;
+	margin-left: 24px;
+	overflow: hidden;
+	display: block;
+	max-height: 0;
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu.open > .v-slot:first-child .toolTip .v-icon {
+	-webkit-transform: rotate(-180deg);
+	-moz-transform: rotate(-180deg);
+	-ms-transform: rotate(-180deg);
+	-o-transform: rotate(-180deg);
+	transform: rotate(-180deg);
+}
+
+.mytheme .myRootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu.open > .v-slot:last-child > .v-verticallayout {
+	max-height: 1000px !important;
+}
+
+.mytheme .myRootContent .breadcrumbs {
+	padding: 15px 20px;
+}
+
+.mytheme .myRootContent .breadcrumbs .v-slot {
+	width: auto !important;
+}
+
+.mytheme .myRootContent .breadcrumbs .v-slot .HMButton.clickable {
+	cursor: pointer;
+}
+
+.mytheme .myRootContent .breadcrumbs .v-slot .HMLabel {
+	display: none !important;
+}
+
+.mytheme .myRootContent.minimal {
+	overflow: inherit;
+}
+
+.mytheme .myRootContent.minimal > .v-expand {
+	padding-left: 50px !important;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu {
+	margin-left: -50px !important;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu {
+	overflow: visible;
+	width: 50px !important;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption .v-captiontext {
+	display: none;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton {
+	overflow: visible;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton:hover .HMButton-caption {
+	pointer-events: all !important;
+	opacity: 1 !important;
+	left: 45px !important;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton .HMButton-wrap {
+	z-index: 100;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton .HMButton-wrap .v-icon {
+	width: 100%;
+	margin: 0;
+}
+
+.mytheme .myRootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton .HMButton-wrap .HMButton-caption {
+	-webkit-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-moz-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-ms-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-o-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	padding: 9px 13px 8px;
+	top: calc(-50% + 5px);
+	pointer-events: none;
+	position: absolute;
+	white-space: pre;
+	z-index: 10000;
+	height: 28px;
+	left: -500px;
+	opacity: 0;
+	margin: 0;
+}
+
+.mytheme .myRootContent .v-slot-contentBox {
+	overflow-y: auto;
+}
+
+.mytheme .myRootContent .v-slot-contentBox .contentBox {
+	padding: 0 !important;
+}
+
+.mytheme .myRootContent .v-slot-contentBox .contentBox > .v-margin-top {
+	padding-top: 0 !important;
+}
