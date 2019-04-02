@@ -64,6 +64,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .build();
         connection = DBConnection.getInstance();
         setContent(hybridMenu);
+        hybridMenu.setStyleName("hybridMenu");
         navigator = new Navigator(this, hybridMenu.getNaviContent());
         navigator.addView("login", LoginPage.class);
         navigator.addView("dashboard", MainDashboard.class);
@@ -122,7 +123,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         else {
             if (f == null || f.equals("") || !f.equals("login")) {
                 buildTopOnlyMenu();
-                //buildLeftMenu();
+                hybridMenu.addLogo();
             }
         }
         getUI().getNavigator().setErrorView(ErrorView.class);
@@ -141,7 +142,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     public void navigate(){
         getPermissionCodes();
         buildTopOnlyMenu();
-        //buildLeftMenu();
+        hybridMenu.addLogo();
         previousPage = "login ok";
         navigator.navigateTo("dashboard");
     }
@@ -154,6 +155,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
 
     private void removeMenus(){
         hybridMenu.getTopMenu().removeAllComponents();
+        hybridMenu.getLogoLayout().removeAllComponents();
 
     }
 

@@ -9,7 +9,7 @@ import com.vaadin.ui.*;
 
 public class MainDashboard extends VerticalLayout implements View {
 
-    private static final String imageWidth = "50%";
+    private static final String imageWidth = "80%";
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -35,12 +35,12 @@ public class MainDashboard extends VerticalLayout implements View {
         verticalLayout.addComponent(btnLayout1);
         verticalLayout.addComponent(btnLayout2);
 
-        Image authorizationImage = new Image(null, new ClassResource("sky_image.png"));
+        Image authorizationImage = new Image(null, new ClassResource("flight_kitchen.png"));
         authorizationImage.setWidth(imageWidth);
         authorizationImage.setHeight(imageWidth);
         authorizationImage.addStyleName("my-img-button");
 
-        Image setupImage = new Image(null, new ClassResource("ground_image.png"));
+        Image setupImage = new Image(null, new ClassResource("pre_order.png"));
         setupImage.setWidth(imageWidth);
         setupImage.setHeight(imageWidth);
         setupImage.addStyleName("my-img-button");
@@ -49,17 +49,17 @@ public class MainDashboard extends VerticalLayout implements View {
             getUI().getNavigator().navigateTo("setup");
         });
 
-        Image fileTransferImage = new Image(null, new ClassResource("galley_image.png"));
+        Image fileTransferImage = new Image(null, new ClassResource("finance.png"));
         fileTransferImage.setWidth(imageWidth);
         fileTransferImage.setHeight(imageWidth);
         fileTransferImage.addStyleName("my-img-button");
 
-        Image bondReportsImage = new Image(null, new ClassResource("galley_image.png"));
+        Image bondReportsImage = new Image(null, new ClassResource("reports.png"));
         bondReportsImage.setWidth(imageWidth);
         bondReportsImage.setHeight(imageWidth);
         bondReportsImage.addStyleName("my-img-button");
 
-        Image salesReportImage = new Image(null, new ClassResource("sky_image.png"));
+        Image salesReportImage = new Image(null, new ClassResource("inventory.png"));
         salesReportImage.setWidth(imageWidth);
         salesReportImage.setHeight(imageWidth);
         salesReportImage.addStyleName("my-img-button");
@@ -68,17 +68,17 @@ public class MainDashboard extends VerticalLayout implements View {
 
         });*/
 
-        Image analysisImage = new Image(null, new ClassResource("ground_image.png"));
+        Image analysisImage = new Image(null, new ClassResource("crm.png"));
         analysisImage.setWidth(imageWidth);
         analysisImage.setHeight(imageWidth);
         analysisImage.addStyleName("my-img-button");
 
-        Image preOrderMgtImage = new Image(null, new ClassResource("galley_image.png"));
+        Image preOrderMgtImage = new Image(null, new ClassResource("analyze_upload.png"));
         preOrderMgtImage.setWidth(imageWidth);
         preOrderMgtImage.setHeight(imageWidth);
         preOrderMgtImage.addStyleName("my-img-button");
 
-        Image settingsImage = new Image(null, new ClassResource("galley_image.png"));
+        Image settingsImage = new Image(null, new ClassResource("setup.png"));
         settingsImage.setWidth(imageWidth);
         settingsImage.setHeight(imageWidth);
         settingsImage.addStyleName("my-img-button");

@@ -1,10 +1,13 @@
 package com.back.office.ui.dashboard;
 
+import com.back.office.utils.Constants;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import kaesdingeling.hybridmenu.components.BreadCrumbs;
+import kaesdingeling.hybridmenu.components.LeftMenu;
 import kaesdingeling.hybridmenu.components.TopMenu;
 import kaesdingeling.hybridmenu.data.DefaultViewChangeManager;
 import kaesdingeling.hybridmenu.data.MenuConfig;
@@ -23,6 +26,7 @@ public class MainMenu extends VerticalLayout {
     private MenuConfig config = null;
     private boolean buildRunning = false;
     private boolean initNavigator = true;
+    private LeftMenu leftMenu = new LeftMenu();
 
     /* Components */
     private HorizontalLayout content = new HorizontalLayout();
@@ -31,6 +35,7 @@ public class MainMenu extends VerticalLayout {
     private Layout naviRootContent = null;
     private VerticalLayout rootContent = new VerticalLayout();
     private TopMenu topMenu = new TopMenu();
+    private VerticalLayout logoLayout = new VerticalLayout();
 
     private Label css = new Label("", ContentMode.HTML);
 
@@ -41,7 +46,6 @@ public class MainMenu extends VerticalLayout {
     public MainMenu() {
         super();
         setSizeFull();
-        setStyleName(CLASS_NAME);
         setMargin(false);
         setSpacing(false);
     }
@@ -65,7 +69,13 @@ public class MainMenu extends VerticalLayout {
                 ui.getNavigator().setErrorView(DefaultPage.class);
             }
 
-            addComponent(topMenu);
+
+            HorizontalLayout layout = new HorizontalLayout();
+            layout.setMargin(Constants.leftMargin);
+            addComponent(layout);
+            layout.addComponent(logoLayout);
+            logoLayout.setMargin(Constants.noMargin);
+            layout.addComponent(topMenu);
 
             content.setSizeFull();
             content.setMargin(false);
@@ -86,11 +96,10 @@ public class MainMenu extends VerticalLayout {
 
             if (config.isBreadcrumbs()) {
                 breadcrumbs = new BreadCrumbs();
-                //rootContent.addComponent(breadcrumbs);
+                rootContent.addComponent(breadcrumbs);
             }
 
             rootContent.addComponent(naviRootContent);
-
             if (config.isBreadcrumbs()) {
                 rootContent.setExpandRatio(naviRootContent, 1f);
             }
@@ -103,6 +112,16 @@ public class MainMenu extends VerticalLayout {
         return this;
     }
 
+    public void addLogo(){
+        if(logoLayout.getComponentCount() == 0) {
+            Image logo = new Image();
+            logo.setSource(new ClassResource("logo.png"));
+            logo.setWidth(170, Unit.PIXELS);
+            logo.setHeight(50, Unit.PIXELS);
+            logoLayout.addComponent(logo);
+        }
+    }
+
     public VerticalLayout getRootContent() {
         return rootContent;
     }
@@ -111,9 +130,17 @@ public class MainMenu extends VerticalLayout {
         return topMenu;
     }
 
+    public VerticalLayout getLogoLayout() {
+        return logoLayout;
+    }
+
     public BreadCrumbs getBreadCrumbs() {
         return breadcrumbs;
     }
+
+    public LeftMenu getLeftMenu() {
+        return leftMenu;
+    };
 
     public Layout getNaviContent() {
         return naviRootContent;

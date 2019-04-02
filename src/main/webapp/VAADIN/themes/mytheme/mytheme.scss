@@ -38,6 +38,47 @@
   .my-img-button {
     cursor: pointer;
     opacity: 0.85;
+    transition-duration: 0.4s;
+
+      @include hmTransition(background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out);
+      border-top: 0 solid;
+      cursor: pointer;
+
+      .HMButton-caption {
+        margin: 0;
+
+        .toolTip {
+          @include hmPos(absolute, 32px, -6px);
+          border-radius: 4px;
+          line-height: 17px;
+          font-size: 14px;
+          padding: 5px;
+        }
+      }
+
+      &:hover {
+        height: 107%;
+        width: 107%;
+
+        .HMButton-caption {
+          pointer-events: auto !important;
+        }
+      }
+  }
+
+
+
+  .hybridMenu{
+    background: url(images/sky.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+  .main-layout{
+    padding-left: 15%;
+    padding-right: 15%;
   }
 
 
