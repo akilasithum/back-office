@@ -15618,6 +15618,50 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .my-img-button {
 	cursor: pointer;
 	opacity: 0.85;
+	transition-duration: 0.4s;
+	-webkit-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	-moz-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	-ms-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	-o-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	border-top: 0 solid;
+	cursor: pointer;
+}
+
+.mytheme .my-img-button .HMButton-caption {
+	margin: 0;
+}
+
+.mytheme .my-img-button .HMButton-caption .toolTip {
+	position: absolute;
+	top: 32px;
+	right: -6px;
+	border-radius: 4px;
+	line-height: 17px;
+	font-size: 14px;
+	padding: 5px;
+}
+
+.mytheme .my-img-button:hover {
+	height: 107%;
+	width: 107%;
+}
+
+.mytheme .my-img-button:hover .HMButton-caption {
+	pointer-events: auto !important;
+}
+
+.mytheme .hybridMenu {
+	background: url(images/sky.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.mytheme .main-layout {
+	padding-left: 15%;
+	padding-right: 15%;
 }
 
 .mytheme .myRootContent > .v-expand {
