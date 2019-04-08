@@ -29,7 +29,7 @@ connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop
         <mapping resource="com.back.office.common/kitCodes.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/equipmentType.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/cartItems.hbm.xml"></mapping>
-        <mapping resource="com.back.office.common/flights.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/flight.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/sectors.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/user.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/blackListCC.hbm.xml"></mapping>
