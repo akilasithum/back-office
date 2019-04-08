@@ -5,12 +5,15 @@ import com.back.office.framework.OnDemandFileDownloader;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
+import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.vaadin.haijian.Exporter;
 
 import java.io.*;
 
@@ -27,6 +30,7 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
     protected HorizontalLayout buttonRow;
     protected Label filterCriteriaText;
     protected Button downloadExcelBtn;
+    protected Button printBtn;
     OnDemandFileDownloader onDemandFileDownloader = null;
     OnDemandFileDownloader.OnDemandStreamResource onDemandStreamResource;
     protected HorizontalLayout optionButtonRow;
@@ -86,7 +90,7 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
         optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         optionButtonRow.setSpacing(true);
 
-        Button printBtn = new Button("Print");
+        printBtn = new Button("Print");
         downloadExcelBtn = new Button("Download as Excel");
         downloadExcelBtn.setId("DownloadButtonID");
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);

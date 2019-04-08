@@ -267,6 +267,16 @@ public class DBConnection {
         }
     }
 
+    public List getSectorsFromFlightType(int flightId,String flightType){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(Sector.class);
+        criteria.add(Restrictions.eq("flightId", flightId));
+        criteria.add(Restrictions.eq("flightType", flightType));
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
     public List getUserRoleIds(String filterName,String fieldName,Integer fieldValue,String className){
         Session session = HibernateUtil.getSessionFactory().openSession();
         try

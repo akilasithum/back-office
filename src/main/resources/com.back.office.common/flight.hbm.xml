@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.Flight" table="flight_details" catalog="">
+        <id name="flightId" type="java.lang.Integer">
+            <column name="flightId" />
+            <generator class="identity" />
+        </id>
+        <property name="baseStation" type="java.lang.String">
+            <column name="baseStation" length="30" />
+        </property>
+        <property name="obFlightNo" type="java.lang.String">
+            <column name="obFlightNo" length="50" />
+        </property>
+        <property name="obFlightFrom" type="java.lang.String">
+            <column name="obFlightFrom" length="50" />
+        </property>
+        <property name="obFlightTo" type="java.lang.String">
+            <column name="obFlightTo"  length="50"/>
+        </property>
+        <property name="obNoOfSectors" type="java.lang.Integer">
+            <column name="obNoOfSectors"  />
+        </property>
+        <property name="ibFlightNo" type="java.lang.String">
+            <column name="ibFlightNo" length="50" />
+        </property>
+        <property name="ibFlightFrom" type="java.lang.String">
+            <column name="ibFlightFrom" length="50" />
+        </property>
+        <property name="ibFlightTo" type="java.lang.String">
+            <column name="ibFlightTo" length="50" />
+        </property>
+        <property name="ibNoOfSectors" type="java.lang.Integer">
+            <column name="ibNoOfSectors"  />
+        </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
+        <property name="country" type="java.lang.String">
+            <column name="country" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>
