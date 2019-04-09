@@ -8,6 +8,8 @@ import com.back.office.ui.*;
 import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
+import com.back.office.ui.download.DownloadView;
+import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
@@ -87,6 +89,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("CreditCardSummary", CreditCardSummaryView.class);
         navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
         navigator.addView("TenderSummary",TenderSummaryView.class);
+        navigator.addView("Downloads", DownloadView.class);
+        navigator.addView("PreOrders", PreOrders.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();

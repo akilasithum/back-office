@@ -112,6 +112,7 @@ public class BackOfficeUtils {
         menuItems.add("Flight-Bond Activity");
         menuItems.add("Cart Usage");
         menuItems.add("HHC Status");
+        menuItems.add("Pre Orders");
         return menuItems;
     }
 
@@ -231,6 +232,17 @@ public class BackOfficeUtils {
 
             notificationCenter.add(notification, true);
 
+    }
+
+    public static String getServicehFromServiceh(String serviceh){
+        switch (serviceh){
+            case "HHC Order": return "HCC";
+            case "Call Center Order" : return "CallCenter";
+            case "Web Order" : return "Web";
+            case "All":return "All";
+
+            default: return null;
+        }
     }
 }
 
