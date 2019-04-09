@@ -1,6 +1,7 @@
 package com.back.office.utils;
 
 import com.back.office.db.DBConnection;
+import com.back.office.entity.CurrencyDetails;
 import com.back.office.entity.PermissionCodes;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -230,7 +231,15 @@ public class BackOfficeUtils {
                 notification.makeAsReaded();
 
             notificationCenter.add(notification, true);
+    }
 
+    public static List<String> getCurrencyDropDownValues(){
+        List<CurrencyDetails> currencyDetails = connection.getAllCurrencies();
+        List<String> currencies = new ArrayList<>();
+        for(CurrencyDetails currency : currencyDetails){
+            currencies.add(currency.getCurrencyCode());
+        }
+        return currencies;
     }
 }
 

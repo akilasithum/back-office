@@ -1,17 +1,17 @@
 package com.back.office.ui.salesReports;
 
 import com.back.office.db.DBConnection;
-import com.back.office.db.SQLConnection;
-import com.back.office.entity.CurrencyDetails;
 import com.back.office.entity.SalesDetails;
 import com.back.office.entity.Sector;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.haijian.Exporter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -27,6 +27,7 @@ public class SalesDetailsView extends VerticalLayout implements View {
     protected HorizontalLayout tableLayout;
     protected VerticalLayout mainUserInputLayout;
     protected Button searchButton;
+    protected Button printBtn;
     protected HorizontalLayout buttonRow;
 
     protected DateField flightDateFromDateField;
@@ -155,7 +156,7 @@ public class SalesDetailsView extends VerticalLayout implements View {
         optionButtonRow.setSpacing(true);
         optionButtonRow.setMargin(Constants.noMargin);
 
-        Button printBtn = new Button("Print");
+        printBtn = new Button("Print");
         Button downloadExcelBtn = new Button("Download as Excel");
         /*downloadExcelBtn.addClickListener((Button.ClickListener) clickEvent -> {
             ExcelExport excelExport = new ExcelExport(detailsTable);
@@ -178,20 +179,25 @@ public class SalesDetailsView extends VerticalLayout implements View {
         setComponentAlignment(userFormLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
         createShowTableHeader();
+
+        StreamResource excelStreamResource = new StreamResource((StreamResource.StreamSource)
+                () -> Exporter.exportAsCSV(detailsTable), "my-excel.csv");
+        FileDownloader excelFileDownloader = new FileDownloader(excelStreamResource);
+        excelFileDownloader.extend(printBtn);
     }
 
     private void createShowTableHeader(){
-        detailsTable.addColumn(SalesDetails::getItemName).setCaption(ITEM_NAME);
-        detailsTable.addColumn(SalesDetails::getCategory).setCaption(CATEGORY);
-        detailsTable.addColumn(SalesDetails::getItemId).setCaption(ITEM_ID);
-        detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY);
-        detailsTable.addColumn(SalesDetails::getPrice).setCaption(GROSS_AMOUNT);
-        detailsTable.addColumn(SalesDetails::getPrice).setCaption(TOTAL);
-        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
-        detailsTable.addColumn(SalesDetails::getFlightNo).setCaption(FLIGHT_NAME);
-        detailsTable.addColumn(SalesDetails::getFlightFrom).setCaption(FLIGHT_FROM);
-        detailsTable.addColumn(SalesDetails::getFlightTo).setCaption(FLIGHT_TO);
-        detailsTable.addColumn(SalesDetails::getSifNo).setCaption(SIF_NO);
+        detailsTable.addColumn(SalesDetails::getItemName).setCaption(ITEM_NAME).setId("itemName");
+        detailsTable.addColumn(SalesDetails::getCategory).setCaption(CATEGORY).setId("category");
+        detailsTable.addColumn(SalesDetails::getItemId).setCaption(ITEM_ID).setId("itemId");
+        detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY).setId("quantity");
+        detailsTable.addColumn(SalesDetails::getPrice).setCaption(GROSS_AMOUNT).setId("price");
+        //detailsTable.addColumn(SalesDetails::getPrice).setCaption(TOTAL).setId("price");
+        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE).setId("flightDate");
+        detailsTable.addColumn(SalesDetails::getFlightNo).setCaption(FLIGHT_NAME).setId("flightNo");
+        detailsTable.addColumn(SalesDetails::getFlightFrom).setCaption(FLIGHT_FROM).setId("flightFrom");
+        detailsTable.addColumn(SalesDetails::getFlightTo).setCaption(FLIGHT_TO).setId("flightTo");
+        detailsTable.addColumn(SalesDetails::getSifNo).setCaption(SIF_NO).setId("sifNo");
     }
 
     private List<String> getSectors(){

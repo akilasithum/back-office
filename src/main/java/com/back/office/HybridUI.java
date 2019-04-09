@@ -11,6 +11,7 @@ import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
+import com.back.office.ui.wizard.CreateItemView;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.annotations.*;
 import com.vaadin.icons.VaadinIcons;
@@ -65,7 +66,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("dashboard", Dashboard.class);
         navigator.addView("AircraftType", AirCraftTypeView.class);
         navigator.addView("Currency", CurerncyDetailsView.class);
-        navigator.addView("CreateItems", ItemView.class);
+        navigator.addView("CreateItems", CreateItemView.class);
         navigator.addView("CreateKitCodes", KitCodesView.class);
         navigator.addView("EquipmentTypes", EquipmentTypeView.class);
         navigator.addView("AssignItems", AssignItemView.class);
