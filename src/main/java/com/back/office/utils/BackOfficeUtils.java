@@ -43,16 +43,18 @@ public class BackOfficeUtils {
         Map<String, VaadinIcons> iconMap = new HashMap<>();
         iconMap.put("Dashboard", VaadinIcons.DASHBOARD);
         iconMap.put("Authorization", VaadinIcons.LOCK);
-        iconMap.put("Setup", VaadinIcons.COG);
-        iconMap.put("File Transfer", VaadinIcons.UPLOAD);
-        iconMap.put("Generate XML", VaadinIcons.MAP_MARKER);
-        iconMap.put("Bond Reports", VaadinIcons.FLAG);
-        iconMap.put("Sales Report", VaadinIcons.SCALE);
-        iconMap.put("Staff", VaadinIcons.USER);
-        iconMap.put("Analysis", VaadinIcons.BAR_CHART);
-        iconMap.put("Special Reports", VaadinIcons.MONEY);
-        iconMap.put("Pre Order Management", VaadinIcons.TRUCK);
+        iconMap.put("Flight Kitchen", VaadinIcons.BOOK);
+        iconMap.put("Pre-order / Messenger", VaadinIcons.CART_O);
+        iconMap.put("Finance", VaadinIcons.DOLLAR);
+        iconMap.put("Reports", VaadinIcons.BOOKMARK);
+        iconMap.put("Inventory", VaadinIcons.INVOICE);
         iconMap.put("CRM", VaadinIcons.PALETE);
+        iconMap.put("Analysis and Uploads", VaadinIcons.DATE_INPUT);
+        iconMap.put("Setup", VaadinIcons.USER);
+//        iconMap.put("Analysis", VaadinIcons.BAR_CHART);
+//        iconMap.put("Special Reports", VaadinIcons.MONEY);
+//        iconMap.put("Pre Order Management", VaadinIcons.TRUCK);
+//        iconMap.put("CRM", VaadinIcons.PALETE);
         return iconMap;
     }
 
@@ -61,11 +63,18 @@ public class BackOfficeUtils {
         switch (menu){
             case "Setup" : return getSetupMap();
             case "Authorization" : return getAuthorizationMap();
-            case  "Sales Report" : return getSellsReportsMap();
-            case  "Bond Reports" : return getBondReportsMap();
-            case "File Transfer" : return getFileTransferMap();
+            case  "Pre-order / Messenger" : return getPreOrder();
+            case  "Finance" : return getFinance();
+            case  "Reports" : return getSellsReportsMap();
+            case  "Inventory" : return getInventory();
+            case  "CRM" : return getcrm();
+            case  "Flight Kitchen" : return getFlightKitchen();
+            case  "Analysis and Uploads" : return getAnalysisUpload();
             default:return menuItems;
         }
+
+
+
     }
 
     public static List<String> getSetupMap(){
@@ -85,17 +94,13 @@ public class BackOfficeUtils {
         return menuItems;
     }
 
-    public static List<String> getSellsReportsMap(){
+    public static List<String> getPreOrder(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Sales Details");
-        menuItems.add("Sales Summary by Flight");
-        menuItems.add("Sale by Category");
-        menuItems.add("Tender Summary");
-        menuItems.add("Sales by Sector");
-        menuItems.add("Sold out by Flight");
-        menuItems.add("Credit Card by Flight");
-        menuItems.add( "Credit Card Summary");
-        menuItems.add("Sales Tender Discrepancy");
+        menuItems.add("pre Order");
+        menuItems.add("Pre-order Inventory");
+        menuItems.add("Inflight Requests");
+        menuItems.add("Bond Messages");
+        menuItems.add("FA Messages");
         return menuItems;
     }
 
@@ -107,21 +112,69 @@ public class BackOfficeUtils {
         return menuItems;
     }
 
-    public static List<String> getBondReportsMap(){
+    public static List<String> getFinance(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Flight-Bond Activity");
-        menuItems.add("Cart Usage");
-        menuItems.add("HHC Status");
-        menuItems.add("Pre Orders");
+        menuItems.add("Currency History");
+        menuItems.add("Bank Settlements");
+        menuItems.add("CC Batch Summary");
+        menuItems.add("FA Commissions");
+        menuItems.add("Gross Margins");
+        menuItems.add("Sales Tender Discrepancy");
         return menuItems;
     }
 
-    public static List<String> getFileTransferMap(){
+    public static List<String> getInventory(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Uploads");
-        menuItems.add("Downloads");
+        menuItems.add("Equipment Master");
+        menuItems.add("Month End  Inventory");
+        menuItems.add("Unaccounted Carts");
+        menuItems.add("Inventory Valuation");
+        menuItems.add("Sold-out by Flight");
+        menuItems.add("Custom Reports");
         return menuItems;
     }
+
+    public static List<String> getFlightKitchen(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Flight Schedule");
+        menuItems.add("Daily Flights");
+        menuItems.add("Request Inventory");
+        menuItems.add("Galley Weights");
+        menuItems.add("SIF");
+        menuItems.add("HHC and Cart Usage");
+        return menuItems;
+    }
+
+    public static List<String> getcrm(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Passenger Purchases");
+        menuItems.add("Import pax Manifest");
+        menuItems.add("Loading Recommendations");
+        return menuItems;
+    }
+
+    public static List<String> getAnalysisUpload(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Wastage");
+        menuItems.add("SIF Inquiry");
+        menuItems.add("Build Times");
+        menuItems.add("Sales vs Weight");
+        menuItems.add("Airline Uploads");
+        menuItems.add("Custom Reports");
+        return menuItems;
+    }
+    public static List<String> getSellsReportsMap(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Monthly Sales");
+        menuItems.add("Flight Sales");
+        menuItems.add("Category/Sector Sales");
+        menuItems.add("Sale By Category");
+        menuItems.add("Item Sales");
+        menuItems.add("Tender Summary");
+        menuItems.add("FA Performance");
+        return menuItems;
+    }
+
 
     public static boolean isInteger(String val){
         try{
@@ -187,53 +240,6 @@ public class BackOfficeUtils {
         }
     }
 
-    public static List<String> getMainMenuItems(){
-        List<String> menuItems = new ArrayList<>();
-        menuItems.add("Authorization");
-        menuItems.add("Setup");
-        menuItems.add("Uploads");
-        menuItems.add("Generate XML");
-        menuItems.add("Bond Reports");
-        menuItems.add("Sales Report");
-        menuItems.add("Analysis");
-        menuItems.add("Staff");
-        menuItems.add("Special Reports");
-        menuItems.add("Pre Order Management");
-        menuItems.add("CRM");
-        return menuItems;
-    }
-
-    public static Map<String, Map<Integer, String>> getPermissionCodes(){
-            Map<String, Map<Integer, String>> funcAreasCodesMap = new HashMap<>();
-            List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllPermissionCodes();
-            for (PermissionCodes permissionCode : permissionCodes) {
-                if (funcAreasCodesMap.containsKey(permissionCode.getFuncArea())) {
-                    funcAreasCodesMap.get(permissionCode.getFuncArea()).put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
-                } else {
-                    Map<Integer, String> map = new HashMap<>();
-                    map.put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
-                    funcAreasCodesMap.put(permissionCode.getFuncArea(), map);
-                }
-            }
-            return funcAreasCodesMap;
-    }
-
-    public static void showNotification(String caption,String content,VaadinIcons icon){
-        NotificationCenter notificationCenter = VaadinSession.getCurrent().getAttribute(NotificationCenter.class);
-
-            Notification notification = Notification.get()
-                    .withTitle(caption)
-                    .withContent(content)
-                    .withIcon(icon)
-                    .withDisplayTime(5000);
-                notification.withCloseable();
-                notification.withAutoRemove();
-                notification.makeAsReaded();
-
-            notificationCenter.add(notification, true);
-
-    }
-
     public static String getServicehFromServiceh(String serviceh){
         switch (serviceh){
             case "HHC Order": return "HCC";
@@ -243,6 +249,55 @@ public class BackOfficeUtils {
 
             default: return null;
         }
+    }
+
+    public static List<String> getMainMenuItems(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Authorization");
+        menuItems.add("Flight Kitchen");
+        menuItems.add("Pre-order / Messenger");
+        menuItems.add("Finance");
+        menuItems.add("Reports");
+        menuItems.add("Inventory");
+        menuItems.add("CRM");
+        menuItems.add("Analysis and Uploads");
+        menuItems.add("Setup");
+//        menuItems.add("Staff");
+//        menuItems.add("Special Reports");
+//        menuItems.add("Pre Order Management");
+//        menuItems.add("CRM");
+        return menuItems;
+    }
+
+    public static Map<String, Map<Integer, String>> getPermissionCodes(){
+        Map<String, Map<Integer, String>> funcAreasCodesMap = new HashMap<>();
+        List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllPermissionCodes();
+        for (PermissionCodes permissionCode : permissionCodes) {
+            if (funcAreasCodesMap.containsKey(permissionCode.getFuncArea())) {
+                funcAreasCodesMap.get(permissionCode.getFuncArea()).put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
+            } else {
+                Map<Integer, String> map = new HashMap<>();
+                map.put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
+                funcAreasCodesMap.put(permissionCode.getFuncArea(), map);
+            }
+        }
+        return funcAreasCodesMap;
+    }
+
+    public static void showNotification(String caption,String content,VaadinIcons icon){
+        NotificationCenter notificationCenter = VaadinSession.getCurrent().getAttribute(NotificationCenter.class);
+
+        Notification notification = Notification.get()
+                .withTitle(caption)
+                .withContent(content)
+                .withIcon(icon)
+                .withDisplayTime(5000);
+        notification.withCloseable();
+        notification.withAutoRemove();
+        notification.makeAsReaded();
+
+        notificationCenter.add(notification, true);
+
     }
 }
 

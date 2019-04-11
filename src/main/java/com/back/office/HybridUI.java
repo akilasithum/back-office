@@ -9,15 +9,18 @@ import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.download.DownloadView;
-import com.back.office.ui.preOrder.PreOrders;
-import com.back.office.ui.salesReports.*;
+import com.back.office.ui.salesReports.CategorySalesView;
+import com.back.office.ui.salesReports.FlightPaymentDetailsView;
+import com.back.office.ui.salesReports.SalesDetailsView;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
+import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.annotations.*;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
+import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.*;
 import com.vaadin.ui.*;
@@ -80,17 +83,14 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("SalebyCategory", CategorySalesView.class);
         navigator.addView("ManageUserRoles", ManageRolesView.class);
         navigator.addView("ManageUsers", UserDetailsView.class);
-        navigator.addView("Uploads", UploadView.class);
+        navigator.addView("uploads", UploadView.class);
+        navigator.addView("download", DownloadView.class);
+        navigator.addView("preOrder", PreOrders.class);
         navigator.addView("Promotions", PromotionView.class);
         navigator.addView("ErrorView", ErrorView.class);
         navigator.addView("CCNumberRange", CCNumberRangeView.class);
         navigator.addView("Flight-BondActivity", FlightBondActivityReportView.class);
         navigator.addView("ViewandEditUser", ViewAndEditCurrentUserDetailsView.class);
-        navigator.addView("CreditCardSummary", CreditCardSummaryView.class);
-        navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
-        navigator.addView("TenderSummary",TenderSummaryView.class);
-        navigator.addView("Downloads", DownloadView.class);
-        navigator.addView("PreOrders", PreOrders.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();
@@ -106,7 +106,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
 
         getPage().addUriFragmentChangedListener(uriFragmentChangedEvent -> {
             String currentPage = uriFragmentChangedEvent.getUriFragment();
-             if(previousPage != null && previousPage.equals("login")){
+            if(previousPage != null && previousPage.equals("login")){
                 getUI().getNavigator().navigateTo("login");
             }
             else {
@@ -195,15 +195,17 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
 
         menuItems = new ArrayList<>();
         menuItems.add("Authorization");
-        menuItems.add("Setup");
-        menuItems.add("File Transfer");
+        menuItems.add("Flight Kitchen");
+        menuItems.add("Pre-order / Messenger");
+        menuItems.add("Finance");
+        menuItems.add("Reports");
         //menuItems.add("Generate XML");
-        menuItems.add("Bond Reports");
-        menuItems.add("Sales Report");
-        menuItems.add("Analysis");
-        menuItems.add("Special Reports");
-        menuItems.add("Pre Order Management");
+        menuItems.add("Inventory");
         menuItems.add("CRM");
+        menuItems.add("Analysis and Uploads");
+        menuItems.add("Setup");
+//        menuItems.add("Pre Order Management");
+//        menuItems.add("CRM");
 
         noPermissionNeededViews = new ArrayList<>();
         noPermissionNeededViews.add("ViewandEditUser");
@@ -211,6 +213,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         List<String> noChildMenus = new ArrayList<>();
         noChildMenus.add("Uploads");
         noChildMenus.add("CRM");
+        noChildMenus.add("Download");
+        noChildMenus.add("preOrder");
 
         LeftMenu leftMenu = hybridMenu.getLeftMenu();
 
@@ -218,7 +222,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .withCaption("<h3><strong>Porter AirLines</strong></h3>");
         hmLabel.setStyleName("logo");
         leftMenu.add(hmLabel);
-                //.withIcon(new ClassResource("logo.png")));
+        //.withIcon(new ClassResource("logo.png")));
         //leftMenu.setStyleName("logo");
 
         int roleId = connection.getRoleIdFromStaffName(UI.getCurrent().getSession().getAttribute("userName").toString());
@@ -236,19 +240,29 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .withNavigateTo(Dashboard.class)));*/
         Map<String,VaadinIcons> iconsMap = BackOfficeUtils.getIconMap();
         for(String menu : menuItems){
-            if(noChildMenus.contains(menu)){
-                if(menu.equalsIgnoreCase("Uploads")) {
-                    leftMenu.add(HMButton.get()
-                            .withCaption(menu).withIcon(iconsMap.get(menu))
-                            .withNavigateTo(UploadView.class));
-                }
-                else if(menu.equalsIgnoreCase("CRM")){
-                    leftMenu.add(HMButton.get()
-                            .withCaption(menu).withIcon(iconsMap.get(menu))
-                            .withNavigateTo(ErrorView.class));
-                }
-            }
-            else{
+//            if(noChildMenus.contains(menu)){
+//                if(menu.equalsIgnoreCase("Uploads")) {
+//                    leftMenu.add(HMButton.get()
+//                            .withCaption(menu).withIcon(iconsMap.get(menu))
+//                            .withNavigateTo(UploadView.class));
+//                }
+//                else if(menu.equalsIgnoreCase("Download")) {
+//                    leftMenu.add(HMButton.get()
+//                            .withCaption(menu).withIcon(iconsMap.get(menu))
+//                            .withNavigateTo(DownloadView.class));
+//                }
+//                else if(menu.equalsIgnoreCase("preOrder")) {
+//                    leftMenu.add(HMButton.get()
+//                            .withCaption(menu).withIcon(iconsMap.get(menu))
+//                            .withNavigateTo(PreOrders.class));
+//                }
+//                else if(menu.equalsIgnoreCase("CRM")){
+//                    leftMenu.add(HMButton.get()
+//                            .withCaption(menu).withIcon(iconsMap.get(menu))
+//                            .withNavigateTo(ErrorView.class));
+//                }
+//            }
+            {
                 HMSubMenu mainMenu = leftMenu.add(HMSubMenu.get()
                         .withCaption(menu)
                         .withIcon(iconsMap.get(menu)));
