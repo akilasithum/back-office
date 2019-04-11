@@ -47,14 +47,14 @@ public class PreOrders extends ReportCommonView {
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String ORDER_TYPE = "Order Type";
 
-    private final String preOrderId = "preOrderId";
+    private final String preOrderId = "pre Order Id";
     private final String PNR = "PNR";
-    private final String customerName = "customerName";
-    private final String serviceType = "serviceType";
-    private final String flightNumber = "flightNumber";
-    private final String FlightDate = "FlightDate";
-    private final String preOrderStatus = "preOrderStatus";
-    private final String typeOfOrder = "typeOfOrder";
+    private final String customerName = "customer Name";
+    private final String serviceType = "service Type";
+    private final String flightNumber = "flight Number";
+    private final String FlightDate = "Flight Date";
+    private final String preOrderStatus = "pre Order Status";
+    private final String typeOfOrder = "type of Order";
 
 
     @Override
@@ -88,7 +88,8 @@ public class PreOrders extends ReportCommonView {
             headerCellStyle.setWrapText(true);
             headerCellStyle.setShrinkToFit(true);
 
-            String[] array1 = { "preOrderId","PNR","customerName","serviceType","flightNumber","flightDate","preOrderStatus","totalAmount","typeOfOrder" };
+            String[] array1 = { "pre Order Id","PNR","customer Name","service Type","flight Number","flight Date","pre Order Status",
+                    "total Amount","type of Order" };
             Row r1 = Spreadsheet.createRow(0);
 
             for (int k = 0; k < array1.length; k++) {
@@ -162,7 +163,6 @@ public class PreOrders extends ReportCommonView {
                 "Order Type = " + service.getValue().toString();
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);
-        String[] arr = {"preOrderId","PNR","customerName","serviceType","flightNumber","flightDate","preOrderStatus","totalAmount","typeOfOrder"};
         optionButtonRow.removeComponent(optionButtonRow.getComponent(1));
         fileexcelh(dateFrom, dateTo, serviceh);
         optionButtonRow.addComponent(downloadExcelBtn);
@@ -178,8 +178,8 @@ public class PreOrders extends ReportCommonView {
         listdata.setColumnReorderingAllowed(true);
         listdata.setSizeFull();
 
-        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("preOrderItemId");
-        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("preOrderId");
+        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("pre Order Item Id");
+        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("pre Order Id");
         listdata.addColumn(PreOrderItem::getCategory).setCaption("category");
         listdata.addColumn(PreOrderItem::getItemNo).setCaption("itemNo");
         listdata.addColumn(PreOrderItem::getQuantity).setCaption("quantity");
@@ -231,7 +231,7 @@ public class PreOrders extends ReportCommonView {
         service = new ComboBox(ORDER_TYPE);
         service.setDescription(ORDER_TYPE);
         service.setItems("HHC Order","Call Center Order","Web Order","All");
-        service.setSelectedItem("HHC Order");
+        service.setSelectedItem("All");
         service.setEmptySelectionAllowed(false);
         firstRow.addComponent(service);
         detailsTable = new FilterGrid<>();
