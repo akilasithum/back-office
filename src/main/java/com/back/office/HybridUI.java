@@ -1,10 +1,32 @@
 package com.back.office;
 
+//import static com.sun.deploy.trace.TraceLevel.UI;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+
+import org.vaadin.dialogs.ConfirmDialog;
+
 import com.back.office.db.DBConnection;
-import com.back.office.entity.BlackListCC;
-import com.back.office.entity.CurrencyDetails;
 import com.back.office.entity.RolePermission;
-import com.back.office.ui.*;
+import com.back.office.ui.AirCraftTypeView;
+import com.back.office.ui.AssignItemView;
+import com.back.office.ui.BlackListCCView;
+import com.back.office.ui.CCNumberRangeView;
+import com.back.office.ui.CurerncyDetailsView;
+import com.back.office.ui.Dashboard;
+import com.back.office.ui.EquipmentTypeView;
+import com.back.office.ui.FlightDetailsView;
+import com.back.office.ui.ItemView;
+import com.back.office.ui.KitCodesView;
+import com.back.office.ui.LoginPage;
+import com.back.office.ui.PromotionView;
+import com.back.office.ui.UserDetailsView;
+import com.back.office.ui.VoucherView;
 import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
@@ -14,23 +36,30 @@ import com.back.office.ui.salesReports.SalesDetailsView;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
 import com.back.office.utils.BackOfficeUtils;
-import com.vaadin.annotations.*;
+import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
+import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.*;
-import com.vaadin.ui.*;
+import com.vaadin.server.ClientConnector;
+import com.vaadin.server.ClientConnector.DetachEvent;
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.JavaScript;
+import com.vaadin.ui.JavaScriptFunction;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+
 import elemental.json.JsonArray;
 import kaesdingeling.hybridmenu.HybridMenu;
 import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.design.DesignItem;
-import org.vaadin.dialogs.ConfirmDialog;
-
-import javax.servlet.annotation.WebServlet;
-import java.util.*;
 
 @SuppressWarnings("deprecation")
 
@@ -101,7 +130,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
 
         getPage().addUriFragmentChangedListener(uriFragmentChangedEvent -> {
             String currentPage = uriFragmentChangedEvent.getUriFragment();
-             if(previousPage != null && previousPage.equals("login")){
+            if(previousPage != null && previousPage.equals("login")){
                 getUI().getNavigator().navigateTo("login");
             }
             else {
@@ -190,15 +219,15 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
 
         menuItems = new ArrayList<>();
         menuItems.add("Authorization");
-        menuItems.add("Setup");
-        menuItems.add("File Transfer");
+        menuItems.add("Flights and Messages");
+        menuItems.add("Baggage");
         //menuItems.add("Generate XML");
-        menuItems.add("Bond Reports");
-        menuItems.add("Sales Report");
-        menuItems.add("Analysis");
-        menuItems.add("Special Reports");
-        menuItems.add("Pre Order Management");
-        menuItems.add("CRM");
+        menuItems.add("Finance");
+        menuItems.add("Reports / CRM");
+        menuItems.add("Setup");
+//        menuItems.add("Special Reports");
+//        menuItems.add("Pre Order Management");
+//        menuItems.add("CRM");
 
         noPermissionNeededViews = new ArrayList<>();
         noPermissionNeededViews.add("ViewandEditUser");
@@ -213,7 +242,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .withCaption("<h3><strong>Porter AirLines</strong></h3>");
         hmLabel.setStyleName("logo");
         leftMenu.add(hmLabel);
-                //.withIcon(new ClassResource("logo.png")));
+        //.withIcon(new ClassResource("logo.png")));
         //leftMenu.setStyleName("logo");
 
         int roleId = connection.getRoleIdFromStaffName(UI.getCurrent().getSession().getAttribute("userName").toString());

@@ -122,7 +122,7 @@ public class ManageRolesView extends VerticalLayout implements View {
         buttonLayout.addComponent(addButton);
         buttonLayout.addComponent(clearButton);
         buttonLayout.setMargin(Constants.noMargin);
-        printInsertStatement();
+        //printInsertStatement();
     }
 
     private FilterGrid getAvailableRolesTable(){
@@ -313,7 +313,7 @@ public class ManageRolesView extends VerticalLayout implements View {
         dataProvider.refreshAll();
     }
 
-    private void printInsertStatement(){
+    /*private void printInsertStatement(){
         String s = "";
         int i = 100;
         for(String menuItem : BackOfficeUtils.getSellsReportsMap()){
@@ -321,5 +321,5 @@ public class ManageRolesView extends VerticalLayout implements View {
             i++;
         }
         int j =0;
-    }
+    }*/
 }

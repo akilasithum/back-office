@@ -43,16 +43,11 @@ public class BackOfficeUtils {
         Map<String, VaadinIcons> iconMap = new HashMap<>();
         iconMap.put("Dashboard", VaadinIcons.DASHBOARD);
         iconMap.put("Authorization", VaadinIcons.LOCK);
+        iconMap.put("Flights and Messages", VaadinIcons.TABS);
+        iconMap.put("Baggage", VaadinIcons.TOOLBOX);
+        iconMap.put("Finance", VaadinIcons.DOLLAR);
+        iconMap.put("Reports / CRM", VaadinIcons.LIST_OL);
         iconMap.put("Setup", VaadinIcons.COG);
-        iconMap.put("File Transfer", VaadinIcons.UPLOAD);
-        iconMap.put("Generate XML", VaadinIcons.MAP_MARKER);
-        iconMap.put("Bond Reports", VaadinIcons.FLAG);
-        iconMap.put("Sales Report", VaadinIcons.SCALE);
-        iconMap.put("Staff", VaadinIcons.USER);
-        iconMap.put("Analysis", VaadinIcons.BAR_CHART);
-        iconMap.put("Special Reports", VaadinIcons.MONEY);
-        iconMap.put("Pre Order Management", VaadinIcons.TRUCK);
-        iconMap.put("CRM", VaadinIcons.PALETE);
         return iconMap;
     }
 
@@ -61,16 +56,17 @@ public class BackOfficeUtils {
         switch (menu){
             case "Setup" : return getSetupMap();
             case "Authorization" : return getAuthorizationMap();
-            case  "Sales Report" : return getSellsReportsMap();
-            case  "Bond Reports" : return getBondReportsMap();
-            case "File Transfer" : return getFileTransferMap();
+            case  "Reports / CRM" : return get_crm();
+            case  "Flights and Messages" : return get_flight_message();
+            case "Baggage" : return get_baggage();
+            case "Finance" : return get_finance();
             default:return menuItems;
         }
     }
 
     public static List<String> getSetupMap(){
         List<String> menuItems = new ArrayList<>();
-        //menuItems.add("Aircraft Type");
+        menuItems.add("Aircraft Type");
         menuItems.add("Flight Details");
         menuItems.add("Currency");
         menuItems.add("Create Items");
@@ -82,20 +78,15 @@ public class BackOfficeUtils {
         menuItems.add("Promotions");
         //menuItems.add("Update Inventory");
         menuItems.add("Vouchers");
+        menuItems.add("Module to enter budgets/targets");
         return menuItems;
     }
 
-    public static List<String> getSellsReportsMap(){
+    public static List<String> get_baggage(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Sales Details");
-        menuItems.add("Sales Summary by Flight");
-        menuItems.add("Sale by Category");
-        menuItems.add("Tender Summary");
-        menuItems.add("Sales by Sector");
-        menuItems.add("Sold out by Flight");
-        menuItems.add("Credit Card by Flight");
-        menuItems.add( "Credit Card Summary");
-        menuItems.add("Sales Tender Discrepancy");
+        menuItems.add("Scanned Bags per flight");
+        menuItems.add("Locate Bag");
+        menuItems.add("Upload to DCS/Amadeus");
         return menuItems;
     }
 
@@ -107,18 +98,31 @@ public class BackOfficeUtils {
         return menuItems;
     }
 
-    public static List<String> getBondReportsMap(){
+    public static List<String> get_flight_message(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Flight-Bond Activity");
-        menuItems.add("Cart Usage");
-        menuItems.add("HHC Status");
+        menuItems.add("Flight Schedule");
+        menuItems.add("Inflight Requests");
+        menuItems.add("FA Messages");
         return menuItems;
     }
 
-    public static List<String> getFileTransferMap(){
+    public static List<String> get_finance(){
         List<String> menuItems = new ArrayList<>();
-        menuItems.add("Uploads");
-        menuItems.add("Downloads");
+        menuItems.add("Currency History");
+        menuItems.add("Bank Settlements");
+        menuItems.add("CC Batch Summary - online");
+        menuItems.add("Tender Summary");
+        menuItems.add("Airline Uploads");
+        return menuItems;
+    }
+
+    public static List<String> get_crm(){
+        List<String> menuItems = new ArrayList<>();
+        menuItems.add("Monthly Sales");
+        menuItems.add("Flight Sales");
+        menuItems.add("Item Sales");
+        menuItems.add("Sales vs Weight");
+        menuItems.add("Passenger Purchases");
         return menuItems;
     }
 
@@ -203,33 +207,33 @@ public class BackOfficeUtils {
     }
 
     public static Map<String, Map<Integer, String>> getPermissionCodes(){
-            Map<String, Map<Integer, String>> funcAreasCodesMap = new HashMap<>();
-            List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllPermissionCodes();
-            for (PermissionCodes permissionCode : permissionCodes) {
-                if (funcAreasCodesMap.containsKey(permissionCode.getFuncArea())) {
-                    funcAreasCodesMap.get(permissionCode.getFuncArea()).put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
-                } else {
-                    Map<Integer, String> map = new HashMap<>();
-                    map.put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
-                    funcAreasCodesMap.put(permissionCode.getFuncArea(), map);
-                }
+        Map<String, Map<Integer, String>> funcAreasCodesMap = new HashMap<>();
+        List<PermissionCodes> permissionCodes = (List<PermissionCodes>) connection.getAllPermissionCodes();
+        for (PermissionCodes permissionCode : permissionCodes) {
+            if (funcAreasCodesMap.containsKey(permissionCode.getFuncArea())) {
+                funcAreasCodesMap.get(permissionCode.getFuncArea()).put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
+            } else {
+                Map<Integer, String> map = new HashMap<>();
+                map.put(permissionCode.getPermissionCode(), permissionCode.getDisplayName());
+                funcAreasCodesMap.put(permissionCode.getFuncArea(), map);
             }
-            return funcAreasCodesMap;
+        }
+        return funcAreasCodesMap;
     }
 
     public static void showNotification(String caption,String content,VaadinIcons icon){
         NotificationCenter notificationCenter = VaadinSession.getCurrent().getAttribute(NotificationCenter.class);
 
-            Notification notification = Notification.get()
-                    .withTitle(caption)
-                    .withContent(content)
-                    .withIcon(icon)
-                    .withDisplayTime(5000);
-                notification.withCloseable();
-                notification.withAutoRemove();
-                notification.makeAsReaded();
+        Notification notification = Notification.get()
+                .withTitle(caption)
+                .withContent(content)
+                .withIcon(icon)
+                .withDisplayTime(5000);
+        notification.withCloseable();
+        notification.withAutoRemove();
+        notification.makeAsReaded();
 
-            notificationCenter.add(notification, true);
+        notificationCenter.add(notification, true);
 
     }
 }
