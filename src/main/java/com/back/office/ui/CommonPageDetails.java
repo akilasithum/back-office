@@ -50,6 +50,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         connection = DBConnection.getInstance();
         defineStringFields();
         createMainLayout();
+        setStyleName("backColorGrey");
     }
 
     protected void createMainLayout(){

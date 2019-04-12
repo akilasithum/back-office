@@ -35,65 +35,82 @@ public class MainDashboard extends VerticalLayout implements View {
         verticalLayout.addComponent(btnLayout1);
         verticalLayout.addComponent(btnLayout2);
 
-        Image authorizationImage = new Image(null, new ClassResource("flight_kitchen.png"));
-        authorizationImage.setWidth(imageWidth);
-        authorizationImage.setHeight(imageWidth);
-        authorizationImage.addStyleName("my-img-button");
-
-        Image setupImage = new Image(null, new ClassResource("pre_order.png"));
-        setupImage.setWidth(imageWidth);
-        setupImage.setHeight(imageWidth);
-        setupImage.addStyleName("my-img-button");
-
-        setupImage.addClickListener(clickEvent -> {
-            getUI().getNavigator().navigateTo("setup");
+        Image flightKitchenImage = new Image(null, new ClassResource("flight_kitchen.png"));
+        flightKitchenImage.setWidth(imageWidth);
+        flightKitchenImage.setHeight(imageWidth);
+        flightKitchenImage.addStyleName("my-img-button");
+        flightKitchenImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("flightKitchen");
         });
 
-        Image fileTransferImage = new Image(null, new ClassResource("finance.png"));
-        fileTransferImage.setWidth(imageWidth);
-        fileTransferImage.setHeight(imageWidth);
-        fileTransferImage.addStyleName("my-img-button");
+        Image preOrderImage = new Image(null, new ClassResource("pre_order.png"));
+        preOrderImage.setWidth(imageWidth);
+        preOrderImage.setHeight(imageWidth);
+        preOrderImage.addStyleName("my-img-button");
+        preOrderImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("preOrderMessenger");
+        });
+
+        Image financeImage = new Image(null, new ClassResource("finance.png"));
+        financeImage.setWidth(imageWidth);
+        financeImage.setHeight(imageWidth);
+        financeImage.addStyleName("my-img-button");
+        financeImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("finance");
+        });
 
         Image bondReportsImage = new Image(null, new ClassResource("reports.png"));
         bondReportsImage.setWidth(imageWidth);
         bondReportsImage.setHeight(imageWidth);
         bondReportsImage.addStyleName("my-img-button");
+        bondReportsImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("reports");
+        });
 
-        Image salesReportImage = new Image(null, new ClassResource("inventory.png"));
-        salesReportImage.setWidth(imageWidth);
-        salesReportImage.setHeight(imageWidth);
-        salesReportImage.addStyleName("my-img-button");
+        Image inventoryImage = new Image(null, new ClassResource("inventory.png"));
+        inventoryImage.setWidth(imageWidth);
+        inventoryImage.setHeight(imageWidth);
+        inventoryImage.addStyleName("my-img-button");
+        inventoryImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("inventory");
+        });
 
-        /*authorizationImage.addClickListener(clickEvent -> {
+        Image crmImage = new Image(null, new ClassResource("crm.png"));
+        crmImage.setWidth(imageWidth);
+        crmImage.setHeight(imageWidth);
+        crmImage.addStyleName("my-img-button");
+        crmImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("crm");
+        });
 
-        });*/
-
-        Image analysisImage = new Image(null, new ClassResource("crm.png"));
+        Image analysisImage = new Image(null, new ClassResource("analyze_upload.png"));
         analysisImage.setWidth(imageWidth);
         analysisImage.setHeight(imageWidth);
         analysisImage.addStyleName("my-img-button");
-
-        Image preOrderMgtImage = new Image(null, new ClassResource("analyze_upload.png"));
-        preOrderMgtImage.setWidth(imageWidth);
-        preOrderMgtImage.setHeight(imageWidth);
-        preOrderMgtImage.addStyleName("my-img-button");
+        analysisImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("analyze");
+        });
 
         Image settingsImage = new Image(null, new ClassResource("setup.png"));
         settingsImage.setWidth(imageWidth);
         settingsImage.setHeight(imageWidth);
         settingsImage.addStyleName("my-img-button");
 
+        settingsImage.addClickListener(clickEvent -> {
+            getUI().getNavigator().navigateTo("setup");
+        });
 
-        btnLayout1.addComponents(authorizationImage,setupImage,fileTransferImage,bondReportsImage);
-        btnLayout1.setComponentAlignment(authorizationImage, Alignment.MIDDLE_CENTER);
-        btnLayout1.setComponentAlignment(setupImage,Alignment.MIDDLE_CENTER);
-        btnLayout1.setComponentAlignment(fileTransferImage,Alignment.MIDDLE_CENTER);
+
+        btnLayout1.addComponents(flightKitchenImage,preOrderImage,financeImage,bondReportsImage);
+        btnLayout1.setComponentAlignment(flightKitchenImage, Alignment.MIDDLE_CENTER);
+        btnLayout1.setComponentAlignment(preOrderImage,Alignment.MIDDLE_CENTER);
+        btnLayout1.setComponentAlignment(financeImage,Alignment.MIDDLE_CENTER);
         btnLayout1.setComponentAlignment(bondReportsImage,Alignment.MIDDLE_CENTER);
 
-        btnLayout2.addComponents(salesReportImage,analysisImage,preOrderMgtImage,settingsImage);
-        btnLayout2.setComponentAlignment(salesReportImage, Alignment.MIDDLE_CENTER);
+        btnLayout2.addComponents(inventoryImage,crmImage,analysisImage,settingsImage);
+        btnLayout2.setComponentAlignment(inventoryImage, Alignment.MIDDLE_CENTER);
+        btnLayout2.setComponentAlignment(crmImage,Alignment.MIDDLE_CENTER);
         btnLayout2.setComponentAlignment(analysisImage,Alignment.MIDDLE_CENTER);
-        btnLayout2.setComponentAlignment(preOrderMgtImage,Alignment.MIDDLE_CENTER);
         btnLayout2.setComponentAlignment(settingsImage,Alignment.MIDDLE_CENTER);
 
         MarginInfo info = new MarginInfo(true);

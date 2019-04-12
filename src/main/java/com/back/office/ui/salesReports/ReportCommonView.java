@@ -49,6 +49,8 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
         setMargin(true);
         defineStringFields();
         createMainLayout();
+        setStyleName("backColorGrey");
+        setSizeFull();
     }
 
     protected void createMainLayout() {

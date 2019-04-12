@@ -519,6 +519,28 @@ public class DBConnection {
         cal.add(Calendar.DATE, + 1);
         return cal.getTime();
     }
+
+    public List getPreOrderDetails(Date flightFromDate,Date flightToDate,String serviceType){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(PreOrderDetails.class);
+        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
+            criteria.add(Restrictions.eq("typeOfOrder", serviceType));
+        }
+
+        return criteria.list();
+    }
+
+    public List getPreOrderItemDetails(int serviceType){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(PreOrderItem.class);
+        if(serviceType != 0 ){
+            criteria.add(Restrictions.eq("preOrderId", serviceType));
+        }
+
+        return criteria.list();
+    }
 }
 
 

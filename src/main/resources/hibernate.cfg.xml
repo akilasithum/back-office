@@ -46,5 +46,7 @@ connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop
         <mapping resource="com.back.office.common/ccSummary.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/ccByFlight.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/tenderSummary.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/preOrder.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/preOrderItem.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

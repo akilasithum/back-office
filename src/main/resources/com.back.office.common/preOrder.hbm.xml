@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.PreOrderDetails" table="pre_orders" catalog="">
+        <id name="preOrderId" type="java.lang.Integer">
+            <column name="preOrderId" />
+            <generator class="identity" />
+        </id>
+        <property name="PNR" type="java.lang.String">
+            <column name="PNR"/>
+        </property>
+        <property name="customerName" type="java.lang.String">
+            <column name="customerName" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType"  />
+        </property>
+        <property name="flightNumber" type="java.lang.String">
+            <column name="flightNumber" />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" length="30" />
+        </property>
+        <property name="preOrderStatus" type="java.lang.String">
+            <column name="preOrderStatus" length="30" />
+        </property>
+        <property name="totalAmount" type="java.lang.Float">
+            <column name="totalAmount" length="30" />
+        </property>
+        <property name="typeOfOrder" type="java.lang.String">
+            <column name="typeOfOrder" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>
