@@ -3,6 +3,7 @@ package com.back.office.db;
 import com.back.office.entity.*;
 import com.back.office.persistence.HibernateUtil;
 import com.back.office.ui.salesReports.CategorySalesView;
+import org.apache.commons.collections.map.HashedMap;
 import org.hibernate.Criteria;
 import org.hibernate.Filter;
 import org.hibernate.classic.Session;
@@ -12,10 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import java.lang.reflect.Method;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class DBConnection {
 
@@ -540,6 +538,26 @@ public class DBConnection {
         }
 
         return criteria.list();
+    }
+
+    public List getMessage(String user_name_datamessage,boolean unreadmessage){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(Message.class);
+        criteria.add(Restrictions.eq("message_to", user_name_datamessage));
+        criteria.add(Restrictions.eq("read_un", unreadmessage));
+
+
+        return criteria.list();
+    }
+
+    public List<User> getStaffIdUserNameMap(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("recordStatus", 0));
+        criteria.add(Restrictions.eq("active", true));
+        List<User> list = criteria.list();
+        session.close();
+        return list;
     }
 }
 

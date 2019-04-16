@@ -25,6 +25,7 @@ public class CreateItemsSecondStep implements WizardStep {
     public Component getContent() {
         FormLayout form = new FormLayout();
         catalogFld = new TextField("Catalogue No");
+        catalogFld.setRequiredIndicatorVisible(true);
 
         weightFld = new TextField("Weight (Grams)");
         weightFld.setRequiredIndicatorVisible(true);
@@ -67,7 +68,7 @@ public class CreateItemsSecondStep implements WizardStep {
             date = Date.from(activateDateFld.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         }
         String deListedStr = String.valueOf(deListed.getValue());
-        if(weight == null || weight.isEmpty() ||  date == null || deListedStr == null){
+        if(weight == null || weight.isEmpty() ||  date == null || deListedStr == null || catalogue == null || catalogue.isEmpty()){
             Notification.show("Fill all the required fields.", Notification.Type.WARNING_MESSAGE);
             return false;
         }
@@ -81,7 +82,7 @@ public class CreateItemsSecondStep implements WizardStep {
                 Notification.show("Something wrong. Please close window and try again", Notification.Type.ERROR_MESSAGE);
                 return false;
             }
-            item.setCategory(catalogue);
+            item.setCatalogue(catalogue);
             item.setWeight(Float.parseFloat(weight));
             item.setActivateDate(BackOfficeUtils.getDateStringFromDate(date));
             item.setDeListed(deListedStr);

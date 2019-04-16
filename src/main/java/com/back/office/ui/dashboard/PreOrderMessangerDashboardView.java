@@ -30,7 +30,7 @@ public class PreOrderMessangerDashboardView extends SubDashboardCommonView {
         row1Map.put("Pre-order","PreOrders");
         row1Map.put("Pre-order Inventory","");
         row1Map.put("Inflight Requests","");
-        row1Map.put("Bond Messages","");
+        row1Map.put("Bond Messages","BondMessages");
         addMenuItems(btnLayout1,row1Map,"pre_order_sub.png");
 
         Map<String,String> row2Map = new LinkedHashMap<>();

@@ -26,6 +26,8 @@ public class MyImageUpload extends CustomField<byte[]> implements Upload.Receive
 
     protected Component display;
     public Label defaultDisplay;
+    Label label;
+    MHorizontalLayout uploadBtnLayout;
 
     private ProgressBar progress = new ProgressBar();
     private final static int MAX_SHOWN_BYTES = 5;
@@ -69,11 +71,17 @@ public class MyImageUpload extends CustomField<byte[]> implements Upload.Receive
 
         });
         upload.setButtonCaption("Choose File");
+        label = new Label("Select item image");
 
         progress.setVisible(false);
         display = createDisplayComponent();
     }
 
+    public void setVisibleUploadBtn(boolean isVisible){
+        upload.setVisible(isVisible);
+        clearBtn.setVisible(isVisible);
+        label.setVisible(isVisible);
+    }
 
 
     @Override
@@ -87,8 +95,9 @@ public class MyImageUpload extends CustomField<byte[]> implements Upload.Receive
         rootLayout.setMargin(marginInfo);
         rootLayout.addComponent(display);
         rootLayout.addComponent(progress);
-        Label label = new Label("Select item image");
-        rootLayout.addComponent(new MHorizontalLayout(label,upload, clearBtn)
+        uploadBtnLayout = new MHorizontalLayout(label,upload, clearBtn);
+
+        rootLayout.addComponent(uploadBtnLayout
                 .alignAll(Alignment.BOTTOM_LEFT));
 
         return rootLayout;
@@ -190,7 +199,13 @@ public class MyImageUpload extends CustomField<byte[]> implements Upload.Receive
             }
             image.markAsDirty();
             if (display.getParent() == null) {
+                VerticalLayout layout = getRootLayout();
+                if(layout != null)
                 getRootLayout().addComponent(display);
+                else {
+                    initContent();
+                    getRootLayout().addComponent(display);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

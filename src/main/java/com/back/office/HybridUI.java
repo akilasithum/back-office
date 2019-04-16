@@ -10,6 +10,7 @@ import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.dashboard.*;
 import com.back.office.ui.download.DownloadView;
+import com.back.office.ui.message.BondMessage;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
@@ -104,6 +105,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("inventory",InventoryDashboardView.class);
         navigator.addView("crm",CRMDashboardView.class);
         navigator.addView("analyze",AnalyzeDashboardView.class);
+        navigator.addView("BondMessages", BondMessage.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();
@@ -182,7 +184,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         topMenu.add(HMButton.get()
                 .withIcon(VaadinIcons.COMMENT_ELLIPSIS)
                 .withDescription("Messages")
-                .withNavigateTo(MainDashboard.class));
+                .withNavigateTo(BondMessage.class));
 
         topMenu.add(HMButton.get()
                 .withIcon(VaadinIcons.POWER_OFF)

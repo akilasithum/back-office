@@ -201,9 +201,6 @@ public class PreOrders extends ReportCommonView {
 
         windowdatatable.addStyleName("mywindowstyle");
         getUI().addWindow(windowdatatable);
-
-        Notification.show("Yooue select"+datalistid, Notification.Type.TRAY_NOTIFICATION);
-
     }
 
     @Override
@@ -242,7 +239,6 @@ public class PreOrders extends ReportCommonView {
 
         detailsTable.addItemClickListener((ItemClickListener<PreOrderDetails>) itemClick -> {
             itemClick.getRowIndex();
-            int selectdatat=itemClick.getRowIndex();
             int selectdata=itemClick.getItem().getPreOrderId();
             selectDetailsh(selectdata);
 

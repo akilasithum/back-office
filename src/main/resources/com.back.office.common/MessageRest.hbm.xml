@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.Message" table="message" catalog="">
+        <id name="message_id" type="java.lang.Integer">
+            <column name="message_id" />
+            <generator class="identity" />
+        </id>
+        <property name="message_from" type="java.lang.String">
+            <column name="message_from" length="30" />
+        </property>
+        <property name="message_to" type="java.lang.String">
+            <column name="message_to" length="100" />
+        </property>
+        <property name="message" type="java.lang.String">
+            <column name="message" length="30" />
+        </property>
+        <property name="read_un" type="java.lang.Boolean">
+            <column name="read_un" length="50"/>
+        </property>
+
+        <filter name="message_from_filter"
+                condition=":message_from=message_from"/>
+    </class>
+    <filter-def name="message_from_filter">
+        <filter-param name="message_from" type="java.lang.String"/>
+    </filter-def>
+</hibernate-mapping>
