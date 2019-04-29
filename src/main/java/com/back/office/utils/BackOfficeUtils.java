@@ -234,11 +234,16 @@ public class BackOfficeUtils {
             notificationCenter.add(notification, true);
     }
 
-    public static List<String> getCurrencyDropDownValues(){
+    public static List<String> getCurrencyDropDownValues(boolean allCurrency){
         List<CurrencyDetails> currencyDetails = connection.getAllCurrencies();
         List<String> currencies = new ArrayList<>();
         for(CurrencyDetails currency : currencyDetails){
-            currencies.add(currency.getCurrencyCode());
+            if(allCurrency)currencies.add(currency.getCurrencyCode());
+            else{
+                if(!currency.getCurrencyType().equals("Base")){
+                    currencies.add(currency.getCurrencyCode());
+                }
+            }
         }
         return currencies;
     }

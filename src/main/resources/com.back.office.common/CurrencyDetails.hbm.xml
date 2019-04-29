@@ -29,5 +29,8 @@
         <property name="recordStatus" type="java.lang.Integer">
             <column name="recordStatus"  />
         </property>
+        <property name="lastUpdateDateTime" type="java.util.Date">
+            <column name="lastUpdateDateTime"  />
+        </property>
     </class>
 </hibernate-mapping>

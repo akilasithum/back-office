@@ -9,7 +9,7 @@ import com.vaadin.ui.*;
 
 public class MainDashboard extends VerticalLayout implements View {
 
-    private static final String imageWidth = "80%";
+    private static final String imageWidth = "75%";
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

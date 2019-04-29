@@ -118,6 +118,7 @@ public class MainMenu extends VerticalLayout {
             logo.setSource(new ClassResource("logo.png"));
             logo.setWidth(170, Unit.PIXELS);
             logo.setHeight(50, Unit.PIXELS);
+            logo.setStyleName("imageMargin");
             logoLayout.addComponent(logo);
         }
     }

@@ -27,7 +27,7 @@ public class FinanceDashboardView extends SubDashboardCommonView  {
         verticalLayout.addComponent(btnLayout2);
 
         Map<String,String> row1Map = new LinkedHashMap<>();
-        row1Map.put("Currency History","");
+        row1Map.put("Currency History","CurrencyHistory");
         row1Map.put("Bank Settlements","");
         row1Map.put("CC Batch Summary","");
         row1Map.put("FA Commissions","");

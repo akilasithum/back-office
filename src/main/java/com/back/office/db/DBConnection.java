@@ -559,6 +559,20 @@ public class DBConnection {
         session.close();
         return list;
     }
+
+    public List<CurrencyDetails> getCurrencyDetail(String currencyType){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(CurrencyDetails.class);
+            criteria.add(Restrictions.eq("currencyCode", currencyType));
+            criteria.addOrder(Order.asc("lastUpdateDateTime"));
+
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
 
 

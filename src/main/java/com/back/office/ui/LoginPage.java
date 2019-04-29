@@ -3,6 +3,7 @@ package com.back.office.ui;
 import com.back.office.HybridUI;
 import com.back.office.db.DBConnection;
 import com.back.office.utils.Authentication;
+import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ClassResource;
@@ -16,23 +17,36 @@ public class LoginPage extends VerticalLayout implements View {
     public static final String NAME = "";
     public static Authentication AUTH;
     DBConnection connection;
+    private VerticalLayout logoLayout = new VerticalLayout();
 
     public LoginPage(){
 
         VerticalLayout mainLayout = new VerticalLayout();
-        addComponent(mainLayout);
-        mainLayout.setSizeFull();
+
+        mainLayout.setSizeUndefined();
         mainLayout.setMargin(true);
         setSpacing(true);
         AUTH = new Authentication();
-        Panel panel = new Panel("Login");
+        VerticalLayout panel = new VerticalLayout();
         panel.setSizeUndefined();
+
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setMargin(Constants.leftMargin);
+        addComponent(layout);
+        addComponent(mainLayout);
+        layout.addComponent(logoLayout);
+        logoLayout.setMargin(Constants.noMargin);
+        setMargin(Constants.noMargin);
+
         Image logo = new Image();
         logo.setSource(new ClassResource("logo.png"));
-        logo.setWidth(370, Unit.PIXELS);
-        logo.setHeight(130, Unit.PIXELS);
-        mainLayout.addComponent(logo);
+        logo.setWidth(170, Unit.PIXELS);
+        logo.setHeight(50, Unit.PIXELS);
+        logoLayout.addComponent(logo);
+
+
         mainLayout.setSpacing(true);
+        panel.setSizeUndefined();
         mainLayout.addComponent(panel);
         connection = DBConnection.getInstance();
 
@@ -70,8 +84,8 @@ public class LoginPage extends VerticalLayout implements View {
         content.addComponent(send);
         content.setSizeUndefined();
         content.setMargin(true);
-        panel.setContent(content);
-        mainLayout.setComponentAlignment(logo,Alignment.MIDDLE_CENTER);
+        panel.addComponent(content);
+        //mainLayout.setComponentAlignment(logo,Alignment.MIDDLE_CENTER);
         mainLayout.setComponentAlignment(panel,Alignment.MIDDLE_CENTER);
         setComponentAlignment(mainLayout, Alignment.MIDDLE_CENTER);
 

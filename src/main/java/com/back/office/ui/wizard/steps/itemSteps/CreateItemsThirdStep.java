@@ -24,7 +24,7 @@ public class CreateItemsThirdStep implements WizardStep {
     @Override
     public Component getContent() {
         FormLayout form = new FormLayout();
-        List<String> currencyValues = BackOfficeUtils.getCurrencyDropDownValues();
+        List<String> currencyValues = BackOfficeUtils.getCurrencyDropDownValues(true);
         baseCurrencyFld = new ComboBox("Base Currency");
         baseCurrencyFld.setItems(currencyValues);
         baseCurrencyFld.setEmptySelectionAllowed(false);

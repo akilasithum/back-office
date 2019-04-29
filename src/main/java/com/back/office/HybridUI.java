@@ -10,6 +10,7 @@ import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.dashboard.*;
 import com.back.office.ui.download.DownloadView;
+import com.back.office.ui.finance.CurruncyDetailHistory;
 import com.back.office.ui.message.BondMessage;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
@@ -106,6 +107,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("crm",CRMDashboardView.class);
         navigator.addView("analyze",AnalyzeDashboardView.class);
         navigator.addView("BondMessages", BondMessage.class);
+        navigator.addView("CurrencyHistory", CurruncyDetailHistory.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();

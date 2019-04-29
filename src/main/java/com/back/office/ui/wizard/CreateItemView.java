@@ -207,7 +207,7 @@ public class CreateItemView extends WizardCommonView {
         deListed.setEnabled(isEdit);
         formLayout.addComponent(deListed);
 
-        List<String> currencyValues = BackOfficeUtils.getCurrencyDropDownValues();
+        List<String> currencyValues = BackOfficeUtils.getCurrencyDropDownValues(true);
 
         ComboBox baseCurrencyFld = new ComboBox(BASE_CURRENCY);
         baseCurrencyFld.setItems(currencyValues);

@@ -7,6 +7,7 @@ import com.poiji.annotation.ExcelCellName;
 import com.poiji.annotation.ExcelRow;
 
 import javax.xml.bind.annotation.*;
+import java.util.Date;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CurrencyDetails {
@@ -25,6 +26,7 @@ public class CurrencyDetails {
     @ExcelCellName("Effective Date")
     private String effectiveDate;
     private int recordStatus;
+    private Date lastUpdateDateTime;
 
     public int getRecordStatus() {
         return recordStatus;
@@ -88,5 +90,13 @@ public class CurrencyDetails {
 
     public void setEffectiveDate(String effectiveDate) {
         this.effectiveDate = effectiveDate;
+    }
+
+    public Date getLastUpdateDateTime() {
+        return lastUpdateDateTime;
+    }
+
+    public void setLastUpdateDateTime(Date lastUpdateDateTime) {
+        this.lastUpdateDateTime = lastUpdateDateTime;
     }
 }
