@@ -48,7 +48,7 @@ public class SetupDashboardView  extends SubDashboardCommonView {
         row3Map.put("Promotions","Promotions");
         row3Map.put("Vouchers","Vouchers");
         row3Map.put("FA Commission Table","error");
-        row3Map.put("empty","");
+        row3Map.put("Budget","Budget");
         addMenuItems(btnLayout3,row3Map,"setup_sub.png");
 
         MarginInfo info = new MarginInfo(true);

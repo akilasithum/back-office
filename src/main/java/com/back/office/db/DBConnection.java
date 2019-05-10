@@ -573,6 +573,87 @@ public class DBConnection {
             return null;
         }
     }
+
+    public List getItemDetails(String itemNumber, String itemName){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            if (itemName!=null&&!itemName.isEmpty()) {
+                if(itemName=="itemName") {
+                    criteria.add(Restrictions.eq("itemCode", itemNumber));
+
+                }else if(itemNumber=="iteNumbe") {
+                    criteria.add(Restrictions.eq("itemName", itemName));
+
+                }else if(itemNumber=="detaSelectNumber"){
+                    criteria.add(Restrictions.eq("recordStatus", 0));
+
+                }else {
+                    return null;
+                }
+            }
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<ItemDetails> getItemGross(String serviceTypeList){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            criteria.add(Restrictions.eq("serviceType", serviceTypeList));
+
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<?> getBudgetDetails(String class1){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(Class.forName(class1));
+
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<FlightSheduleDetail> getFlightShedule(String filterDate,Date dateListh){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(FlightSheduleDetail.class);
+            if(filterDate=="datefully") {
+                criteria.add(Restrictions.ge("flightDateTime", dateListh));
+                criteria.add(Restrictions.le("flightDateTime", dateExt(dateListh)));
+            }else if(filterDate=="datethis") {
+                criteria.add(Restrictions.ge("flightDateTime", dateListh));
+
+            }else {
+
+            }
+
+            return criteria.list();
+        } catch (Exception e) {
+
+            return null;
+        }
+    }
+
+    private Date dateExt(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, + 2);
+        return cal.getTime();
+    }
 }
 
 

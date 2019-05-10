@@ -42,6 +42,15 @@ public class ItemDetails {
     private String barcode;
     private int recordStatus;
     private byte[] image;
+    private String orderQuntity;
+
+    public String getorderQuntity() {
+        return orderQuntity;
+    }
+
+    public void setorerQuntity(String orderQuntity) {
+        this.orderQuntity = orderQuntity;
+    }
 
     public int getRecordStatus() {
         return recordStatus;

@@ -26,5 +26,17 @@
         <property name="recordStatus" type="java.lang.Integer">
             <column name="recordStatus"  />
         </property>
+        <property name="cartManufacturer" type="java.lang.String">
+            <column name="cartManufacturer" length="50" />
+        </property>
+        <property name="drawerManufacturer" type="java.lang.String">
+            <column name="drawerManufacturer" length="50" />
+        </property>
+        <property name="cartWeight" type="java.lang.Float">
+            <column name="cartWeight"  />
+        </property>
+        <property name="draweWeight" type="java.lang.Float">
+            <column name="draweWeight"  />
+        </property>
     </class>
 </hibernate-mapping>

@@ -19,6 +19,10 @@ public class EquipmentDetails {
     @ExcelCellName("No of Seals")
     private int noOfSeals;
     private int recordStatus;
+    private String cartManufacturer;
+    private float cartWeight;
+    private String drawerManufacturer;
+    private float draweWeight;
 
     public int getRecordStatus() {
         return recordStatus;
@@ -74,6 +78,38 @@ public class EquipmentDetails {
 
     public void setNoOfSeals(int noOfSeals) {
         this.noOfSeals = noOfSeals;
+    }
+
+    public String getCartManufacturer() {
+        return cartManufacturer;
+    }
+
+    public void setCartManufacturer(String cartManufacturer) {
+        this.cartManufacturer = cartManufacturer;
+    }
+
+    public float getCartWeight() {
+        return cartWeight;
+    }
+
+    public void setCartWeight(float cartWeight) {
+        this.cartWeight = cartWeight;
+    }
+
+    public String getDrawerManufacturer() {
+        return drawerManufacturer;
+    }
+
+    public void setDrawerManufacturer(String drawerManufacturer) {
+        this.drawerManufacturer = drawerManufacturer;
+    }
+
+    public float getDraweWeight() {
+        return draweWeight;
+    }
+
+    public void setDraweWeight(float draweWeight) {
+        this.draweWeight = draweWeight;
     }
 
     @Override

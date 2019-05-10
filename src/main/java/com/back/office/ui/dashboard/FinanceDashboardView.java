@@ -34,7 +34,7 @@ public class FinanceDashboardView extends SubDashboardCommonView  {
         addMenuItems(btnLayout1,row1Map,"finance_sub.png");
 
         Map<String,String> row2Map = new LinkedHashMap<>();
-        row2Map.put("Gross Margins","");
+        row2Map.put("Gross Margins","GrossMargins");
         row2Map.put("Sales Tender Discrepancy","");
         row2Map.put("empty","");
         row2Map.put("empty1","");

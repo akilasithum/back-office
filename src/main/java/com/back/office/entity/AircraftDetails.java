@@ -1,12 +1,14 @@
 package com.back.office.entity;
 
+import java.util.Date;
+
 public class AircraftDetails {
 
     private int aircraftId;
     private String aircraftName;
     private String galleyPosition;
     private boolean active;
-    private String UpdateDateAndtime;
+    private Date UpdateDateAndtime;
     private String registrationNumber;
     private int ecoClassSeatCount;
     private int businessClassSeatCount;
@@ -54,11 +56,11 @@ public class AircraftDetails {
         this.active = active;
     }
 
-    public String getUpdateDateAndtime() {
+    public Date getUpdateDateAndtime() {
         return UpdateDateAndtime;
     }
 
-    public void setUpdateDateAndtime(String updateDateAndtime) {
+    public void setUpdateDateAndtime(Date updateDateAndtime) {
         UpdateDateAndtime = updateDateAndtime;
     }
 

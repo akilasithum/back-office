@@ -1,24 +1,34 @@
 package com.back.office.ui.wizard;
 
 import com.back.office.db.DBConnection;
+import com.back.office.entity.AircraftDetails;
+import com.back.office.ui.wizard.steps.aircraft.AirCraftFirstStep;
+import com.back.office.ui.wizard.steps.aircraft.AircraftFrontGalleyStep;
+import com.back.office.ui.wizard.steps.aircraft.AircraftMiddleGalleyStep;
+import com.back.office.ui.wizard.steps.aircraft.AircraftRearGalleyStep;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.dialogs.ConfirmDialog;
+import org.vaadin.teemu.wizards.Wizard;
 
 public abstract class WizardCommonView extends VerticalLayout implements View {
 
     protected DBConnection connection;
     protected String headerName;
     protected String className;
-    protected String keyField;
+    protected String objectName;
+    protected String wizardName;
     protected Object editObj;
 
     protected VerticalLayout headerLayout;
     protected HorizontalLayout buttonLayout;
     protected HorizontalLayout tableLayout;
     protected Button addNewButton;
+    protected Wizard wizard;
+    protected Window window;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -78,4 +88,56 @@ public abstract class WizardCommonView extends VerticalLayout implements View {
     protected abstract void defineStringFields();
 
     protected abstract void createItemWizard();
+
+    protected void createWizard(){
+        window = new Window(wizardName);
+        window.setWidth("50%");
+        window.setHeight(500,Unit.PIXELS);
+        final FormLayout content = new FormLayout();
+        content.setMargin(true);
+        window.center();
+        wizard = new Wizard();
+        wizard.setSizeFull();
+        window.setContent(wizard);
+        registerWizardBanClickListeners();
+    }
+
+    protected void registerWizardBanClickListeners(){
+        wizard.getCancelButton().addClickListener((Button.ClickListener) clickEvent ->
+        {
+            ConfirmDialog.show(getUI(), "Cancel", "Are you sure you want to cancel the wizard?",
+                    "Yes", "No", new ConfirmDialog.Listener() {
+                        public void onClose(ConfirmDialog dialog) {
+                            if (dialog.isConfirmed()) {
+                                UI.getCurrent().getSession().setAttribute(objectName,null);
+                                window.close();
+                            }
+                        }
+                    });
+        });
+        wizard.getFinishButton().addClickListener((Button.ClickListener) clickEvent -> {
+            ConfirmDialog.show(getUI(), "Add item", "Are you sure you want to add new Item?",
+                    "Yes", "No", new ConfirmDialog.Listener() {
+                        public void onClose(ConfirmDialog dialog) {
+                            if (dialog.isConfirmed()) {
+                                Object obj = UI.getCurrent().getSession().getAttribute(objectName);
+                                connection.insertObjectHBM(obj);
+                                updateTable(false,obj);
+                                window.close();
+                            }
+                        }
+                    });
+        });
+    }
+
+    protected void enableDisableAllComponents(FormLayout layout,boolean isEnable){
+        for(int i = 0 ; i< layout.getComponentCount();i++){
+            Component component = layout.getComponent(i);
+            if(!(component instanceof HorizontalLayout)){
+                component.setEnabled(isEnable);
+            }
+        }
+    }
+
+    protected abstract void updateTable(boolean isEdit , Object object);
 }

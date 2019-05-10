@@ -15655,6 +15655,11 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #f3fafb;
 }
 
+.mytheme .imageMargin {
+	margin-top: 20px;
+	cursor: pointer;
+}
+
 .mytheme .itemLabel {
 	font-weight: bold;
 	color: white;
@@ -15671,6 +15676,11 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .main-layout {
 	padding-left: 15%;
 	padding-right: 15%;
+}
+
+.mytheme .icon-image {
+	width: 25%;
+	height: 25%;
 }
 
 .mytheme .myRootContent > .v-expand {

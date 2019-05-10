@@ -45,16 +45,16 @@ public class PreOrders extends ReportCommonView {
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
-    private final String ORDER_TYPE = "Order Type";
+    private final String ORDER_TYPE = "Source";
 
-    private final String preOrderId = "pre Order Id";
+    private final String preOrderId = "Pre Order Id";
     private final String PNR = "PNR";
-    private final String customerName = "customer Name";
-    private final String serviceType = "service Type";
-    private final String flightNumber = "flight Number";
+    private final String customerName = "Customer Name";
+    private final String serviceType = "Service Type";
+    private final String flightNumber = "Flight Number";
     private final String FlightDate = "Flight Date";
     private final String preOrderStatus = "pre Order Status";
-    private final String typeOfOrder = "type of Order";
+    private final String typeOfOrder = "Source";
 
 
     @Override
@@ -88,8 +88,8 @@ public class PreOrders extends ReportCommonView {
             headerCellStyle.setWrapText(true);
             headerCellStyle.setShrinkToFit(true);
 
-            String[] array1 = { "pre Order Id","PNR","customer Name","service Type","flight Number","flight Date","pre Order Status",
-                    "total Amount","type of Order" };
+            String[] array1 = { "Pre Order Id","PNR","Customer Name","Service Type","Flight Number","Flight Date","Pre Order Status",
+                    "Total Amount","Source" };
             Row r1 = Spreadsheet.createRow(0);
 
             for (int k = 0; k < array1.length; k++) {
@@ -178,11 +178,11 @@ public class PreOrders extends ReportCommonView {
         listdata.setColumnReorderingAllowed(true);
         listdata.setSizeFull();
 
-        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("pre Order Item Id");
-        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("pre Order Id");
-        listdata.addColumn(PreOrderItem::getCategory).setCaption("category");
-        listdata.addColumn(PreOrderItem::getItemNo).setCaption("itemNo");
-        listdata.addColumn(PreOrderItem::getQuantity).setCaption("quantity");
+        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("Pre Order Item Id");
+        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("Ppre Order Id");
+        listdata.addColumn(PreOrderItem::getCategory).setCaption("Category");
+        listdata.addColumn(PreOrderItem::getItemNo).setCaption("ItemNo");
+        listdata.addColumn(PreOrderItem::getQuantity).setCaption("Quantity");
         Window windowdatatable=new Window();
         VerticalLayout windowContent = new VerticalLayout();
         windowContent.setMargin(true);

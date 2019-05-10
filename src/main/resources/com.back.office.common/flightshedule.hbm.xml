@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.FlightSheduleDetail" table="flight_schedule" catalog="">
+        <id name="flightId" type="java.lang.Integer">
+            <column name="flightId" />
+            <generator class="identity" />
+        </id>
+        <property name="flightDateTime" type="java.util.Date">
+            <column name="flightDateTime"/>
+        </property>
+        <property name="flightTime" type="java.lang.String">
+            <column name="flightTime"/>
+        </property>
+        <property name="aircraftRegistration" type="java.lang.String">
+            <column name="aircraftRegistration"/>
+        </property>
+        <property name="aircraftType" type="java.lang.String">
+            <column name="aircraftType" length="50"/>
+        </property>
+        <property name="flightNumber" type="java.lang.String">
+            <column name="flightNumber"  />
+        </property>
+        <property name="root" type="java.lang.String">
+            <column name="root" length="50" />
+        </property>
+        <property name="services" type="java.lang.String">
+            <column name="services" length="50"/>
+        </property>
+        <property name="baseStation" type="java.lang.String">
+            <column name="baseStation"  />
+        </property>
+    </class>
+</hibernate-mapping>

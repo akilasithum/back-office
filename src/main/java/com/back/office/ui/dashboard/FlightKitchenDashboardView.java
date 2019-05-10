@@ -29,9 +29,9 @@ public class FlightKitchenDashboardView extends SubDashboardCommonView {
         verticalLayout.addComponent(btnLayout2);
 
         Map<String,String> row1Map = new LinkedHashMap<>();
-        row1Map.put("Flight Schedule","");
-        row1Map.put("Daily Flights","");
-        row1Map.put("Request Inventory","");
+        row1Map.put("Flight Schedule","FlightSchedule");
+        row1Map.put("Daily Flights","DailyFlights");
+        row1Map.put("Request Inventory","RequestInventory");
         row1Map.put("Galley Weights","");
         addMenuItems(btnLayout1,row1Map,"flight_kitchen_sub.png");
 

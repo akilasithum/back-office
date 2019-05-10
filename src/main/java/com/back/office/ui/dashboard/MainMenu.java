@@ -1,6 +1,7 @@
 package com.back.office.ui.dashboard;
 
 import com.back.office.utils.Constants;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ClassResource;
 import com.vaadin.server.VaadinSession;
@@ -119,6 +120,9 @@ public class MainMenu extends VerticalLayout {
             logo.setWidth(170, Unit.PIXELS);
             logo.setHeight(50, Unit.PIXELS);
             logo.setStyleName("imageMargin");
+            logo.addClickListener((MouseEvents.ClickListener) clickEvent -> {
+                getUI().getNavigator().navigateTo("dashboard");
+            });
             logoLayout.addComponent(logo);
         }
     }

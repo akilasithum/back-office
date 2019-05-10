@@ -124,7 +124,7 @@ public class DownloadView<T> extends VerticalLayout implements View {
                         int s1 = lista.get(i).getAircraftId();
                         String s2 = lista.get(i).getAircraftName();
                         String s3 = lista.get(i).getGalleyPosition();
-                        String s4 = lista.get(i).getUpdateDateAndtime();
+                        String s4 = String.valueOf(lista.get(i).getUpdateDateAndtime());
                         String s5 = lista.get(i).getRegistrationNumber();
                         int s6 = lista.get(i).getEcoClassSeatCount();
                         int s7 = lista.get(i).getBusinessClassSeatCount();

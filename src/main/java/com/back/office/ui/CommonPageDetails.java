@@ -4,6 +4,7 @@ import com.back.office.db.DBConnection;
 import com.back.office.entity.AircraftDetails;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.contextmenu.GridContextMenu;
+import com.vaadin.event.dd.acceptcriteria.Not;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -183,11 +184,11 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(object);
             if (newId != 0) {
-                BackOfficeUtils.showNotification("Success", pageHeader +" added successfully", VaadinIcons.CHECK_CIRCLE_O);
+                Notification.show("Success", pageHeader +" added successfully", Notification.Type.HUMANIZED_MESSAGE);
                 updateTable(false,object,newId);
                 resetFields();
             } else {
-                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+                Notification.show("Error", "Something wrong, please try again", Notification.Type.WARNING_MESSAGE);
             }
         }
         else{

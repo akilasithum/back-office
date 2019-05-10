@@ -11,12 +11,19 @@ import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.dashboard.*;
 import com.back.office.ui.download.DownloadView;
 import com.back.office.ui.finance.CurruncyDetailHistory;
+import com.back.office.ui.finance.GrossMargine;
+import com.back.office.ui.flightKitchen.DailyFlightsView;
+import com.back.office.ui.flightKitchen.FlightScheduleView;
+import com.back.office.ui.flightKitchen.RequestInventory;
 import com.back.office.ui.message.BondMessage;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
+import com.back.office.ui.wizard.AircraftDetailsView;
+import com.back.office.ui.wizard.CreateFlightView;
 import com.back.office.ui.wizard.CreateItemView;
+import com.back.office.ui.wizard.EquipmentView;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.annotations.*;
 import com.vaadin.icons.VaadinIcons;
@@ -71,13 +78,13 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator = new Navigator(this, hybridMenu.getNaviContent());
         navigator.addView("login", LoginPage.class);
         navigator.addView("dashboard", MainDashboard.class);
-        navigator.addView("AircraftType", AirCraftTypeView.class);
+        navigator.addView("AircraftType", AircraftDetailsView.class);
         navigator.addView("Currency", CurerncyDetailsView.class);
         navigator.addView("CreateItems", CreateItemView.class);
         navigator.addView("CreateKitCodes", KitCodesView.class);
-        navigator.addView("EquipmentTypes", EquipmentTypeView.class);
+        navigator.addView("EquipmentTypes", EquipmentView.class);
         navigator.addView("AssignItems", AssignItemView.class);
-        navigator.addView("FlightDetails", FlightDetailsView.class);
+        navigator.addView("FlightDetails", CreateFlightView.class);
         navigator.addView("Staff", UserDetailsView.class);
         navigator.addView("CCBlackList", BlackListCCView.class);
         navigator.addView("Vouchers", VoucherView.class);
@@ -108,6 +115,11 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("analyze",AnalyzeDashboardView.class);
         navigator.addView("BondMessages", BondMessage.class);
         navigator.addView("CurrencyHistory", CurruncyDetailHistory.class);
+        navigator.addView("RequestInventory", RequestInventory.class);
+        navigator.addView("GrossMargins", GrossMargine.class);
+        navigator.addView("Budget", BudgetView.class);
+        navigator.addView("FlightSchedule", FlightScheduleView.class);
+        navigator.addView("DailyFlights", DailyFlightsView.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();
@@ -208,105 +220,6 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                     }
                 });
     }
-
-    /*private void buildLeftMenu() {
-
-        menuItems = new ArrayList<>();
-        menuItems.add("Authorization");
-        menuItems.add("Setup");
-        menuItems.add("File Transfer");
-        //menuItems.add("Generate XML");
-        menuItems.add("Bond Reports");
-        menuItems.add("Sales Report");
-        menuItems.add("Analysis");
-        menuItems.add("Special Reports");
-        menuItems.add("Pre Order Management");
-        menuItems.add("CRM");
-
-        noPermissionNeededViews = new ArrayList<>();
-        noPermissionNeededViews.add("ViewandEditUser");
-
-        List<String> noChildMenus = new ArrayList<>();
-        noChildMenus.add("Uploads");
-        noChildMenus.add("CRM");
-
-        LeftMenu leftMenu = hybridMenu.getLeftMenu();
-
-        HMLabel hmLabel = HMLabel.get()
-                .withCaption("<h3><strong>Porter AirLines</strong></h3>");
-        hmLabel.setStyleName("logo");
-        leftMenu.add(hmLabel);
-                //.withIcon(new ClassResource("logo.png")));
-        //leftMenu.setStyleName("logo");
-
-        int roleId = connection.getRoleIdFromStaffName(UI.getCurrent().getSession().getAttribute("userName").toString());
-        List<RolePermission> rolePermissions = connection.getFilterList("roleIdFilter","roleId",roleId,
-                "com.back.office.entity.RolePermission","permissionCode");
-        Map<String, Map<Integer, String>> funcAreasCodesMap = (Map<String, Map<Integer, String>>)getSession().getAttribute("permissionCodes");
-        List<Integer> userPermissions = new ArrayList<>();
-        for(RolePermission rolePermission : rolePermissions){
-            userPermissions.add(rolePermission.getPermissionCode());
-        }
-
-        *//*hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
-                .withCaption("Dashboard")
-                .withIcon(VaadinIcons.HOME)
-                .withNavigateTo(Dashboard.class)));*//*
-        Map<String,VaadinIcons> iconsMap = BackOfficeUtils.getIconMap();
-        for(String menu : menuItems){
-            if(noChildMenus.contains(menu)){
-                if(menu.equalsIgnoreCase("Uploads")) {
-                    leftMenu.add(HMButton.get()
-                            .withCaption(menu).withIcon(iconsMap.get(menu))
-                            .withNavigateTo(UploadView.class));
-                }
-                else if(menu.equalsIgnoreCase("CRM")){
-                    leftMenu.add(HMButton.get()
-                            .withCaption(menu).withIcon(iconsMap.get(menu))
-                            .withNavigateTo(ErrorView.class));
-                }
-            }
-            else{
-                HMSubMenu mainMenu = leftMenu.add(HMSubMenu.get()
-                        .withCaption(menu)
-                        .withIcon(iconsMap.get(menu)));
-                for(String subMeu : BackOfficeUtils.getSubMeuList(menu)){
-                    Map<Integer,String> permissionMap = funcAreasCodesMap.get(menu);
-                    Map<String,Integer> reverseMap = new HashMap<>();
-                    if(permissionMap != null) {
-                        for (Map.Entry<Integer, String> map : permissionMap.entrySet()) {
-                            reverseMap.put(map.getValue(), map.getKey());
-                        }
-                    }
-                    String name = subMeu.replace(" ","");
-                    if(reverseMap.isEmpty() || userPermissions.contains(reverseMap.get(name)) || noPermissionNeededViews.contains(name)) {
-                        mainMenu.add(HMButton.get()
-                                .withCaption(subMeu).withNavigateTo(subMeu.replace(" ","")));
-                    }
-
-                }
-            }
-        }
-
-        HMSubMenu demoSettings = leftMenu.add(HMSubMenu.get()
-                .withCaption("Settings")
-                .withIcon(VaadinIcons.COGS));
-
-        demoSettings.add(HMButton.get()
-                .withCaption("White Theme")
-                .withIcon(VaadinIcons.PALETE)
-                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getWhiteDesign())));
-
-        demoSettings.add(HMButton.get()
-                .withCaption("Dark Theme")
-                .withIcon(VaadinIcons.PALETE)
-                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getDarkDesign())));
-
-        demoSettings.add(HMButton.get()
-                .withCaption("Minimal")
-                .withIcon(VaadinIcons.COG)
-                .withClickListener(e -> hybridMenu.getLeftMenu().toggleSize()));
-    }*/
 
     public MainMenu getHybridMenu() {
         return hybridMenu;

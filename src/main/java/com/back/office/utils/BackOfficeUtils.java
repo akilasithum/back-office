@@ -6,6 +6,11 @@ import com.back.office.entity.PermissionCodes;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.ValoTheme;
 import kaesdingeling.hybridmenu.components.Notification;
 import kaesdingeling.hybridmenu.components.NotificationCenter;
 
@@ -220,8 +225,8 @@ public class BackOfficeUtils {
     }
 
     public static void showNotification(String caption,String content,VaadinIcons icon){
-        NotificationCenter notificationCenter = VaadinSession.getCurrent().getAttribute(NotificationCenter.class);
 
+        com.vaadin.ui.Notification.show(caption,content, com.vaadin.ui.Notification.Type.WARNING_MESSAGE);
             Notification notification = Notification.get()
                     .withTitle(caption)
                     .withContent(content)
@@ -231,7 +236,6 @@ public class BackOfficeUtils {
                 notification.withAutoRemove();
                 notification.makeAsReaded();
 
-            notificationCenter.add(notification, true);
     }
 
     public static List<String> getCurrencyDropDownValues(boolean allCurrency){
@@ -257,6 +261,76 @@ public class BackOfficeUtils {
 
             default: return null;
         }
+    }
+
+    public static FormLayout getFormLayout(){
+        FormLayout form = new FormLayout();
+        List<String> list = new ArrayList<>();
+        list.add("Full Carts");
+        list.add("Half Carts");
+        list.add("Containers");
+        for(String cartType : list){
+            ComboBox comboBox = new ComboBox(cartType);
+            comboBox.setDescription(cartType);
+            comboBox.setRequiredIndicatorVisible(true);
+            comboBox.setItems(getNumberList(20));
+            comboBox.setValue(0);
+            form.addComponent(comboBox);
+        }
+        return form;
+    }
+
+    public static List<Integer> getNumberList(int number){
+        List<Integer> list = new ArrayList<>();
+        for(int i = 0;i<=number;i++){
+            list.add(i);
+        }
+        return list;
+    }
+
+    public static float getFloat(String str){
+        try{
+            return Float.parseFloat(str);
+        }
+        catch (Exception e){
+            return 0;
+        }
+    }
+
+    public static int getInt(String str){
+        try{
+            return Integer.parseInt(str);
+        }
+        catch (Exception e){
+            return 0;
+        }
+    }
+
+    public static FormLayout getSectorFormLayout(int i){
+        FormLayout formLayout = new FormLayout();
+        formLayout.setSizeFull();
+        formLayout.setMargin(Constants.noMargin);
+
+        Label h1 = new Label("Sector " + i);
+        h1.setSizeFull();
+        h1.addStyleName(ValoTheme.LABEL_H3);
+        formLayout.addComponent(h1);
+
+        TextField sectorFromFld = new TextField("Sector From");
+        sectorFromFld.setDescription("Sector From");
+        formLayout.addComponent(sectorFromFld);
+
+        TextField sectorToFld = new TextField("Sector To");
+        sectorToFld.setDescription("Sector To");
+        formLayout.addComponent(sectorToFld);
+
+        ComboBox sectorTypeComboBox = new ComboBox("Sector Type");
+        sectorTypeComboBox.setDescription("Sector Type");
+        sectorTypeComboBox.setItems("International","Domestic");
+        sectorTypeComboBox.setEmptySelectionAllowed(false);
+        formLayout.addComponent(sectorTypeComboBox);
+
+        return formLayout;
     }
 }
 

@@ -7,7 +7,7 @@
 //$v-font-weight: 300;
 //$v-font-family: "Open Sans", sans-serif;
 
-// Defines the border used by all components.
+// Defines the border used by all wizard.
 //$v-border: 1px solid (v-shade 0.7);
 //$v-border-radius: 4px;
 
@@ -16,7 +16,7 @@
 // Affects the color of content areas, e.g  Panel and Window content, TextField input etc
 //$v-app-background-color: $v-background-color;
 
-// Affects the visual appearance of all components
+// Affects the visual appearance of all wizard
 //$v-gradient: v-linear 8%;
 //$v-bevel-depth: 30%;
 //$v-shadow-opacity: 5%;
@@ -72,6 +72,7 @@
 
   .imageMargin{
     margin-top: 20px;
+    cursor: pointer;
   }
 
   .itemLabel{
@@ -90,6 +91,11 @@
   .main-layout{
     padding-left: 15%;
     padding-right: 15%;
+  }
+
+  .icon-image{
+    width: 25%;
+    height: 25%;
   }
 
 

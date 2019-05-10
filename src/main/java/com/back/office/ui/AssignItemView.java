@@ -62,6 +62,7 @@ public class AssignItemView extends VerticalLayout implements View {
         connection = DBConnection.getInstance();
         setMargin(true);
         createMainLayout();
+        setStyleName("backColorGrey");
     }
 
     private void createMainLayout(){

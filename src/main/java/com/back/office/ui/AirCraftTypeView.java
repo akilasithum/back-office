@@ -356,7 +356,7 @@ public class AirCraftTypeView extends CommonPageDetails {
         flightDetails.setRearHalfCarts(((Integer)((ComboBox)rearGalleyLayout.getComponent(2)).getValue()));
         flightDetails.setRearContainers(((Integer)((ComboBox)rearGalleyLayout.getComponent(3)).getValue()));
 
-        flightDetails.setUpdateDateAndtime(BackOfficeUtils.getCurrentDateAndTime());
+        //flightDetails.setUpdateDateAndtime(BackOfficeUtils.getCurrentDateAndTime());
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(flightDetails);
             if (newId != 0) {

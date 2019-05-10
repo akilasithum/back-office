@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.BudgetDetails" table="estimated_budget" catalog="">
+        <id name="estimateId" type="java.lang.Integer">
+            <column name="estimateId" />
+            <generator class="identity" />
+        </id>
+        <property name="year" type="java.lang.Integer">
+            <column name="year" length="100" />
+        </property>
+        <property name="month" type="java.lang.String">
+            <column name="month" length="100" />
+        </property>
+        <property name="budgetEstimate" type="java.lang.Float">
+            <column name="budgetEstimate"  />
+        </property>
+        <property name="estimatedPax" type="java.lang.Integer">
+            <column name="estimatedPax" length="30" />
+        </property>
+        <property name="estimatedBudgetForPax" type="java.lang.Float">
+            <column name="estimatedBudgetForPax" length="10"/>
+        </property>
+
+    </class>
+</hibernate-mapping>

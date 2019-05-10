@@ -316,11 +316,11 @@ public class CreateItemView extends WizardCommonView {
                 editItem.setBarcode(barCodeField.getValue());
                 connection.insertObjectHBM(editItem);
                 updateTable(true,editItem);
+                detailsWindow.close();
 
             }
         });
         deleteButton.addClickListener(clickEvent -> {
-
             ConfirmDialog.show(getUI(), "Delete", "Are you sure you want to delete this item?",
                     "Yes", "No", new ConfirmDialog.Listener() {
                         public void onClose(ConfirmDialog dialog) {

@@ -53,8 +53,8 @@
         <property name="active" type="boolean">
             <column name="active" />
         </property>
-        <property name="updateDateAndtime" type="java.lang.String">
-            <column name="UpdateDateAndtime" length="50" />
+        <property name="updateDateAndtime" type="java.util.Date">
+            <column name="UpdateDateAndtime" />
         </property>
         <property name="recordStatus" type="java.lang.Integer">
             <column name="recordStatus"  />
