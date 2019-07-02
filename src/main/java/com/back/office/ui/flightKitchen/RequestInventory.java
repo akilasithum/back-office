@@ -68,6 +68,8 @@ public class RequestInventory extends VerticalLayout implements View{
         baseStationCB=new ComboBox("Base Station");
         baseStationCB.setDescription("Base Station");
         baseStationCB.setItems("YYZ","YYL");
+        String baseStation = UI.getCurrent().getSession().getAttribute("baseStation").toString();
+        baseStationCB.setValue(baseStation);
         baseStationCB.setEmptySelectionAllowed(false);
         baseStationCB.setRequiredIndicatorVisible(true);
         addComponent(firstRow);

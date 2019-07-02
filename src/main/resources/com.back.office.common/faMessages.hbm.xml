@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.FaMessage" table="fa_messages" catalog="">
+        <id name="faMessageId" type="java.lang.Integer">
+            <column name="faMessageId" />
+            <generator class="identity" />
+        </id>
+        <property name="flightNumber" type="java.lang.String">
+            <column name="flightNumber" length="50" />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" length="10" />
+        </property>
+        <property name="faName" type="java.lang.String">
+            <column name="faName" length="30" />
+        </property>
+        <property name="comment" type="java.lang.String">
+            <column name="comment" length="300" />
+        </property>
+
+    </class>
+</hibernate-mapping>

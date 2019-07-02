@@ -2,15 +2,14 @@ package com.back.office.ui.salesReports;
 
 import com.back.office.entity.FlightAmountSummary;
 import com.back.office.entity.FlightPaymentDetails;
-import com.back.office.entity.Flights;
-import com.back.office.entity.Sector;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Sheet;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -20,20 +19,19 @@ public class FlightPaymentDetailsView extends ReportCommonView {
     protected DateField flightDateFromDateField;
     protected DateField flightDateToDateField;
     protected ComboBox flightNoComboBox;
-    protected ComboBox serviceTypeComboBox;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String FLIGHT_NO = "Flight No";
-    private final String SERVICE_TYPE = "Service Type";
 
-    private final String FLIGHT_DATE = "Flight Date";
+    private final String NO_OF_FLIGHTS = "No of Flights";
     private final String CASH = "Cash";
     private final String CREDIT_CARD = "Credit Card";
     private final String VOUCHER = "Voucher";
     private final String GROSS_SALE = "Gross Sale";
     private final String DISCOUNT = "Discount";
     private final String NET_SALE = "Net Sale";
+    private final String SALES_PER_FLIGHT = "Sales per Flight";
 
     protected Grid<FlightAmountSummary> detailsTable;
 
@@ -56,27 +54,25 @@ public class FlightPaymentDetailsView extends ReportCommonView {
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setSizeFull();
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
+        flightDateToDateField.setSizeFull();
         firstRow.addComponent(flightDateToDateField);
 
         flightNoComboBox = new ComboBox(FLIGHT_NO);
         flightNoComboBox.setDescription(FLIGHT_NO);
-        flightNoComboBox.setItems(getFlightNos());
+        flightNoComboBox.setItems(connection.getFlightsNoList());
+        flightNoComboBox.setSizeFull();
         firstRow.addComponent(flightNoComboBox);
 
-        serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
-        serviceTypeComboBox.setDescription(SERVICE_TYPE);
-        serviceTypeComboBox.setItems("All","Duty Free","Duty Paid","Buy on Board");
-        serviceTypeComboBox.setSelectedItem("All");
-        serviceTypeComboBox.setEmptySelectionAllowed(false);
-        firstRow.addComponent(serviceTypeComboBox);
         detailsTable = new Grid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
+        firstRow.setWidth("60%");
         userFormLayout.setWidth("80%");
         createShowTableHeader();
     }
@@ -87,24 +83,16 @@ public class FlightPaymentDetailsView extends ReportCommonView {
     }
 
     private void createShowTableHeader(){
-        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
+        NumberFormat formatter = new DecimalFormat("#0.00");
         detailsTable.addColumn(FlightAmountSummary::getFlightNo).setCaption(FLIGHT_NO);
-        detailsTable.addColumn(FlightAmountSummary::getCashAmount).setCaption(CASH);
-        detailsTable.addColumn(FlightAmountSummary::getCreditCardAmount).setCaption(CREDIT_CARD);
-        detailsTable.addColumn(FlightAmountSummary::getVoucherAmount).setCaption(VOUCHER);
-        detailsTable.addColumn(FlightAmountSummary::getGrossSale).setCaption(GROSS_SALE);
-        detailsTable.addColumn(FlightAmountSummary::getDiscount).setCaption(DISCOUNT);
-        detailsTable.addColumn(FlightAmountSummary::getNetSale).setCaption(NET_SALE);
-
-    }
-
-    private List<String> getFlightNos(){
-        List<Flights> flights = (List<Flights>)connection.getAllValues("com.back.office.entity.Flights");
-        List<String> flightNoList  = new ArrayList<>();
-        for(Flights flight : flights){
-            flightNoList.add(flight.getFlightName());
-        }
-        return flightNoList;
+        detailsTable.addColumn(FlightAmountSummary::getNoOfFlights).setCaption(NO_OF_FLIGHTS);
+        detailsTable.addColumn(bean-> formatter.format(bean.getCashAmount())).setCaption(CASH);
+        detailsTable.addColumn(bean-> formatter.format(bean.getCreditCardAmount())).setCaption(CREDIT_CARD);
+        detailsTable.addColumn(bean-> formatter.format(bean.getVoucherAmount())).setCaption(VOUCHER);
+        detailsTable.addColumn( bean-> formatter.format(bean.getGrossSale())).setCaption(GROSS_SALE);
+        detailsTable.addColumn(bean-> formatter.format(bean.getDiscount())).setCaption(DISCOUNT);
+        detailsTable.addColumn(bean-> formatter.format(bean.getNetSale())).setCaption(NET_SALE);
+        detailsTable.addColumn(bean -> formatter.format(bean.getNetSale()/bean.getNoOfFlights())).setCaption(SALES_PER_FLIGHT);
     }
 
     @Override
@@ -117,15 +105,14 @@ public class FlightPaymentDetailsView extends ReportCommonView {
     protected void showFilterData() {
         mainTableLayout.setVisible(true);
         String flightNo = flightNoComboBox.getValue() != null ? flightNoComboBox.getValue().toString() : null;
-        String serviceType = BackOfficeUtils.getServiceTypeFromServiceType( serviceTypeComboBox.getValue().toString());
         Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         List<FlightPaymentDetails> list = connection.getFlightPaymentDetails(dateFrom,dateTo,
-                serviceType,flightNo);
+                flightNo);
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Service Type = " + serviceTypeComboBox.getValue().toString() + ((flightNo == null || flightNo.isEmpty()) ? "" : " Flight No = " + flightNo);
+                 ((flightNo == null || flightNo.isEmpty()) ? "" : " Flight No = " + flightNo);
         filterCriteriaText.setValue(outputStr);
         String flightNoStr = "";
         float creditCardAmount  = 0;
@@ -135,11 +122,11 @@ public class FlightPaymentDetailsView extends ReportCommonView {
         Date flightDate = null;
         Map<String,FlightAmountSummary> summaries = new HashMap<>();
         for(FlightPaymentDetails details : list){
-            String key = details.getFlightNo()+details.getFlightDate();
+            String key = details.getFlightNo();
             String paymentMethod = details.getPaymentType();
             if(summaries.containsKey(key)){
                 FlightAmountSummary summary = summaries.get(key);
-                if(paymentMethod.equals("Cash USD")){
+                /*if(paymentMethod.equals("Cash USD")){
                     summary.setCashAmount(details.getAmount());
                 }
                 else if(paymentMethod.equals("Credit Card USD")){
@@ -147,32 +134,48 @@ public class FlightPaymentDetailsView extends ReportCommonView {
                 }
                 else{
                     summary.setVoucherAmount(details.getAmount());
-                }
+                }*/
                 Float discount = summary.getDiscount() + details.getDiscount();
                 Float netAmount = summary.getNetSale() + details.getDiscount() + details.getAmount();
                 Float grossAmount = summary.getGrossSale() + details.getAmount();
+                if(paymentMethod.equals("Cash USD")){
+                    summary.setCashAmount(summary.getCashAmount() + details.getAmount());
+                }
+                else if(paymentMethod.equals("Credit Card USD")){
+                    summary.setCreditCardAmount(summary.getCreditCardAmount() + details.getAmount());
+                }
+                else{
+                    summary.setVoucherAmount(summary.getVoucherAmount() + details.getAmount());
+                }
                 summary.setDiscount(discount);
                 summary.setNetSale(netAmount);
                 summary.setGrossSale(grossAmount);
+                summary.setNoOfFlights(summary.getNoOfFlights() + 1);
                 summaries.put(key,summary);
 
             }
             else{
                 FlightAmountSummary summary = new FlightAmountSummary();
                 summary.setFlightNo(details.getFlightNo());
-                summary.setFlightDate(details.getFlightDate());
                 if(paymentMethod.equals("Cash USD")){
                     summary.setCashAmount(details.getAmount());
+                    summary.setCreditCardAmount(0F);
+                    summary.setVoucherAmount(0F);
                 }
                 else if(paymentMethod.equals("Credit Card USD")){
                     summary.setCreditCardAmount(details.getAmount());
+                    summary.setCashAmount(0F);
+                    summary.setVoucherAmount(0F);
                 }
                 else{
                     summary.setVoucherAmount(details.getAmount());
+                    summary.setCashAmount(0F);
+                    summary.setCreditCardAmount(0F);
                 }
                 summary.setDiscount(details.getDiscount());
                 summary.setGrossSale(details.getAmount());
                 summary.setNetSale(details.getAmount() + details.getDiscount());
+                summary.setNoOfFlights(1);
                 summaries.put(key,summary);
             }
 
@@ -186,7 +189,7 @@ public class FlightPaymentDetailsView extends ReportCommonView {
     /*private void showDataInTheTable(String id,Date flightDate,String flightNoStr,float cashAmount,
                                     float creditCardAmount,float voucherAmount,float grossSale,float discount,float netSale){
         Item item = container.addItem(id);
-        item.getItemProperty(FLIGHT_DATE).setValue(BackOfficeUtils.getDateFromDateTime(flightDate));
+        item.getItemProperty(NO_OF_FLIGHTS).setValue(BackOfficeUtils.getDateFromDateTime(flightDate));
         item.getItemProperty(FLIGHT_NO).setValue(flightNoStr);
         item.getItemProperty(CASH).setValue(cashAmount);
         item.getItemProperty(CREDIT_CARD).setValue(creditCardAmount);

@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DBConnection {
 
@@ -156,6 +157,15 @@ public class DBConnection {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public Map<String,ItemDetails> getItemNoItemDetailsMap(){
+        Map<String,ItemDetails> itemDetailsMap = new HashMap<>();
+        List<ItemDetails> itemDetails = getAllItems();
+        for(ItemDetails item : itemDetails){
+            itemDetailsMap.put(item.getItemCode(),item);
+        }
+        return itemDetailsMap;
     }
 
     public boolean isLoginSuccessful(String userName,String password){
@@ -335,14 +345,25 @@ public class DBConnection {
         return list;
     }
 
-    public List getFlightPaymentDetails(Date flightFromDate,Date flightToDate,String serviceType,String flightNo){
+    public List getMonthlySales(Date flightFromDate,Date flightToDate,String flightNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(SalesDetails.class);
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
+        if(flightNo != null && !flightNo.isEmpty()){
+            criteria.add(Restrictions.eq("flightNo", flightNo));
+        }
+
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
+    public List getFlightPaymentDetails(Date flightFromDate,Date flightToDate,String flightNo){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(FlightPaymentDetails.class);
         criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
         criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
-        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
-            criteria.add(Restrictions.eq("serviceType", serviceType));
-        }
         if(flightNo != null && !flightNo.isEmpty()){
             criteria.add(Restrictions.eq("flightNo", flightNo));
         }
@@ -545,19 +566,28 @@ public class DBConnection {
         Criteria criteria = session.createCriteria(Message.class);
         criteria.add(Restrictions.eq("message_to", user_name_datamessage));
         criteria.add(Restrictions.eq("read_un", unreadmessage));
-
-
         return criteria.list();
     }
 
-    public List<User> getStaffIdUserNameMap(){
+    public List getSentMessage(String user_name_datamessage){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(Message.class);
+        criteria.add(Restrictions.eq("message_from", user_name_datamessage));
+        return criteria.list();
+    }
+
+    public List<String> getStaffIdUserNameMap(){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(User.class);
         criteria.add(Restrictions.eq("recordStatus", 0));
         criteria.add(Restrictions.eq("active", true));
         List<User> list = criteria.list();
         session.close();
-        return list;
+        List<String> staffIdList = new ArrayList<>();
+        for(User user : list){
+            staffIdList.add(user.getStaffId());
+        }
+        return staffIdList;
     }
 
     public List<CurrencyDetails> getCurrencyDetail(String currencyType){
@@ -613,6 +643,20 @@ public class DBConnection {
         }
     }
 
+    public List<OpeningInventory> getOpeningInventory(String sifNO){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(OpeningInventory.class);
+            criteria.add(Restrictions.eq("sifNo", sifNO));
+
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public List<?> getBudgetDetails(String class1){
         try
         {
@@ -625,7 +669,25 @@ public class DBConnection {
         }
     }
 
-    public List<FlightSheduleDetail> getFlightShedule(String filterDate,Date dateListh){
+    public List<FlightSheduleDetail> getFlightShedule(Date fromDate,Date toDate,String baseStation){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(FlightSheduleDetail.class);
+                criteria.add(Restrictions.ge("flightDateTime",yesterday(fromDate)));
+                criteria.add(Restrictions.le("flightDateTime", tommorow(toDate)));
+                if(baseStation != null && !baseStation.isEmpty()) {
+                    criteria.add(Restrictions.eq("baseStation", baseStation));
+                }
+            return criteria.list();
+        } catch (Exception e) {
+
+            return null;
+        }
+    }
+
+    public List<FlightSheduleDetail> getFlightShedule(String filterDate,Date dateListh,Date dateListhTo){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
@@ -634,19 +696,339 @@ public class DBConnection {
             if(filterDate=="datefully") {
                 criteria.add(Restrictions.ge("flightDateTime", dateListh));
                 criteria.add(Restrictions.le("flightDateTime", dateExt(dateListh)));
+            }else if(filterDate=="datethisgre") {
+                criteria.add(Restrictions.ge("flightDateTime", dateListh));
+                criteria.add(Restrictions.le("flightDateTime", dateListhTo));
+
             }else if(filterDate=="datethis") {
                 criteria.add(Restrictions.ge("flightDateTime", dateListh));
 
-            }else {
+            }
+            else {
 
             }
 
+            return criteria.list();
+        } catch (Exception e) {
+            System.out.print(e);
+
+            return null;
+        }
+    }
+
+    public List<BondMessageDetail> getBondMessageDetail(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(BondMessageDetail.class);
             return criteria.list();
         } catch (Exception e) {
 
             return null;
         }
     }
+
+    public List<String> getFlightsNoList(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<String> flightsList = new ArrayList<>();
+        try
+        {
+            Criteria criteria = session.createCriteria(Flight.class);
+            criteria.add(Restrictions.eq("recordStatus", 0));
+            List<Flight> list = criteria.list();
+            session.close();
+            if(list != null){
+                for(Flight flight : list){
+                    flightsList.add(flight.getIbFlightNo());
+                    flightsList.add(flight.getObFlightNo());
+                }
+            }
+            return flightsList;
+        } catch (Exception e) {
+            session.close();
+            return null;
+        }
+    }
+
+    public Map<String,ItemDetails> getItemCodeDetailsMap(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            criteria.add(Restrictions.ge("recordStatus", 0));
+
+            List<ItemDetails> itemDetails = criteria.list();
+            Map<String,ItemDetails> map = new HashMap<>();
+            itemDetails.stream().forEach((k)-> map.put(k.getItemCode(),k));
+            return map;
+        } catch (Exception e) {
+
+
+            return null;
+        }
+    }
+
+    public List<CartNumber> getCartNumbersFromSIF(String sifNo){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(CartNumber.class);
+            criteria.add(Restrictions.eq("sifNo", sifNo));
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<OpeningInventory> getOpeningInventoryFromSIF(int sifNo,String cartNo){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(OpeningInventory.class);
+            criteria.add(Restrictions.eq("sifNo", String.valueOf(sifNo)));
+            criteria.add(Restrictions.eq("cartNo", cartNo));
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<EquipmentDetails> getEquipmentsFromType(List<String> packType){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(EquipmentDetails.class);
+            criteria.add(Restrictions.in("packType", packType));
+            return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<FaMessage> getFaMessages(String flightNo,Date dateListh,Date dateListhTo){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(FaMessage.class);
+            criteria.add(Restrictions.ge("flightDate", dateListh));
+            criteria.add(Restrictions.le("flightDate", dateListhTo));
+            if(flightNo != null) {
+                criteria.add(Restrictions.eq("flightNumber", flightNo));
+            }
+
+
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<EquipmentMasterDetail> getEquipmentMasterDetails(Date dateFrom,Date dateTo){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(EquipmentMasterDetail.class);
+            criteria.add(Restrictions.ge("lastUsedDate", dateFrom));
+            criteria.add(Restrictions.le("lastUsedDate", dateTo));
+            return criteria.list();
+        } catch (Exception e) {
+            System.out.print(e);
+            return null;
+        }
+    }
+
+    public List<HHCMaster> getHHCMasterDetails(Date dateFrom,Date dateTo){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(HHCMaster.class);
+            criteria.add(Restrictions.ge("lastUsedDate", dateFrom));
+            criteria.add(Restrictions.le("lastUsedDate", dateTo));
+            return criteria.list();
+        } catch (Exception e) {
+            System.out.print(e);
+            return null;
+        }
+    }
+
+    public List<PassengerPurchases> getPassengerPurchase(String filterType,String fliterDate,Date dateFrom,Date dateTo){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(PassengerPurchases.class);
+            if(filterType=="allType") {
+                criteria.add(Restrictions.ge("deparureDate", dateFrom));
+                criteria.add(Restrictions.le("deparureDate", dateTo));
+                criteria.add(Restrictions.eq("flightNo", fliterDate));
+                return criteria.list();
+            }else if(filterType=="dateOnly") {
+
+                criteria.add(Restrictions.ge("deparureDate", dateFrom));
+                criteria.add(Restrictions.le("deparureDate", dateTo));
+                return criteria.list();
+
+
+            }else if(filterType=="typeOnly") {
+                criteria.add(Restrictions.eq("flightNo", fliterDate));
+                return criteria.list();
+
+            }
+            else {
+                return criteria.list();
+
+            }
+
+
+        } catch (Exception e) {
+            System.out.print(e);
+
+            return null;
+        }
+    }
+
+    public List<PosItemSaleDetail> getPosItemSale(String class1){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(PosItemSaleDetail.class);
+            criteria.add(Restrictions.eq("orderId", class1));
+
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<ItemDetails> getItemId(int class1){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            criteria.add(Restrictions.eq("itemId", class1));
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<BuildTime> getBuildTimeList(Object flightName,Date fromPaked,Date toPaked,int sifBase){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(BuildTime.class);
+        if(flightName != null && !String.valueOf(flightName).isEmpty()){
+            criteria.add(Restrictions.eq("packedFor", flightName.toString()));
+        }
+        if(fromPaked != null && toPaked != null){
+            criteria.add(Restrictions.ge("downloaded", fromPaked));
+            criteria.add(Restrictions.le("downloaded", toPaked));
+        }
+        if(sifBase != 0){
+            criteria.add(Restrictions.eq("SIFNo", sifBase));
+        }
+        criteria.add(Restrictions.isNotNull("packedFor"));
+        return criteria.list();
+    }
+
+    public List<WastageDetail> getSoldOut(Object flightName,Object sifList,Date fromPaked,Date toPaked){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(WastageDetail.class);
+            criteria.add(Restrictions.eq("quantity",0));
+            criteria.add(Restrictions.ge("flightDate", fromPaked));
+            criteria.add(Restrictions.le("flightDate", toPaked));
+            if(flightName!=null&&!flightName.toString().isEmpty()){
+                criteria.add(Restrictions.eq("flightNo", flightName.toString()));
+            }
+            if(sifList!=null&&!sifList.toString().isEmpty()){
+                criteria.add(Restrictions.eq("sifNo", sifList));
+            }
+            return criteria.list();
+
+        } catch (Exception e) {
+            System.out.print(e);
+
+            return null;
+        }
+    }
+
+    public List<WastageDetail> getWastage(Object flightName,Object sifList,Object fromList,Object toList,Date fromPaked,Date toPaked){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(WastageDetail.class);
+            if(flightName!=null&&!flightName.toString().isEmpty()&&sifList!=null&&!sifList.toString().isEmpty()&&fromList!=null&&!fromList.toString().isEmpty()&&toList!=null&&!toList.toString().isEmpty()) {
+                criteria.add(Restrictions.ne("quantity",0));
+                criteria.add(Restrictions.ge("flightDate", fromPaked));
+                criteria.add(Restrictions.le("flightDate", toPaked));
+                criteria.add(Restrictions.eq("sifNo", sifList));
+                criteria.add(Restrictions.eq("flightNo", flightName.toString()));
+                return criteria.list();
+            }else if(sifList!=null&&!sifList.toString().isEmpty()&&fromList!=null&&!fromList.toString().isEmpty()&&toList!=null&&!toList.toString().isEmpty()) {
+
+                criteria.add(Restrictions.ne("quantity",0));
+                criteria.add(Restrictions.ge("flightDate", fromPaked));
+                criteria.add(Restrictions.le("flightDate", toPaked));
+                criteria.add(Restrictions.eq("sifNo", sifList));
+                return criteria.list();
+
+
+            }else if(flightName!=null&&!flightName.toString().isEmpty()&&fromList!=null&&!fromList.toString().isEmpty()&&toList!=null&&!toList.toString().isEmpty()) {
+                criteria.add(Restrictions.ne("quantity",0));
+                criteria.add(Restrictions.ge("flightDate", fromPaked));
+                criteria.add(Restrictions.le("flightDate", toPaked));
+                criteria.add(Restrictions.eq("flightNo", flightName.toString()));
+                return criteria.list();
+
+            }
+            else if(flightName!=null&&!flightName.toString().isEmpty()&&sifList!=null&&!sifList.toString().isEmpty()){
+                criteria.add(Restrictions.ne("quantity",0));
+
+                criteria.add(Restrictions.eq("sifNo", sifList));
+                criteria.add(Restrictions.eq("flightNo", flightName.toString()));
+                return criteria.list();
+
+            }else if(fromList!=null&&!fromList.toString().isEmpty()&&toList!=null&&!toList.toString().isEmpty()) {
+                criteria.add(Restrictions.ne("quantity",0));
+                criteria.add(Restrictions.ge("flightDate", fromPaked));
+                criteria.add(Restrictions.le("flightDate", toPaked));
+                return criteria.list();
+
+            }else if(sifList!=null&&!sifList.toString().isEmpty()) {
+                criteria.add(Restrictions.ne("quantity",0));
+
+                criteria.add(Restrictions.eq("sifNo", sifList));
+                return criteria.list();
+
+            }else if(flightName!=null&&!flightName.toString().isEmpty()) {
+                criteria.add(Restrictions.ne("quantity",0));
+                criteria.add(Restrictions.eq("flightNo", flightName.toString()));
+                return criteria.list();
+
+            }else {
+                criteria.add(Restrictions.ne("quantity",0));
+                return criteria.list();
+            }
+
+
+        } catch (Exception e) {
+            System.out.print(e);
+
+            return null;
+        }
+    }
+
 
     private Date dateExt(Date date) {
         Calendar cal = Calendar.getInstance();

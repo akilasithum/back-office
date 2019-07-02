@@ -11,4 +11,5 @@ public class Constants {
     public static final MarginInfo topBottomMarginInfo = new MarginInfo(true,false,true,false);
     public static final MarginInfo noMargin = new MarginInfo(false,false,false,false);
     public static final MarginInfo leftMargin = new MarginInfo(false,false,false,true);
+    public static final MarginInfo leftBottomtMargin = new MarginInfo(false,false,true,true);
 }

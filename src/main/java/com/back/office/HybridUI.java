@@ -1,21 +1,27 @@
 package com.back.office;
 
 import com.back.office.db.DBConnection;
-import com.back.office.entity.BlackListCC;
-import com.back.office.entity.CurrencyDetails;
-import com.back.office.entity.RolePermission;
+import com.back.office.entity.EquipmentMasterDetail;
+import com.back.office.entity.WastageDetail;
 import com.back.office.ui.*;
+import com.back.office.ui.analysis.BuildTimesView;
+import com.back.office.ui.analysis.WastageDetailsView;
 import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
+import com.back.office.ui.crm.PassengerPurchasesView;
 import com.back.office.ui.dashboard.*;
 import com.back.office.ui.download.DownloadView;
 import com.back.office.ui.finance.CurruncyDetailHistory;
 import com.back.office.ui.finance.GrossMargine;
-import com.back.office.ui.flightKitchen.DailyFlightsView;
 import com.back.office.ui.flightKitchen.FlightScheduleView;
+import com.back.office.ui.flightKitchen.FlightShedule;
 import com.back.office.ui.flightKitchen.RequestInventory;
-import com.back.office.ui.message.BondMessage;
+import com.back.office.ui.inventory.EquipmentMasterView;
+import com.back.office.ui.inventory.SoldOutDetails;
+import com.back.office.ui.message.BondMessagesView;
+import com.back.office.ui.message.FAMessagesView;
+import com.back.office.ui.message.MessagingModuleView;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
@@ -29,7 +35,6 @@ import com.vaadin.annotations.*;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.JavaScript;
@@ -88,8 +93,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("Staff", UserDetailsView.class);
         navigator.addView("CCBlackList", BlackListCCView.class);
         navigator.addView("Vouchers", VoucherView.class);
-        navigator.addView("SalesDetails", SalesDetailsView.class);
-        navigator.addView("SalesSummarybyFlight", FlightPaymentDetailsView.class);
+        navigator.addView("MonthlySales", SalesDetailsView.class);
+        navigator.addView("FlightSales", FlightPaymentDetailsView.class);
         navigator.addView("SalebyCategory", CategorySalesView.class);
         navigator.addView("ManageUserRoles", ManageRolesView.class);
         navigator.addView("ManageUsers", UserDetailsView.class);
@@ -97,29 +102,30 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("Promotions", PromotionView.class);
         navigator.addView("ErrorView", ErrorView.class);
         navigator.addView("CCNumberRange", CCNumberRangeView.class);
-        navigator.addView("Flight-BondActivity", FlightBondActivityReportView.class);
+        navigator.addView("SIFDetails", FlightBondActivityReportView.class);
         navigator.addView("ViewandEditUser", ViewAndEditCurrentUserDetailsView.class);
         navigator.addView("CreditCardSummary", CreditCardSummaryView.class);
         navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
         navigator.addView("TenderSummary",TenderSummaryView.class);
         navigator.addView("Downloads", DownloadView.class);
         navigator.addView("PreOrders", PreOrders.class);
-
-        navigator.addView("setup", SetupDashboardView.class);
-        navigator.addView("flightKitchen", FlightKitchenDashboardView.class);
-        navigator.addView("preOrderMessenger", PreOrderMessangerDashboardView.class);
-        navigator.addView("finance", FinanceDashboardView.class);
-        navigator.addView("reports", ReportsDashboardView.class);
-        navigator.addView("inventory",InventoryDashboardView.class);
-        navigator.addView("crm",CRMDashboardView.class);
-        navigator.addView("analyze",AnalyzeDashboardView.class);
-        navigator.addView("BondMessages", BondMessage.class);
+        navigator.addView("MessagingModule", MessagingModuleView.class);
         navigator.addView("CurrencyHistory", CurruncyDetailHistory.class);
         navigator.addView("RequestInventory", RequestInventory.class);
         navigator.addView("GrossMargins", GrossMargine.class);
         navigator.addView("Budget", BudgetView.class);
-        navigator.addView("FlightSchedule", FlightScheduleView.class);
-        navigator.addView("DailyFlights", DailyFlightsView.class);
+        navigator.addView("FlightSchedule", FlightShedule.class);
+        navigator.addView("DailyFlights", FlightScheduleView.class);
+        navigator.addView("BondMessages", BondMessagesView.class);
+        navigator.addView("FAMessages", FAMessagesView.class);
+        navigator.addView("ItemSales",ItemSalesView.class);
+        navigator.addView("EquipmentMaster", EquipmentMasterView.class);
+        navigator.addView("PassengerPurchases", PassengerPurchasesView.class);
+        navigator.addView("BuildTimes", BuildTimesView.class);
+        navigator.addView("Wastage", WastageDetailsView.class);
+        navigator.addView("SoldOut", SoldOutDetails.class);
+        navigator.addView("HHCAndCartUsage", EquipmentMasterView.class);
+        navigator.addView("CommonView",CommonSelection.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();
@@ -198,7 +204,12 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         topMenu.add(HMButton.get()
                 .withIcon(VaadinIcons.COMMENT_ELLIPSIS)
                 .withDescription("Messages")
-                .withNavigateTo(BondMessage.class));
+                .withNavigateTo(MessagingModuleView.class));
+
+        topMenu.add(HMButton.get()
+                .withIcon(VaadinIcons.USER)
+                .withDescription("User Management")
+                .withNavigateTo(UserDetailsView.class));
 
         topMenu.add(HMButton.get()
                 .withIcon(VaadinIcons.POWER_OFF)

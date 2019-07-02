@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.BondMessageDetail" table="bond_messages" catalog="">
+        <id name="bondMessageId" type="java.lang.Integer">
+            <column name="bondMessageId" />
+            <generator class="identity" />
+        </id>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo" length="100" />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" length="10" />
+        </property>
+        <property name="messageBody" type="java.lang.String">
+            <column name="messageBody"  length="30"/>
+        </property>
+
+
+    </class>
+
+</hibernate-mapping>

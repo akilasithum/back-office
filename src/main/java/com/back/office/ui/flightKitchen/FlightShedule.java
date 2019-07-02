@@ -1,19 +1,15 @@
 package com.back.office.ui.flightKitchen;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -24,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.FlightSheduleDetail;
+import com.poiji.bind.Poiji;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
@@ -35,32 +32,31 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class FlightScheduleView extends VerticalLayout implements View{
+public class FlightShedule extends VerticalLayout implements View{
 
     protected Button flightShedul;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
     protected Button ExportToExcel;
     protected Button print;
-    protected Grid<FlightSheduleDetail> flightSheduleDetailGrid;
-    protected List<FlightSheduleDetail> flightDetList;
+    protected Grid<FlightSheduleDetail> flightList;
     protected Button clearButton;
     protected Button exportToExcel;
-    protected Button exportPdf;
+    protected Button printDetail;
     protected DateField fromDateText;
     protected DateField toDateText;
     protected File file=new File("Schedule.xlsx");
     protected FileResource fir=new FileResource(file);
-    protected FileDownloader excelFileDownloader = new FileDownloader(fir);
-    List<FlightSheduleDetail> flightDetailListdatelis;
-    protected File fileList=new File("fileListPdf.pdf");
-    protected FileResource fileResoce=new FileResource(fileList);
-    FileDownloader pdfFileDownloader = new FileDownloader(fileResoce);
-
-
+    protected FileDownloader fid=new FileDownloader(fir);
+    Upload uploadButton;
+    Button rssFeedBtn;
+    protected File fileData;
+    List uploadedFlightList;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -70,8 +66,7 @@ public class FlightScheduleView extends VerticalLayout implements View{
     }
 
 
-    public FlightScheduleView() {
-        setMargin(Constants.noMargin);
+    public FlightShedule() {
         createMainLayout();
         connection=DBConnection.getInstance();
         setStyleName("backColorGrey");
@@ -79,7 +74,8 @@ public class FlightScheduleView extends VerticalLayout implements View{
 
     public void createMainLayout() {
 
-        createLayout = new VerticalLayout();
+        createLayout=new VerticalLayout();
+        createLayout.setMargin(Constants.noMargin);
 
         Label h1=new Label("Flight Schedule");
 
@@ -89,13 +85,14 @@ public class FlightScheduleView extends VerticalLayout implements View{
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
         HorizontalLayout buttonLayoutExportExcel=new HorizontalLayout();
         HorizontalLayout dateText=new HorizontalLayout();
+        HorizontalLayout dataLayout=new HorizontalLayout();
 
-        buttonLayoutSubmit.setMargin(Constants.noMargin);
+        rssFeedBtn = new Button("RSS Feed");
 
 
 
-        flightShedul=new Button("Get Flight Schedule");
-        //createLayout.addComponent(flightShedul);
+        flightShedul=new Button("Flight Schedule");
+        createLayout.addComponent(flightShedul);
         flightShedul.addClickListener((Button.ClickListener) ClickEvent->
                 processList());
 
@@ -104,11 +101,19 @@ public class FlightScheduleView extends VerticalLayout implements View{
         clearButton.addClickListener((Button.ClickListener) ClickEvent->
                 clearText());
 
-        exportToExcel=new Button("Export To");
+        Button processButton=new Button("Process");
+        dataLayout.addComponent(processButton);
+
+        processButton.setVisible(false);
+        processButton.addClickListener((Button.ClickListener)ClickEvent->
+                processFile());
+
+
+        exportToExcel=new Button("Export To Excel");
         exportToExcel.setVisible(false);
 
-        exportPdf=new Button("Print");
-        exportPdf.setVisible(false);
+        printDetail=new Button("Print");
+        printDetail.setVisible(false);
 
         fromDateText=new DateField("Date From");
         fromDateText.setDescription("Date From");
@@ -125,114 +130,95 @@ public class FlightScheduleView extends VerticalLayout implements View{
         buttonLayoutSubmit.addComponent(clearButton);
 
         buttonLayoutExportExcel.addComponent(exportToExcel);
-        buttonLayoutExportExcel.addComponent(exportPdf);
+        buttonLayoutExportExcel.addComponent(printDetail);
 
         addComponent(createLayout);
 
+        flightList=new Grid();
+        flightList.setSizeFull();
+        flightList.setWidth("70%");
 
-        flightSheduleDetailGrid =new Grid();
-        createLayout.addComponent(dateText);
-        createLayout.addComponent(buttonLayoutSubmit);
-        createLayout.addComponent(flightSheduleDetailGrid);
-        createLayout.addComponent(buttonLayoutExportExcel);
-
-        flightSheduleDetailGrid.setSizeFull();
-        flightSheduleDetailGrid.setWidth("60%");
-
-
-        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDateTime())).setCaption("Date");
-        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
-        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getaircraftRegistration).setCaption("ACFT Reg");
-        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getaircraftType).setCaption("Type");
-        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightNumber).setCaption("Flight Number");
-        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getservices).setCaption("Services");
-    }
-
-    private void downloadPdf(){
-        try {
+        flightList.addColumn(FlightSheduleDetail::getflightDateTime).setCaption("Date");
+        flightList.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
+        flightList.addColumn(FlightSheduleDetail::getaircraftRegistration).setCaption("ACFT Reg");
+        flightList.addColumn(FlightSheduleDetail::getaircraftType).setCaption("Type");
+        flightList.addColumn(FlightSheduleDetail::getflightNumber).setCaption("Flight Number");
+        flightList.addColumn(FlightSheduleDetail::getFrom).setCaption("From");
+        flightList.addColumn(FlightSheduleDetail::getTo).setCaption("To");
+        flightList.addColumn(FlightSheduleDetail::getservices).setCaption("Services");
 
 
-            String[] array = {"Date","Time","ACFT Reg","Type","flight Number","services","base Station"};
+        List<String> allowedMimeTypes = new ArrayList<>();
+        allowedMimeTypes.add("text/xml");
+        allowedMimeTypes.add("application/xls");
+        allowedMimeTypes.add("application/vnd.ms-excel");
+        allowedMimeTypes.add("application/octet-stream");
 
-            Document document = new Document();
-
-            try
-            {
-                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileList));
-                document.open();
-                document.add(new Paragraph("Flight"));
-
-
-                PdfPTable table = new PdfPTable(array.length);
-                table.setWidthPercentage(100);
-                table.setSpacingBefore(10f);
-                table.setSpacingAfter(10f);
-                for(int i=0;i<array.length;i++) {
-                    PdfPCell cellDetails = new PdfPCell(new Paragraph(array[i]));
-                    table.addCell(cellDetails);
-
-
+        uploadButton = new Upload("",new Upload.Receiver() {
+            @Override
+            public OutputStream receiveUpload(String filename, String mimeType) {
+                try {
+                    fileData = File.createTempFile("temp",".xls");
+                    return new FileOutputStream(fileData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
                 }
-
-                for(int k=0;k<flightDetailListdatelis.size();k++) {
-
-                    String s0 = flightDetailListdatelis.get(k).getflightDateTime().toString();
-                    String s1 = flightDetailListdatelis.get(k).getflightTime();
-                    String s2 = flightDetailListdatelis.get(k).getaircraftRegistration();
-                    String s3 = flightDetailListdatelis.get(k).getaircraftType();
-                    String s4 = flightDetailListdatelis.get(k).getflightNumber();
-                    String s6 = flightDetailListdatelis.get(k).getservices();
-                    String s7 = flightDetailListdatelis.get(k).getbaseStation();
-                    PdfPCell cellDetails=new PdfPCell(new Paragraph(s0));
-                    PdfPCell cellDetail1=new PdfPCell(new Paragraph(s1));
-                    PdfPCell cellDetail2=new PdfPCell(new Paragraph(s2));
-                    PdfPCell cellDetail3=new PdfPCell(new Paragraph(s3));
-                    PdfPCell cellDetail4=new PdfPCell(new Paragraph(s4));
-                    PdfPCell cellDetail6=new PdfPCell(new Paragraph(s6));
-                    PdfPCell cellDetail7=new PdfPCell(new Paragraph(s7));
-                    table.addCell(cellDetails);
-                    table.addCell(cellDetail1);
-                    table.addCell(cellDetail2);
-                    table.addCell(cellDetail3);
-                    table.addCell(cellDetail4);
-                    table.addCell(cellDetail6);
-                    table.addCell(cellDetail7);
-                }
-                document.add(table);
-
-                document.close();
-                writer.close();
-            } catch (DocumentException e)
-            {
-                e.printStackTrace();
-            } catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
             }
+        });
 
-            pdfFileDownloader.extend(exportPdf);
+        uploadButton.addStartedListener((Upload.StartedListener) event -> {
 
-        } catch (Exception e) {
-            Notification.show("Something wrong", Notification.Type.WARNING_MESSAGE);
+            String contentType = event.getMIMEType();
+            boolean allowed = false;
+            for (int i = 0; i < allowedMimeTypes.size(); i++) {
+                if (contentType.equalsIgnoreCase(allowedMimeTypes.get(i))) {
+                    allowed = true;
+                    break;
+                }
+            }
+            if (allowed) {
+                Notification.show("Upload started: ", Type.HUMANIZED_MESSAGE);
+            } else {
+                Notification.show("Error", "Not a valid file ", Type.WARNING_MESSAGE);
+                uploadButton.interruptUpload();
+            }
+        });
 
-        }
+        uploadButton.addFinishedListener((Upload.FinishedListener) finishedEvent -> {
+            flightList.setVisible(true);
+            dataList();
+            processButton.setVisible(true);
+
+        });
+
+        //createLayout.addComponent(dateText);
+        //createLayout.addComponent(buttonLayoutSubmit);
+        VerticalLayout btnLayout = new VerticalLayout();
+        btnLayout.setMargin(Constants.noMargin);
+
+        HorizontalLayout rssFeedLayout = new HorizontalLayout();
+        rssFeedLayout.addComponents(rssFeedBtn,new Label("Last Updated at : " + new Date()));
+        btnLayout.addComponents(uploadButton,rssFeedLayout);
+        createLayout.addComponents(btnLayout);
+        uploadButton.setButtonCaption("Upload Excel");
+        createLayout.addComponent(buttonLayoutExportExcel);
+        createLayout.addComponent(flightList);
+        createLayout.addComponent(dataLayout);
     }
 
     public void processList() {
 
-        flightSheduleDetailGrid.setVisible(true);
+        flightList.setVisible(true);
 
         exportToExcel.setVisible(true);
-        exportPdf.setVisible(true);
+        printDetail.setVisible(true);
 
-
+        String[] array = {"Date","Time","ACFT Reg","Type","flight Number","From","To","Services"};
         if(fromDateText.getValue()!=null&&!toDateText.getValue().toString().isEmpty()) {
 
-            String baseStation = UI.getCurrent().getSession().getAttribute("baseStation").toString();
-            flightDetailListdatelis = connection.getFlightShedule(Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                    Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),baseStation);
-            flightSheduleDetailGrid.setItems(flightDetailListdatelis);
-
+            List<FlightSheduleDetail> flightDetailListdatelis=connection.getFlightShedule("datethisgre",Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            flightList.setItems(flightDetailListdatelis);
             try {
                 XSSFWorkbook workbook = new XSSFWorkbook();
                 FileOutputStream out = new FileOutputStream(file);
@@ -247,13 +233,12 @@ public class FlightScheduleView extends VerticalLayout implements View{
                 headerCellStyle.setWrapText(true);
                 headerCellStyle.setShrinkToFit(true);
 
-                String[] array = {"Date","Time","ACFT Reg","Type","flight Number","From","To","services"};
                 Row r1 = Spreadsheet.createRow(0);
 
                 for (int k = 0; k < array.length; k++) {
 
                     Cell c = r1.createCell(k);
-                    c.setCellValue(array[k].toString());
+                    c.setCellValue(array[k]);
                     c.setCellStyle(headerCellStyle);
 
                 }
@@ -293,8 +278,7 @@ public class FlightScheduleView extends VerticalLayout implements View{
 
                 workbook.close();
 
-                excelFileDownloader.extend(exportToExcel);
-
+                fid.extend(exportToExcel);
 
             } catch (Exception e) {
                 Notification.show("Something wrong", Notification.Type.WARNING_MESSAGE);
@@ -302,7 +286,7 @@ public class FlightScheduleView extends VerticalLayout implements View{
             }
         }else {
             List<FlightSheduleDetail> flightDetailListdatelis=connection.getFlightShedule("datethis",new Date(),new Date());
-            flightSheduleDetailGrid.setItems(flightDetailListdatelis);
+            flightList.setItems(flightDetailListdatelis);
 
             try {
                 XSSFWorkbook workbook = new XSSFWorkbook();
@@ -316,9 +300,8 @@ public class FlightScheduleView extends VerticalLayout implements View{
                 CellStyle headerCellStyle = workbook.createCellStyle();
                 headerCellStyle.setFont(headerFont);
                 headerCellStyle.setWrapText(true);
-                //headerCellStyle.setShrinkToFit(true);
+                headerCellStyle.setShrinkToFit(true);
 
-                String[] array = {"Flight Date Time","Flight Time","Aircraft Registration","Aircraft Type","Flight Number","Root","Services","Base Station"};
                 Row r1 = Spreadsheet.createRow(0);
 
                 for (int k = 0; k < array.length; k++) {
@@ -326,7 +309,6 @@ public class FlightScheduleView extends VerticalLayout implements View{
                     Cell c = r1.createCell(k);
                     c.setCellValue(array[k].toString());
                     c.setCellStyle(headerCellStyle);
-
                 }
 
                 for (int i = 0; i < flightDetailListdatelis.size(); i++) {
@@ -337,9 +319,9 @@ public class FlightScheduleView extends VerticalLayout implements View{
                     String s3 = flightDetailListdatelis.get(i).getaircraftRegistration();
                     String s4 = flightDetailListdatelis.get(i).getaircraftType();
                     String s5 = flightDetailListdatelis.get(i).getflightNumber();
-                    String s7 = flightDetailListdatelis.get(i).getservices();
-                    String s8 = flightDetailListdatelis.get(i).getbaseStation();
-
+                    String s6 = flightDetailListdatelis.get(i).getFrom();
+                    String s7 = flightDetailListdatelis.get(i).getTo();
+                    String s8 = flightDetailListdatelis.get(i).getservices();
 
                     Cell c = r.createCell(0);
                     c.setCellValue(s1);
@@ -352,30 +334,44 @@ public class FlightScheduleView extends VerticalLayout implements View{
                     Cell c4 = r.createCell(4);
                     c4.setCellValue(s5);
                     Cell c5 = r.createCell(5);
+                    c5.setCellValue(s6);
                     Cell c6 = r.createCell(6);
                     c6.setCellValue(s7);
                     Cell c7 = r.createCell(7);
                     c7.setCellValue(s8);
-
-
                 }
 
                 workbook.write(out);
                 out.close();
-
                 workbook.close();
-
-                excelFileDownloader.extend(exportToExcel);
+                fid.extend(exportToExcel);
 
             } catch (Exception e) {
                 Notification.show("Something wrong", Notification.Type.WARNING_MESSAGE);
-
             }
-
         }
-        downloadPdf();
+    }
 
+    private void processFile(){
+        try {
 
+            for (Object object : uploadedFlightList) {
+                connection.insertObjectHBM(object);
+            }
+            Notification.show("Successfully updated.");
+            uploadedFlightList = new ArrayList();
+            flightList.setItems(uploadedFlightList);
+            fileData.delete();
+        }
+        catch (Exception e){
+            Notification.show("Error", "Something wrong with the input file. Please check the file and upload again ", Type.WARNING_MESSAGE);
+            fileData.delete();
+        }
+    }
+
+    public void dataList() {
+            uploadedFlightList = Poiji.fromExcel(fileData, FlightSheduleDetail.class);
+            flightList.setItems(uploadedFlightList);
     }
 
     public void clearText() {
@@ -385,3 +381,4 @@ public class FlightScheduleView extends VerticalLayout implements View{
 
     }
 }
+

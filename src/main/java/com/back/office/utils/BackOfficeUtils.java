@@ -42,7 +42,9 @@ public class BackOfficeUtils {
     }
 
     public static String getDateStringFromDate(Date date){
+        if(date != null)
         return new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
+        else return null;
     }
 
     public static Map<String, VaadinIcons> getIconMap(){

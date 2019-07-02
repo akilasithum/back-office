@@ -26,5 +26,18 @@
         <property name="crewClosedTime" type="java.util.Date">
             <column name="crewClosedTime" />
         </property>
+
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
+        </property>
+        <property name="programs" type="java.lang.String">
+            <column name="programs" length="50" />
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status" length="20" />
+        </property>
+        <property name="packedUser" type="java.lang.String">
+            <column name="packedUser" length="50" />
+        </property>
     </class>
 </hibernate-mapping>

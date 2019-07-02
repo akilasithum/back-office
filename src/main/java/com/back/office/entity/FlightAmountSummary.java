@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class FlightAmountSummary {
 
-    private Date flightDate;
+    private int noOfFlights;
     private String flightNo;
     private Float cashAmount;
     private Float creditCardAmount;
@@ -13,12 +13,12 @@ public class FlightAmountSummary {
     private Float discount;
     private Float netSale;
 
-    public Date getFlightDate() {
-        return flightDate;
+    public int getNoOfFlights() {
+        return noOfFlights;
     }
 
-    public void setFlightDate(Date flightDate) {
-        this.flightDate = flightDate;
+    public void setNoOfFlights(int noOfFlights) {
+        this.noOfFlights = noOfFlights;
     }
 
     public String getFlightNo() {

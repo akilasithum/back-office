@@ -70,7 +70,6 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
         mainTableLayout = new VerticalLayout();
         addComponent(mainTableLayout);
         mainTableLayout.setMargin(Constants.noMargin);
-        mainTableLayout.setVisible(false);
         tableLayout = new HorizontalLayout();
         tableLayout.setMargin(Constants.noMargin);
         tableLayout.setSizeFull();
@@ -105,6 +104,13 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
         setComponentAlignment(mainTableLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(userFormLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
+    }
+
+    protected TextField getColumnFilterField() {
+        TextField filter = new TextField();
+        filter.setWidth("100%");
+        filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
+        return filter;
     }
 
     public File exportToExcel(String sheetName, String[] columns){

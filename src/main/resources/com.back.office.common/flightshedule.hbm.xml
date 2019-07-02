@@ -23,8 +23,11 @@
         <property name="flightNumber" type="java.lang.String">
             <column name="flightNumber"  />
         </property>
-        <property name="root" type="java.lang.String">
-            <column name="root" length="50" />
+        <property name="from" type="java.lang.String">
+            <column name="flightFrom" length="50" />
+        </property>
+        <property name="to" type="java.lang.String">
+            <column name="flightTo" length="50" />
         </property>
         <property name="services" type="java.lang.String">
             <column name="services" length="50"/>

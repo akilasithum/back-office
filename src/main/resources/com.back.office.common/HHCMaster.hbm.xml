@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.HHCMaster" table="hhc_master" catalog="">
+        <id name="hhcMasterId" type="java.lang.Integer">
+            <column name="hhcMasterId" />
+            <generator class="identity" />
+        </id>
+        <property name="hhcId" type="java.lang.String">
+            <column name="hhcId"/>
+        </property>
+        <property name="type" type="java.lang.String">
+            <column name="type"/>
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status"/>
+        </property>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo" length="50"/>
+        </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus"  />
+        </property>
+        <property name="lastUsedDate" type="java.util.Date">
+            <column name="lastUsedDate" length="50" />
+        </property>
+
+    </class>
+</hibernate-mapping>

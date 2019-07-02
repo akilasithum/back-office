@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.OpeningInventory" table="opening_inventory" catalog="">
+        <id name="inventoryItemId" type="java.lang.Integer">
+            <column name="inventoryItemId" />
+            <generator class="identity" />
+        </id>
+        <property name="itemCode" type="java.lang.String">
+            <column name="itemId" length="30" />
+        </property>
+        <property name="cartNo" type="java.lang.String">
+            <column name="cartNo" length="30" />
+        </property>
+        <property name="drawer" type="java.lang.String">
+            <column name="drawer"  length="30" />
+        </property>
+        <property name="sifNo" type="java.lang.String">
+            <column name="sifNo"  length="30"/>
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity"  />
+        </property>
+    </class>
+</hibernate-mapping>

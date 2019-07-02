@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.WastageDetail" table="closing_inventory" catalog="">
+        <id name="closingInventoryItemId" type="java.lang.Integer">
+            <column name="closingInventoryItemId" />
+            <generator class="identity" />
+        </id>
+        <property name="itemId" type="java.lang.String">
+            <column name="itemId" length="100" />
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" length="10" />
+        </property>
+        <property name="cartNo" type="java.lang.String">
+            <column name="cartNo"  length="30"/>
+        </property>
+        <property name="drawer" type="java.lang.String">
+            <column name="drawer" length="30" />
+        </property>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo"/>
+        </property>
+        <property name="sifNo" type="java.lang.String">
+            <column name="sifNo"  length="30"/>
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate"  length="30"/>
+        </property>
+
+    </class>
+
+</hibernate-mapping>

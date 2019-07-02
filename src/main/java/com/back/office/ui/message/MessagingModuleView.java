@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.back.office.entity.User;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import org.vaadin.addons.ComboBoxMultiselect;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -18,18 +21,20 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import javax.jws.soap.SOAPBinding;
 
-public class BondMessage extends VerticalLayout implements View{
+public class MessagingModuleView extends VerticalLayout implements View{
 
     protected DBConnection connection;
     protected VerticalLayout hedderLayout;
     protected VerticalLayout userFormLayout;
     protected VerticalLayout tableLayout;
-    protected ComboBoxMultiselect<User> messageTo;
+    protected ComboBoxMultiselect<String> messageTo;
     protected TextArea message;
     protected Button sendButton;
     protected FilterGrid<Message> readMessage;
     protected FilterGrid<Message> newMessage;
+    protected FilterGrid<Message> sentMessage;
     protected String userName;
+    protected TabSheet messageTab;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -39,7 +44,7 @@ public class BondMessage extends VerticalLayout implements View{
         }
     }
 
-    public BondMessage() {
+    public MessagingModuleView() {
         connection=DBConnection.getInstance();
         setMargin(true);
         createMainLayout();
@@ -91,26 +96,36 @@ public class BondMessage extends VerticalLayout implements View{
         userFormLayout.addComponent(message);
         userFormLayout.addComponent(sendButton);
 
+        messageTab = new TabSheet();
+
+
         readMessage = new FilterGrid<>();
         readMessage.setColumnReorderingAllowed(false);
         readMessage.setWidth("60%");
         readMessage.setSizeFull();
+
 
         newMessage = new FilterGrid<>();
         newMessage.setColumnReorderingAllowed(false);
         newMessage.setWidth("60%");
         newMessage.setSizeFull();
 
-        Label labelreadmessage=new Label("Read Messages");
-        Label label_new_message=new Label("New Messages");
+        sentMessage = new FilterGrid<>();
+        sentMessage.setColumnReorderingAllowed(false);
+        sentMessage.setWidth("60%");
+        sentMessage.setSizeFull();
+
+        messageTab.addStyleName(ValoTheme.TABSHEET_FRAMED);
+        messageTab.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
+
+        messageTab.addTab(newMessage,"New Messages", VaadinIcons.ENVELOPE);
+        messageTab.addTab(readMessage,"Read Messages",VaadinIcons.ENVELOPE_OPEN);
+        messageTab.addTab(sentMessage,"Sent Messages",VaadinIcons.ENVELOPE_OPEN_O);
 
         sendButton.addClickListener(clickListener->messagdilivr());
 
-        tableLayout.addComponent(label_new_message);
-        tableLayout.addComponent(newMessage);
-        tableLayout.addComponent(labelreadmessage);
-        tableLayout.addComponent(readMessage);
         tableLayout.setWidth("70%");
+        tableLayout.addComponents(messageTab);
 
 
         showTableHeader();
@@ -147,47 +162,59 @@ public class BondMessage extends VerticalLayout implements View{
 
 
         });
-
-
     }
 
 
     public void selectDetailsh(String from_message_data,String recive_message_data) {
 
-        Window windowdatatable=new Window();
+        Window messageWindow = new Window();
+        messageWindow.setSizeFull();
+        messageWindow.setWidth("40%");
+        messageWindow.setHeight("40%");
         VerticalLayout windowContent = new VerticalLayout();
         windowContent.setMargin(true);
-        windowdatatable.setContent(windowContent);
-        Button buttonclose=new Button("Ok");
-        buttonclose.addClickListener((Button.ClickListener) clickEvent->closedatawindowh(windowdatatable));
+        messageWindow.setContent(windowContent);
+        Button replyBtn=new Button("Reply");
+        Button buttonclose=new Button("Cancel");
+        buttonclose.addClickListener((Button.ClickListener) clickEvent->closedatawindowh(messageWindow));
+        replyBtn.addClickListener((Button.ClickListener) clickEvent -> {
+            setUserNameForReply(from_message_data,messageWindow);
+        });
 
         TextField message_from=new TextField("From");
+        message_from.setEnabled(false);
+        message_from.setSizeFull();
+        message_from.setWidth("30%");
         message_from.setValue(from_message_data);
-        TextArea message_deta=new TextArea("Message");
-        message_deta.setValue(recive_message_data);
+        TextArea messageText = new TextArea("Message");
+        messageText.setEnabled(false);
+        messageText.setSizeFull();
+        messageText.setWidth("70%");
+        messageText.setValue(recive_message_data);
 
         windowContent.addComponent(message_from);
-        windowContent.addComponent(message_deta);
+        windowContent.addComponent(messageText);
 
-        windowdatatable.center();
-        windowContent.addComponent(buttonclose);
-        windowContent.setComponentAlignment(buttonclose,Alignment.BOTTOM_CENTER);
+        messageWindow.center();
+        HorizontalLayout btnLayout = new HorizontalLayout();
+        btnLayout.addComponents(replyBtn,buttonclose);
+        windowContent.addComponent(btnLayout);
 
-        windowdatatable.addStyleName("mywindowstyle");
-        getUI().addWindow(windowdatatable);
+        messageWindow.addStyleName("mywindowstyle");
+        getUI().addWindow(messageWindow);
     }
 
     public void messagdilivr() {
 
-        Set<User> receiverList = messageTo.getSelectedItems();
+        Set<String> receiverList = messageTo.getSelectedItems();
         userName =UI.getCurrent().getSession().getAttribute("userName").toString();
-        for(User user : receiverList){
+        for(String user : receiverList){
             String messageContent = String.valueOf(message.getValue());
             Message messageDetails = new Message();
             messageDetails.setMessage_from(userName);
             messageDetails.setRead_un(false);
             messageDetails.setMessage(messageContent);
-            messageDetails.setMessage_to(user.getStaffId());
+            messageDetails.setMessage_to(user);
             connection.insertObjectHBM(messageDetails);
         }
 
@@ -197,15 +224,24 @@ public class BondMessage extends VerticalLayout implements View{
     }
 
     public void mssageread(String user_name_data) {
-        List<Message> lista = connection.getMessage(user_name_data,false);
-        List<Message> listb = connection.getMessage(user_name_data,true);
+        List<Message> newMessages = connection.getMessage(user_name_data,false);
+        List<Message> readMessages = connection.getMessage(user_name_data,true);
+        List<Message> sentMessages = connection.getSentMessage(user_name_data);
 
-        readMessage.setItems(listb);
-        newMessage.setItems(lista);
+        readMessage.setItems(readMessages);
+        newMessage.setItems(newMessages);
+        sentMessage.setItems(sentMessages);
     }
 
     private void closedatawindowh(Window windowdata) {
         windowdata.close();
+    }
+
+    private void setUserNameForReply(String userName,Window window){
+        window.close();
+        messageTo.clear();
+        messageTo.select(userName);
+
     }
 
     public void showTableHeader() {
@@ -213,6 +249,8 @@ public class BondMessage extends VerticalLayout implements View{
         readMessage.addColumn(Message::getMessage).setCaption("Message");
         newMessage.addColumn(Message::getMessage_from).setCaption("Message From").setWidth(200);
         newMessage.addColumn(Message::getMessage).setCaption("Message");
+        sentMessage.addColumn(Message::getMessage_to).setCaption("Message To").setWidth(200);
+        sentMessage.addColumn(Message::getMessage).setCaption("Message");
     }
 
 }
