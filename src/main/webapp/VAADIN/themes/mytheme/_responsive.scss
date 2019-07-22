@@ -1,0 +1,46 @@
+.porter-app[width-range~="1200px-9000px"] {
+  .wrappwr-button {
+    width: 60% !important;
+  }
+  .bg_banner {
+    &:before {
+      right: 120px;
+    }
+  }
+}
+
+.porter-app[width-range~="1999px-1000px"] {
+  .wrappwr-button {
+    width: 80% !important;
+  }
+
+}
+
+.porter-app[width-range~="999px-0px"] {
+  .bg_banner {
+    &:before {
+      right: 0;
+    }
+  }
+  .cloud2{
+    margin-top: 0;
+  }
+  .tab_wrpapper {
+    > .v-horizontallayout{
+      width: 100%;
+    }
+  }
+}
+
+
+.porter-app[width-range~="1366px-0px"] {
+ .common-logo{
+   top: 0;
+ }
+  .wrappwr-button {
+    margin-top: 70px;
+  }
+  .porter-logo {
+    margin-top: -109px;
+  }
+}

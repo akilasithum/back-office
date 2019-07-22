@@ -2,6 +2,7 @@ package com.back.office.ui;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.*;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.contextmenu.GridContextMenu;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AssignItemView extends VerticalLayout implements View {
+public class AssignItemView extends UserEntryView implements View {
 
     ComboBox packTypeComboBox;
     ComboBox drawerComboBox;
@@ -59,10 +60,9 @@ public class AssignItemView extends VerticalLayout implements View {
     }
 
     public AssignItemView(){
+        super();
         connection = DBConnection.getInstance();
-        setMargin(true);
         createMainLayout();
-        setStyleName("backColorGrey");
     }
 
     private void createMainLayout(){
@@ -74,13 +74,11 @@ public class AssignItemView extends VerticalLayout implements View {
         headerLayout.setMargin(Constants.noMargin);
         userFormLayout = new VerticalLayout();
         addComponent(userFormLayout);
-        userFormLayout.setMargin(Constants.noMargin);
+        userFormLayout.setMargin(Constants.bottomMarginInfo);
         tableLayout = new VerticalLayout();
         tableLayout.setSizeFull();
         addComponent(tableLayout);
         tableLayout.setMargin(Constants.noMargin);
-
-        setSpacing(true);
         Label h1 = new Label("Assign Items");
         h1.addStyleName(ValoTheme.LABEL_H1);
         headerLayout.addComponent(h1);
@@ -197,7 +195,7 @@ public class AssignItemView extends VerticalLayout implements View {
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
 
 
-        tableLayout.setWidth("55%");
+        tableLayout.setWidth("75%");
         setComponentAlignment(tableLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(userFormLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
@@ -401,11 +399,11 @@ public class AssignItemView extends VerticalLayout implements View {
        // }
     }
 
-    private String getItemNameFromItemCode(String itemCode){
+    private ItemDetails getItemNameFromItemCode(String itemCode){
         for(ItemDetails details : itemDetailsList){
-            if(details.getItemCode().equals(itemCode)) return details.getItemName();
+            if(details.getItemCode().equals(itemCode)) return details;
         }
-        return "";
+        return null;
     }
 
     private void resetFields(){

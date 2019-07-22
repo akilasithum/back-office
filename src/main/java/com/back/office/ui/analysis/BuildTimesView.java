@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.back.office.entity.BuildTime;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -33,7 +34,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class BuildTimesView extends VerticalLayout implements View{
+public class BuildTimesView extends UserEntryView implements View{
 
     protected Button submitList;
     protected VerticalLayout createLayout;
@@ -61,10 +62,10 @@ public class BuildTimesView extends VerticalLayout implements View{
 
 
     public BuildTimesView() {
+        super();
         connection=DBConnection.getInstance();
         setMargin(Constants.noMargin);
         createMainLayout();
-        setStyleName("backColorGrey");
     }
 
     public void createMainLayout() {
@@ -120,9 +121,9 @@ public class BuildTimesView extends VerticalLayout implements View{
         buttonLayoutSubmit.addComponent(submitList);
 
         buttonLayoutSubmit.addComponent(clearButton);
-        flightLayout.addComponent(flightText);
+        dateText.addComponent(flightText);
 
-        flightLayout.addComponent(listText);
+        dateText.addComponent(listText);
 
         buttonLayoutExportExcel.addComponent(exportToExcel);
         buttonLayoutExportExcel.addComponent(printDetail);
@@ -134,7 +135,7 @@ public class BuildTimesView extends VerticalLayout implements View{
         buildTimeGrid.setWidth("70%");
 
         createLayout.addComponent(dateText);
-        createLayout.addComponent(flightLayout);
+        //createLayout.addComponent(flightLayout);
         createLayout.addComponent(buttonLayoutSubmit);
         createLayout.addComponent(buildTimeGrid);
         createLayout.addComponent(buttonLayoutExportExcel);

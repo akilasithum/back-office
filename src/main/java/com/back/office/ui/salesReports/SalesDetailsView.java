@@ -3,6 +3,7 @@ package com.back.office.ui.salesReports;
 import com.back.office.db.DBConnection;
 import com.back.office.entity.SalesDetails;
 import com.back.office.entity.Sector;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-public class SalesDetailsView extends VerticalLayout implements View {
+public class SalesDetailsView extends UserEntryView implements View {
 
     DBConnection connection;
     protected String pageHeader = "Monthly Sales";
@@ -42,6 +43,7 @@ public class SalesDetailsView extends VerticalLayout implements View {
     private static final String QUANTITY = "Quantity";
 
     public SalesDetailsView(){
+        super();
         connection = DBConnection.getInstance();
         setMargin(true);
         createMainLayout();
@@ -56,7 +58,6 @@ public class SalesDetailsView extends VerticalLayout implements View {
     }
 
     private void createMainLayout() {
-        setStyleName("backColorGrey");
         setSpacing(true);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();

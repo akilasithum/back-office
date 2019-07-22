@@ -3,6 +3,7 @@ package com.back.office.ui.uploads;
 import com.back.office.db.DBConnection;
 import com.back.office.entity.CurrencyDetails;
 import com.back.office.entity.ItemDetails;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import com.back.office.xml.Currencies;
 import com.poiji.bind.Poiji;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UploadView extends VerticalLayout implements View {
+public class UploadView extends UserEntryView implements View {
 
     protected DBConnection connection;
     protected VerticalLayout headerLayout;
@@ -48,6 +49,7 @@ public class UploadView extends VerticalLayout implements View {
     }
 
     public UploadView(){
+        super();
         connection = DBConnection.getInstance();
         setMargin(true);
         createMainLayout();

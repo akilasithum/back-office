@@ -2,6 +2,7 @@ package com.back.office.ui.finance;
 
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -14,7 +15,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class CurruncyDetailHistory extends VerticalLayout implements View {
+public class CurruncyDetailHistory extends UserEntryView implements View {
     protected DBConnection connection;
     ComboBox currencyDetail;
     FilterGrid<CurrencyDetails> currencyGrid;
@@ -30,9 +31,9 @@ public class CurruncyDetailHistory extends VerticalLayout implements View {
     }
 
     public CurruncyDetailHistory() {
+        super();
         createMainLayout();
         connection=DBConnection.getInstance();
-        setStyleName("backColorGrey");
     }
 
     public void createMainLayout() {

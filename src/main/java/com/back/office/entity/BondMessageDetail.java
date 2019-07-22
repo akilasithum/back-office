@@ -8,39 +8,36 @@ public class BondMessageDetail {
     private Date flightDate ;
     private String messageBody;
 
-    public int getbondMessageId() {
+
+    public int getBondMessageId() {
         return bondMessageId;
     }
 
-    public void setbondMessageId(int bondMessageId) {
+    public void setBondMessageId(int bondMessageId) {
         this.bondMessageId = bondMessageId;
     }
 
-    public String getflightNo() {
+    public String getFlightNo() {
         return flightNo;
     }
 
-    public void setflightNo(String flightNo) {
+    public void setFlightNo(String flightNo) {
         this.flightNo = flightNo;
     }
 
-    public Date getflightDate() {
+    public Date getFlightDate() {
         return flightDate;
     }
 
-    public void setflightDate(Date flightDate) {
-        this.flightDate= flightDate;
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
     }
 
-    public String getmessageBody() {
+    public String getMessageBody() {
         return messageBody;
     }
 
-    public void setmessageBody(String messageBody) {
+    public void setMessageBody(String messageBody) {
         this.messageBody = messageBody;
     }
-
-
-
-
 }

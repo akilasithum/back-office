@@ -1,11 +1,21 @@
-@import "mytheme.scss";
-@import "addons.scss";
-
+@import "addons";
+@import "../valo/valo.scss";
+@import "vari";
+@import "mixs";
+@import "theme";
+@import "hybrid_menu";
+@import "dashboard";
+@import "mytheme";
+@import "responsive";
 // This file prefixes all rules with the theme name to avoid causing conflicts with other themes.
 // The actual styles should be defined in mytheme.scss
 
 .mytheme {
   @include addons;
+  @include valo;
+  @include theme;
   @include mytheme;
+  @include hybrid-menu;
+  @include overridehybridMenu;
 
 }

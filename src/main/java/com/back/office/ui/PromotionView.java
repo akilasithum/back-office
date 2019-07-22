@@ -111,7 +111,7 @@ public class PromotionView extends CommonPageDetails {
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
 
         userFormLayout.setWidth("60%");
-        mainTableLayout.setWidth("75%");
+        mainTableLayout.setWidth("85%");
         headerLayout.setWidth("60%");
     }
 

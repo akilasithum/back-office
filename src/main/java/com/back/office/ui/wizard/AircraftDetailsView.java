@@ -162,6 +162,7 @@ public class AircraftDetailsView extends WizardCommonView {
         detailsWindow.setWidth("40%");
         detailsWindow.setHeight(500,Unit.PIXELS);
         detailsWindow.center();
+        detailsWindow.setStyleName("popupView");
         formLayout.setMargin(true);
 
         Button editButton = new Button("Edit");

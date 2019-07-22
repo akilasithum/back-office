@@ -1,11 +1,9 @@
 package com.back.office.ui.dashboard;
 
 import com.back.office.entity.SubMenuItem;
-import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ClassResource;
-import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 
 import java.util.LinkedHashMap;
@@ -13,7 +11,7 @@ import java.util.Map;
 
 public class MainDashboard extends VerticalLayout implements View {
 
-    private static final String imageWidth = "75%";
+    private static final String imageWidth = "35%";
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -34,22 +32,28 @@ public class MainDashboard extends VerticalLayout implements View {
         btnLayout1.setSizeFull();
         HorizontalLayout btnLayout2 = new HorizontalLayout();
         btnLayout2.setSizeFull();
+        btnLayout2.setHeight("260px");
         verticalLayout.setStyleName("main-layout");
-        btnLayout1.setMargin(Constants.bottomMarginInfo);
+//        btnLayout1.setMargin(Constants.bottomMarginInfo);
         verticalLayout.addComponent(btnLayout1);
         verticalLayout.addComponent(btnLayout2);
 
-        Image flightKitchenImage = new Image(null, new ClassResource("flight_kitchen.png"));
-        flightKitchenImage.setWidth(imageWidth);
-        flightKitchenImage.setHeight(imageWidth);
-        flightKitchenImage.addStyleName("my-img-button");
+
+
+        CssLayout iconWrapper1 = new CssLayout();
+        Button flightKitchenImage = new Button("flight kitchen");
+        iconWrapper1.addComponents(flightKitchenImage);
+        iconWrapper1.setStyleName("iconWrapper-1");
+        flightKitchenImage.setIcon(FontAwesome.PLANE);
         flightKitchenImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","flight kitchen");
             SubMenuItem menuItem = new SubMenuItem();
-            menuItem.setMenuImage("crm_sub.png");
+            menuItem.setMenuImage("flight_kitchen_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
-            row1Map.put("Passenger Purchases","PassengerPurchases");
-            row1Map.put("Import pax Manifest","");
-            row1Map.put("Loading Recommendations","");
+            row1Map.put("Flight Schedule","FlightSchedule");
+            row1Map.put("Daily Flights","DailyFlights");
+            row1Map.put("Request Inventory","RequestInventory");
+            row1Map.put("Galley Weight","");
             row1Map.put("SIF","SIFDetails");
             row1Map.put("HHC and Cart Usage","HHCAndCartUsage");
             menuItem.setMenuName("flight_kitchen");
@@ -58,12 +62,15 @@ public class MainDashboard extends VerticalLayout implements View {
             getUI().getNavigator().navigateTo("CommonView");
         });
 
-        Image preOrderImage = new Image(null, new ClassResource("pre_order.png"));
-        preOrderImage.setWidth(imageWidth);
-        preOrderImage.setHeight(imageWidth);
-        preOrderImage.addStyleName("my-img-button");
-        preOrderImage.addClickListener(clickEvent -> {
 
+        CssLayout iconWrapper2 = new CssLayout();
+        Button preOrderImage = new Button("pre order");
+        iconWrapper2.addComponents(preOrderImage );
+        iconWrapper2.setStyleName("iconWrapper-2");
+        preOrderImage.setIcon(FontAwesome.CART_ARROW_DOWN);
+
+        preOrderImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","pre order");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("pre_order_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
@@ -73,17 +80,22 @@ public class MainDashboard extends VerticalLayout implements View {
             row1Map.put("Bond Messages","BondMessages");
             row1Map.put("FA Messages","FAMessages");
             menuItem.setSubMenuImageMap(row1Map);
+            menuItem.setSubMenuImageMap(row1Map);
             menuItem.setMenuName("pre_order");
             UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
             getUI().getNavigator().navigateTo("CommonView");
         });
 
-        Image financeImage = new Image(null, new ClassResource("finance.png"));
-        financeImage.setWidth(imageWidth);
-        financeImage.setHeight(imageWidth);
-        financeImage.addStyleName("my-img-button");
-        financeImage.addClickListener(clickEvent -> {
 
+
+        CssLayout iconWrapper3 = new CssLayout();
+        Button financeImage = new Button("finance");
+        iconWrapper3.addComponents(financeImage);
+        iconWrapper3.setStyleName("iconWrapper-3");
+        financeImage.setIcon(FontAwesome.USD);
+
+        financeImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","finance");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("finance_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
@@ -99,18 +111,22 @@ public class MainDashboard extends VerticalLayout implements View {
             getUI().getNavigator().navigateTo("CommonView");
         });
 
-        Image bondReportsImage = new Image(null, new ClassResource("reports.png"));
-        bondReportsImage.setWidth(imageWidth);
-        bondReportsImage.setHeight(imageWidth);
-        bondReportsImage.addStyleName("my-img-button");
-        bondReportsImage.addClickListener(clickEvent -> {
 
+        CssLayout iconWrapper4 = new CssLayout();
+        Button bondReportsImage = new Button("reports");
+        iconWrapper4.addComponents(bondReportsImage);
+        iconWrapper4.setStyleName("iconWrapper-4");
+        bondReportsImage.setIcon(FontAwesome.FILE_TEXT_O);
+
+
+        bondReportsImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","reports");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("reports_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Monthly Sales","MonthlySales");
             row1Map.put("Flight Sales","FlightSales");
-            row1Map.put("Category/Sector Sales","");
+            row1Map.put("Category Sales","");
             row1Map.put("Item Sales","ItemSales");
             row1Map.put("FA Performance","");
             row1Map.put("Tender Summary","");
@@ -121,12 +137,15 @@ public class MainDashboard extends VerticalLayout implements View {
 
         });
 
-        Image inventoryImage = new Image(null, new ClassResource("inventory.png"));
-        inventoryImage.setWidth(imageWidth);
-        inventoryImage.setHeight(imageWidth);
-        inventoryImage.addStyleName("my-img-button");
-        inventoryImage.addClickListener(clickEvent -> {
 
+        CssLayout iconWrapper5 = new CssLayout();
+        Button inventoryImage = new Button("inventory");
+        iconWrapper5.addComponents(inventoryImage);
+        iconWrapper5.setStyleName("iconWrapper-4");
+        inventoryImage.setIcon(FontAwesome.SHOPPING_BASKET);
+
+        inventoryImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","inventory");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("inventory_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
@@ -143,11 +162,16 @@ public class MainDashboard extends VerticalLayout implements View {
 
         });
 
-        Image crmImage = new Image(null, new ClassResource("crm.png"));
-        crmImage.setWidth(imageWidth);
-        crmImage.setHeight(imageWidth);
-        crmImage.addStyleName("my-img-button");
+
+
+        CssLayout iconWrapper6 = new CssLayout();
+        Button crmImage = new Button("crm");
+        iconWrapper6.addComponents(crmImage);
+        iconWrapper6.setStyleName("iconWrapper-3");
+        crmImage.setIcon(FontAwesome.USERS);
+
         crmImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","crm");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("crm_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
@@ -160,11 +184,15 @@ public class MainDashboard extends VerticalLayout implements View {
             getUI().getNavigator().navigateTo("CommonView");
         });
 
-        Image analysisImage = new Image(null, new ClassResource("analyze_upload.png"));
-        analysisImage.setWidth(imageWidth);
-        analysisImage.setHeight(imageWidth);
-        analysisImage.addStyleName("my-img-button");
+
+        CssLayout iconWrapper7 = new CssLayout();
+        Button analysisImage = new Button("analyze upload");
+        iconWrapper7.addComponents(analysisImage);
+        iconWrapper7.setStyleName("iconWrapper-2");
+        analysisImage.setIcon(FontAwesome.LINE_CHART);
+
         analysisImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","analyze/uploads");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("analyze_upload_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
@@ -179,13 +207,16 @@ public class MainDashboard extends VerticalLayout implements View {
             UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
             getUI().getNavigator().navigateTo("CommonView");
         });
+        CssLayout iconWrapper8 = new CssLayout();
+        Button settingsImage = new Button("setup");
+        iconWrapper8.addComponents(settingsImage);
 
-        Image settingsImage = new Image(null, new ClassResource("setup.png"));
-        settingsImage.setWidth(imageWidth);
-        settingsImage.setHeight(imageWidth);
-        settingsImage.addStyleName("my-img-button");
+        iconWrapper8.setStyleName("iconWrapper-1");
+        settingsImage.setIcon(FontAwesome.COGS);
+
 
         settingsImage.addClickListener(clickEvent -> {
+            UI.getCurrent().getSession().setAttribute("selectedLayout","setup");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("setup_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
@@ -208,21 +239,21 @@ public class MainDashboard extends VerticalLayout implements View {
         });
 
 
-        btnLayout1.addComponents(flightKitchenImage,preOrderImage,financeImage,bondReportsImage);
-        btnLayout1.setComponentAlignment(flightKitchenImage, Alignment.MIDDLE_CENTER);
-        btnLayout1.setComponentAlignment(preOrderImage,Alignment.MIDDLE_CENTER);
-        btnLayout1.setComponentAlignment(financeImage,Alignment.MIDDLE_CENTER);
-        btnLayout1.setComponentAlignment(bondReportsImage,Alignment.MIDDLE_CENTER);
+        btnLayout1.addComponents(iconWrapper1,iconWrapper2,iconWrapper3,iconWrapper4);
+        btnLayout1.setComponentAlignment(iconWrapper1, Alignment.MIDDLE_CENTER);
+        btnLayout1.setComponentAlignment(iconWrapper2,Alignment.MIDDLE_CENTER);
+        btnLayout1.setComponentAlignment(iconWrapper3,Alignment.MIDDLE_CENTER);
+        btnLayout1.setComponentAlignment(iconWrapper4,Alignment.MIDDLE_CENTER);
 
-        btnLayout2.addComponents(inventoryImage,crmImage,analysisImage,settingsImage);
-        btnLayout2.setComponentAlignment(inventoryImage, Alignment.MIDDLE_CENTER);
-        btnLayout2.setComponentAlignment(crmImage,Alignment.MIDDLE_CENTER);
-        btnLayout2.setComponentAlignment(analysisImage,Alignment.MIDDLE_CENTER);
-        btnLayout2.setComponentAlignment(settingsImage,Alignment.MIDDLE_CENTER);
+        btnLayout2.addComponents(iconWrapper5,iconWrapper6,iconWrapper7,iconWrapper8);
+        btnLayout2.setComponentAlignment(iconWrapper5, Alignment.MIDDLE_CENTER);
+        btnLayout2.setComponentAlignment(iconWrapper6,Alignment.MIDDLE_CENTER);
+        btnLayout2.setComponentAlignment(iconWrapper7,Alignment.MIDDLE_CENTER);
+        btnLayout2.setComponentAlignment(iconWrapper8,Alignment.MIDDLE_CENTER);
 
-        MarginInfo info = new MarginInfo(true);
-        info.setMargins(true,false,false,false);
-        verticalLayout.setMargin(info);
+//        MarginInfo info = new MarginInfo(true);
+//        info.setMargins(true,false,false,false);
+//        verticalLayout.setMargin(info);
         addComponent(verticalLayout);
         setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
     }

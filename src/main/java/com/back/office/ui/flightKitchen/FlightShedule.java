@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -37,7 +38,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class FlightShedule extends VerticalLayout implements View{
+public class FlightShedule extends UserEntryView implements View{
 
     protected Button flightShedul;
     protected VerticalLayout createLayout;
@@ -67,9 +68,9 @@ public class FlightShedule extends VerticalLayout implements View{
 
 
     public FlightShedule() {
+        super();
         createMainLayout();
         connection=DBConnection.getInstance();
-        setStyleName("backColorGrey");
     }
 
     public void createMainLayout() {

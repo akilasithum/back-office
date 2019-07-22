@@ -12,7 +12,7 @@
             <column name="flightNo" length="100" />
         </property>
         <property name="flightDate" type="java.util.Date">
-            <column name="flightDate" length="10" />
+            <column name="flightDate" />
         </property>
         <property name="messageBody" type="java.lang.String">
             <column name="messageBody"  length="30"/>

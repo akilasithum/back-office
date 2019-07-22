@@ -2,10 +2,12 @@ package com.back.office.ui.wizard;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.AircraftDetails;
+import com.back.office.framework.UserEntryView;
 import com.back.office.ui.wizard.steps.aircraft.AirCraftFirstStep;
 import com.back.office.ui.wizard.steps.aircraft.AircraftFrontGalleyStep;
 import com.back.office.ui.wizard.steps.aircraft.AircraftMiddleGalleyStep;
 import com.back.office.ui.wizard.steps.aircraft.AircraftRearGalleyStep;
+import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.MarginInfo;
@@ -14,7 +16,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.teemu.wizards.Wizard;
 
-public abstract class WizardCommonView extends VerticalLayout implements View {
+public abstract class WizardCommonView extends UserEntryView implements View {
 
     protected DBConnection connection;
     protected String headerName;
@@ -39,10 +41,10 @@ public abstract class WizardCommonView extends VerticalLayout implements View {
     }
 
     public WizardCommonView(){
+        super();
         connection = DBConnection.getInstance();
         defineStringFields();
         createMainLayout();
-        setStyleName("backColorGrey");
     }
 
     protected void createMainLayout(){
@@ -56,7 +58,7 @@ public abstract class WizardCommonView extends VerticalLayout implements View {
         headerLayout.setMargin(marginInfo);
 
         buttonLayout = new HorizontalLayout();
-        buttonLayout.setMargin(marginInfo);
+        buttonLayout.setMargin(Constants.bottomMarginInfo);
         buttonLayout.setSizeFull();
         addComponent(buttonLayout);
 
@@ -99,6 +101,7 @@ public abstract class WizardCommonView extends VerticalLayout implements View {
         wizard = new Wizard();
         wizard.setSizeFull();
         window.setContent(wizard);
+        wizard.setStyleName("wizard");
         registerWizardBanClickListeners();
     }
 

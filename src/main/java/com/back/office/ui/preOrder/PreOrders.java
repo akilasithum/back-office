@@ -47,13 +47,13 @@ public class PreOrders extends ReportCommonView {
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String ORDER_TYPE = "Source";
 
-    private final String preOrderId = "Pre Order Id";
+    private final String preOrderId = "Pre Order No";
     private final String PNR = "PNR";
     private final String customerName = "Customer Name";
     private final String serviceType = "Service Type";
     private final String flightNumber = "Flight Number";
     private final String FlightDate = "Flight Date";
-    private final String preOrderStatus = "pre Order Status";
+    private final String preOrderStatus = "Pre Order Status";
     private final String typeOfOrder = "Source";
 
 
@@ -178,10 +178,10 @@ public class PreOrders extends ReportCommonView {
         listdata.setColumnReorderingAllowed(true);
         listdata.setSizeFull();
 
-        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("Pre Order Item Id");
-        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("Ppre Order Id");
+        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("Pre Order Item No");
+        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("Ppre Order No");
         listdata.addColumn(PreOrderItem::getCategory).setCaption("Category");
-        listdata.addColumn(PreOrderItem::getItemNo).setCaption("ItemNo");
+        listdata.addColumn(PreOrderItem::getItemNo).setCaption("Item No");
         listdata.addColumn(PreOrderItem::getQuantity).setCaption("Quantity");
         Window windowdatatable=new Window();
         VerticalLayout windowContent = new VerticalLayout();
@@ -250,14 +250,15 @@ public class PreOrders extends ReportCommonView {
         windowdata.close();
     }
     private void createShowTableHeader(){
+        detailsTable.addColumn(PreOrderDetails::getServiceType).setCaption(serviceType);
+        detailsTable.addColumn(PreOrderDetails::getTypeOfOrder).setCaption(typeOfOrder);
         detailsTable.addColumn(PreOrderDetails::getPreOrderId).setCaption(preOrderId);
         detailsTable.addColumn(PreOrderDetails::getPNR).setCaption(PNR);
         detailsTable.addColumn(PreOrderDetails::getCustomerName).setCaption(customerName);
-        detailsTable.addColumn(PreOrderDetails::getServiceType).setCaption(serviceType);
         detailsTable.addColumn(PreOrderDetails::getFlightNumber).setCaption(flightNumber);
         detailsTable.addColumn(PreOrderDetails::getFlightDate).setCaption(FlightDate);
         detailsTable.addColumn(PreOrderDetails::getPreOrderStatus).setCaption(preOrderStatus);
-        detailsTable.addColumn(PreOrderDetails::getTypeOfOrder).setCaption(typeOfOrder);
+
     }
 
 }

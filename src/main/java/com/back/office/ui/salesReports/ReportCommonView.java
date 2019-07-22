@@ -2,6 +2,7 @@ package com.back.office.ui.salesReports;
 
 import com.back.office.db.DBConnection;
 import com.back.office.framework.OnDemandFileDownloader;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -17,7 +18,7 @@ import org.vaadin.haijian.Exporter;
 
 import java.io.*;
 
-public abstract class ReportCommonView extends VerticalLayout implements View {
+public abstract class ReportCommonView extends UserEntryView implements View {
     protected DBConnection connection;
     protected String pageHeader = "";
     protected String reportExcelHeader = "";
@@ -45,11 +46,10 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
     }
 
     public ReportCommonView(){
+        super();
         connection = DBConnection.getInstance();
-        setMargin(true);
         defineStringFields();
         createMainLayout();
-        setStyleName("backColorGrey");
         setSizeFull();
     }
 
@@ -65,7 +65,7 @@ public abstract class ReportCommonView extends VerticalLayout implements View {
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();
-        userFormLayout.setMargin(Constants.noMargin);
+        userFormLayout.setMargin(Constants.bottomMarginInfo);
         addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         addComponent(mainTableLayout);

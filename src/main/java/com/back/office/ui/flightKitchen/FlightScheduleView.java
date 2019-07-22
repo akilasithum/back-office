@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.itextpdf.text.Document;
@@ -38,7 +39,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class FlightScheduleView extends VerticalLayout implements View{
+public class FlightScheduleView extends UserEntryView implements View{
 
     protected Button flightShedul;
     protected VerticalLayout createLayout;
@@ -71,17 +72,17 @@ public class FlightScheduleView extends VerticalLayout implements View{
 
 
     public FlightScheduleView() {
+        super();
         setMargin(Constants.noMargin);
         createMainLayout();
         connection=DBConnection.getInstance();
-        setStyleName("backColorGrey");
     }
 
     public void createMainLayout() {
 
         createLayout = new VerticalLayout();
 
-        Label h1=new Label("Flight Schedule");
+        Label h1=new Label("Daily Flights");
 
         h1.addStyleName(ValoTheme.LABEL_H1);
         createLayout.addComponent(h1);
@@ -137,14 +138,15 @@ public class FlightScheduleView extends VerticalLayout implements View{
         createLayout.addComponent(buttonLayoutExportExcel);
 
         flightSheduleDetailGrid.setSizeFull();
-        flightSheduleDetailGrid.setWidth("60%");
+        flightSheduleDetailGrid.setWidth("70%");
 
-
-        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDateTime())).setCaption("Date");
+        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightDateTime).setCaption("Date");
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getaircraftRegistration).setCaption("ACFT Reg");
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getaircraftType).setCaption("Type");
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightNumber).setCaption("Flight Number");
+        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getFrom).setCaption("From");
+        flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getTo).setCaption("To");
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getservices).setCaption("Services");
     }
 

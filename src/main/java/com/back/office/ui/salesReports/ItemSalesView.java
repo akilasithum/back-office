@@ -3,6 +3,7 @@ package com.back.office.ui.salesReports;
 import com.back.office.db.DBConnection;
 import com.back.office.entity.SalesDetails;
 import com.back.office.entity.Sector;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-public class ItemSalesView extends VerticalLayout implements View {
+public class ItemSalesView extends UserEntryView implements View {
 
     DBConnection connection;
     protected String pageHeader = "Item Sales";
@@ -45,10 +46,10 @@ public class ItemSalesView extends VerticalLayout implements View {
     private final String CATEGORY = "Category";
     private final String SECTOR = "Sector";
     private final String SERVICE_TYPE = "Service Type";
-    private static final String ITEM_NAME = "Item Name";
+    private static final String ITEM_NAME = "Item Description";
     private static final String ITEM_ID = "Item No";
     private static final String QUANTITY = "Quantity";
-    private static final String GROSS_AMOUNT = "Gross Sale";
+    private static final String GROSS_AMOUNT = "Gross Sales";
     private static final String TOTAL = "Total";
     private static final String FLIGHT_DATE = "Flight Date";
     private static final String FLIGHT_NAME = "Flight";
@@ -56,6 +57,7 @@ public class ItemSalesView extends VerticalLayout implements View {
     private static final String FLIGHT_TO = "To";
 
     public ItemSalesView(){
+        super();
         connection = DBConnection.getInstance();
         setMargin(true);
         createMainLayout();
@@ -70,7 +72,6 @@ public class ItemSalesView extends VerticalLayout implements View {
     }
 
     private void createMainLayout() {
-        setStyleName("backColorGrey");
         setSpacing(true);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
@@ -121,7 +122,7 @@ public class ItemSalesView extends VerticalLayout implements View {
 
         sifNoField = new TextField(SIF_NO);
         sifNoField.setDescription(SIF_NO);
-        firstRow.addComponent(sifNoField);
+        //firstRow.addComponent(sifNoField);
 
         categoryComboBox = new ComboBox(CATEGORY);
         categoryComboBox.setDescription(CATEGORY);

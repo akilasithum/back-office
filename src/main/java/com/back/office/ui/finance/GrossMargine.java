@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
+import com.back.office.utils.BackOfficeUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -30,7 +32,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class GrossMargine extends VerticalLayout implements View{
+public class GrossMargine extends UserEntryView implements View{
     protected ComboBox serviceTypeC;
     protected Button process;
     protected List<ItemDetails> itemList;
@@ -58,7 +60,7 @@ public class GrossMargine extends VerticalLayout implements View{
     }
 
     public GrossMargine() {
-
+        super();
         createMainLayout();
         connection=DBConnection.getInstance();
         setMargin(true);
@@ -68,7 +70,6 @@ public class GrossMargine extends VerticalLayout implements View{
     public void createMainLayout() {
 
         createLayout=new VerticalLayout();
-        setStyleName("backColorGrey");
         Label h1=new Label("Gross Margin");
         h1.addStyleName(ValoTheme.LABEL_H1);
         createLayout.addComponent(h1);
@@ -93,6 +94,8 @@ public class GrossMargine extends VerticalLayout implements View{
         listGrid=new Grid();
         createLayout.addComponent(listGrid);
         createLayout.addComponent(listGrid);
+        listGrid.setSizeFull();
+        listGrid.setWidth("80%");
 
         //listGrid.setVisible(false);
 
@@ -105,12 +108,12 @@ public class GrossMargine extends VerticalLayout implements View{
         buttonList.addComponent(print);
         print.setVisible(false);
         listGrid.setWidth("50%");
-        listGrid.addColumn(ItemGross::getItemId).setCaption("Item Id");
-        listGrid.addColumn(ItemGross::getItemDescription).setCaption("Item Description");
-        listGrid.addColumn(ItemGross::getBasePrice).setCaption("Base Price");
-        listGrid.addColumn(ItemGross::getCostPrice).setCaption("CostPrice");
+        listGrid.addColumn(ItemGross::getItemId).setCaption("Item #");
+        listGrid.addColumn(ItemGross::getItemDescription).setCaption("Description");
+        listGrid.addColumn(ItemGross::getBasePrice).setCaption("Selling Price");
+        listGrid.addColumn(ItemGross::getCostPrice).setCaption("Cost");
         listGrid.addColumn(ItemGross::getMargine).setCaption("Margin");
-        listGrid.addColumn(ItemGross::getMarginPresentage).setCaption("Margin Percentage");
+        listGrid.addColumn(bean-> BackOfficeUtils.formatDecimals(bean.getMarginPresentage())).setCaption("Percentage");
 
         addComponent(createLayout);
 
@@ -121,7 +124,7 @@ public class GrossMargine extends VerticalLayout implements View{
             itemList=connection.getItemGross(serviceTypeC.getValue().toString());
             listGrid.setVisible(true);
 
-           // listGrid.removeAllColumns();
+            // listGrid.removeAllColumns();
             grossarrayList.clear();
 
 

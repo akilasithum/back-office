@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.back.office.entity.EquipmentMasterDetail;
 import com.back.office.entity.HHCMaster;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,7 +27,7 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class EquipmentMasterView extends VerticalLayout implements View {
+public class EquipmentMasterView extends UserEntryView implements View {
 
     protected Button submitList;
     protected VerticalLayout createLayout;
@@ -52,6 +53,7 @@ public class EquipmentMasterView extends VerticalLayout implements View {
 
 
     public EquipmentMasterView() {
+        super();
         createMainLayout();
         connection = DBConnection.getInstance();
 
@@ -60,7 +62,6 @@ public class EquipmentMasterView extends VerticalLayout implements View {
     public void createMainLayout() {
 
         createLayout = new VerticalLayout();
-        setStyleName("backColorGrey");
         setMargin(Constants.leftBottomtMargin);
         Label h1 = new Label("HHC and Cart Usage");
 
@@ -98,8 +99,8 @@ public class EquipmentMasterView extends VerticalLayout implements View {
         toDateText.setRequiredIndicatorVisible(true);
 
         masterType = new ComboBox("Type");
-        masterType.setItems(Arrays.asList("Equipments", "HHC"));
-        masterType.setValue("Equipments");
+        masterType.setItems(Arrays.asList("Equipment", "HHC"));
+        masterType.setValue("Equipment");
         masterType.setEmptySelectionAllowed(false);
 
         dateText.addComponent(fromDateText);
@@ -123,7 +124,6 @@ public class EquipmentMasterView extends VerticalLayout implements View {
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getEquipmentId).setCaption("Equipment ID");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getType).setCaption("Type");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getStatus).setCaption("Status");
-        equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getLastUsed).setCaption("Last Used");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getFlightNumber).setCaption("Flight Number");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getLastUsedDate).setCaption("Last Used Date");
 
@@ -157,7 +157,7 @@ public class EquipmentMasterView extends VerticalLayout implements View {
         if (fromDateText.getValue() != null && !fromDateText.getValue().toString().isEmpty() && toDateText.getValue() != null &&
                 !toDateText.getValue().toString().isEmpty()) {
 
-            if (masterTypeText != null && masterTypeText.equals("Equipments")) {
+            if (masterTypeText != null && masterTypeText.equals("Equipment")) {
                 List<com.back.office.entity.EquipmentMasterDetail> flightDetailListdatelis = connection.getEquipmentMasterDetails(Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 hhcMasterDetailGrid.setVisible(false);
                 equipmentMasterDetailGrid.setVisible(true);
@@ -195,7 +195,6 @@ public class EquipmentMasterView extends VerticalLayout implements View {
                         String s1 = flightDetailListdatelis.get(i).getEquipmentId();
                         String s2 = flightDetailListdatelis.get(i).getType();
                         String s3 = flightDetailListdatelis.get(i).getStatus();
-                        String s4 = flightDetailListdatelis.get(i).getLastUsed();
                         String s5 = flightDetailListdatelis.get(i).getFlightNumber();
                         Date s6 = flightDetailListdatelis.get(i).getLastUsedDate();
 
@@ -205,8 +204,6 @@ public class EquipmentMasterView extends VerticalLayout implements View {
                         c1.setCellValue(s2);
                         Cell c2 = r.createCell(2);
                         c2.setCellValue(s3);
-                        Cell c3 = r.createCell(3);
-                        c3.setCellValue(s4);
                         Cell c4 = r.createCell(4);
                         c4.setCellValue(s5);
                         Cell c5 = r.createCell(5);

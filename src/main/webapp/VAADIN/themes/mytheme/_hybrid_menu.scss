@@ -1,0 +1,718 @@
+/* Colors */
+$hm-dark-color: rgb(66, 66, 66);
+$hm-white-color: rgb(245, 245, 245);
+
+@mixin hmTransition($settings1, $settings2: null, $settings3: null) {
+  @if ($settings2) {
+    @if ($settings3) {
+      -webkit-transition: $settings1, $settings2, $settings3;
+      -moz-transition: $settings1, $settings2, $settings3;
+      -ms-transition: $settings1, $settings2, $settings3;
+      -o-transition: $settings1, $settings2, $settings3;
+      transition: $settings1, $settings2, $settings3;
+    } @else {
+      -webkit-transition: $settings1, $settings2;
+      -moz-transition: $settings1, $settings2;
+      -ms-transition: $settings1, $settings2;
+      -o-transition: $settings1, $settings2;
+      transition: $settings1, $settings2;
+    }
+  } @else {
+    -webkit-transition: $settings1;
+    -moz-transition: $settings1;
+    -ms-transition: $settings1;
+    -o-transition: $settings1;
+    transition: $settings1;
+  }
+}
+
+@mixin hmPos($position: null, $top: null, $right: null, $bottom: null, $left: null, $z-index: null) {
+  @if ($position) {
+    position: $position;
+  }
+  @if ($top) {
+    top: $top;
+  }
+  @if ($right) {
+    right: $right;
+  }
+  @if ($bottom) {
+    bottom: $bottom;
+  }
+  @if ($left) {
+    left: $left;
+  }
+  @if ($z-index) {
+    z-index: $z-index;
+  }
+}
+
+@mixin hmSize($width: null, $height: null) {
+  @if ($width) {
+    width: $width;
+  }
+  @if ($height) {
+    height: $height;
+  }
+}
+
+@mixin hmTransformTranslate($x: null, $y: null) {
+  @if ($x) {
+    @if ($y) {
+      -webkit-transform: translateX($x) translateY($y);
+      -moz-transform: translateX($x) translateY($y);
+      -ms-transform: translateX($x) translateY($y);
+      -o-transform: translateX($x) translateY($y);
+      transform: translateX($x) translateY($y);
+    } @else {
+      -webkit-transform: translateX($x);
+      -moz-transform: translateX($x);
+      -ms-transform: translateX($x);
+      -o-transform: translateX($x);
+      transform: translateX($x);
+    }
+  } @else {
+    -webkit-transform: translateY($y);
+    -moz-transform: translateY($y);
+    -ms-transform: translateY($y);
+    -o-transform: translateY($y);
+    transform: translateY($y);
+  }
+}
+
+@mixin hmTransformRotate($settings1) {
+  -webkit-transform: rotate($settings1);
+  -moz-transform: rotate($settings1);
+  -ms-transform: rotate($settings1);
+  -o-transform: rotate($settings1);
+  transform: rotate($settings1);
+}
+
+@mixin hmTheme($content-background,
+        $menuLeft-background,
+        $button-active-background,
+        $button-hover-background,
+        $notification-background,
+        $notification-remove-button-color,
+        $tooltip-background,
+        $tooltip-active-background) {
+  .topMenu .v-slot > div {
+    @include hmBackgroundWithColor($menuLeft-background);
+    border-top-color: $tooltip-background !important;
+
+    &:hover {
+      @include hmBackgroundWithColor($button-hover-background);
+    }
+
+    .HMButton-caption .toolTip {
+      @include hmBackgroundWithColor($tooltip-background);
+    }
+  }
+
+  .rootContent {
+    @include hmBackgroundWithColor($content-background);
+
+    .leftMenu {
+      background: $menuLeft-background;
+
+      .v-slot-HMLabel > div .v-caption:after {
+        border-bottom-color: rgba(hmColorDedect($menuLeft-background), 0.25) !important;
+      }
+
+      .HMButton {
+        border-left-color: $tooltip-background !important;
+
+        &.active {
+          border-left-color: $tooltip-active-background !important;
+          @include hmBackgroundWithColor($button-active-background);
+        }
+
+        &:hover {
+          @include hmBackgroundWithColor($button-hover-background);
+        }
+      }
+
+      .HMSubMenu > .v-slot:last-child > .v-verticallayout {
+        border-left-color: rgba(hmColorDedect($menuLeft-background), 0.25) !important;
+      }
+    }
+
+    .notificationCenter {
+      background: rgba($menuLeft-background, 0.75);
+      color: hmColorDedect($menuLeft-background);
+
+      .notification {
+        @include hmBackgroundWithColor($notification-background);
+
+        .title .timeAgo:before {
+          background: hmColorDedect($notification-background);
+        }
+
+        .button {
+          background: transparent;
+          color: hmColorDedect($notification-background);
+
+          &:hover {
+            color: $notification-remove-button-color;
+            background: rgba($button-hover-background, 0.5);
+          }
+        }
+      }
+
+      .v-slot-footer .v-slot > div {
+        @include hmBackgroundWithColor($button-active-background);
+
+        &:hover {
+          @include hmBackgroundWithColor($button-hover-background);
+        }
+      }
+    }
+  }
+}
+
+@function hmColorDedect($background) {
+  @if (lightness($background) > 50) {
+    @return $hm-dark-color;
+  } @else {
+    @return $hm-white-color;
+  }
+}
+
+@mixin hmBackgroundWithColor($background) {
+  background: $background;
+  color: hmColorDedect($background);
+}
+
+@-webkit-keyframes showNotiInit {
+  from {
+    height: 0 !important;
+  } to {
+      height: auto !important;
+    }
+}
+
+@keyframes showNotiInit {
+  from {
+    height: 0 !important;
+  } to {
+      height: auto !important;
+    }
+}
+
+@mixin hybrid-menu {
+  .hybridMenu {
+    position: relative;
+    z-index: 1;
+
+    /* notification center */
+    .v-slot-notificationCenter {
+      @include hmPos(null, 0, 0, null, null, 100000);
+      position: fixed !important;
+
+      .notificationCenter {
+        -webkit-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+        -moz-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+        -ms-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+        -o-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+        transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+        @include hmPos(fixed, 0, -350px, null, null, 100000);
+        width: 350px !important;
+
+        &.open {
+          right: 0;
+
+          .lastNotification {
+            right: 350px !important;
+
+            .notification {
+              right: -700px;
+            }
+          }
+        }
+
+        .v-slot-content {
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+
+        .buttonLine {
+          padding: 8px;
+        }
+
+        .v-slot-buttonLine {
+          text-align: center;
+
+          .v-slot > div {
+            @include hmTransition(background 0.3s ease-in-out);
+            @include hmSize(40px, 40px);
+            vertical-align: middle;
+            text-align: center;
+            position: relative;
+            line-height: 38px;
+            margin: 0 5px;
+
+            &.HMButton {
+              cursor: pointer;
+            }
+          }
+        }
+
+        .notification {
+          position: relative;
+          margin: 8px 8px 0;
+          font-size: 18px;
+          display: block;
+          padding: 10px;
+
+          .title {
+            width: 100%;
+            text-overflow: ellipsis;
+            line-height: 22px;
+            overflow: hidden;
+            display: block;
+            height: 24px;
+
+            .timeAgo {
+              display: inline-block;
+              position: absolute;
+              margin: 0 0 0 8px;
+              font-size: 10px;
+
+              &:before {
+                @include hmSize(4px, 4px);
+                display: inline-block;
+                margin: 0 7px 1px 0;
+                border-radius: 50%;
+                content: '';
+              }
+            }
+          }
+
+          &.withIcon {
+            padding-left: 50px;
+
+            .title {
+              width: calc(100% - 23px) !important;
+            }
+
+            .v-caption {
+              @include hmSize(34px, calc(100% - 16px));
+              @include hmPos(absolute, 0, null, null, 0);
+              border-right: 1px solid;
+              vertical-align: middle;
+              font-size: 28px;
+              display: block;
+              margin: 8px;
+              padding: 0;
+            }
+          }
+
+          .content {
+            white-space: pre-line;
+            word-break: break-all;
+            overflow: hidden;
+            font-size: 14px;
+            margin: 2px 0 0;
+            display: block;
+          }
+
+          .button {
+            @include hmTransition(opacity 0.3s ease-in-out);
+            @include hmPos(absolute, 0, 0);
+            @include hmSize(30px, 30px);
+            text-align: center;
+            line-height: 28px;
+            cursor: pointer;
+            opacity: 0;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .lastNotification {
+          @include hmTransition(opacity 0.3s ease-in-out, height 0.3s ease-in-out, right 0.3s ease-in-out);
+
+          height: auto !important;
+          position: fixed;
+          bottom: 8px;
+          right: 0;
+
+          &:hover {
+            opacity: 0.2;
+          }
+
+          .notification {
+            -webkit-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            -moz-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            -ms-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            -o-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            -webkit-animation-name: showNotiInit;
+            -webkit-animation-duration: 1s;
+            animation-name: showNotiInit;
+            animation-duration: 1s;
+            height: auto !important;
+            position: relative;
+            overflow: hidden;
+            display: block;
+            z-index: 1000;
+            right: -350px;
+            width: 330px;
+
+            &.show {
+              right: 0 !important;
+            }
+          }
+
+          &.top .notification {
+            top: 45px !important;
+            bottom: unset !important;
+          }
+        }
+      }
+    }
+
+    /* top menu */
+    .v-slot-topMenu {
+      @include hmPos(fixed, 0, null, null, 0, 1000);
+
+      .topMenu {
+        @include hmPos(fixed, 0, 100px, null, null, 1000);
+
+        .v-slot.v-slot-HMTextField > div {
+          @include hmTransition(width 0.3s ease-in-out);
+          width: 36px !important;
+          overflow: hidden;
+
+          .v-caption-HMTextField {
+            display: inline-block;
+            max-width: 36px;
+            width: 100%;
+            padding: 0;
+          }
+
+          input.HMTextField {
+            @include hmTransition(width 0.3s ease-in-out);
+            display: inline-block;
+            box-shadow: none !important;
+            outline: unset !important;
+            border-radius: 0 !important;
+            border: none !important;
+            @include hmSize(0, 30px);
+            margin: 6px 0 0 5px;
+            padding: 5px;
+          }
+
+          &:hover {
+            width: 206px !important;
+
+            input.HMTextField {
+              width: 150px !important;
+            }
+          }
+        }
+
+        .v-slot > div {
+          @include hmSize(36px, 44px);
+          @include hmPos(relative);
+          vertical-align: middle;
+          text-align: center;
+          line-height: 42px;
+          margin: 0 5px;
+
+          &.HMButton {
+            @include hmTransition(background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out);
+            border-top: 0 solid;
+            cursor: pointer;
+
+            .HMButton-caption {
+              margin: 0;
+
+              .toolTip {
+                @include hmPos(absolute, 32px, -6px);
+                border-radius: 4px;
+                line-height: 17px;
+                font-size: 14px;
+                padding: 5px;
+              }
+            }
+
+            &:hover {
+              border-top-width: 4px;
+              height: 48px;
+
+              .HMButton-caption {
+                pointer-events: auto !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    /* root content */
+    .rootContent {
+      & > .v-expand {
+        @include hmTransition(padding-left 0.3s ease-in-out);
+        padding-left: 250px !important;
+
+        /* Left Menu */
+        .v-slot-leftMenu {
+          @include hmTransition(margin-left 0.3s ease-in-out);
+          margin-left: -250px !important;
+
+          .leftMenu {
+            @include hmTransition(width 0.3s ease-in-out);
+            width: 250px !important;
+
+            & > .v-expand > .v-slot {
+              height: auto !important;
+            }
+
+            &:not(.minimal) {
+              overflow: auto;
+            }
+
+            .v-slot-HMLabel > div {
+              width: 100%;
+
+              .v-caption {
+                text-align: center;
+                position: relative;
+                font-size: 20px;
+                padding: 10px;
+
+                &:after {
+                  @include hmPos(absolute, null, null, 0, 0);
+                  border-bottom: 1px solid;
+                  content: '';
+                  width: 100%;
+                }
+
+                .v-icon {
+                  margin-right: 5px;
+                  max-height: 32px;
+                }
+              }
+
+              .v-label {
+                display: none;
+              }
+            }
+
+            .HMButton {
+              @include hmTransition(background 0.3s, border-left 0.3s, height 0.5s);
+              border-left: 0 solid transparent;
+              background: transparent;
+              overflow: hidden;
+              cursor: pointer;
+              display: block;
+              padding: 8px 0;
+              height: 45px;
+
+              &.active {
+                border-left-width: 3px;
+              }
+
+              &:hover, &.active:hover {
+                border-left-width: 5px;
+              }
+            }
+
+            .HMButton-wrap {
+              @include hmTransition(border 0.3s);
+              @include hmPos(relative);
+              display: block;
+              z-index: 1000;
+
+              .v-icon {
+                @include hmPos(relative);
+                vertical-align: middle;
+                display: inline-block;
+                text-align: center;
+                margin-left: 10px;
+                width: 25px;
+              }
+
+              .HMButton-caption {
+                font-size: 17px;
+                vertical-align: middle;
+              }
+            }
+
+            .HMSubMenu {
+              & > .v-slot {
+                &:first-child .toolTip {
+                  @include hmPos(absolute, 0, 5px);
+                  @include hmSize(30px, 30px);
+
+                  .v-icon {
+                    @include hmTransition(transform 0.3s ease-in-out);
+                    @include hmTransformRotate(0deg);
+                    @include hmSize(30px, 30px);
+                    line-height: 27px;
+                    margin: 0;
+                  }
+                }
+
+                &:last-child > .v-verticallayout {
+                  @include hmTransition(max-height 0.5s ease-in-out);
+                  width: calc(100% - 24px) !important;
+                  border-left: 1px solid transparent;
+                  position: relative;
+                  margin-left: 24px;
+                  overflow: hidden;
+                  display: block;
+                  max-height: 0;
+                }
+              }
+
+              &.open > .v-slot {
+                &:first-child .toolTip .v-icon {
+                  @include hmTransformRotate(-180deg);
+                }
+
+                &:last-child > .v-verticallayout {
+                  max-height: 1000px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      /* breadcrumbs */
+      .breadcrumbs {
+        padding: 15px 20px;
+
+        .v-slot {
+          width: auto !important;
+
+          .HMButton.clickable {
+            cursor: pointer;
+          }
+
+          .HMLabel {
+            display: none !important;
+          }
+        }
+      }
+
+      /* left menu minimal */
+      &.minimal {
+        overflow: inherit;
+
+        & > .v-expand {
+          padding-left: 50px !important;
+
+          .v-slot-leftMenu {
+            margin-left: -50px !important;
+
+            .leftMenu {
+              overflow: visible;
+              width: 50px !important;
+
+              .v-slot-HMLabel > div .v-caption .v-captiontext {
+                display: none;
+              }
+
+              .HMButton {
+                overflow: visible;
+
+                &:hover .HMButton-caption {
+                  pointer-events: all !important;
+                  opacity: 1 !important;
+                  left: 45px !important;
+                }
+
+                .HMButton-wrap {
+                  z-index: 100;
+
+                  .v-icon {
+                    width: 100%;
+                    margin: 0;
+                  }
+
+                  .HMButton-caption {
+                    @include hmTransition(left 0.5s ease-in-out, opacity 0.5s ease-in-out);
+                    padding: 9px 13px 8px;
+                    top: calc(-50% + 5px);
+                    pointer-events: none;
+                    position: absolute;
+                    white-space: pre;
+                    z-index: 10000;
+                    height: 28px;
+                    left: -500px;
+                    opacity: 0;
+                    margin: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      /* content */
+      .v-slot-contentBox {
+        overflow-y: auto;
+
+        .contentBox {
+          padding: 0 !important;
+
+          & > .v-margin-top {
+            padding-top: 0 !important;
+          }
+        }
+      }
+    }
+
+    /*
+    $tooltip-background: rgb(25, 118, 210);
+    $tooltip-active-background: rgb(51, 105, 30);
+    $notification-remove-button-color: rgb(222, 30, 30);
+
+    // white theme
+    &.white {
+        $white-content-background: rgb(245, 245, 245);
+        $white-menuLeft-background: rgb(224, 224, 224);
+        $white-button-active-background: $white-content-background;
+        $white-button-hover-background: rgb(189, 189, 189);
+        $white-notification-background: rgba($white-menuLeft-background, 0.75);
+
+        @include hmTheme(
+                $white-content-background,
+                $white-menuLeft-background,
+                $white-button-active-background,
+                $white-button-hover-background,
+                $white-notification-background,
+                $notification-remove-button-color,
+                $tooltip-background,
+                $tooltip-active-background
+            );
+    }
+
+    // dark theme
+    &.dark {
+        $dark-content-background: rgb(83, 83, 83);
+        $dark-menuLeft-background: rgb(53, 53, 53);
+        $dark-button-active-background: $dark-content-background;
+        $dark-button-hover-background: rgb(33, 33, 33);
+        $dark-notification-background: rgba($dark-menuLeft-background, 0.75);
+
+        @include hmTheme(
+                $dark-content-background,
+                $dark-menuLeft-background,
+                $dark-button-active-background,
+                $dark-button-hover-background,
+                $dark-notification-background,
+                $notification-remove-button-color,
+                $tooltip-background,
+                $tooltip-active-background
+            );
+    }
+    */
+  }
+}

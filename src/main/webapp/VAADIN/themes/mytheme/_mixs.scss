@@ -1,0 +1,518 @@
+//#@mixin for shorthand
+//#Rotatating mixin
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+//#transform origin
+@mixin transform-origin($origin) {
+  moz-transform-origin: $origin;
+  -o-transform-origin: $origin;
+  -ms-transform-origin: $origin;
+  -webkit-transform-origin: $origin;
+  transform-origin: $origin;
+}
+
+// #Border radius shorthand
+@mixin border-radiusk($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+  border-radius: $radius;
+}
+
+// #rotate
+@mixin rotate($deg) {
+  @include transform(rotate(#{$deg}deg));
+}
+
+// #scale
+@mixin scale($scale) {
+  @include transform(scale($scale));
+}
+
+// #translate
+@mixin translate($x, $y) {
+  @include transform(translate($x, $y));
+}
+
+@mixin transition2s {
+  transition-delay: 0.1s;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+
+// #box_shadow radius shorthand
+@mixin box_Shadow($top, $left, $blur, $color, $inset) {
+  -webkit-box-shadow: $top $left $blur $color $inset;
+  -moz-box-shadow: $top $left $blur $color $inset;
+  box-shadow: $top $left $blur $color $inset;
+}
+
+@mixin box_ShadowNew($left, $bottom, $all, $blur, $color) {
+  -webkit-box-shadow: $left $bottom $all $blur $color;
+  -moz-box-shadow: $left $bottom $all $blur $color;
+  box-shadow: $left $bottom $all $blur $color;
+}
+
+@mixin box_ShadowNone {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;;
+}
+
+// ===========================================================================================================================
+///#v-button-primary fpcus animation/
+// ===========================================================================================================================
+@mixin buttonfocusAnimation($buttonfocusBG) {
+  &:before {
+    content: "";
+    width: 31px;
+    height: 29px !important;
+    background: darken($buttonfocusBG, 12%);
+    @include transition2s;
+    opacity: 0;
+    @include border-radiusk(30px);
+    position: absolute;
+    left: 32%;
+  }
+  &:active {
+    &:before {
+      width: 100%;
+      opacity: 0.5;
+      @include border-radiusk(0);
+      left: 0;
+
+    }
+  }
+}
+
+// ===========================================================================================================================
+///#v-button colour and bg mixin/
+// ===========================================================================================================================
+@mixin buttonColor($buttonBG, $buttonCo, $radius) {
+  background: $buttonBG;
+  cursor: pointer;
+  font-weight: normal;
+  color: $buttonCo;
+  height: $v-buttonSize;
+  min-width: 85px;
+  @include border-radiusk($radius);
+  position: relative;
+  @include buttonfocusAnimation($buttonBG);
+  border: 1px solid lighten($buttonBG, 12%);
+  @include box_ShadowNone;
+  &:hover, &:focus, &:active {
+    background: darken($buttonBG, 8%);
+    &:after {
+      border: none !important;
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+      color: $buttonCo !important;
+    }
+    span {
+      color: $buttonCo !important;
+    }
+  }
+  .v-button-wrap {
+    position: relative;
+    top: 7px;
+  }
+}
+@mixin buttonColorNone($buttonCo, $radius) {
+  background: none!important;
+  cursor: pointer;
+  font-weight: normal;
+  color: $buttonCo!important;
+  min-width: 85px;
+  border: none!important;
+  @include border-radiusk($radius);
+  position: relative;
+  @include box_ShadowNone;
+  &:hover, &:focus, &:active {
+    border: none!important;
+    background: none!important;
+    &:after {
+      border: none !important;
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+      color: $buttonCo !important;
+      background: none!important;
+    }
+    span {
+      color: $buttonCo !important;
+    }
+  }
+
+}
+
+@mixin buttonInforandReject($buttonBG, $buttonCo, $hoverRjectBG) {
+  background: $buttonBG !important;
+  cursor: pointer;
+  font-weight: normal;
+  color: $buttonCo !important;
+  height: $v-buttonSize;
+  min-width: 85px;
+  @include border-radiusk(0);
+  border: 1px solid $buttonCo !important;
+  position: relative;
+  @include buttonfocusAnimation(darken($hoverRjectBG, 3%));
+  &:hover, &:focus {
+    &:after {
+      border: 1px solid darken($buttonCo, 4%);
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+      color: $buttonCo !important;
+      background-color: transparent !important;
+    }
+    span {
+      color: $buttonCo !important;
+    }
+  }
+  .v-button-wrap {
+    position: relative;
+    top: 6px;
+  }
+}
+
+// ===========================================================================================================================
+//#Input boarder error change color
+// ===========================================================================================================================
+@mixin inputBordererrorColor($inputBordererrorColorsa, $errorColor) {
+  background-image: -moz-linear-gradient(top, darken($inputBordererrorColorsa, 10%), darken($inputBordererrorColorsa, 10%)), -moz-linear-gradient(top, $inputBordererrorColorsa, $inputBordererrorColorsa) !important;
+  background-image: -webkit-linear-gradient(top, darken($inputBordererrorColorsa, 10%), darken($inputBordererrorColorsa, 10%)), -webkit-linear-gradient(top, $inputBordererrorColorsa, $inputBordererrorColorsa) !important;
+  background-image: -o-linear-gradient(top, darken($inputBordererrorColorsa, 10%), darken($inputBordererrorColorsa, 10%)), -o-linear-gradient(top, $inputBordererrorColorsa, $inputBordererrorColorsa) !important; /* Opera 11.10+ */
+  background-image: -ms-linear-gradient(top, darken($inputBordererrorColorsa, 10%), darken($inputBordererrorColorsa, 10%)), -ms-linear-gradient(top, $inputBordererrorColorsa, $inputBordererrorColorsa) !important; /* IE10+ */
+  background-image: linear-gradient(to bottom, darken($inputBordererrorColorsa, 10%), darken($inputBordererrorColorsa, 10%)), linear-gradient(to bottom, $inputBordererrorColorsa, $inputBordererrorColorsa) !important;
+  color: $white !important;
+  [class*="input"]:focus, [class*="textfield"]:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: rgba(250, 252, 252, 1);
+    border: transparent;
+    -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  }
+  //If you want remove this mixin styels this class (entitySearchTextField)remove boarder bottom
+}
+
+// ===========================================================================================================================
+//#inputBorderColorParentClass
+// ===========================================================================================================================
+@mixin inputBorderColorParentClass($inputBorderFocusColor) {
+  input, textarea, [class*="input"], [class*="textfield"], .gwt-TextBox {
+    border-left: transparent;
+    border-right: transparent;
+    border-top: transparent;
+    border: 0;
+    background: transparent no-repeat;
+    background-image: -moz-linear-gradient(top, $inputBorderFocusColor, $inputBorderFocusColor), -moz-linear-gradient(top, silver, silver);
+    background-image: -webkit-linear-gradient(top, $inputBorderFocusColor, $inputBorderFocusColor), -webkit-linear-gradient(top, silver, silver);
+    background-image: -o-linear-gradient(top, $inputBorderFocusColor, $inputBorderFocusColor), -o-linear-gradient(top, silver, silver); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, $inputBorderFocusColor, $inputBorderFocusColor), -ms-linear-gradient(top, silver, silver); /* IE10+ */
+    background-image: linear-gradient(to bottom, $inputBorderFocusColor, $inputBorderFocusColor), linear-gradient(to bottom, silver, silver);
+    background-size: 0 2px, 100% 1px;
+    background-position: 50% 100%, 50% 100%;
+    -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    -webkit-box-shadow: none;
+    color: $white !important;
+    box-shadow: none;
+    &:focus, &:active {
+      border: transparent;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-size: 100% 2px, 100% 1px;
+      outline: none;
+      -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    }
+  }
+
+  [class*="input"]:focus, [class*="textfield"]:focus {
+    background-size: 100% 2px, 100% 1px;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: transparent;
+    -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+
+  }
+  .v-filterselect-button {
+    border-left: none;
+    color: $white;
+    &:hover, &:focus {
+      &:after {
+        background: transparent;
+      }
+    }
+  }
+  .stepper-updown {
+    border-left: none !important;
+    .stepper-up {
+      border-bottom: none !important;
+    }
+  }
+  .v-datefield-button {
+    border: none !important;
+    color: $white;
+  }
+  .v-filterselect-button, .v-datefield-button {
+    &:active {
+      &:after {
+        background: transparent !important;
+      }
+    }
+    &:hover {
+      &:before {
+        color: $inputBorderFocusColor !important;
+      }
+    }
+  }
+}
+
+// ===========================================================================================================================
+//#inputBorderColor
+// ===========================================================================================================================
+@mixin inputBorderColor($inputBorderFocusColorsa) {
+  border-left: transparent;
+  border-right: transparent;
+  border-top: transparent;
+  border: 0;
+  background: transparent no-repeat;
+  background-image: -moz-linear-gradient(top, $inputBorderFocusColorsa, $inputBorderFocusColorsa), -moz-linear-gradient(top, silver, silver);
+  background-image: -webkit-linear-gradient(top, $inputBorderFocusColorsa, $inputBorderFocusColorsa), -webkit-linear-gradient(top, silver, silver);
+  background-image: -o-linear-gradient(top, $inputBorderFocusColorsa, $inputBorderFocusColorsa), -o-linear-gradient(top, silver, silver); /* Opera 11.10+ */
+  background-image: -ms-linear-gradient(top, $inputBorderFocusColorsa, $inputBorderFocusColorsa), -ms-linear-gradient(top, silver, silver); /* IE10+ */
+  background-image: linear-gradient(to bottom, $inputBorderFocusColorsa, $inputBorderFocusColorsa), linear-gradient(to bottom, silver, silver);
+  background-size: 0 2px, 100% 1px;
+  background-position: 50% 100%, 50% 100%;
+  -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);;
+  transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  &:focus, &:active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-size: 100% 2px, 100% 1px;
+    outline: none;
+    border: transparent;
+    -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  }
+  //  If you want remove this mixin styels this class (entitySearchTextField)remove boarder bottom
+}
+
+.v-Notification {
+  background: $orange;
+  .v-Notification-caption {
+    font-size: 16px;
+  }
+}
+
+.iconWrapper-1, .iconWrapper-2, .iconWrapper-3, .iconWrapper-4{
+  .v-button {
+    @include buttonColorNone($orange, 0);
+    z-index: 2;
+    font-size: 32px;
+    position: absolute;
+    left: 0;
+    top: 36%;
+    bottom: 0;
+    right: 0;
+    .v-button-caption{
+      display: block;
+      font-size: 16px;
+      margin-top: 45px;
+      text-transform: uppercase;
+      color: $white;
+    }
+    &:hover, &:focus, &:active {
+      .v-button-caption{
+        color: $white;
+      }
+    }
+  }
+  color: $white;
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  width: 170px;
+  height: 170px;
+  &:after{
+    position: absolute;
+    content: "";
+    width: 170px;
+    height: 170px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    margin: 0 auto;
+  }
+}
+
+.iconWrapper-11, .iconWrapper-21, .iconWrapper-31, .iconWrapper-41{
+  .v-button {
+    @include buttonColorNone($light_orange , 0);
+    z-index: 2;
+    font-size: 25px;
+    .v-button-caption{
+      display: block;
+      font-size: 8px;
+      text-transform: uppercase;
+      color: $white;
+    }
+    &:hover, &:focus, &:active {
+      .v-button-caption{
+        color: $white  !important;
+      }
+    }
+    color: #e2864e !important;
+  }
+  color: $white;
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  width: 50px;
+  &:after{
+    position: absolute;
+    content: "";
+    width: 40px;
+    height: 40px;
+    top: -60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    margin: 0 auto;
+  }
+}
+
+.selected{
+  .v-button {
+    @include buttonColorNone($light_orange , 0);
+    z-index: 2;
+    font-size: 25px;
+    .v-button-caption{
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      color: $white;
+    }
+    &:hover, &:focus, &:active {
+      .v-button-caption{
+        color: $white  !important;
+      }
+    }
+    color: white !important;
+  }
+  color: $white;
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  width: 50px;
+  &:after{
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 50px;
+    top: -60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    margin: 0 auto;
+  }
+}
+
+.backBtn{
+  .v-button {
+    @include buttonColorNone($light_orange , 0);
+    z-index: 2;
+    font-size: 25px;
+    .v-button-caption{
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      color: $white;
+    }
+    &:hover, &:focus, &:active {
+      .v-button-caption{
+        color: $white  !important;
+      }
+    }
+    color: greenyellow !important;
+  }
+  color: $white;
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  width: 50px;
+  &:after{
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 50px;
+    top: -60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    margin: 0 auto;
+  }
+}
+
+.iconLayoutBackground{
+  padding-left: 15%;
+  padding-right: 15%;
+  padding-top: 0;
+  background-color: #030277;
+  margin-bottom: 100px;
+  height: 60px;
+}
+
+.iconLayoutBackgroundNoMargin{
+  padding-left: 15%;
+  padding-right: 15%;
+  padding-top: 0;
+  background-color: #030277;
+  height: 60px;
+}
+
+.iconWrapper-1{
+  &:after{
+    background: url("images/icon_1.svg")  no-repeat!important;
+  }
+}
+
+.iconWrapper-2{
+  &:after{
+    background: url("images/icon_2.svg")  no-repeat!important;
+  }
+}
+
+.iconWrapper-3{
+  &:after{
+    background: url("images/icon_3.svg")  no-repeat!important;
+  }
+}
+
+.iconWrapper-4{
+  &:after{
+    background: url("images/icon_4.svg")  no-repeat!important;
+  }
+}

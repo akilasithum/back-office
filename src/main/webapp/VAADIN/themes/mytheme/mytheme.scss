@@ -29,10 +29,7 @@
 // For more information, see: https://vaadin.com/book/-/page/themes.valo.html
 // Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
 
-@import "../valo/valo.scss";
-
-@mixin mytheme {
-  @include valo;
+@mixin theme {
 
   // Insert your own theme rules here
   .my-img-button {
@@ -66,38 +63,27 @@
     }
   }
 
-  .backColorGrey{
-    background-color:#f3fafb;
-  }
 
-  .imageMargin{
-    margin-top: 20px;
+
+  .imageMargin {
     cursor: pointer;
   }
 
-  .itemLabel{
+  .itemLabel {
     font-weight: bold;
     color: white;
   }
 
-  .hybridMenu{
-    background: url(images/Sky.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-
-  .main-layout{
+  .main-layout {
     padding-left: 15%;
     padding-right: 15%;
+    padding-top: 0;
   }
 
-  .icon-image{
+  .icon-image {
     width: 25%;
     height: 25%;
   }
-
 
   .myRootContent {
     & > .v-expand {
@@ -304,8 +290,10 @@
       overflow-y: auto;
 
       .contentBox {
-        padding: 0 !important;
-
+        padding-top: 0;
+        padding-bottom: 0;
+        position: relative;
+        z-index: 1;
         & > .v-margin-top {
           padding-top: 0 !important;
         }

@@ -2,6 +2,7 @@ package com.back.office.ui.flightKitchen;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.ItemDetails;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import com.vaadin.event.selection.SingleSelectionListener;
 import com.vaadin.navigator.View;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class RequestInventory extends VerticalLayout implements View{
+public class RequestInventory extends UserEntryView implements View{
     private ComboBox baseStationCB;
     private ComboBox itemNumberCB;
     private ComboBox itemNameCB;
@@ -50,9 +51,9 @@ public class RequestInventory extends VerticalLayout implements View{
     }
 
     public RequestInventory() {
+        super();
         connection=DBConnection.getInstance();
         createMainLayout();
-        setStyleName("backColorGrey");
     }
 
     public void createMainLayout() {
@@ -128,6 +129,8 @@ public class RequestInventory extends VerticalLayout implements View{
         buttonLayout.addComponents(submitButton,deleteButton);
         formLayoutList.addComponent(buttonLayout);
         formLayoutList.addComponent(itemDetailsFilterGrid);
+        itemDetailsFilterGrid.setSizeFull();
+        itemDetailsFilterGrid.setWidth("70%");
 
         downloadPdfButton=new Button("Download to Excel");
 

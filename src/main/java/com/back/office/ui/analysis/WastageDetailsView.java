@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import org.apache.poi.ss.usermodel.Cell;
@@ -34,7 +35,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class WastageDetailsView extends VerticalLayout implements View{
+public class WastageDetailsView extends UserEntryView implements View{
 
     protected Button submitList;
     protected VerticalLayout createLayout;
@@ -61,10 +62,10 @@ public class WastageDetailsView extends VerticalLayout implements View{
 
 
     public WastageDetailsView() {
+        super();
         connection=DBConnection.getInstance();
         createMainLayout();
         setMargin(Constants.noMargin);
-        setStyleName("backColorGrey");
     }
 
     public void createMainLayout() {
@@ -138,7 +139,7 @@ public class WastageDetailsView extends VerticalLayout implements View{
         createLayout.addComponent(wastageDetailGrid);
         createLayout.addComponent(buttonLayoutExportExcel);
 
-        wastageDetailGrid.addColumn(WastageDetail::getitemId).setCaption("Item Id");
+        wastageDetailGrid.addColumn(WastageDetail::getitemId).setCaption("Item No");
         wastageDetailGrid.addColumn(WastageDetail::getquantity).setCaption("Quantity");
         wastageDetailGrid.addColumn(WastageDetail::getcartNo).setCaption("Cart No");
         wastageDetailGrid.addColumn(WastageDetail::getdrawer).setCaption("Drawer");

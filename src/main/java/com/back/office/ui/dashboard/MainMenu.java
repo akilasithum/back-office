@@ -31,14 +31,17 @@ public class MainMenu extends VerticalLayout {
 
     /* Components */
     private HorizontalLayout content = new HorizontalLayout();
+    private CssLayout tab_wrpapper = new CssLayout();
+    private HorizontalLayout tab_content = new HorizontalLayout();
 
     private BreadCrumbs breadcrumbs = null;
     private Layout naviRootContent = null;
     private VerticalLayout rootContent = new VerticalLayout();
     private TopMenu topMenu = new TopMenu();
-    private VerticalLayout logoLayout = new VerticalLayout();
+    private CssLayout logoLayout = new CssLayout();
 
     private Label css = new Label("", ContentMode.HTML);
+    private Label tab_css = new Label("New Tab");
 
     public static MainMenu get() {
         return new MainMenu();
@@ -75,30 +78,37 @@ public class MainMenu extends VerticalLayout {
             layout.setMargin(Constants.leftMargin);
             addComponent(layout);
             layout.addComponent(logoLayout);
-            logoLayout.setMargin(Constants.noMargin);
             layout.addComponent(topMenu);
 
             content.setSizeFull();
+           tab_content.setSizeFull();
+           tab_content.setWidthUndefined();
+            layout.setStyleName("hybridMenu");
             content.setMargin(false);
             content.setSpacing(false);
             content.setStyleName("myRootContent");
+            //addComponent(tab_wrpapper);
             addComponent(content);
             setExpandRatio(content, 1f);
+            content.setSpacing(false);
 
             css.setHeight(0, Unit.PIXELS);
             css.setStyleName("customCss");
 
             content.addComponents(rootContent,css);
+            tab_wrpapper.addComponents(tab_content);
+            tab_wrpapper.setStyleName("tab_wrpapper");
+            tab_content.addComponents(tab_css);
             content.setExpandRatio(rootContent, 1f);
 
             rootContent.setMargin(false);
             rootContent.setSpacing(false);
             rootContent.setSizeFull();
 
-            if (config.isBreadcrumbs()) {
+            /*if (config.isBreadcrumbs()) {
                 breadcrumbs = new BreadCrumbs();
                 rootContent.addComponent(breadcrumbs);
-            }
+            }*/
 
             rootContent.addComponent(naviRootContent);
             if (config.isBreadcrumbs()) {
@@ -116,10 +126,10 @@ public class MainMenu extends VerticalLayout {
     public void addLogo(){
         if(logoLayout.getComponentCount() == 0) {
             Image logo = new Image();
-            logo.setSource(new ClassResource("logo.png"));
+            logo.setSource(new ClassResource("logo.svg"));
             logo.setWidth(170, Unit.PIXELS);
-            logo.setHeight(50, Unit.PIXELS);
-            logo.setStyleName("imageMargin");
+            logo.setHeight(36, Unit.PIXELS);
+            logo.setStyleName("imageMargin logo");
             logo.addClickListener((MouseEvents.ClickListener) clickEvent -> {
                 getUI().getNavigator().navigateTo("dashboard");
             });
@@ -135,7 +145,7 @@ public class MainMenu extends VerticalLayout {
         return topMenu;
     }
 
-    public VerticalLayout getLogoLayout() {
+    public CssLayout getLogoLayout() {
         return logoLayout;
     }
 

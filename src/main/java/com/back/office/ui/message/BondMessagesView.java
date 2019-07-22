@@ -4,6 +4,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -25,7 +26,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class BondMessagesView extends VerticalLayout implements View{
+public class BondMessagesView extends UserEntryView implements View{
 
     protected Button submitButton;
     protected VerticalLayout createLayout;
@@ -34,9 +35,11 @@ public class BondMessagesView extends VerticalLayout implements View{
     protected List<BondMessageDetail> flightDetList;
     protected Button clear;
     protected DateField craftDateText;
-    protected TextField flightNumberText;
     protected ComboBox flightNumberList;
     protected com.vaadin.ui.TextArea bondMessage;
+    private DateField flightFromDate;
+    private DateField flightToDate;
+    private ComboBox flightNumberCombo;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -47,6 +50,7 @@ public class BondMessagesView extends VerticalLayout implements View{
 
 
     public BondMessagesView() {
+        super();
         connection=DBConnection.getInstance();
         createMainLayout();
 
@@ -55,8 +59,7 @@ public class BondMessagesView extends VerticalLayout implements View{
     public void createMainLayout() {
 
         createLayout=new VerticalLayout();
-        setStyleName("backColorGrey");
-        setMargin(Constants.leftMargin);
+        setMargin(Constants.noTopMargin);
         setSizeFull();
         createLayout.setMargin(Constants.noMargin);
 
@@ -111,9 +114,9 @@ public class BondMessagesView extends VerticalLayout implements View{
 
     public void dataInGrid() {
         flightDetList=connection.getBondMessageDetail();
-        flightList.addColumn(BondMessageDetail::getflightNo).setCaption("Flight Number").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        flightList.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDate())).setCaption("Flight Date").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        flightList.addColumn(BondMessageDetail::getmessageBody).setCaption("Message").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightList.addColumn(BondMessageDetail::getFlightNo).setCaption("Flight Number").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightList.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Flight Date").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightList.addColumn(BondMessageDetail::getMessageBody).setCaption("Message").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         flightList.setItems(flightDetList);
     }
 
@@ -135,29 +138,19 @@ public class BondMessagesView extends VerticalLayout implements View{
     public void processList() {
 
         if(flightNumberList.getValue()!=null&&!flightNumberList.getValue().toString().isEmpty()&&craftDateText.getValue()!=null&&!craftDateText.getValue().toString().isEmpty()&&bondMessage.getValue()!=null&&!bondMessage.getValue().toString().isEmpty()) {
-
-            String flightNumberField=flightNumberList.getValue().toString();
-            Date craftDateField=Date.from(craftDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            String bondField=bondMessage.getValue().toString();
-
             BondMessageDetail bondMessageText=new BondMessageDetail();
-
-            bondMessageText.setflightNo(flightNumberList.getValue().toString());
-            bondMessageText.setflightDate(Date.from(craftDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            bondMessageText.setmessageBody(bondMessage.getValue().toString());
-
+            bondMessageText.setFlightNo(flightNumberList.getValue().toString());
+            bondMessageText.setFlightDate(Date.from(craftDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            bondMessageText.setMessageBody(bondMessage.getValue());
             int messageDetails;
-
             messageDetails = connection.insertObjectHBM(bondMessageText);
-            bondMessageText.setbondMessageId(messageDetails);
-
+            bondMessageText.setBondMessageId(messageDetails);
             flightDetList=connection.getBondMessageDetail();
             flightList.setItems(flightDetList);
 
 
         }else {
             Notification.show("Error","Pleas Insert All field details",Notification.Type.WARNING_MESSAGE);
-
         }
 
 

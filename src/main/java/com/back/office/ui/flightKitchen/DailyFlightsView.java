@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.FlightSheduleDetail;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
@@ -17,7 +18,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class DailyFlightsView extends VerticalLayout implements View{
+public class DailyFlightsView extends UserEntryView implements View{
 
     protected Button flightShedul;
     protected VerticalLayout createLayout;
@@ -35,6 +36,7 @@ public class DailyFlightsView extends VerticalLayout implements View{
 
 
     public DailyFlightsView() {
+        super();
         createMainLayout();
         connection=DBConnection.getInstance();
 
@@ -56,7 +58,6 @@ public class DailyFlightsView extends VerticalLayout implements View{
                 processList());
 
         addComponent(createLayout);
-        setStyleName("backColorGrey");
         setMargin(Constants.noMargin);
 
 

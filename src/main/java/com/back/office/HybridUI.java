@@ -1,8 +1,6 @@
 package com.back.office;
 
 import com.back.office.db.DBConnection;
-import com.back.office.entity.EquipmentMasterDetail;
-import com.back.office.entity.WastageDetail;
 import com.back.office.ui.*;
 import com.back.office.ui.analysis.BuildTimesView;
 import com.back.office.ui.analysis.WastageDetailsView;
@@ -10,7 +8,9 @@ import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
 import com.back.office.ui.crm.PassengerPurchasesView;
-import com.back.office.ui.dashboard.*;
+import com.back.office.ui.dashboard.CommonSelection;
+import com.back.office.ui.dashboard.MainDashboard;
+import com.back.office.ui.dashboard.MainMenu;
 import com.back.office.ui.download.DownloadView;
 import com.back.office.ui.finance.CurruncyDetailHistory;
 import com.back.office.ui.finance.GrossMargine;
@@ -39,13 +39,15 @@ import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.JavaScript;
 import elemental.json.JsonArray;
-import kaesdingeling.hybridmenu.components.*;
+import kaesdingeling.hybridmenu.components.HMButton;
+import kaesdingeling.hybridmenu.components.HMTextField;
+import kaesdingeling.hybridmenu.components.TopMenu;
 import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.design.DesignItem;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 
@@ -79,7 +81,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .build();
         connection = DBConnection.getInstance();
         setContent(hybridMenu);
-        hybridMenu.setStyleName("hybridMenu");
+        hybridMenu.setStyleName("porter-app");
+        Responsive.makeResponsive(hybridMenu);
         navigator = new Navigator(this, hybridMenu.getNaviContent());
         navigator.addView("login", LoginPage.class);
         navigator.addView("dashboard", MainDashboard.class);
@@ -172,7 +175,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     }
 
     public void navigate(){
-        getPermissionCodes();
+        //getPermissionCodes();
         buildTopOnlyMenu();
         hybridMenu.addLogo();
         previousPage = "login ok";
@@ -226,7 +229,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                         if (dialog.isConfirmed()) {
                             getSession().setAttribute("userName","");
                             removeMenus();
-                            getUI().getNavigator().navigateTo("login");
+                            //getUI().getNavigator().navigateTo("login");
+                            getUI().getPage().setLocation("http://163.172.156.224:8080/login/");
                         }
                     }
                 });

@@ -1,0 +1,154 @@
+@mixin form($width) {
+  width: $width;
+  .v-slot {
+    .v-widget {
+      width: $width;
+    }
+  }
+}
+
+@mixin login {
+  .login-wrapper {
+    @include form(100%);
+  }
+  .login-form {
+    &:after {
+      background: url("images/login-banner.svg") no-repeat;
+      content: "";
+      position: absolute;
+      left: 0;
+      top: -1px;
+      right: 0;
+      bottom: 0;
+      height: 60%;
+      z-index: 0;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    color: $white;
+
+    .v-button {
+      text-transform: uppercase;
+      padding: 0.8rem 0;
+      margin-top: 2rem;
+    }
+  }
+  .v-slot-login-wrapper {
+    position: relative;
+    z-index: 1;
+    min-width: 24.3rem;
+
+  }
+
+  .porter-logo {
+    margin-bottom: 9rem;
+    margin-top: -80px;
+  }
+  input.v-textfield {
+    @include inputBorderColor($orange);
+  }
+
+  @include inputBorderColorParentClass($orange);
+  .v-textfield-error {
+    @include inputBordererrorColor(red, white);
+  }
+  //////////////////////////////
+  .bg_banner {
+    position: relative;
+    &:after {
+      background: url("images/bg-01.svg") no-repeat;
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 60%;
+      z-index: 0;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    &:before {
+      background: url("images/icon_draw.svg") no-repeat;
+      content: "";
+      position: fixed;
+      right: 50px;
+      bottom: 0;
+      height: 100%;
+      z-index: 0;
+      width: 150px;
+    }
+  }
+
+  .wrappwr-button {
+    position: relative;
+    z-index: 2;
+    .v-expand {
+      padding: 0 !important;
+    }
+  }
+
+  .common-logo {
+    position: relative;
+    top: 20%;
+  }
+
+  .IconWrapper {
+    text-align: center;
+    .icon-text {
+      font-size: 16px;
+      position: relative;
+      color: $blue-color;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-top: 20px;
+      &:before {
+        content: "\f0a9";
+        font-family: FontAwesome;
+        position: absolute;
+        right: -20px;
+
+      }
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    img {
+      max-width: 70%;
+    }
+  }
+
+  .v-slot-boarder-icon {
+    border-left: 1px solid $blue-color;;
+    border-right: 1px solid $blue-color;;
+    height: 105px !important;
+  }
+
+  img.flight_cn {
+    max-width: 40%;
+  }
+
+  .cloud {
+    position: absolute;
+    top: 60px;
+    width: 100px;
+  }
+  .cloud1 {
+    position: absolute;
+    top: 60px;
+    width: 60px;
+    right: 100px;
+  }
+  .cloud2 {
+    position: absolute;
+    margin-top: -140px;
+    width: 40px;
+    right: 30px;
+  }
+  .v-slot-cloud2 {
+    height: 5% !important;
+  }
+}

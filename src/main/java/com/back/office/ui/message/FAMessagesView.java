@@ -4,6 +4,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -23,7 +24,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class FAMessagesView extends VerticalLayout implements View{
+public class FAMessagesView extends UserEntryView implements View{
 
     protected Button submitButton;
     protected VerticalLayout createLayout;
@@ -44,6 +45,7 @@ public class FAMessagesView extends VerticalLayout implements View{
     }
 
     public FAMessagesView() {
+        super();
         connection=DBConnection.getInstance();
         createMainLayout();
 
@@ -52,7 +54,6 @@ public class FAMessagesView extends VerticalLayout implements View{
     public void createMainLayout() {
 
         createLayout=new VerticalLayout();
-        setStyleName("backColorGrey");
         setMargin(Constants.leftMargin);
         setSizeFull();
 
@@ -66,33 +67,34 @@ public class FAMessagesView extends VerticalLayout implements View{
                 processList());
 
         fromDateText=new DateField("From");
+        fromDateText.setRequiredIndicatorVisible(true);
         toDateText=new DateField("To");
+        toDateText.setRequiredIndicatorVisible(true);
 
 
         flightNumberList=new ComboBox("Flight Number");
         flightNumberList.setDescription("Flight Number");
         flightNumberList.setItems(connection.getFlightsNoList());
         flightNumberList.setEmptySelectionAllowed(false);
-        flightNumberList.setRequiredIndicatorVisible(true);
 
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
         addComponent(createLayout);
 
         faMessageFilterGrid =new FilterGrid();
         buttonLayoutSubmit.addComponent(fromDateText);
-        buttonLayoutSubmit.addComponent(toDateText);
+        buttonLayoutSubmit.addComponents(toDateText,flightNumberList);
         faMessageFilterGrid.setSizeFull();
         faMessageFilterGrid.setWidth("50%");
 
         createLayout.addComponent(buttonLayoutSubmit);
-        createLayout.addComponent(flightNumberList);
+        //createLayout.addComponent(flightNumberList);
         createLayout.addComponent(submitButton);
         createLayout.addComponent(faMessageFilterGrid);
 
         faMessageFilterGrid.addColumn(FaMessage::getflightNumber).setCaption("Flight Number");
         faMessageFilterGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDate())).setCaption("Flight Date");
         faMessageFilterGrid.addColumn(FaMessage::getfaName).setCaption("FA Name");
-        faMessageFilterGrid.addColumn(FaMessage::getcomment).setCaption("Comment");
+        faMessageFilterGrid.addColumn(FaMessage::getcomment).setCaption("Comment").setWidth(400);
     }
 
     private TextField getColumnFilterField() {

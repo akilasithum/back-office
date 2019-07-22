@@ -26,11 +26,11 @@ public class FlightPaymentDetailsView extends ReportCommonView {
 
     private final String NO_OF_FLIGHTS = "No of Flights";
     private final String CASH = "Cash";
-    private final String CREDIT_CARD = "Credit Card";
-    private final String VOUCHER = "Voucher";
-    private final String GROSS_SALE = "Gross Sale";
-    private final String DISCOUNT = "Discount";
-    private final String NET_SALE = "Net Sale";
+    private final String CREDIT_CARD = "Credit Cards";
+    private final String VOUCHER = "Vouchers";
+    private final String GROSS_SALE = "Gross Sales";
+    private final String DISCOUNT = "Discounts";
+    private final String NET_SALE = "Net Sales";
     private final String SALES_PER_FLIGHT = "Sales per Flight";
 
     protected Grid<FlightAmountSummary> detailsTable;
@@ -97,8 +97,8 @@ public class FlightPaymentDetailsView extends ReportCommonView {
 
     @Override
     protected void defineStringFields() {
-        this.pageHeader = "Sales Summary by Flight";
-        this.reportExcelHeader = "Sales Summary by Flight";
+        this.pageHeader = "Flight Sales";
+        this.reportExcelHeader = "Flight Sales";
     }
 
     @Override
@@ -112,7 +112,7 @@ public class FlightPaymentDetailsView extends ReportCommonView {
                 flightNo);
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                 ((flightNo == null || flightNo.isEmpty()) ? "" : " Flight No = " + flightNo);
+                ((flightNo == null || flightNo.isEmpty()) ? "" : " Flight No = " + flightNo);
         filterCriteriaText.setValue(outputStr);
         String flightNoStr = "";
         float creditCardAmount  = 0;
@@ -182,7 +182,7 @@ public class FlightPaymentDetailsView extends ReportCommonView {
 
         }
         detailsTable.setItems(summaries.values());
-       // if(list != null && !list.isEmpty())
+        // if(list != null && !list.isEmpty())
         //showDataInTheTable("1",flightDate,flightNoStr,cashAmount,creditCardAmount,voucherAmount,total,0,total);
     }
 

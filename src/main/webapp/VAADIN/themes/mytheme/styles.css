@@ -1,3 +1,21 @@
+@-webkit-keyframes showNotiInit {
+		from {
+		height: 0 !important;
+	}
+		to {
+		height: auto !important;
+	}
+	}
+
+@keyframes showNotiInit {
+		from {
+		height: 0 !important;
+	}
+		to {
+		height: auto !important;
+	}
+	}
+
 /**
  * Checks if a list contains a certain value.
  * 
@@ -1627,6 +1645,329 @@ div.v-layout.v-horizontal.v-widget {
 	vertical-align: top;
 }
 
+.v-Notification {
+	background: #ff9103;
+}
+
+.v-Notification .v-Notification-caption {
+	font-size: 16px;
+}
+
+.iconWrapper-1, .iconWrapper-2, .iconWrapper-3, .iconWrapper-4 {
+	color: #fbfbfb;
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	width: 170px;
+	height: 170px;
+}
+
+.iconWrapper-1 .v-button, .iconWrapper-2 .v-button, .iconWrapper-3 .v-button, .iconWrapper-4 .v-button {
+	background: none !important;
+	cursor: pointer;
+	font-weight: normal;
+	color: #ff9103 !important;
+	min-width: 85px;
+	border: none !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	position: relative;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	z-index: 2;
+	font-size: 32px;
+	position: absolute;
+	left: 0;
+	top: 36%;
+	bottom: 0;
+	right: 0;
+}
+
+.iconWrapper-1 .v-button:hover, .iconWrapper-1 .v-button:focus, .iconWrapper-1 .v-button:active, .iconWrapper-2 .v-button:hover, .iconWrapper-2 .v-button:focus, .iconWrapper-2 .v-button:active, .iconWrapper-3 .v-button:hover, .iconWrapper-3 .v-button:focus, .iconWrapper-3 .v-button:active, .iconWrapper-4 .v-button:hover, .iconWrapper-4 .v-button:focus, .iconWrapper-4 .v-button:active {
+	border: none !important;
+	background: none !important;
+}
+
+.iconWrapper-1 .v-button:hover:after, .iconWrapper-1 .v-button:focus:after, .iconWrapper-1 .v-button:active:after, .iconWrapper-2 .v-button:hover:after, .iconWrapper-2 .v-button:focus:after, .iconWrapper-2 .v-button:active:after, .iconWrapper-3 .v-button:hover:after, .iconWrapper-3 .v-button:focus:after, .iconWrapper-3 .v-button:active:after, .iconWrapper-4 .v-button:hover:after, .iconWrapper-4 .v-button:focus:after, .iconWrapper-4 .v-button:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: #ff9103 !important;
+	background: none !important;
+}
+
+.iconWrapper-1 .v-button:hover span, .iconWrapper-1 .v-button:focus span, .iconWrapper-1 .v-button:active span, .iconWrapper-2 .v-button:hover span, .iconWrapper-2 .v-button:focus span, .iconWrapper-2 .v-button:active span, .iconWrapper-3 .v-button:hover span, .iconWrapper-3 .v-button:focus span, .iconWrapper-3 .v-button:active span, .iconWrapper-4 .v-button:hover span, .iconWrapper-4 .v-button:focus span, .iconWrapper-4 .v-button:active span {
+	color: #ff9103 !important;
+}
+
+.iconWrapper-1 .v-button .v-button-caption, .iconWrapper-2 .v-button .v-button-caption, .iconWrapper-3 .v-button .v-button-caption, .iconWrapper-4 .v-button .v-button-caption {
+	display: block;
+	font-size: 16px;
+	margin-top: 45px;
+	text-transform: uppercase;
+	color: #fbfbfb;
+}
+
+.iconWrapper-1 .v-button:hover .v-button-caption, .iconWrapper-1 .v-button:focus .v-button-caption, .iconWrapper-1 .v-button:active .v-button-caption, .iconWrapper-2 .v-button:hover .v-button-caption, .iconWrapper-2 .v-button:focus .v-button-caption, .iconWrapper-2 .v-button:active .v-button-caption, .iconWrapper-3 .v-button:hover .v-button-caption, .iconWrapper-3 .v-button:focus .v-button-caption, .iconWrapper-3 .v-button:active .v-button-caption, .iconWrapper-4 .v-button:hover .v-button-caption, .iconWrapper-4 .v-button:focus .v-button-caption, .iconWrapper-4 .v-button:active .v-button-caption {
+	color: #fbfbfb;
+}
+
+.iconWrapper-1:after, .iconWrapper-2:after, .iconWrapper-3:after, .iconWrapper-4:after {
+	position: absolute;
+	content: "";
+	width: 170px;
+	height: 170px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	margin: 0 auto;
+}
+
+.iconWrapper-11, .iconWrapper-21, .iconWrapper-31, .iconWrapper-41 {
+	color: #fbfbfb;
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	width: 50px;
+}
+
+.iconWrapper-11 .v-button, .iconWrapper-21 .v-button, .iconWrapper-31 .v-button, .iconWrapper-41 .v-button {
+	background: none !important;
+	cursor: pointer;
+	font-weight: normal;
+	color: $light_orange !important;
+	min-width: 85px;
+	border: none !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	position: relative;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	z-index: 2;
+	font-size: 25px;
+	color: #e2864e !important;
+}
+
+.iconWrapper-11 .v-button:hover, .iconWrapper-11 .v-button:focus, .iconWrapper-11 .v-button:active, .iconWrapper-21 .v-button:hover, .iconWrapper-21 .v-button:focus, .iconWrapper-21 .v-button:active, .iconWrapper-31 .v-button:hover, .iconWrapper-31 .v-button:focus, .iconWrapper-31 .v-button:active, .iconWrapper-41 .v-button:hover, .iconWrapper-41 .v-button:focus, .iconWrapper-41 .v-button:active {
+	border: none !important;
+	background: none !important;
+}
+
+.iconWrapper-11 .v-button:hover:after, .iconWrapper-11 .v-button:focus:after, .iconWrapper-11 .v-button:active:after, .iconWrapper-21 .v-button:hover:after, .iconWrapper-21 .v-button:focus:after, .iconWrapper-21 .v-button:active:after, .iconWrapper-31 .v-button:hover:after, .iconWrapper-31 .v-button:focus:after, .iconWrapper-31 .v-button:active:after, .iconWrapper-41 .v-button:hover:after, .iconWrapper-41 .v-button:focus:after, .iconWrapper-41 .v-button:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: $light_orange !important;
+	background: none !important;
+}
+
+.iconWrapper-11 .v-button:hover span, .iconWrapper-11 .v-button:focus span, .iconWrapper-11 .v-button:active span, .iconWrapper-21 .v-button:hover span, .iconWrapper-21 .v-button:focus span, .iconWrapper-21 .v-button:active span, .iconWrapper-31 .v-button:hover span, .iconWrapper-31 .v-button:focus span, .iconWrapper-31 .v-button:active span, .iconWrapper-41 .v-button:hover span, .iconWrapper-41 .v-button:focus span, .iconWrapper-41 .v-button:active span {
+	color: $light_orange !important;
+}
+
+.iconWrapper-11 .v-button .v-button-caption, .iconWrapper-21 .v-button .v-button-caption, .iconWrapper-31 .v-button .v-button-caption, .iconWrapper-41 .v-button .v-button-caption {
+	display: block;
+	font-size: 8px;
+	text-transform: uppercase;
+	color: #fbfbfb;
+}
+
+.iconWrapper-11 .v-button:hover .v-button-caption, .iconWrapper-11 .v-button:focus .v-button-caption, .iconWrapper-11 .v-button:active .v-button-caption, .iconWrapper-21 .v-button:hover .v-button-caption, .iconWrapper-21 .v-button:focus .v-button-caption, .iconWrapper-21 .v-button:active .v-button-caption, .iconWrapper-31 .v-button:hover .v-button-caption, .iconWrapper-31 .v-button:focus .v-button-caption, .iconWrapper-31 .v-button:active .v-button-caption, .iconWrapper-41 .v-button:hover .v-button-caption, .iconWrapper-41 .v-button:focus .v-button-caption, .iconWrapper-41 .v-button:active .v-button-caption {
+	color: #fbfbfb !important;
+}
+
+.iconWrapper-11:after, .iconWrapper-21:after, .iconWrapper-31:after, .iconWrapper-41:after {
+	position: absolute;
+	content: "";
+	width: 40px;
+	height: 40px;
+	top: -60px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	margin: 0 auto;
+}
+
+.selected {
+	color: #fbfbfb;
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	width: 50px;
+}
+
+.selected .v-button {
+	background: none !important;
+	cursor: pointer;
+	font-weight: normal;
+	color: $light_orange !important;
+	min-width: 85px;
+	border: none !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	position: relative;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	z-index: 2;
+	font-size: 25px;
+	color: white !important;
+}
+
+.selected .v-button:hover, .selected .v-button:focus, .selected .v-button:active {
+	border: none !important;
+	background: none !important;
+}
+
+.selected .v-button:hover:after, .selected .v-button:focus:after, .selected .v-button:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: $light_orange !important;
+	background: none !important;
+}
+
+.selected .v-button:hover span, .selected .v-button:focus span, .selected .v-button:active span {
+	color: $light_orange !important;
+}
+
+.selected .v-button .v-button-caption {
+	display: block;
+	font-size: 9px;
+	text-transform: uppercase;
+	color: #fbfbfb;
+}
+
+.selected .v-button:hover .v-button-caption, .selected .v-button:focus .v-button-caption, .selected .v-button:active .v-button-caption {
+	color: #fbfbfb !important;
+}
+
+.selected:after {
+	position: absolute;
+	content: "";
+	width: 50px;
+	height: 50px;
+	top: -60px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	margin: 0 auto;
+}
+
+.backBtn {
+	color: #fbfbfb;
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	width: 50px;
+}
+
+.backBtn .v-button {
+	background: none !important;
+	cursor: pointer;
+	font-weight: normal;
+	color: $light_orange !important;
+	min-width: 85px;
+	border: none !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	position: relative;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	z-index: 2;
+	font-size: 25px;
+	color: greenyellow !important;
+}
+
+.backBtn .v-button:hover, .backBtn .v-button:focus, .backBtn .v-button:active {
+	border: none !important;
+	background: none !important;
+}
+
+.backBtn .v-button:hover:after, .backBtn .v-button:focus:after, .backBtn .v-button:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: $light_orange !important;
+	background: none !important;
+}
+
+.backBtn .v-button:hover span, .backBtn .v-button:focus span, .backBtn .v-button:active span {
+	color: $light_orange !important;
+}
+
+.backBtn .v-button .v-button-caption {
+	display: block;
+	font-size: 9px;
+	text-transform: uppercase;
+	color: #fbfbfb;
+}
+
+.backBtn .v-button:hover .v-button-caption, .backBtn .v-button:focus .v-button-caption, .backBtn .v-button:active .v-button-caption {
+	color: #fbfbfb !important;
+}
+
+.backBtn:after {
+	position: absolute;
+	content: "";
+	width: 50px;
+	height: 50px;
+	top: -60px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	margin: 0 auto;
+}
+
+.iconLayoutBackground {
+	padding-left: 15%;
+	padding-right: 15%;
+	padding-top: 0;
+	background-color: #030277;
+	margin-bottom: 100px;
+	height: 60px;
+}
+
+.iconLayoutBackgroundNoMargin {
+	padding-left: 15%;
+	padding-right: 15%;
+	padding-top: 0;
+	background-color: #030277;
+	height: 60px;
+}
+
+.iconWrapper-1:after {
+	background: url("images/icon_1.svg") no-repeat !important;
+}
+
+.iconWrapper-2:after {
+	background: url("images/icon_2.svg") no-repeat !important;
+}
+
+.iconWrapper-3:after {
+	background: url("images/icon_3.svg") no-repeat !important;
+}
+
+.iconWrapper-4:after {
+	background: url("images/icon_4.svg") no-repeat !important;
+}
+
 @-webkit-keyframes showNotiInit {
 		from {
 		height: 0 !important;
@@ -1644,6 +1985,84 @@ div.v-layout.v-horizontal.v-widget {
 		height: auto !important;
 	}
 	}
+
+.porter-app {
+	position: relative;
+}
+
+.porter-app:after {
+	background: url("images/app_bg-01.svg") no-repeat;
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 25%;
+	z-index: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.porter-app:before {
+	background: url("images/icon_draw.svg") no-repeat;
+	content: "";
+	position: fixed;
+	right: 50px;
+	bottom: 0;
+	height: 100%;
+	z-index: 0;
+	width: 180px;
+}
+
+.v-label, .v-captiontext {
+	color: #fbfbfb !important;
+}
+
+.v-formlayout-captioncell .v-caption {
+	color: #fbfbfb !important;
+}
+
+.v-slot-hybridMenu {
+	background: #000f4b;
+}
+
+.porter-app[width-range~="1200px-9000px"] .wrappwr-button {
+	width: 60% !important;
+}
+
+.porter-app[width-range~="1200px-9000px"] .bg_banner:before {
+	right: 120px;
+}
+
+.porter-app[width-range~="1999px-1000px"] .wrappwr-button {
+	width: 80% !important;
+}
+
+.porter-app[width-range~="999px-0px"] .bg_banner:before {
+	right: 0;
+}
+
+.porter-app[width-range~="999px-0px"] .cloud2 {
+	margin-top: 0;
+}
+
+.porter-app[width-range~="999px-0px"] .tab_wrpapper  > .v-horizontallayout {
+	width: 100%;
+}
+
+.porter-app[width-range~="1366px-0px"] .common-logo {
+	top: 0;
+}
+
+.porter-app[width-range~="1366px-0px"] .wrappwr-button {
+	margin-top: 70px;
+}
+
+.porter-app[width-range~="1366px-0px"] .porter-logo {
+	margin-top: -109px;
+}
 
 .mytheme .hybridMenu {
 	position: relative;
@@ -3894,10 +4313,10 @@ div.v-layout.v-horizontal.v-widget {
 	line-height: 25px;
 	text-align: center;
 	font-family: ThemeIcons;
-	-webkit-transform: scale(0.8);
 	-moz-transform: scale(0.8);
-	-ms-transform: scale(0.8);
 	-o-transform: scale(0.8);
+	-ms-transform: scale(0.8);
+	-webkit-transform: scale(0.8);
 	transform: scale(0.8);
 	color: #464646;
 }
@@ -3927,19 +4346,19 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-filterselect-suggestpopup:hover div[class*="page"] {
-	-webkit-transform: scale(1);
 	-moz-transform: scale(1);
-	-ms-transform: scale(1);
 	-o-transform: scale(1);
+	-ms-transform: scale(1);
+	-webkit-transform: scale(1);
 	transform: scale(1);
 }
 
 .mytheme .v-filterselect-suggestpopup div[class*="prev"] {
 	top: 0;
-	-webkit-transform-origin: 100% 0%;
-	-moz-transform-origin: 100% 0%;
-	-ms-transform-origin: 100% 0%;
+	moz-transform-origin: 100% 0%;
 	-o-transform-origin: 100% 0%;
+	-ms-transform-origin: 100% 0%;
+	-webkit-transform-origin: 100% 0%;
 	transform-origin: 100% 0%;
 	border-radius: 0 4px 0 4px;
 }
@@ -3950,10 +4369,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-filterselect-suggestpopup div[class*="next"] {
 	bottom: 0;
-	-webkit-transform-origin: 100% 100%;
-	-moz-transform-origin: 100% 100%;
-	-ms-transform-origin: 100% 100%;
+	moz-transform-origin: 100% 100%;
 	-o-transform-origin: 100% 100%;
+	-ms-transform-origin: 100% 100%;
+	-webkit-transform-origin: 100% 100%;
 	transform-origin: 100% 100%;
 	border-radius: 4px 0 4px 0;
 }
@@ -9066,10 +9485,10 @@ div.v-layout.v-horizontal.v-widget {
 	top: 0;
 	left: 0;
 	right: 0;
-	-webkit-transform: translatez(0);
 	-moz-transform: translatez(0);
-	-ms-transform: translatez(0);
 	-o-transform: translatez(0);
+	-ms-transform: translatez(0);
+	-webkit-transform: translatez(0);
 	transform: translatez(0);
 }
 
@@ -9439,10 +9858,10 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-tree-node-expanded > .v-tree-node-caption > div:before {
-	-webkit-transform: rotate(90deg);
 	-moz-transform: rotate(90deg);
-	-ms-transform: rotate(90deg);
 	-o-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
 	transform: rotate(90deg);
 	content: "\f0da";
 	font-family: ThemeIcons;
@@ -15587,10 +16006,10 @@ div.v-layout.v-horizontal.v-widget {
 	max-width: 100%;
 	overflow: auto;
 	padding: 19px 0;
-	-webkit-transform: translatex(-100%);
 	-moz-transform: translatex(-100%);
-	-ms-transform: translatex(-100%);
 	-o-transform: translatex(-100%);
+	-ms-transform: translatex(-100%);
+	-webkit-transform: translatex(-100%);
 	transform: translatex(-100%);
 	-webkit-transition: all 300ms;
 	-moz-transition: all 300ms;
@@ -15598,10 +16017,10 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .valo-menu-responsive[width-range~="0-800px"] .valo-menu-visible .valo-menuitems, .mytheme .valo-menu-responsive[width-range~="0-800px"] .valo-menu-hover:hover .valo-menuitems {
-	-webkit-transform: translatex(0%);
 	-moz-transform: translatex(0%);
-	-ms-transform: translatex(0%);
 	-o-transform: translatex(0%);
+	-ms-transform: translatex(0%);
+	-webkit-transform: translatex(0%);
 	transform: translatex(0%);
 }
 
@@ -15651,12 +16070,7 @@ div.v-layout.v-horizontal.v-widget {
 	pointer-events: auto !important;
 }
 
-.mytheme .backColorGrey {
-	background-color: #f3fafb;
-}
-
 .mytheme .imageMargin {
-	margin-top: 20px;
 	cursor: pointer;
 }
 
@@ -15665,17 +16079,10 @@ div.v-layout.v-horizontal.v-widget {
 	color: white;
 }
 
-.mytheme .hybridMenu {
-	background: url(images/Sky.jpg) no-repeat center center fixed;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-}
-
 .mytheme .main-layout {
 	padding-left: 15%;
 	padding-right: 15%;
+	padding-top: 0;
 }
 
 .mytheme .icon-image {
@@ -15925,9 +16332,711 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .myRootContent .v-slot-contentBox .contentBox {
-	padding: 0 !important;
+	padding-top: 0;
+	padding-bottom: 0;
+	position: relative;
+	z-index: 1;
 }
 
 .mytheme .myRootContent .v-slot-contentBox .contentBox > .v-margin-top {
 	padding-top: 0 !important;
+}
+
+.mytheme .v-loading-indicator {
+	background: #ff9103;
+}
+
+.mytheme .porter-app {
+	background: #00125a;
+}
+
+.mytheme .v-Notification, .mytheme .gwt-PopupPanel {
+	background: #ff9103;
+	padding: 6px 15px;
+	font-size: 0.8rem;
+	width: 100%;
+	top: 0;
+	right: 0;
+}
+
+.mytheme .v-Notification h1, .mytheme .gwt-PopupPanel h1 {
+	font-size: 14px;
+}
+
+.mytheme .tab_wrpapper {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	padding: 10px;
+	background: #001464;
+	text-align: center;
+}
+
+.mytheme .tab_wrpapper  > .v-horizontallayout {
+	width: 60%;
+}
+
+.mytheme .logo {
+	margin: 5px 0;
+}
+
+.mytheme .v-grid-tablewrapper {
+	border-color: #ececec;
+}
+
+.mytheme .v-grid-tablewrapper .v-grid-header .v-grid-cell {
+	background: #265fb6;
+	border-color: #2b6ccf;
+}
+
+.mytheme .v-grid-tablewrapper .v-grid-header .v-grid-cell .v-grid-column-header-content {
+	color: #fbfbfb;
+	font-weight: 500;
+}
+
+.mytheme .v-filterselect {
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	border: none;
+}
+
+.mytheme .primary {
+	background: #ff9103;
+	cursor: pointer;
+	font-weight: normal;
+	color: #fbfbfb;
+	height: 4em;
+	min-width: 85px;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	position: relative;
+	border: 1px solid #ffac40;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	height: 40px;
+}
+
+.mytheme .primary:before {
+	content: "";
+	width: 31px;
+	height: 29px !important;
+	background: #c56f00;
+	transition-delay: 0.1s;
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	-o-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+	opacity: 0;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	-ms-border-radius: 30px;
+	-o-border-radius: 30px;
+	border-radius: 30px;
+	position: absolute;
+	left: 32%;
+}
+
+.mytheme .primary:active:before {
+	width: 100%;
+	opacity: 0.5;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	left: 0;
+}
+
+.mytheme .primary:hover, .mytheme .primary:focus, .mytheme .primary:active {
+	background: #d97a00;
+}
+
+.mytheme .primary:hover:after, .mytheme .primary:focus:after, .mytheme .primary:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: #fbfbfb !important;
+}
+
+.mytheme .primary:hover span, .mytheme .primary:focus span, .mytheme .primary:active span {
+	color: #fbfbfb !important;
+}
+
+.mytheme .primary .v-button-wrap {
+	position: relative;
+	top: 7px;
+}
+
+.mytheme .wizard .v-caption {
+	color: black !important;
+}
+
+.mytheme .popupView .v-caption {
+	color: black !important;
+}
+
+.mytheme .hybridMenu {
+	position: relative;
+	z-index: 1;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter {
+	top: 0;
+	right: 0;
+	z-index: 100000;
+	position: fixed !important;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter {
+	-webkit-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+	-moz-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+	-ms-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+	-o-transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+	transition: right 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+	position: fixed;
+	top: 0;
+	right: -350px;
+	z-index: 100000;
+	width: 350px !important;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter.open {
+	right: 0;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter.open .lastNotification {
+	right: 350px !important;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter.open .lastNotification .notification {
+	right: -700px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .v-slot-content {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .buttonLine {
+	padding: 8px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .v-slot-buttonLine {
+	text-align: center;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .v-slot-buttonLine .v-slot > div {
+	-webkit-transition: background 0.3s ease-in-out;
+	-moz-transition: background 0.3s ease-in-out;
+	-ms-transition: background 0.3s ease-in-out;
+	-o-transition: background 0.3s ease-in-out;
+	transition: background 0.3s ease-in-out;
+	width: 40px;
+	height: 40px;
+	vertical-align: middle;
+	text-align: center;
+	position: relative;
+	line-height: 38px;
+	margin: 0 5px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .v-slot-buttonLine .v-slot > div.HMButton {
+	cursor: pointer;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification {
+	position: relative;
+	margin: 8px 8px 0;
+	font-size: 18px;
+	display: block;
+	padding: 10px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification .title {
+	width: 100%;
+	text-overflow: ellipsis;
+	line-height: 22px;
+	overflow: hidden;
+	display: block;
+	height: 24px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification .title .timeAgo {
+	display: inline-block;
+	position: absolute;
+	margin: 0 0 0 8px;
+	font-size: 10px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification .title .timeAgo:before {
+	width: 4px;
+	height: 4px;
+	display: inline-block;
+	margin: 0 7px 1px 0;
+	border-radius: 50%;
+	content: "";
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification.withIcon {
+	padding-left: 50px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification.withIcon .title {
+	width: calc(100% - 23px) !important;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification.withIcon .v-caption {
+	width: 34px;
+	height: calc(100% - 16px);
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-right: 1px solid;
+	vertical-align: middle;
+	font-size: 28px;
+	display: block;
+	margin: 8px;
+	padding: 0;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification .content {
+	white-space: pre-line;
+	word-break: break-all;
+	overflow: hidden;
+	font-size: 14px;
+	margin: 2px 0 0;
+	display: block;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification .button {
+	-webkit-transition: opacity 0.3s ease-in-out;
+	-moz-transition: opacity 0.3s ease-in-out;
+	-ms-transition: opacity 0.3s ease-in-out;
+	-o-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	line-height: 28px;
+	cursor: pointer;
+	opacity: 0;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .notification .button:hover {
+	opacity: 1;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .lastNotification {
+	-webkit-transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, right 0.3s ease-in-out;
+	-moz-transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, right 0.3s ease-in-out;
+	-ms-transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, right 0.3s ease-in-out;
+	-o-transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, right 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, right 0.3s ease-in-out;
+	height: auto !important;
+	position: fixed;
+	bottom: 8px;
+	right: 0;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .lastNotification:hover {
+	opacity: 0.2;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .lastNotification .notification {
+	-webkit-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	-moz-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	-ms-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	-o-transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	transition: right 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	-webkit-animation-name: showNotiInit;
+	-webkit-animation-duration: 1s;
+	animation-name: showNotiInit;
+	animation-duration: 1s;
+	height: auto !important;
+	position: relative;
+	overflow: hidden;
+	display: block;
+	z-index: 1000;
+	right: -350px;
+	width: 330px;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .lastNotification .notification.show {
+	right: 0 !important;
+}
+
+.mytheme .hybridMenu .v-slot-notificationCenter .notificationCenter .lastNotification.top .notification {
+	top: 45px !important;
+	bottom: unset !important;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu {
+	position: fixed;
+	top: 0;
+	right: 100px;
+	z-index: 1000;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot.v-slot-HMTextField > div {
+	-webkit-transition: width 0.3s ease-in-out;
+	-moz-transition: width 0.3s ease-in-out;
+	-ms-transition: width 0.3s ease-in-out;
+	-o-transition: width 0.3s ease-in-out;
+	transition: width 0.3s ease-in-out;
+	width: 36px !important;
+	overflow: hidden;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot.v-slot-HMTextField > div .v-caption-HMTextField {
+	display: inline-block;
+	max-width: 36px;
+	width: 100%;
+	padding: 0;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot.v-slot-HMTextField > div input.HMTextField {
+	-webkit-transition: width 0.3s ease-in-out;
+	-moz-transition: width 0.3s ease-in-out;
+	-ms-transition: width 0.3s ease-in-out;
+	-o-transition: width 0.3s ease-in-out;
+	transition: width 0.3s ease-in-out;
+	display: inline-block;
+	box-shadow: none !important;
+	outline: unset !important;
+	border-radius: 0 !important;
+	border: none !important;
+	width: 0;
+	height: 30px;
+	margin: 6px 0 0 5px;
+	padding: 5px;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot.v-slot-HMTextField > div:hover {
+	width: 206px !important;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot.v-slot-HMTextField > div:hover input.HMTextField {
+	width: 150px !important;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot > div {
+	width: 36px;
+	height: 44px;
+	position: relative;
+	vertical-align: middle;
+	text-align: center;
+	line-height: 42px;
+	margin: 0 5px;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot > div.HMButton {
+	-webkit-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	-moz-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	-ms-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	-o-transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	transition: background 0.3s ease-in-out, border-top-width 0.3s ease-in-out, height 0.3s ease-in-out;
+	border-top: 0 solid;
+	cursor: pointer;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot > div.HMButton .HMButton-caption {
+	margin: 0;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot > div.HMButton .HMButton-caption .toolTip {
+	position: absolute;
+	top: 32px;
+	right: -6px;
+	border-radius: 4px;
+	line-height: 17px;
+	font-size: 14px;
+	padding: 5px;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot > div.HMButton:hover {
+	border-top-width: 4px;
+	height: 48px;
+}
+
+.mytheme .hybridMenu .v-slot-topMenu .topMenu .v-slot > div.HMButton:hover .HMButton-caption {
+	pointer-events: auto !important;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand {
+	-webkit-transition: padding-left 0.3s ease-in-out;
+	-moz-transition: padding-left 0.3s ease-in-out;
+	-ms-transition: padding-left 0.3s ease-in-out;
+	-o-transition: padding-left 0.3s ease-in-out;
+	transition: padding-left 0.3s ease-in-out;
+	padding-left: 250px !important;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu {
+	-webkit-transition: margin-left 0.3s ease-in-out;
+	-moz-transition: margin-left 0.3s ease-in-out;
+	-ms-transition: margin-left 0.3s ease-in-out;
+	-o-transition: margin-left 0.3s ease-in-out;
+	transition: margin-left 0.3s ease-in-out;
+	margin-left: -250px !important;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu {
+	-webkit-transition: width 0.3s ease-in-out;
+	-moz-transition: width 0.3s ease-in-out;
+	-ms-transition: width 0.3s ease-in-out;
+	-o-transition: width 0.3s ease-in-out;
+	transition: width 0.3s ease-in-out;
+	width: 250px !important;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu > .v-expand > .v-slot {
+	height: auto !important;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu:not(.minimal) {
+	overflow: auto;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div {
+	width: 100%;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption {
+	text-align: center;
+	position: relative;
+	font-size: 20px;
+	padding: 10px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption:after {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	border-bottom: 1px solid;
+	content: "";
+	width: 100%;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption .v-icon {
+	margin-right: 5px;
+	max-height: 32px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-label {
+	display: none;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton {
+	-webkit-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	-moz-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	-ms-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	-o-transition: background 0.3s, border-left 0.3s, height 0.5s;
+	transition: background 0.3s, border-left 0.3s, height 0.5s;
+	border-left: 0 solid transparent;
+	background: transparent;
+	overflow: hidden;
+	cursor: pointer;
+	display: block;
+	padding: 8px 0;
+	height: 45px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton.active {
+	border-left-width: 3px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton:hover, .mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton.active:hover {
+	border-left-width: 5px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton-wrap {
+	-webkit-transition: border 0.3s;
+	-moz-transition: border 0.3s;
+	-ms-transition: border 0.3s;
+	-o-transition: border 0.3s;
+	transition: border 0.3s;
+	position: relative;
+	display: block;
+	z-index: 1000;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton-wrap .v-icon {
+	position: relative;
+	vertical-align: middle;
+	display: inline-block;
+	text-align: center;
+	margin-left: 10px;
+	width: 25px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMButton-wrap .HMButton-caption {
+	font-size: 17px;
+	vertical-align: middle;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu > .v-slot:first-child .toolTip {
+	position: absolute;
+	top: 0;
+	right: 5px;
+	width: 30px;
+	height: 30px;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu > .v-slot:first-child .toolTip .v-icon {
+	-webkit-transition: transform 0.3s ease-in-out;
+	-moz-transition: transform 0.3s ease-in-out;
+	-ms-transition: transform 0.3s ease-in-out;
+	-o-transition: transform 0.3s ease-in-out;
+	transition: transform 0.3s ease-in-out;
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotate(0deg);
+	width: 30px;
+	height: 30px;
+	line-height: 27px;
+	margin: 0;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu > .v-slot:last-child > .v-verticallayout {
+	-webkit-transition: max-height 0.5s ease-in-out;
+	-moz-transition: max-height 0.5s ease-in-out;
+	-ms-transition: max-height 0.5s ease-in-out;
+	-o-transition: max-height 0.5s ease-in-out;
+	transition: max-height 0.5s ease-in-out;
+	width: calc(100% - 24px) !important;
+	border-left: 1px solid transparent;
+	position: relative;
+	margin-left: 24px;
+	overflow: hidden;
+	display: block;
+	max-height: 0;
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu.open > .v-slot:first-child .toolTip .v-icon {
+	-webkit-transform: rotate(-180deg);
+	-moz-transform: rotate(-180deg);
+	-ms-transform: rotate(-180deg);
+	-o-transform: rotate(-180deg);
+	transform: rotate(-180deg);
+}
+
+.mytheme .hybridMenu .rootContent > .v-expand .v-slot-leftMenu .leftMenu .HMSubMenu.open > .v-slot:last-child > .v-verticallayout {
+	max-height: 1000px !important;
+}
+
+.mytheme .hybridMenu .rootContent .breadcrumbs {
+	padding: 15px 20px;
+}
+
+.mytheme .hybridMenu .rootContent .breadcrumbs .v-slot {
+	width: auto !important;
+}
+
+.mytheme .hybridMenu .rootContent .breadcrumbs .v-slot .HMButton.clickable {
+	cursor: pointer;
+}
+
+.mytheme .hybridMenu .rootContent .breadcrumbs .v-slot .HMLabel {
+	display: none !important;
+}
+
+.mytheme .hybridMenu .rootContent.minimal {
+	overflow: inherit;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand {
+	padding-left: 50px !important;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu {
+	margin-left: -50px !important;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu {
+	overflow: visible;
+	width: 50px !important;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .v-slot-HMLabel > div .v-caption .v-captiontext {
+	display: none;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton {
+	overflow: visible;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton:hover .HMButton-caption {
+	pointer-events: all !important;
+	opacity: 1 !important;
+	left: 45px !important;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton .HMButton-wrap {
+	z-index: 100;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton .HMButton-wrap .v-icon {
+	width: 100%;
+	margin: 0;
+}
+
+.mytheme .hybridMenu .rootContent.minimal > .v-expand .v-slot-leftMenu .leftMenu .HMButton .HMButton-wrap .HMButton-caption {
+	-webkit-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-moz-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-ms-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-o-transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	padding: 9px 13px 8px;
+	top: calc(-50% + 5px);
+	pointer-events: none;
+	position: absolute;
+	white-space: pre;
+	z-index: 10000;
+	height: 28px;
+	left: -500px;
+	opacity: 0;
+	margin: 0;
+}
+
+.mytheme .hybridMenu .rootContent .v-slot-contentBox {
+	overflow-y: auto;
+}
+
+.mytheme .hybridMenu .rootContent .v-slot-contentBox .contentBox {
+	padding: 0 !important;
+}
+
+.mytheme .hybridMenu .rootContent .v-slot-contentBox .contentBox > .v-margin-top {
+	padding-top: 0 !important;
+}
+
+.mytheme .hybridMenu .topMenu .v-slot  > div {
+	background: none !important;
+	border-color: #ff9103 !important;
+	color: #fbfbfb !important;
+}
+
+.mytheme .hybridMenu .topMenu .v-slot  > div:hover, .mytheme .hybridMenu .topMenu .v-slot  > div:focus {
+	background: none !important;
+	border-color: #ff9103 !important;
+	color: #fbfbfb !important;
 }

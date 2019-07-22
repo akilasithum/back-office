@@ -1,0 +1,59 @@
+.porter-app {
+  position: relative;
+  &:after {
+    background: url("images/app_bg-01.svg") no-repeat;
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 25%;
+    z-index: 0;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  &:before {
+    background: url("images/icon_draw.svg") no-repeat;
+    content: "";
+    position: fixed;
+    right: 50px;
+    bottom: 0;
+    height: 100%;
+    z-index: 0;
+    width: 180px;
+  }
+}
+
+///////// Menu componet override styles
+@mixin overridehybridMenu{
+.hybridMenu {
+  .topMenu {
+    .v-slot {
+      > div {
+        background: none!important;
+        border-color: $orange!important;
+        color: $white!important;
+        &:hover,&:focus{
+          background: none!important;
+          border-color: $orange!important;
+          color: $white!important;
+        }
+      }
+    }
+  }
+}
+}
+
+.v-label, .v-captiontext{
+   color: $white!important;
+ }
+
+.v-formlayout-captioncell .v-caption{
+  color: $white!important;
+}
+
+.v-slot-hybridMenu{
+  background: darken($blue-color,3%);
+}

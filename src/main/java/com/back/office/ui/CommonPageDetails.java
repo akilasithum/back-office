@@ -2,6 +2,7 @@ package com.back.office.ui;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.AircraftDetails;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.vaadin.contextmenu.GridContextMenu;
 import com.vaadin.event.dd.acceptcriteria.Not;
@@ -16,7 +17,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommonPageDetails extends VerticalLayout implements View {
+public abstract class CommonPageDetails extends UserEntryView implements View {
 
     protected DBConnection connection;
     protected HorizontalLayout outerLayout;
@@ -48,10 +49,10 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
     }
 
     public CommonPageDetails(){
+        super();
         connection = DBConnection.getInstance();
         defineStringFields();
         createMainLayout();
-        setStyleName("backColorGrey");
     }
 
     protected void createMainLayout(){
@@ -184,7 +185,7 @@ public abstract class CommonPageDetails extends VerticalLayout implements View {
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(object);
             if (newId != 0) {
-                Notification.show("Success", pageHeader +" added successfully", Notification.Type.HUMANIZED_MESSAGE);
+                Notification.show(pageHeader +" added successfully");
                 updateTable(false,object,newId);
                 resetFields();
             } else {

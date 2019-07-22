@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.back.office.entity.PassengerPurchases;
+import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 
@@ -26,7 +27,7 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class PassengerPurchasesView extends VerticalLayout implements View{
+public class PassengerPurchasesView extends UserEntryView implements View{
 
     protected Button submitList;
     protected VerticalLayout createLayout;
@@ -52,6 +53,7 @@ public class PassengerPurchasesView extends VerticalLayout implements View{
 
 
     public PassengerPurchasesView() {
+        super();
         connection=DBConnection.getInstance();
         createMainLayout();
     }
@@ -59,7 +61,6 @@ public class PassengerPurchasesView extends VerticalLayout implements View{
     public void createMainLayout() {
 
         createLayout=new VerticalLayout();
-        setStyleName("backColorGrey");
         createLayout.setMargin(Constants.leftBottomtMargin);
         Label h1=new Label("Passenger Purchases");
 
@@ -113,14 +114,14 @@ public class PassengerPurchasesView extends VerticalLayout implements View{
         passengerPurchasesGrid.setSizeFull();
         passengerPurchasesGrid.setWidth("60%");
 
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getPNR).setCaption("PNR");
         passengerPurchasesGrid.addColumn(PassengerPurchases::getpaxName).setCaption("Pax Name");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getemail).setCaption("Email");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::gettelephoneNo).setCaption("Telephone nNo");
         passengerPurchasesGrid.addColumn(PassengerPurchases::getfrequentFlyerNo).setCaption("Frequent flyer No");
+        passengerPurchasesGrid.addColumn(PassengerPurchases::getemail).setCaption("Email");
+        passengerPurchasesGrid.addColumn(PassengerPurchases::gettelephoneNo).setCaption("Tel No");
+        passengerPurchasesGrid.addColumn(PassengerPurchases::getflightNo).setCaption("Flight No");
         passengerPurchasesGrid.addColumn(bean-> BackOfficeUtils.getDateStringFromDate(bean.getdeparureDate())).setCaption("Departure Date");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getflightNo).setCaption("FlightNo");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getorderId).setCaption("Order Id");
+        passengerPurchasesGrid.addColumn(PassengerPurchases::getPNR).setCaption("PNR");
+        passengerPurchasesGrid.addColumn(PassengerPurchases::getorderId).setCaption("Order");
     }
 
     public void processList() {

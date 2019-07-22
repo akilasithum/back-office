@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.back.office.entity.User;
+import com.back.office.framework.UserEntryView;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ClassResource;
 import com.vaadin.server.FontAwesome;
@@ -21,7 +22,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import javax.jws.soap.SOAPBinding;
 
-public class MessagingModuleView extends VerticalLayout implements View{
+public class MessagingModuleView extends UserEntryView implements View{
 
     protected DBConnection connection;
     protected VerticalLayout hedderLayout;
@@ -45,11 +46,10 @@ public class MessagingModuleView extends VerticalLayout implements View{
     }
 
     public MessagingModuleView() {
+        super();
         connection=DBConnection.getInstance();
-        setMargin(true);
         createMainLayout();
         userName =UI.getCurrent().getSession().getAttribute("userName").toString();
-        setStyleName("backColorGrey");
         mssageread(userName);
 
     }
@@ -121,6 +121,7 @@ public class MessagingModuleView extends VerticalLayout implements View{
         messageTab.addTab(newMessage,"New Messages", VaadinIcons.ENVELOPE);
         messageTab.addTab(readMessage,"Read Messages",VaadinIcons.ENVELOPE_OPEN);
         messageTab.addTab(sentMessage,"Sent Messages",VaadinIcons.ENVELOPE_OPEN_O);
+        messageTab.setStyleName("blackFont");
 
         sendButton.addClickListener(clickListener->messagdilivr());
 

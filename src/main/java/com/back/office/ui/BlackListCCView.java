@@ -70,7 +70,7 @@ public class BlackListCCView extends CommonPageDetails {
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
 
         userFormLayout.setWidth("60%");
-        mainTableLayout.setWidth("40%");
+        mainTableLayout.setWidth("60%");
         headerLayout.setWidth("60%");
     }
 

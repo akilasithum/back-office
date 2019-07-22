@@ -102,7 +102,7 @@ public class VoucherView extends CommonPageDetails {
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
 
         userFormLayout.setWidth("70%");
-        mainTableLayout.setWidth("70%");
+        mainTableLayout.setWidth("85%");
         headerLayout.setWidth("70%");
     }
 

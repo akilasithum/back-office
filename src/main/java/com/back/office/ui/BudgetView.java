@@ -99,7 +99,7 @@ public class BudgetView extends CommonPageDetails {
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
 
         userFormLayout.setWidth("100%");
-        mainTableLayout.setWidth("70%");
+        mainTableLayout.setWidth("85%");
         headerLayout.setWidth("70%");
     }
 
