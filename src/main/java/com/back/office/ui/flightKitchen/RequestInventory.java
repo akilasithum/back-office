@@ -63,7 +63,7 @@ public class RequestInventory extends UserEntryView implements View{
 
         HorizontalLayout firstRow = new HorizontalLayout();
         Label h1=new Label("Request Inventory");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         firstRow.addComponent(h1);
 
         baseStationCB=new ComboBox("Base Station");

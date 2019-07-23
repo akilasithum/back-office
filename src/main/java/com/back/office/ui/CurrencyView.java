@@ -54,7 +54,7 @@ public class CurrencyView {
 
         setSpacing(true);
         Label h1 = new Label("Currency Details");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         addComponent(h1);
 
         HorizontalLayout firstRow = new HorizontalLayout();

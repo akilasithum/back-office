@@ -80,7 +80,7 @@ public class AssignItemView extends UserEntryView implements View {
         addComponent(tableLayout);
         tableLayout.setMargin(Constants.noMargin);
         Label h1 = new Label("Assign Items");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
 
         HorizontalLayout firstRow = new HorizontalLayout();

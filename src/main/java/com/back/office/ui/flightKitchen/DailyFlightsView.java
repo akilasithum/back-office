@@ -49,7 +49,7 @@ public class DailyFlightsView extends UserEntryView implements View{
 
         Label h1=new Label("Daily Flights");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         flightShedul=new Button("Show Daily Flights");

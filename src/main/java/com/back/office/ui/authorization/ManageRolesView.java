@@ -64,7 +64,7 @@ public class ManageRolesView extends VerticalLayout implements View {
     }
     protected void createMainLayout() {
         Label h1 = new Label("Manage User Roles");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
 
         outterLayout = new HorizontalLayout();
         outterLayout.setSizeFull();

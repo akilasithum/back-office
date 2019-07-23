@@ -70,6 +70,7 @@ public class FlightShedule extends UserEntryView implements View{
     public FlightShedule() {
         super();
         createMainLayout();
+        setMargin(Constants.noMargin);
         connection=DBConnection.getInstance();
     }
 
@@ -80,7 +81,7 @@ public class FlightShedule extends UserEntryView implements View{
 
         Label h1=new Label("Flight Schedule");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
@@ -137,7 +138,6 @@ public class FlightShedule extends UserEntryView implements View{
 
         flightList=new Grid();
         flightList.setSizeFull();
-        flightList.setWidth("70%");
 
         flightList.addColumn(FlightSheduleDetail::getflightDateTime).setCaption("Date");
         flightList.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
@@ -199,6 +199,7 @@ public class FlightShedule extends UserEntryView implements View{
         btnLayout.setMargin(Constants.noMargin);
 
         HorizontalLayout rssFeedLayout = new HorizontalLayout();
+        rssFeedLayout.setMargin(false);
         rssFeedLayout.addComponents(rssFeedBtn,new Label("Last Updated at : " + new Date()));
         btnLayout.addComponents(uploadButton,rssFeedLayout);
         createLayout.addComponents(btnLayout);

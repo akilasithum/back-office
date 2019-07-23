@@ -65,7 +65,7 @@ public class BondMessagesView extends UserEntryView implements View{
 
         Label h1=new Label("Bond Messages");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         submitButton=new Button("Submit");

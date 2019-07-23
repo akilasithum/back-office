@@ -58,7 +58,7 @@ public class DownloadView<T> extends VerticalLayout implements View {
         headerLayout.setMargin(Constants.noMargin);
         addComponent(headerLayout);
         Label h1 = new Label("Download files");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();

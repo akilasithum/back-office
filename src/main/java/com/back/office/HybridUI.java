@@ -53,7 +53,7 @@ import java.util.List;
 
 @Theme("mytheme")
 @Widgetset("com.back.office.MyAppWidgetset")
-@Title("Porter - Back Office")
+@Title("Swoop - Back Office")
 @Push
 @PushStateNavigation
 public class HybridUI extends UI implements ClientConnector.DetachListener {

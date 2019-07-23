@@ -59,7 +59,7 @@ public class FAMessagesView extends UserEntryView implements View{
 
         Label h1=new Label("FA Messages");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         submitButton=new Button("Submit");

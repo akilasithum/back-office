@@ -62,7 +62,7 @@ public abstract class CommonPageDetails extends UserEntryView implements View {
         headerLayout.setSizeFull();
         addComponent(headerLayout);
         Label h1 = new Label(pageHeader);
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
         headerLayout.setMargin(marginInfo);
 

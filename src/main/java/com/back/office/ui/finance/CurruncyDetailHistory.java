@@ -39,7 +39,7 @@ public class CurruncyDetailHistory extends UserEntryView implements View {
     public void createMainLayout() {
         layoutVertical=new FormLayout();
         Label h1=new Label("Currency History");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         layoutVertical.addComponent(h1);
         currencyDetail=new ComboBox("Currency");
         currencyDetail.setItems(BackOfficeUtils.getCurrencyDropDownValues(false));

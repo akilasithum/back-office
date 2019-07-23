@@ -64,7 +64,7 @@ public class SalesDetailsView extends UserEntryView implements View {
         headerLayout.setMargin(Constants.noMargin);
         addComponent(headerLayout);
         Label h1 = new Label(pageHeader);
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();

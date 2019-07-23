@@ -77,7 +77,7 @@ public class SoldOutDetails extends UserEntryView implements View{
 
         Label h1=new Label("Sold Out by Flight");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();

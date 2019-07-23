@@ -71,7 +71,7 @@ public class GrossMargine extends UserEntryView implements View{
 
         createLayout=new VerticalLayout();
         Label h1=new Label("Gross Margin");
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         serviceTypeC=new ComboBox("Service Type");

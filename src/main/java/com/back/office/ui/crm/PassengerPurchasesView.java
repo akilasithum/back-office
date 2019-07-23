@@ -64,7 +64,7 @@ public class PassengerPurchasesView extends UserEntryView implements View{
         createLayout.setMargin(Constants.leftBottomtMargin);
         Label h1=new Label("Passenger Purchases");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();

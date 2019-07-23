@@ -58,7 +58,7 @@ public class ViewAndEditCurrentUserDetailsView extends VerticalLayout implements
         mainLayout.setMargin(Constants.noMargin);
         addComponent(mainLayout);
         Label header = new Label("View and Edit User Details");
-        header.addStyleName(ValoTheme.LABEL_H1);
+        header.addStyleName("headerText");
         mainLayout.addComponent(header);
         userFormLayout = new VerticalLayout();
         userFormLayout.setMargin(Constants.noMargin);

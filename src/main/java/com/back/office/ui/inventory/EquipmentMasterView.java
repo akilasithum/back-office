@@ -56,7 +56,7 @@ public class EquipmentMasterView extends UserEntryView implements View {
         super();
         createMainLayout();
         connection = DBConnection.getInstance();
-
+        setMargin(false);
     }
 
     public void createMainLayout() {
@@ -64,8 +64,9 @@ public class EquipmentMasterView extends UserEntryView implements View {
         createLayout = new VerticalLayout();
         setMargin(Constants.leftBottomtMargin);
         Label h1 = new Label("HHC and Cart Usage");
+        createLayout.setMargin(false);
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
         HorizontalLayout buttonLayoutSubmit = new HorizontalLayout();

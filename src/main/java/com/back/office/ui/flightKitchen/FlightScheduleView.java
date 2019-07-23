@@ -84,13 +84,14 @@ public class FlightScheduleView extends UserEntryView implements View{
 
         Label h1=new Label("Daily Flights");
 
-        h1.addStyleName(ValoTheme.LABEL_H1);
+        h1.addStyleName("headerText");
         createLayout.addComponent(h1);
+        createLayout.setMargin(false);
 
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
         HorizontalLayout buttonLayoutExportExcel=new HorizontalLayout();
-        HorizontalLayout dateText=new HorizontalLayout();
-
+        HorizontalLayout dateLayout = new HorizontalLayout();
+        dateLayout.setMargin(Constants.topMarginInfo);
         buttonLayoutSubmit.setMargin(Constants.noMargin);
 
 
@@ -119,8 +120,8 @@ public class FlightScheduleView extends UserEntryView implements View{
         toDateText.setDescription("Date From");
         toDateText.setRequiredIndicatorVisible(true);
 
-        dateText.addComponent(fromDateText);
-        dateText.addComponent(toDateText);
+        dateLayout.addComponent(fromDateText);
+        dateLayout.addComponent(toDateText);
 
         buttonLayoutSubmit.addComponent(flightShedul);
         buttonLayoutSubmit.addComponent(clearButton);
@@ -132,13 +133,12 @@ public class FlightScheduleView extends UserEntryView implements View{
 
 
         flightSheduleDetailGrid =new Grid();
-        createLayout.addComponent(dateText);
+        createLayout.addComponent(dateLayout);
         createLayout.addComponent(buttonLayoutSubmit);
         createLayout.addComponent(flightSheduleDetailGrid);
         createLayout.addComponent(buttonLayoutExportExcel);
 
         flightSheduleDetailGrid.setSizeFull();
-        flightSheduleDetailGrid.setWidth("70%");
 
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightDateTime).setCaption("Date");
         flightSheduleDetailGrid.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
