@@ -55,6 +55,13 @@ public abstract class CommonPageDetails extends UserEntryView implements View {
         createMainLayout();
     }
 
+    public CommonPageDetails(boolean isMenuRequired){
+        super(isMenuRequired);
+        connection = DBConnection.getInstance();
+        defineStringFields();
+        createMainLayout();
+    }
+
     protected void createMainLayout(){
         keyFieldValues = (List<String>) connection.getKeyFieldList(className,keyFieldDBName);
         MarginInfo marginInfo = new MarginInfo(false,false,false,false);

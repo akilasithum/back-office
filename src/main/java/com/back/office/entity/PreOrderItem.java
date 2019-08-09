@@ -6,8 +6,8 @@ public class PreOrderItem {
 
     private int preOrderItemId;
     private int preOrderId;
-    private String category;
     private String itemNo;
+    private String itemDesc;
     private int quantity;
 
     public int getPreOrderItemId() {
@@ -26,14 +26,6 @@ public class PreOrderItem {
         this.preOrderId = preOrderId;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public String getItemNo() {
         return itemNo;
     }
@@ -48,5 +40,13 @@ public class PreOrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getItemDesc() {
+        return itemDesc;
+    }
+
+    public void setItemDesc(String itemDesc) {
+        this.itemDesc = itemDesc;
     }
 }

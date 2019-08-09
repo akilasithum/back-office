@@ -83,6 +83,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         setContent(hybridMenu);
         hybridMenu.setStyleName("porter-app");
         Responsive.makeResponsive(hybridMenu);
+
+        getSession().setAttribute("notification", hybridMenu.getNotifications());
         navigator = new Navigator(this, hybridMenu.getNaviContent());
         navigator.addView("login", LoginPage.class);
         navigator.addView("dashboard", MainDashboard.class);

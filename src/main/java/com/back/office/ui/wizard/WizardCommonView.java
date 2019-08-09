@@ -1,15 +1,10 @@
 package com.back.office.ui.wizard;
 
 import com.back.office.db.DBConnection;
-import com.back.office.entity.AircraftDetails;
 import com.back.office.framework.UserEntryView;
-import com.back.office.ui.wizard.steps.aircraft.AirCraftFirstStep;
-import com.back.office.ui.wizard.steps.aircraft.AircraftFrontGalleyStep;
-import com.back.office.ui.wizard.steps.aircraft.AircraftMiddleGalleyStep;
-import com.back.office.ui.wizard.steps.aircraft.AircraftRearGalleyStep;
-import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -41,10 +36,10 @@ public abstract class WizardCommonView extends UserEntryView implements View {
     }
 
     public WizardCommonView(){
-        super();
         connection = DBConnection.getInstance();
         defineStringFields();
         createMainLayout();
+        setStyleName("backColorGrey");
     }
 
     protected void createMainLayout(){
@@ -53,16 +48,18 @@ public abstract class WizardCommonView extends UserEntryView implements View {
         headerLayout.setSizeFull();
         addComponent(headerLayout);
         Label h1 = new Label(headerName);
-        h1.addStyleName("headerText");
+        h1.addStyleName(ValoTheme.LABEL_H1);
         headerLayout.addComponent(h1);
         headerLayout.setMargin(marginInfo);
 
         buttonLayout = new HorizontalLayout();
-        buttonLayout.setMargin(Constants.bottomMarginInfo);
+        buttonLayout.setMargin(marginInfo);
         buttonLayout.setSizeFull();
         addComponent(buttonLayout);
 
-        addNewButton = new Button("Add New");
+        addNewButton = new Button();
+        addNewButton.setIcon(FontAwesome.PLUS);
+        addNewButton.setStyleName("add_button");
         addNewButton.setSizeFull();
         addNewButton.addClickListener((Button.ClickListener) clickEvent -> createItemWizard());
 
@@ -97,11 +94,12 @@ public abstract class WizardCommonView extends UserEntryView implements View {
         window.setHeight(500,Unit.PIXELS);
         final FormLayout content = new FormLayout();
         content.setMargin(true);
+
+
         window.center();
         wizard = new Wizard();
         wizard.setSizeFull();
         window.setContent(wizard);
-        wizard.setStyleName("wizard");
         registerWizardBanClickListeners();
     }
 
@@ -116,7 +114,7 @@ public abstract class WizardCommonView extends UserEntryView implements View {
                                 window.close();
                             }
                         }
-                    });
+                    }).setStyleName("confirmBox");
         });
         wizard.getFinishButton().addClickListener((Button.ClickListener) clickEvent -> {
             ConfirmDialog.show(getUI(), "Add item", "Are you sure you want to add new Item?",
@@ -131,6 +129,13 @@ public abstract class WizardCommonView extends UserEntryView implements View {
                         }
                     });
         });
+
+        wizard.getNextButton().setStyleName("primarey-button");
+        wizard.getBackButton().setStyleName("defalt");
+        wizard.getCancelButton().setStyleName("cancel");
+        wizard.getFinishButton().setStyleName("defalt");
+        ;
+
     }
 
     protected void enableDisableAllComponents(FormLayout layout,boolean isEnable){

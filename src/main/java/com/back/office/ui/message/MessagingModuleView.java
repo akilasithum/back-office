@@ -46,7 +46,7 @@ public class MessagingModuleView extends UserEntryView implements View{
     }
 
     public MessagingModuleView() {
-        super();
+        super(true);
         connection=DBConnection.getInstance();
         createMainLayout();
         userName =UI.getCurrent().getSession().getAttribute("userName").toString();

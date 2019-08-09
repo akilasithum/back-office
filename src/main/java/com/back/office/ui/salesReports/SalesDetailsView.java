@@ -58,7 +58,8 @@ public class SalesDetailsView extends UserEntryView implements View {
     }
 
     private void createMainLayout() {
-        setSpacing(true);
+        //setSpacing(true);
+        setMargin(false);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
         headerLayout.setMargin(Constants.noMargin);
@@ -116,18 +117,18 @@ public class SalesDetailsView extends UserEntryView implements View {
         List<String> catList = connection.getFlightsNoList();
         flightNoComboBox.setItems(catList);
         firstRow.addComponent(flightNoComboBox);
-        firstRow.setWidth("60%");
-
+        firstRow.setWidth("65%");
+        //firstRow.addComponent(searchButton);
 
         buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        buttonRow.setSpacing(true);
-        buttonRow.setMargin(Constants.noMargin);
-        userFormLayout.addComponent(buttonRow);
+       buttonRow.setStyleName("searchButton");
+       userFormLayout.addComponent(buttonRow);
 
         searchButton = new Button("Search");
         searchButton.addClickListener((Button.ClickListener) clickEvent -> showFilterData());
         buttonRow.addComponent(searchButton);
+        firstRow.addComponent(buttonRow);
 
         HorizontalLayout optionButtonRow = new HorizontalLayout();
         optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);

@@ -63,7 +63,15 @@
     }
   }
 
+  .popupContent{
+    background-color: grey;
+  }
 
+
+  .searchButton{
+    padding-top: 26px;
+    padding-left: 40px;
+  }
 
   .imageMargin {
     cursor: pointer;
@@ -72,6 +80,32 @@
   .itemLabel {
     font-weight: bold;
     color: white;
+  }
+
+  .notification-error {
+    background-color: rgba(199, 0, 57 ) !important;
+  }
+
+  .notification-error:hover {
+    background-color: rgba(147, 28, 62) !important;
+  }
+
+  .notification-warning {
+    background-color: rgba(247, 206, 38) !important;
+  }
+
+  .notification-warning:hover {
+    background-color: rgba(247, 158, 38) !important;
+  }
+
+  .fancy-notif-title {
+    font-family: cursive;
+    margin-top: 0px !important;
+  }
+
+  .fancy-notif-desc {
+    font-family: monospace;
+    margin-bottom: 8px;
   }
 
   .main-layout {
@@ -213,7 +247,9 @@
         }
       }
     }
-
+    .confirmBox .v-label .v-captiontext{
+      color: black !important;
+    }
     /* breadcrumbs */
     .breadcrumbs {
       padding: 15px 20px;
@@ -285,7 +321,6 @@
         }
       }
     }
-
     /* content */
     .v-slot-contentBox {
       overflow-y: auto;

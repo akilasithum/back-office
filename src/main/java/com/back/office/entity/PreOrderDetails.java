@@ -5,6 +5,7 @@ import java.util.Date;
 public class PreOrderDetails {
 
     private int preOrderId;
+    private int orderNumber;
     private String PNR;
     private String customerName;
     private String serviceType;
@@ -20,6 +21,14 @@ public class PreOrderDetails {
 
     public void setPreOrderId(int preOrderId) {
         this.preOrderId = preOrderId;
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getPNR() {

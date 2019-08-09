@@ -2,6 +2,7 @@ package com.back.office.ui.wizard.steps.aircraft;
 
 import com.back.office.entity.AircraftDetails;
 import com.back.office.entity.ItemDetails;
+import com.back.office.utils.UserNotification;
 import com.vaadin.ui.*;
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -58,7 +59,7 @@ public class AirCraftFirstStep implements WizardStep {
         boolean active = activeCheckBox.getValue();
         if(regNo == null || "null".equals(regNo) || type == null || "null".equals(type) || businessClassPaxCount == null ||
         "null".equals(businessClassPaxCount) || econClassPaxCount == null || "null".equals(econClassPaxCount)){
-            Notification.show("Fill all required fields", Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Error","Fill all required fields","warning",UI.getCurrent());
             return false;
         }
         else{

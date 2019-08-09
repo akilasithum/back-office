@@ -3,16 +3,19 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.back.office.entity.PreOrderDetails" table="pre_orders" catalog="">
+    <class name="com.back.office.entity.PreOrderDetails" table="preorder" catalog="">
         <id name="preOrderId" type="java.lang.Integer">
             <column name="preOrderId" />
             <generator class="identity" />
         </id>
+        <property name="orderNumber" type="java.lang.Integer">
+            <column name="orderNumber"/>
+        </property>
         <property name="PNR" type="java.lang.String">
-            <column name="PNR"/>
+            <column name="pnrNumber"/>
         </property>
         <property name="customerName" type="java.lang.String">
-            <column name="customerName" />
+            <column name="userName" />
         </property>
         <property name="serviceType" type="java.lang.String">
             <column name="serviceType"  />
@@ -27,7 +30,7 @@
             <column name="preOrderStatus" length="30" />
         </property>
         <property name="totalAmount" type="java.lang.Float">
-            <column name="totalAmount" length="30" />
+            <column name="purchaseAmount" length="30" />
         </property>
         <property name="typeOfOrder" type="java.lang.String">
             <column name="typeOfOrder" length="30" />

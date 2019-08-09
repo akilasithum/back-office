@@ -454,7 +454,7 @@ public class BackOfficeUtils {
             row1Map.put("Category Sales","");
             row1Map.put("Item Sales","ItemSales");
             row1Map.put("FA Performance","");
-            row1Map.put("Tender Summary","");
+            row1Map.put("Tender Summary","TenderSummary");
             menuItem.setSubMenuImageMap(row1Map);
             menuItem.setMenuName("report");
             UI.getCurrent().getSession().setAttribute("subMenu",menuItem);

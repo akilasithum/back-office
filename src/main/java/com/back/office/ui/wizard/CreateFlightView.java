@@ -99,6 +99,7 @@ public class CreateFlightView extends WizardCommonView {
                                     sector.setFlightId(id);
                                     connection.insertObjectHBM(sector);
                                 }
+                                UI.getCurrent().getSession().setAttribute(objectName,null);
                                 window.close();
                             }
                         }

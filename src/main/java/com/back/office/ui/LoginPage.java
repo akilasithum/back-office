@@ -4,25 +4,36 @@ import com.back.office.HybridUI;
 import com.back.office.db.DBConnection;
 import com.back.office.utils.Authentication;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ClassResource;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.TextField;
+import org.vaadin.alump.fancylayouts.FancyNotifications;
+
+import java.awt.*;
 
 public class LoginPage extends VerticalLayout implements View {
     private static final long serialVersionUID = 1L;
     public static final String NAME = "";
     public static Authentication AUTH;
     DBConnection connection;
+    FancyNotifications notifications;
     private VerticalLayout logoLayout = new VerticalLayout();
 
     public LoginPage(){
 
         VerticalLayout mainLayout = new VerticalLayout();
-
+        notifications = new FancyNotifications();
+        addComponent(notifications);
+        notifications.setClickClose(true);
         mainLayout.setSizeUndefined();
         mainLayout.setMargin(true);
         setSpacing(true);
@@ -72,11 +83,15 @@ public class LoginPage extends VerticalLayout implements View {
                         getSession().setAttribute("baseStation",baseStation.getValue().toString());
                         ((HybridUI)getUI()).navigate();
                     }else{
-                        Notification.show("Invalid credentials", Notification.Type.ERROR_MESSAGE);
+                        notifications.showNotification(null, "Error",
+                                "Invalid credentials!", null,
+                                "notification-error");
                     }
                 }
                 else{
-                    Notification.show("Select base station", Notification.Type.WARNING_MESSAGE);
+                    notifications.showNotification(null, "Missing",
+                            "Select base station", null,
+                            "notification-warning");
                 }
             }
 
@@ -90,6 +105,24 @@ public class LoginPage extends VerticalLayout implements View {
         setComponentAlignment(mainLayout, Alignment.MIDDLE_CENTER);
 
     }
+
+   /* public void init() {
+        notifications
+                .addListener((FancyNotifications.NotificationsListener) id -> {
+
+                    String msg;
+                    if (id != null && id instanceof Button) {
+                        Button button = (Button) id;
+                        msg = button.getCaption() + " clicked";
+                    } else {
+                        return;
+                    }
+
+                    LoginPage.this.notifications.showNotification(
+                            null, "click!", msg);
+                });
+
+    }*/
 
     @Override
     public void enter(ViewChangeEvent event) {

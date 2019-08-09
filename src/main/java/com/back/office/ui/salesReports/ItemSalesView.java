@@ -72,7 +72,8 @@ public class ItemSalesView extends UserEntryView implements View {
     }
 
     private void createMainLayout() {
-        setSpacing(true);
+        //setSpacing(true);
+        setMargin(Constants.noTopMargin);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
         headerLayout.setMargin(Constants.noMargin);
@@ -82,7 +83,7 @@ public class ItemSalesView extends UserEntryView implements View {
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();
-        userFormLayout.setMargin(Constants.noMargin);
+        userFormLayout.setMargin(Constants.bottomMarginInfo);
         addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         mainTableLayout.setMargin(Constants.noMargin);
@@ -128,7 +129,7 @@ public class ItemSalesView extends UserEntryView implements View {
         categoryComboBox.setDescription(CATEGORY);
         List<String> catList = (List<String>) connection.getCategories();
         categoryComboBox.setItems(catList);
-        secondRow.addComponent(categoryComboBox);
+        firstRow.addComponent(categoryComboBox);
 
         sectorComboBox = new ComboBox(SECTOR);
         sectorComboBox.setDescription(SECTOR);
@@ -141,6 +142,8 @@ public class ItemSalesView extends UserEntryView implements View {
         serviceTypeComboBox.setSelectedItem("All");
         serviceTypeComboBox.setEmptySelectionAllowed(false);
         secondRow.addComponent(serviceTypeComboBox);
+
+        secondRow.addComponent(new Label());
 
         buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);

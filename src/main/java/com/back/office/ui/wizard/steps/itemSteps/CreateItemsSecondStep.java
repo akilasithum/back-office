@@ -55,7 +55,7 @@ public class CreateItemsSecondStep implements WizardStep {
                 LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 activateDateFld.setValue(date);
             }
-            if(item.getDeListed() != null)deListed.setValue(item.getItemName());
+            if(item.getDeListed() != null)deListed.setValue(item.getDeListed());
         }
     }
 
@@ -83,11 +83,27 @@ public class CreateItemsSecondStep implements WizardStep {
                 return false;
             }
             item.setCatalogue(catalogue);
-            item.setWeight(Float.parseFloat(weight));
+            if(isFloat(weight)){
+                item.setWeight(Float.parseFloat(weight));
+            }
+            else {
+                Notification.show("Weight should be a decimal value without texts", Notification.Type.ERROR_MESSAGE);
+                return false;
+            }
+
             item.setActivateDate(BackOfficeUtils.getDateStringFromDate(date));
             item.setDeListed(deListedStr);
             UI.getCurrent().getSession().setAttribute("item",item);
             return true;
+        }
+    }
+
+    private boolean isFloat(String val){
+        try{
+            float f = Float.parseFloat(val);
+            return true;
+        }catch (Exception e){
+            return false;
         }
     }
 

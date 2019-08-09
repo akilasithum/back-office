@@ -11,9 +11,6 @@
         <property name="preOrderId" type="java.lang.Integer">
             <column name="preOrderId" />
         </property>
-        <property name="category" type="java.lang.String">
-            <column name="category"  />
-        </property>
         <property name="itemNo" type="java.lang.String">
             <column name="itemNo" />
         </property>

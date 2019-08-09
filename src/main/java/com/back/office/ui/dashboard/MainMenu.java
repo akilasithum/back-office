@@ -15,6 +15,7 @@ import kaesdingeling.hybridmenu.data.MenuConfig;
 import kaesdingeling.hybridmenu.data.interfaces.ViewChangeManager;
 import kaesdingeling.hybridmenu.design.DesignItem;
 import kaesdingeling.hybridmenu.page.DefaultPage;
+import org.vaadin.alump.fancylayouts.FancyNotifications;
 
 
 public class MainMenu extends VerticalLayout {
@@ -46,6 +47,7 @@ public class MainMenu extends VerticalLayout {
     public static MainMenu get() {
         return new MainMenu();
     }
+    FancyNotifications notifications;
 
     public MainMenu() {
         super();
@@ -73,6 +75,9 @@ public class MainMenu extends VerticalLayout {
                 ui.getNavigator().setErrorView(DefaultPage.class);
             }
 
+            notifications = new FancyNotifications();
+            addComponent(notifications);
+            notifications.setClickClose(true);
 
             HorizontalLayout layout = new HorizontalLayout();
             layout.setMargin(Constants.leftMargin);
@@ -121,6 +126,10 @@ public class MainMenu extends VerticalLayout {
             buildRunning = true;
         }
         return this;
+    }
+
+    public FancyNotifications getNotifications(){
+        return notifications;
     }
 
     public void addLogo(){

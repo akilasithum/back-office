@@ -40,7 +40,8 @@ public class FlightCommonStep implements WizardStep {
             else item = new Flight();
 
             item.setCountry(country);
-            item.setBaseStation(UI.getCurrent().getSession().getAttribute("baseStation").toString());
+            //item.setBaseStation(UI.getCurrent().getSession().getAttribute("baseStation").toString());
+            item.setBaseStation("YYZ");
             UI.getCurrent().getSession().setAttribute("flight",item);
         }
         return true;

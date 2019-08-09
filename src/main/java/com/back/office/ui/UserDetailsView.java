@@ -41,7 +41,7 @@ public class UserDetailsView extends CommonPageDetails {
     List<User> userList;
 
     public UserDetailsView(){
-        super();
+        super(false);
     }
 
     @Override

@@ -93,6 +93,7 @@ public class CreateItemView extends WizardCommonView {
                                     connection.insertObjectHBM(item);
                                     updateTable(false,item);
                                 }
+                                UI.getCurrent().getSession().setAttribute("item",null);
                                 window.close();
                             }
                         }

@@ -1,13 +1,10 @@
 package com.back.office.ui.wizard;
 
 import com.back.office.entity.AircraftDetails;
-import com.back.office.entity.ItemDetails;
 import com.back.office.ui.wizard.steps.aircraft.AirCraftFirstStep;
 import com.back.office.ui.wizard.steps.aircraft.AircraftFrontGalleyStep;
 import com.back.office.ui.wizard.steps.aircraft.AircraftMiddleGalleyStep;
 import com.back.office.ui.wizard.steps.aircraft.AircraftRearGalleyStep;
-import com.back.office.utils.Constants;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -22,7 +19,7 @@ import static com.back.office.utils.BackOfficeUtils.getNumberList;
 public class AircraftDetailsView extends WizardCommonView {
 
     FilterGrid<AircraftDetails> aircraftDetailsGrid;
-    List<AircraftDetails> aircraftDetailsList;
+    List<AircraftDetails> aircraftDetailsList = new ArrayList<>();
 
     private final String AIRCRAFT_NAME = "Aircraft Type";
     private final String GALLEY_POSITION = "Galley Type";
@@ -75,8 +72,8 @@ public class AircraftDetailsView extends WizardCommonView {
     }
 
     private void setDataInGrid(){
-        aircraftDetailsList = connection.getAllFlights();
-        aircraftDetailsGrid.setItems(aircraftDetailsList);
+        // aircraftDetailsList = connection.getAllFlights();
+        // aircraftDetailsGrid.setItems(aircraftDetailsList);
         aircraftDetailsGrid.addColumn(AircraftDetails::getRegistrationNumber).setCaption(REG_NO).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         aircraftDetailsGrid.addColumn(AircraftDetails::getAircraftName).setCaption(AIRCRAFT_NAME).
@@ -162,7 +159,6 @@ public class AircraftDetailsView extends WizardCommonView {
         detailsWindow.setWidth("40%");
         detailsWindow.setHeight(500,Unit.PIXELS);
         detailsWindow.center();
-        detailsWindow.setStyleName("popupView");
         formLayout.setMargin(true);
 
         Button editButton = new Button("Edit");
@@ -177,40 +173,40 @@ public class AircraftDetailsView extends WizardCommonView {
 
         editButton.addClickListener(clickEvent -> {
 
-                    if (editButton.getCaption().equals("Edit")) {
-                        enableDisableAllComponents(formLayout, true);
-                        editButton.setCaption("Save");
-                    }
-                    else{
-                        try {
-                            AircraftDetails aircraft = new AircraftDetails();
-                            aircraft.setRegistrationNumber(registrationNumberFld.getValue());
-                            aircraft.setAircraftName(aircraftType.getValue());
-                            aircraft.setBusinessClassSeatCount(Integer.parseInt(businessClassSeatsComboBox.getValue().toString()));
-                            aircraft.setEcoClassSeatCount(Integer.parseInt(economyClassSeatsComboBox.getValue().toString()));
-                            aircraft.setFrontFullCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(7)).getValue().toString()));
-                            aircraft.setFrontHalfCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(8)).getValue().toString()));
-                            aircraft.setFrontContainers(Integer.parseInt(((ComboBox) formLayout.getComponent(9)).getValue().toString()));
+            if (editButton.getCaption().equals("Edit")) {
+                enableDisableAllComponents(formLayout, true);
+                editButton.setCaption("Save");
+            }
+            else{
+                try {
+                    AircraftDetails aircraft = new AircraftDetails();
+                    aircraft.setRegistrationNumber(registrationNumberFld.getValue());
+                    aircraft.setAircraftName(aircraftType.getValue());
+                    aircraft.setBusinessClassSeatCount(Integer.parseInt(businessClassSeatsComboBox.getValue().toString()));
+                    aircraft.setEcoClassSeatCount(Integer.parseInt(economyClassSeatsComboBox.getValue().toString()));
+                    aircraft.setFrontFullCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(7)).getValue().toString()));
+                    aircraft.setFrontHalfCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(8)).getValue().toString()));
+                    aircraft.setFrontContainers(Integer.parseInt(((ComboBox) formLayout.getComponent(9)).getValue().toString()));
 
-                            aircraft.setMiddleFullCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(11)).getValue().toString()));
-                            aircraft.setMiddleHalfCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(12)).getValue().toString()));
-                            aircraft.setMiddleContainers(Integer.parseInt(((ComboBox) formLayout.getComponent(13)).getValue().toString()));
+                    aircraft.setMiddleFullCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(11)).getValue().toString()));
+                    aircraft.setMiddleHalfCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(12)).getValue().toString()));
+                    aircraft.setMiddleContainers(Integer.parseInt(((ComboBox) formLayout.getComponent(13)).getValue().toString()));
 
-                            aircraft.setRearFullCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(15)).getValue().toString()));
-                            aircraft.setRearHalfCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(16)).getValue().toString()));
-                            aircraft.setRearContainers(Integer.parseInt(((ComboBox) formLayout.getComponent(17)).getValue().toString()));
-                            aircraft.setActive(activeCheckBox.getValue());
-                            connection.updateRecordStatus(Integer.parseInt(idFld.getValue()),
-                                    "com.back.office.entity.AircraftDetails");
-                            connection.insertObjectHBM(aircraft);
-                            updateTable(true, aircraft);
-                            detailsWindow.close();
-                        }
-                        catch (Exception e){
-                            Notification.show("Some fields are not specified or contain wrong values. Please check.", Notification.Type.WARNING_MESSAGE);
-                        }
-                    }
-                });
+                    aircraft.setRearFullCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(15)).getValue().toString()));
+                    aircraft.setRearHalfCarts(Integer.parseInt(((ComboBox) formLayout.getComponent(16)).getValue().toString()));
+                    aircraft.setRearContainers(Integer.parseInt(((ComboBox) formLayout.getComponent(17)).getValue().toString()));
+                    aircraft.setActive(activeCheckBox.getValue());
+                    connection.updateRecordStatus(Integer.parseInt(idFld.getValue()),
+                            "com.back.office.entity.AircraftDetails");
+                    connection.insertObjectHBM(aircraft);
+                    updateTable(true, aircraft);
+                    detailsWindow.close();
+                }
+                catch (Exception e){
+                    Notification.show("Some fields are not specified or contain wrong values. Please check.", Notification.Type.WARNING_MESSAGE);
+                }
+            }
+        });
 
         deleteButton.addClickListener(clickEvent -> {
             ConfirmDialog.show(getUI(), "Delete", "Are you sure you want to delete this Aircraft?",

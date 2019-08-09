@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import com.back.office.entity.ItemDetails;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -40,8 +43,7 @@ public class PreOrders extends ReportCommonView {
     protected DateField flightDateToDateField;
     protected ComboBox service;
     FilterGrid<PreOrderDetails> detailsTable;
-    List<PreOrderDetails> list;
-    protected Grid<PreOrderItem> listdata;
+    protected Grid<PreOrderItem> preOrderItemGrid;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
@@ -55,6 +57,7 @@ public class PreOrders extends ReportCommonView {
     private final String FlightDate = "Flight Date";
     private final String preOrderStatus = "Pre Order Status";
     private final String typeOfOrder = "Source";
+    private Map<String, ItemDetails> itemNoNameMap;
 
 
     @Override
@@ -172,40 +175,46 @@ public class PreOrders extends ReportCommonView {
     private void selectDetailsh(int datalistid) {
 
         int idofdata=datalistid;
-        List<PreOrderItem> listdataorder = connection.getPreOrderItemDetails(idofdata);
+        List<PreOrderItem> preOrderItemList = connection.getPreOrderItemDetails(idofdata);
+        for(PreOrderItem item : preOrderItemList){
+            item.setItemDesc(itemNoNameMap.get(item.getItemNo()).getItemName());
+        }
 
-        listdata=new Grid<>();
-        listdata.setColumnReorderingAllowed(true);
-        listdata.setSizeFull();
+        preOrderItemGrid =new Grid<>();
+        preOrderItemGrid.setColumnReorderingAllowed(true);
+        preOrderItemGrid.setSizeFull();
 
-        listdata.addColumn(PreOrderItem::getPreOrderItemId).setCaption("Pre Order Item No");
-        listdata.addColumn(PreOrderItem::getPreOrderId).setCaption("Ppre Order No");
-        listdata.addColumn(PreOrderItem::getCategory).setCaption("Category");
-        listdata.addColumn(PreOrderItem::getItemNo).setCaption("Item No");
-        listdata.addColumn(PreOrderItem::getQuantity).setCaption("Quantity");
-        Window windowdatatable=new Window();
+        preOrderItemGrid.addColumn(PreOrderItem::getPreOrderId).setCaption("Pre Order No");
+        preOrderItemGrid.addColumn(PreOrderItem::getItemNo).setCaption("Item No");
+        preOrderItemGrid.addColumn(PreOrderItem::getItemDesc).setCaption("Item Desc");
+        preOrderItemGrid.addColumn(PreOrderItem::getQuantity).setCaption("Quantity");
+        Window preOrderItemWindow = new Window();
+        preOrderItemWindow.setCaption("Pre Order Items");
         VerticalLayout windowContent = new VerticalLayout();
         windowContent.setMargin(true);
-        windowdatatable.setContent(windowContent);
+        preOrderItemWindow.setContent(windowContent);
         Button buttonclose=new Button("Ok");
-        buttonclose.addClickListener((Button.ClickListener) clickEvent->closedatawindowh(windowdatatable));
+        buttonclose.addClickListener((Button.ClickListener) clickEvent->closedatawindowh(preOrderItemWindow));
 
-        windowdatatable.setWidth("50%");
+        preOrderItemWindow.setWidth("50%");
+        preOrderItemWindow.setResizable(false);
+        preOrderItemWindow.setResponsive(true);
         windowContent.addComponent(new Label("Per Order Item"));
-        windowdatatable.center();
-        windowContent.addComponent(listdata);
+        preOrderItemWindow.center();
+        windowContent.addComponent(preOrderItemGrid);
         windowContent.addComponent(buttonclose);
         windowContent.setComponentAlignment(buttonclose,Alignment.BOTTOM_CENTER);
 
-        listdata.setItems(listdataorder);
+        preOrderItemGrid.setItems(preOrderItemList);
 
-        windowdatatable.addStyleName("mywindowstyle");
-        getUI().addWindow(windowdatatable);
+        preOrderItemWindow.addStyleName("mywindowstyle");
+        getUI().addWindow(preOrderItemWindow);
     }
 
     @Override
     protected void createMainLayout() {
         super.createMainLayout();
+        itemNoNameMap = connection.getItemNoItemDetailsMap();
         HorizontalLayout firstRow = new HorizontalLayout();
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
@@ -256,7 +265,7 @@ public class PreOrders extends ReportCommonView {
         detailsTable.addColumn(PreOrderDetails::getPNR).setCaption(PNR);
         detailsTable.addColumn(PreOrderDetails::getCustomerName).setCaption(customerName);
         detailsTable.addColumn(PreOrderDetails::getFlightNumber).setCaption(flightNumber);
-        detailsTable.addColumn(PreOrderDetails::getFlightDate).setCaption(FlightDate);
+        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FlightDate);
         detailsTable.addColumn(PreOrderDetails::getPreOrderStatus).setCaption(preOrderStatus);
 
     }

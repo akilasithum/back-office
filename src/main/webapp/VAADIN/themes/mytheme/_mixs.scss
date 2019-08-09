@@ -527,4 +527,102 @@
   &:after{
     background: url("images/icon_4.svg")  no-repeat!important;
   }
+
+  .selected{
+    .v-button {
+      @include buttonColorNone($light_orange , 0);
+      z-index: 2;
+      font-size: 25px;
+      .v-button-caption{
+        display: block;
+        font-size: 9px;
+        text-transform: uppercase;
+        color: $white;
+      }
+      &:hover, &:focus, &:active {
+        .v-button-caption{
+          color: $white  !important;
+        }
+      }
+      color: white !important;
+    }
+    color: $white;
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    width: 50px;
+    &:after{
+      position: absolute;
+      content: "";
+      width: 50px;
+      height: 50px;
+      top: -60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      margin: 0 auto;
+    }
+  }
+  .backBtn{
+    .v-button {
+      @include buttonColorNone($light_orange , 0);
+      z-index: 2;
+      font-size: 25px;
+      .v-button-caption{
+        display: block;
+        font-size: 9px;
+        text-transform: uppercase;
+        color: $white;
+      }
+      &:hover, &:focus, &:active {
+        .v-button-caption{
+          color: $white  !important;
+        }
+      }
+      color: greenyellow !important;
+    }
+    color: $white;
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    width: 50px;
+    &:after{
+      position: absolute;
+      content: "";
+      width: 50px;
+      height: 50px;
+      top: -60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      margin: 0 auto;
+    }
+  }
+  .headerText{
+    font-weight: bold;
+    font-size: 30px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+  }
+  .v-grid-tablewrapper .v-grid-header .v-grid-cell .v-grid-column-header-content {
+    color: #fbfbfb;
+    font-weight: 500;
+    text-align: center;
+  }
+  .iconLayoutBackground{
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: 0;
+    background-color: #030277;
+    height: 60px;
+  }
+  .iconLayoutBackgroundNoMargin{
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: 0;
+    background-color: #030277;
+    height: 60px;
+  }
 }
