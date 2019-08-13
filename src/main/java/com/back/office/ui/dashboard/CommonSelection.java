@@ -319,6 +319,7 @@ public class CommonSelection extends VerticalLayout implements View {
                 horizontalLayout.addComponents(emptyLayout);
             }
             else {
+                resourceName = map.getKey().replace(" ","-")+".svg";
                 Image authorizationImage = new Image(null, new ClassResource(resourceName));
                 authorizationImage.setWidth("50%");
                 authorizationImage.setHeight("50%");
