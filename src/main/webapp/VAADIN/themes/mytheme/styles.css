@@ -2170,6 +2170,17 @@ div.v-layout.v-horizontal.v-widget {
 	color: #fbfbfb !important;
 }
 
+.imgStyle {
+	position: relative;
+	z-index: 1;
+	left: -2px;
+	width: 32px;
+	top: 32px;
+	right: 0;
+	bottom: 0;
+	filter: invert(0.5) sepia(2) saturate(10);
+}
+
 .popupContent .v-window-header {
 	font-size: 22px;
 	margin-right: 0px !important;

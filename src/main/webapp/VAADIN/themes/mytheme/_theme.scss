@@ -187,6 +187,18 @@
   color: $white !important;
 }
 
+.imgStyle{
+  position: relative;
+  z-index: 1;
+  left: -2px;
+  width: 32px;
+  right: 0;
+  bottom: 0;
+  //filter: invert(0.5) sepia(2) saturate(10) hue-rotate(-24deg);
+  //filter: invert(0.5);
+  filter: invert(0.5) sepia(2) saturate(10);
+}
+
 .popupContent {
   .v-window-header {
     font-size: 22px;
