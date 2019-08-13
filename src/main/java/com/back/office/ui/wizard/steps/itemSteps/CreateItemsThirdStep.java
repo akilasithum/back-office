@@ -2,6 +2,7 @@ package com.back.office.ui.wizard.steps.itemSteps;
 
 import com.back.office.entity.ItemDetails;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.UserNotification;
 import com.vaadin.ui.*;
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -83,7 +84,7 @@ public class CreateItemsThirdStep implements WizardStep {
         if(baseCurrency == null || "null".equals(baseCurrency) || basePrice == null || basePrice.isEmpty()
                 || secondaryCurrency == null || "null".equals(secondaryCurrency) || secondaryPrice == null || secondaryPrice.isEmpty()
          || costCurrency == null || "null".equals(costCurrency) || costPrice == null || costPrice.isEmpty()){
-            Notification.show("Fill all the required fields.", Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Warning","Fill all the required fields.","warning",UI.getCurrent());
             return false;
         }
         else{
@@ -93,7 +94,7 @@ public class CreateItemsThirdStep implements WizardStep {
                 item = (ItemDetails)obj;
             }
             else{
-                Notification.show("Something wrong. Please close window and try again", Notification.Type.ERROR_MESSAGE);
+                UserNotification.show("Error","Something wrong. Please close window and try again","error",UI.getCurrent());
                 return false;
             }
             item.setBaseCurrency(baseCurrency);

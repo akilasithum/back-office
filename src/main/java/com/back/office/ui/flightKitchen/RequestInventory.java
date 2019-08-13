@@ -117,7 +117,6 @@ public class RequestInventory extends UserEntryView implements View{
 
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemCode).setCaption("Item Number");
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemName).setCaption("Item Name");
-        itemDetailsFilterGrid.addColumn(ItemDetails::getorderQuntity).setCaption("Order Qty");
 
         addComponent(formLayoutList);
         firstRow.addComponent(h1);
@@ -177,7 +176,6 @@ public class RequestInventory extends UserEntryView implements View{
                     itemDetailListGrid.setItemCode(itemNumberCB.getValue().toString());
 
                     itemDetailListGrid.setItemName(itemNameCB.getValue().toString());
-                    itemDetailListGrid.setorerQuntity(orderQuntity.getValue());
 
                     setList.add(itemDetailListGrid);
 
@@ -217,14 +215,12 @@ public class RequestInventory extends UserEntryView implements View{
 
                             String s1 = setList.get(i).getItemCode();
                             String s2 = setList.get(i).getItemName();
-                            String s3 = setList.get(i).getorderQuntity();
 
                             Cell c = r.createCell(0);
                             c.setCellValue(s1);
                             Cell c1 = r.createCell(1);
                             c1.setCellValue(s2);
                             Cell c2 = r.createCell(2);
-                            c2.setCellValue(s3);
 
 
                         }

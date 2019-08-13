@@ -83,7 +83,7 @@
   }
 
   .notification-error {
-    background-color: rgba(199, 0, 57 ) !important;
+    background-color: rgba(197, 68, 61 ) !important;
   }
 
   .notification-error:hover {
@@ -91,11 +91,19 @@
   }
 
   .notification-warning {
-    background-color: rgba(247, 206, 38) !important;
+    background-color: rgba(214, 134, 35) !important;
   }
 
   .notification-warning:hover {
     background-color: rgba(247, 158, 38) !important;
+  }
+
+  .notification-success {
+    background-color: rgba(66, 160, 96) !important;
+  }
+
+  .notification-success:hover {
+    background-color: rgba(188, 255, 161) !important;
   }
 
   .fancy-notif-title {

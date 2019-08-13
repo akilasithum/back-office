@@ -24,19 +24,10 @@ public class CreateItemsFourthStep implements WizardStep {
         barCodeField = new TextField("Barcode");
         barCodeField.setRequiredIndicatorVisible(true);
         form.addComponent(barCodeField);
-        fillFieldsIfAddedAlready();
         return form;
     }
 
-    private void fillFieldsIfAddedAlready(){
-        Object obj = UI.getCurrent().getSession().getAttribute("item");
-        ItemDetails item;
-        if(obj != null && obj instanceof ItemDetails){
-            item = (ItemDetails)obj;
-            if(item.getNfcId() != null)NFCIdField.setValue(item.getNfcId());
-            if(item.getBarcode() != null)barCodeField.setValue(item.getBarcode());
-        }
-    }
+
 
     @Override
     public boolean onAdvance() {
@@ -56,8 +47,6 @@ public class CreateItemsFourthStep implements WizardStep {
                 Notification.show("Something wrong. Please close window and try again", Notification.Type.ERROR_MESSAGE);
                 return false;
             }
-            item.setNfcId(nfcId);
-            item.setBarcode(barcodeVal);
             UI.getCurrent().getSession().setAttribute("item",item);
         }
         return true;

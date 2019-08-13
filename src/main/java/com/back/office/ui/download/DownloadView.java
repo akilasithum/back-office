@@ -289,10 +289,8 @@ public class DownloadView<T> extends VerticalLayout implements View {
                         int s1 = lista.get(i).getRecordStatus();
                         int s2 = lista.get(i).getItemId();
                         String s3 = lista.get(i).getItemName();
-                        String s4 = lista.get(i).getServiceType();
                         String s5 = lista.get(i).getCategory();
                         String s6 = lista.get(i).getCatalogue();
-                        Float s7 = lista.get(i).getWeight();
                         String s8 = lista.get(i).getCostCurrency();
                         float s9 = lista.get(i).getCostPrice();
                         String s10 = lista.get(i).getBaseCurrency();
@@ -302,8 +300,6 @@ public class DownloadView<T> extends VerticalLayout implements View {
                         String s14 = lista.get(i).getSecondCurrency();
                         float s15 = lista.get(i).getSecondPrice();
                         String s16 = lista.get(i).getDeListed();
-                        String s17 = lista.get(i).getNfcId();
-                        String s18 = lista.get(i).getBarcode();
                         Cell c = r.createCell(0);
                         c.setCellValue(s1);
                         Cell c1 = r.createCell(1);
@@ -311,13 +307,11 @@ public class DownloadView<T> extends VerticalLayout implements View {
                         Cell c2 = r.createCell(2);
                         c2.setCellValue(s3);
                         Cell c3 = r.createCell(3);
-                        c3.setCellValue(s4);
                         Cell c4 = r.createCell(4);
                         c4.setCellValue(s5);
                         Cell c5 = r.createCell(5);
                         c5.setCellValue(s6);
                         Cell c6 = r.createCell(6);
-                        c6.setCellValue(s7);
                         Cell c7 = r.createCell(7);
                         c7.setCellValue(s8);
                         Cell c8 = r.createCell(8);
@@ -337,9 +331,6 @@ public class DownloadView<T> extends VerticalLayout implements View {
                         Cell c15 = r.createCell(15);
                         c15.setCellValue(s16);
                         Cell c16 = r.createCell(16);
-                        c16.setCellValue(s17);
-                        Cell c17 = r.createCell(17);
-                        c17.setCellValue(s18);
 
                     }
 

@@ -2,15 +2,20 @@ package com.back.office.ui.wizard.steps.itemSteps;
 
 import com.back.office.entity.ItemDetails;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.UserNotification;
 import com.vaadin.ui.*;
 import org.vaadin.teemu.wizards.WizardStep;
+
+import java.util.Arrays;
 
 public class CreateItemsFirstStep implements WizardStep {
 
     protected TextField itemNameFld;
-    protected ComboBox serviceTypeFld;
     protected TextField itemCode;
-    protected ComboBox categoryFld;
+    protected TextField categoryFld;
+    protected FormLayout verticalLayout;
+    protected Object editObj;
+    protected ComboBox availableForCompensation;
 
     @Override
     public String getCaption() {
@@ -19,20 +24,12 @@ public class CreateItemsFirstStep implements WizardStep {
 
     @Override
     public Component getContent() {
-        FormLayout verticalLayout = new FormLayout();
-        serviceTypeFld = new ComboBox("Service Type");
-        serviceTypeFld.setItems("BOB","DTF","DTP","VRT");
-        serviceTypeFld.setEmptySelectionAllowed(false);
-        serviceTypeFld.setRequiredIndicatorVisible(true);
-        serviceTypeFld.addValueChangeListener( valueChangeEvent -> {
-            if(serviceTypeFld.getValue() != null && !serviceTypeFld.getValue().toString().isEmpty()){
-                categoryFld.setItems(BackOfficeUtils.getCategoryFromServiceType(serviceTypeFld.getValue().toString()));
-            }
-        });
+        verticalLayout = new FormLayout();
 
-        categoryFld = new ComboBox("Category");
-        categoryFld.setEmptySelectionAllowed(false);
-        categoryFld.setRequiredIndicatorVisible(true);
+        categoryFld = new TextField("Category");
+        String setupType = (String) UI.getCurrent().getSession().getAttribute("setupSubMenu");
+        categoryFld.setValue(setupType);
+        categoryFld.setVisible(false);
 
         itemCode = new TextField("Item No");
         itemCode.setRequiredIndicatorVisible(true);
@@ -40,18 +37,26 @@ public class CreateItemsFirstStep implements WizardStep {
         itemNameFld = new TextField("Item Description");
         itemNameFld.setRequiredIndicatorVisible(true);
 
-        verticalLayout.addComponents(serviceTypeFld,categoryFld,itemCode,itemNameFld);
+        availableForCompensation = new ComboBox("Available for Compensation");
+        availableForCompensation.setItems(Arrays.asList("Sales & Compensation","Sales only","Compensation only"));
+        availableForCompensation.setSelectedItem("Sales & Compensation");
+        availableForCompensation.setEmptySelectionAllowed(false);
+        if(setupType == null || setupType.equalsIgnoreCase("Bags") || setupType.equalsIgnoreCase("Order Now")){
+            availableForCompensation.setVisible(false);
+        }
+
+        verticalLayout.addComponents(categoryFld,itemCode,itemNameFld,availableForCompensation);
         verticalLayout.setMargin(true);
+        verticalLayout.setWidth("70%");
         fillFieldsIfAddedAlready();
         return verticalLayout;
     }
 
-    private void fillFieldsIfAddedAlready(){
-        Object obj = UI.getCurrent().getSession().getAttribute("item");
+    protected void fillFieldsIfAddedAlready(){
+        editObj = UI.getCurrent().getSession().getAttribute("item");
         ItemDetails item;
-        if(obj != null && obj instanceof ItemDetails){
-            item = (ItemDetails)obj;
-            serviceTypeFld.setValue(item.getServiceType());
+        if(editObj != null && editObj instanceof ItemDetails){
+            item = (ItemDetails)editObj;
             categoryFld.setValue(item.getCategory());
             itemCode.setValue(item.getItemCode());
             itemNameFld.setValue(item.getItemName());
@@ -60,13 +65,12 @@ public class CreateItemsFirstStep implements WizardStep {
 
     @Override
     public boolean onAdvance() {
-        String serviceType = String.valueOf(serviceTypeFld.getValue());
         String category = String.valueOf(categoryFld.getValue());
         String itemNo = itemCode.getValue();
         String itemName = itemNameFld.getValue();
-        if(serviceType == null || "null".equals(serviceType) || category == null || "null".equals(category) ||
+        if(category == null || "null".equals(category) ||
                 itemName == null || itemName.isEmpty() || itemNo == null || itemNo.isEmpty()){
-            Notification.show("Fill all the required fields.", Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Warning","Fill all the required fields.","warning",UI.getCurrent());
             return false;
         }
         else{
@@ -76,11 +80,10 @@ public class CreateItemsFirstStep implements WizardStep {
                 item = (ItemDetails)obj;
             }
             else item = new ItemDetails();
-
-            item.setServiceType(serviceType);
             item.setCategory(category);
             item.setItemCode(itemNo);
             item.setItemName(itemName);
+            item.setAvailableForCompensation(String.valueOf(availableForCompensation.getValue()));
             UI.getCurrent().getSession().setAttribute("item",item);
         }
         return true;

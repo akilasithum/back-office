@@ -1682,7 +1682,7 @@ img.v-icon {
 }
 
 .v-icon + .v-captiontext, .v-icon + span {
-  margin-left: 7px;
+  margin-left: -7px;
 }
 
 .v-icon + .v-captiontext:empty, .v-icon + span:empty {

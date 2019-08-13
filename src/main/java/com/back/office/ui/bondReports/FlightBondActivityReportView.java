@@ -211,10 +211,8 @@ public class FlightBondActivityReportView extends ReportCommonView {
 
                     for(OpeningInventory inventory : cartInventory){
                         ItemDetails item = itemDetailsMap.get(inventory.getItemCode());
-                        totalWeight += item.getWeight() * inventory.getQuantity();
                         itemTable.addCell(new Paragraph(item.getItemCode(),redFont));
                         itemTable.addCell(new Paragraph(item.getItemName(),redFont));
-                        itemTable.addCell(new Paragraph(item.getWeight() * inventory.getQuantity()+"",redFont));
                     }
                     document.add(itemTable);
                     document.add(new Paragraph("Cart Total Weight : " + totalWeight/1000 + "Kg",redFont));

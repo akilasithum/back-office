@@ -10,14 +10,11 @@ public class ItemDetails {
     private int itemId;
     @ExcelCellName("Item Description")
     private String itemName;
-    @ExcelCellName("Service Type")
-    private String serviceType;
     @ExcelCellName("Category")
     private String category;
+    private String bobCategory;
     @ExcelCellName("Catalogue No")
     private String catalogue;
-    @ExcelCellName("Weight (Grams)")
-    private float weight;
     @ExcelCellName("Cost Currency")
     private String costCurrency;
     @ExcelCellName("Cost Price")
@@ -36,21 +33,9 @@ public class ItemDetails {
     private float secondPrice;
     @ExcelCellName("De listed")
     private String deListed;
-    @ExcelCellName("RFID")
-    private String nfcId;
-    @ExcelCellName("Barcode")
-    private String barcode;
+    private String availableForCompensation;
     private int recordStatus;
     private byte[] image;
-    private String orderQuntity;
-
-    public String getorderQuntity() {
-        return orderQuntity;
-    }
-
-    public void setorerQuntity(String orderQuntity) {
-        this.orderQuntity = orderQuntity;
-    }
 
     public int getRecordStatus() {
         return recordStatus;
@@ -76,14 +61,6 @@ public class ItemDetails {
         this.itemName = itemName;
     }
 
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -92,20 +69,20 @@ public class ItemDetails {
         this.category = category;
     }
 
+    public String getBobCategory() {
+        return bobCategory;
+    }
+
+    public void setBobCategory(String bobCategory) {
+        this.bobCategory = bobCategory;
+    }
+
     public String getCatalogue() {
         return catalogue;
     }
 
     public void setCatalogue(String catalogue) {
         this.catalogue = catalogue;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
     }
 
     public String getCostCurrency() {
@@ -176,6 +153,14 @@ public class ItemDetails {
         return deListed;
     }
 
+    public String getAvailableForCompensation() {
+        return availableForCompensation;
+    }
+
+    public void setAvailableForCompensation(String availableForCompensation) {
+        this.availableForCompensation = availableForCompensation;
+    }
+
     public void setDeListed(String deListed) {
         this.deListed = deListed;
     }
@@ -187,24 +172,6 @@ public class ItemDetails {
     public void setImage(byte[] image) {
         this.image = image;
     }
-
-    public String getNfcId() {
-        return nfcId;
-    }
-
-    public void setNfcId(String nfcId) {
-        this.nfcId = nfcId;
-    }
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-
 
     @Override
     public String toString(){

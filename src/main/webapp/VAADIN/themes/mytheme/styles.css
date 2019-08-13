@@ -16500,7 +16500,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .notification-error {
-	background-color: rgba(199, 0, 57) !important;
+	background-color: rgba(197, 68, 61) !important;
 }
 
 .mytheme .notification-error:hover {
@@ -16508,11 +16508,19 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .notification-warning {
-	background-color: rgba(247, 206, 38) !important;
+	background-color: rgba(214, 134, 35) !important;
 }
 
 .mytheme .notification-warning:hover {
 	background-color: rgba(247, 158, 38) !important;
+}
+
+.mytheme .notification-success {
+	background-color: rgba(66, 160, 96) !important;
+}
+
+.mytheme .notification-success:hover {
+	background-color: rgba(188, 255, 161) !important;
 }
 
 .mytheme .fancy-notif-title {

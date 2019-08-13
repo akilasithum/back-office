@@ -2,6 +2,7 @@ package com.back.office.ui.wizard.steps.itemSteps;
 
 import com.back.office.entity.ItemDetails;
 import com.back.office.framework.MyImageUpload;
+import com.back.office.utils.UserNotification;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Notification;
@@ -39,7 +40,7 @@ public class CreateItemsFifthStep implements WizardStep {
     @Override
     public boolean onAdvance() {
         if(previewField.getValue() == null) {
-            Notification.show("Fill all the required fields.", Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Warning","Fill all the required fields.","warning",UI.getCurrent());
             return false;
         }
         else{
@@ -49,7 +50,7 @@ public class CreateItemsFifthStep implements WizardStep {
                 item = (ItemDetails)obj;
             }
             else{
-                Notification.show("Something wrong. Please close window and try again", Notification.Type.ERROR_MESSAGE);
+                UserNotification.show("Error","Something wrong. Please close window and try again","error",UI.getCurrent());
                 return false;
             }
             item.setImage(previewField.getValue());
@@ -66,7 +67,7 @@ public class CreateItemsFifthStep implements WizardStep {
             if (obj != null) {
                 item = (ItemDetails) obj;
             } else {
-                Notification.show("Something wrong. Please close window and try again", Notification.Type.ERROR_MESSAGE);
+                UserNotification.show("Error","Something wrong. Please close window and try again","error",UI.getCurrent());
                 return false;
             }
             item.setImage(previewField.getValue());

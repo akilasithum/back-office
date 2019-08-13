@@ -11,18 +11,15 @@
         <property name="itemName" type="java.lang.String">
             <column name="itemName" length="100" />
         </property>
-        <property name="serviceType" type="java.lang.String">
-            <column name="serviceType" length="10" />
-        </property>
         <property name="category" type="java.lang.String">
             <column name="category"  length="30"/>
+        </property>
+        <property name="bobCategory" type="java.lang.String">
+            <column name="bobCategory"  length="50"/>
         </property>
         <property name="catalogue" type="java.lang.String">
             <column name="catalogue" length="30" />
         </property>
-        <property name="weight" type="java.lang.Float">
-        <column name="weight"/>
-    </property>
         <property name="costCurrency" type="java.lang.String">
             <column name="costCurrency"  length="30"/>
         </property>
@@ -51,22 +48,14 @@
         <property name="deListed" type="java.lang.String">
             <column name="deListed"  length="10"/>
         </property>
+        <property name="availableForCompensation" type="java.lang.String">
+            <column name="availableForCompensation"  length="50"/>
+        </property>
         <property name="image" type="binary">
             <column name="image" />
-        </property>
-        <property name="nfcId" type="java.lang.String">
-            <column name="nfcId"  length="50"/>
-        </property>
-        <property name="barcode" type="java.lang.String">
-            <column name="barcode"  length="50"/>
         </property>
         <property name="recordStatus" type="java.lang.Integer">
             <column name="recordStatus"  />
         </property>
-        <filter name="serviceTypeFilter"
-                condition=":serviceType=serviceType"/>
     </class>
-    <filter-def name="serviceTypeFilter">
-        <filter-param name="serviceType" type="java.lang.String"/>
-    </filter-def>
 </hibernate-mapping>

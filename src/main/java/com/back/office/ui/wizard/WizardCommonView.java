@@ -19,7 +19,7 @@ public abstract class WizardCommonView extends UserEntryView implements View {
     protected String objectName;
     protected String wizardName;
     protected Object editObj;
-
+    protected Label headerLabel;
     protected VerticalLayout headerLayout;
     protected HorizontalLayout buttonLayout;
     protected HorizontalLayout tableLayout;
@@ -47,9 +47,9 @@ public abstract class WizardCommonView extends UserEntryView implements View {
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
         addComponent(headerLayout);
-        Label h1 = new Label(headerName);
-        h1.addStyleName(ValoTheme.LABEL_H1);
-        headerLayout.addComponent(h1);
+        headerLabel = new Label(headerName);
+        headerLabel.addStyleName(ValoTheme.LABEL_H1);
+        headerLayout.addComponent(headerLabel);
         headerLayout.setMargin(marginInfo);
 
         buttonLayout = new HorizontalLayout();

@@ -159,6 +159,21 @@ public class DBConnection {
         }
     }
 
+    public List<ItemDetails> getAllItems(String category){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            criteria.add(Restrictions.eq("category", category));
+            criteria.add(Restrictions.eq("recordStatus", 0));
+            List list = criteria.list();
+            session.close();
+            return list;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Map<String,ItemDetails> getItemNoItemDetailsMap(){
         Map<String,ItemDetails> itemDetailsMap = new HashMap<>();
         List<ItemDetails> itemDetails = getAllItems();

@@ -4,6 +4,7 @@ import com.back.office.entity.ItemDetails;
 import com.back.office.framework.*;
 import com.back.office.ui.wizard.steps.itemSteps.*;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.UserNotification;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
@@ -12,6 +13,7 @@ import org.vaadin.teemu.wizards.Wizard;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -21,10 +23,8 @@ public class CreateItemView extends WizardCommonView {
     List<ItemDetails> itemDetails;
 
     private final String ITEM_NAME = "Item Description";
-    private final String SERVICE_TYPE = "Service Type";
     private final String CATEGORY = "Category";
     private final String CATELOGUE = "Catalogue No";
-    private final String WEIGHT = "Weight (Grams)";
     private final String COST_CURRENCY = "Cost Currency";
     private final String COST_PRICE = "Cost Price";
     private final String BASE_CURRENCY = "Base Currency";
@@ -34,8 +34,9 @@ public class CreateItemView extends WizardCommonView {
     private final String SECOND_CURRENCY = "Second Currency";
     private final String SECOND_PRICE = "Second Price";
     private final String DE_LISTED = "De listed";
-    private final String NFC_ID = "RFID";
-    private final String BARCODE = "Barcode";
+    private final String AVAILABLE_FOR_COMPENSATION = "Available for Compensation";
+    String setupType;
+    boolean isCompensationFldRequired = false;
 
     public CreateItemView(){
         super();
@@ -44,6 +45,11 @@ public class CreateItemView extends WizardCommonView {
     @Override
     protected void createMainLayout(){
         super.createMainLayout();
+        setupType = (String) UI.getCurrent().getSession().getAttribute("setupSubMenu");
+        headerLabel.setValue("Item Details - " +setupType);
+        if(setupType == null || setupType.equalsIgnoreCase("Bags") || setupType.equalsIgnoreCase("Order Now")){
+            isCompensationFldRequired = true;
+        }
         itemDetailsFilterGrid = new FilterGrid<>();
         itemDetailsFilterGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
         itemDetailsFilterGrid.setSizeFull();
@@ -63,10 +69,14 @@ public class CreateItemView extends WizardCommonView {
         window.center();
         Wizard components = new Wizard();
         components.setSizeFull();
-        components.addStep(new CreateItemsFirstStep());
+        if(setupType.equalsIgnoreCase("Order Now")){
+            components.addStep(new CreateBuyOnBoardItemFirstStep());
+        }
+        else{
+            components.addStep(new CreateItemsFirstStep());
+        }
         components.addStep(new CreateItemsSecondStep());
         components.addStep(new CreateItemsThirdStep());
-        components.addStep(new CreateItemsFourthStep());
         components.addStep(new CreateItemsFifthStep());
         window.setContent(components);
         components.getCancelButton().addClickListener((Button.ClickListener) clickEvent ->
@@ -92,6 +102,7 @@ public class CreateItemView extends WizardCommonView {
                                     item = (ItemDetails) obj;
                                     connection.insertObjectHBM(item);
                                     updateTable(false,item);
+                                    UserNotification.show("Success","Item added successfully","success",UI.getCurrent());
                                 }
                                 UI.getCurrent().getSession().setAttribute("item",null);
                                 window.close();
@@ -103,23 +114,19 @@ public class CreateItemView extends WizardCommonView {
     }
 
     private void setDataInGrid(){
-        itemDetails = connection.getAllItems();
+        itemDetails = connection.getAllItems(setupType);
         itemDetailsFilterGrid.setItems(itemDetails);
-        itemDetailsFilterGrid.addColumn(ItemDetails::getServiceType).setCaption(SERVICE_TYPE).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getCategory).setCaption(CATEGORY).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        /*itemDetailsFilterGrid.addColumn(ItemDetails::getCategory).setCaption(CATEGORY).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());*/
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemCode).setCaption(ITEM_CODE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemName).setCaption(ITEM_NAME).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getCatalogue).setCaption(CATELOGUE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getWeight).setCaption(WEIGHT).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getCostCurrency).setCaption(COST_CURRENCY).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getCostPrice).setCaption(COST_PRICE).
+        itemDetailsFilterGrid.addColumn(bean->(String.valueOf(bean.getCostPrice())).equals("0.0") ? "" : bean.getCostPrice()).setCaption(COST_PRICE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getBaseCurrency).setCaption(BASE_CURRENCY).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
@@ -129,13 +136,13 @@ public class CreateItemView extends WizardCommonView {
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(bean->(String.valueOf(bean.getSecondPrice())).equals("0.0") ? "" : bean.getSecondPrice()).setCaption(SECOND_PRICE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        if(!isCompensationFldRequired){
+            itemDetailsFilterGrid.addColumn(ItemDetails::getAvailableForCompensation).setCaption(AVAILABLE_FOR_COMPENSATION).
+                    setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        }
         itemDetailsFilterGrid.addColumn(ItemDetails::getDeListed).setCaption(DE_LISTED).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getActivateDate).setCaption(ACTIVATE_DATE).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getNfcId).setCaption(NFC_ID).
-                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        itemDetailsFilterGrid.addColumn(ItemDetails::getBarcode).setCaption(BARCODE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
     }
 
@@ -146,67 +153,59 @@ public class CreateItemView extends WizardCommonView {
 
     private void openViewEditWindow(boolean isEdit,ItemDetails item){
         Window detailsWindow = new Window((isEdit ? "Edit " : "View") + " Item");
-        FormLayout formLayout = new FormLayout();
+        FormLayout formLayout1 = new FormLayout();
+        FormLayout formLayout2 = new FormLayout();
         editObj = item;
-        ComboBox serviceTypeFld = new ComboBox(SERVICE_TYPE);
-        serviceTypeFld.setItems("BOB","DTF","DTP","VRT");
-        serviceTypeFld.setEmptySelectionAllowed(false);
-        serviceTypeFld.setValue(item.getServiceType());
-        serviceTypeFld.setEnabled(isEdit);
-        formLayout.addComponent(serviceTypeFld);
 
         ComboBox categoryFld = new ComboBox(CATEGORY);
-        categoryFld.setEmptySelectionAllowed(false);
-        if(isEdit) {
-            serviceTypeFld.addValueChangeListener(valueChangeEvent -> {
-                if (serviceTypeFld.getValue() != null && !serviceTypeFld.getValue().toString().isEmpty()) {
-                    categoryFld.setItems(BackOfficeUtils.getCategoryFromServiceType(serviceTypeFld.getValue().toString()));
-                }
-            });
-        }
-        else{
-            categoryFld.setEnabled(false);
-        }
+        categoryFld.setVisible(false);
         categoryFld.setValue(item.getCategory());
-        formLayout.addComponent(categoryFld);
+        formLayout1.addComponent(categoryFld);
 
         TextField idFld = new TextField();
         idFld.setValue(String.valueOf(item.getItemId()));
-        formLayout.addComponents(idFld);
+        formLayout1.addComponents(idFld);
         idFld.setVisible(false);
 
         TextField itemCode = new TextField(ITEM_CODE);
         itemCode.setValue(item.getItemCode());
         itemCode.setEnabled(isEdit);
-        formLayout.addComponents(itemCode);
+        formLayout1.addComponents(itemCode);
 
         TextField itemNameFld = new TextField(ITEM_NAME);
         itemNameFld.setValue(item.getItemName());
         itemNameFld.setEnabled(isEdit);
-        formLayout.addComponent(itemNameFld);
+        formLayout1.addComponent(itemNameFld);
+
+        ComboBox availableForCompensation = new ComboBox(AVAILABLE_FOR_COMPENSATION);
+        availableForCompensation.setItems(Arrays.asList("Sales & Compensation","Sales only","Compensation only"));
+        availableForCompensation.setValue(item.getAvailableForCompensation());
+        availableForCompensation.setEnabled(false);
+        formLayout1.addComponent(availableForCompensation);
+        if(setupType == null || setupType.equalsIgnoreCase("Bags") || setupType.equalsIgnoreCase("Order Now")){
+            isCompensationFldRequired = true;
+        }
+        if(isCompensationFldRequired){
+            availableForCompensation.setVisible(false);
+        }
 
         TextField catelogFld = new TextField(CATELOGUE);
         catelogFld.setValue(item.getCatalogue());
         catelogFld.setEnabled(isEdit);
-        formLayout.addComponent(catelogFld);
-
-        TextField weightFld = new TextField(WEIGHT);
-        weightFld.setValue(String.valueOf(item.getWeight()));
-        weightFld.setEnabled(isEdit);
-        formLayout.addComponent(weightFld);
+        formLayout1.addComponent(catelogFld);
 
         DateField activateDateFld = new DateField(ACTIVATE_DATE);
         Date input = BackOfficeUtils.convertStringToDate(item.getActivateDate());
         LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         activateDateFld.setValue(date);
         activateDateFld.setEnabled(isEdit);
-        formLayout.addComponent(activateDateFld);
+        formLayout1.addComponent(activateDateFld);
 
         ComboBox deListed = new ComboBox(DE_LISTED);
         deListed.setItems("Yes","No");
         deListed.setSelectedItem(item.getDeListed());
         deListed.setEnabled(isEdit);
-        formLayout.addComponent(deListed);
+        formLayout1.addComponent(deListed);
 
         List<String> currencyValues = BackOfficeUtils.getCurrencyDropDownValues(true);
 
@@ -214,55 +213,47 @@ public class CreateItemView extends WizardCommonView {
         baseCurrencyFld.setItems(currencyValues);
         baseCurrencyFld.setEnabled(isEdit);
         baseCurrencyFld.setValue(item.getBaseCurrency());
-        formLayout.addComponent(baseCurrencyFld);
+        formLayout2.addComponent(baseCurrencyFld);
 
         TextField basePriceFld = new TextField(BASE_PRICE);
         basePriceFld.setEnabled(isEdit);
         basePriceFld.setValue(String.valueOf(item.getBasePrice()));
-        formLayout.addComponent(basePriceFld);
+        formLayout2.addComponent(basePriceFld);
 
         ComboBox secondCurrencyFld = new ComboBox(SECOND_CURRENCY);
         secondCurrencyFld.setItems(currencyValues);
         secondCurrencyFld.setValue(item.getSecondCurrency());
         secondCurrencyFld.setEnabled(isEdit);
-        formLayout.addComponent(secondCurrencyFld);
+        formLayout2.addComponent(secondCurrencyFld);
 
         TextField secondPriceFld = new TextField(SECOND_PRICE);
         secondPriceFld.setEnabled(isEdit);
         secondPriceFld.setValue(String.valueOf(item.getSecondPrice()));
-        formLayout.addComponent(secondPriceFld);
+        formLayout2.addComponent(secondPriceFld);
 
         ComboBox costCurrencyFld = new ComboBox(COST_CURRENCY);
         costCurrencyFld.setItems(currencyValues);
         costCurrencyFld.setValue(item.getCostCurrency());
         costCurrencyFld.setEnabled(isEdit);
-        formLayout.addComponent(costCurrencyFld);
+        formLayout2.addComponent(costCurrencyFld);
 
         TextField costPriceFld = new TextField(COST_PRICE);
         costPriceFld.setEnabled(isEnabled());
-        secondPriceFld.setValue(String.valueOf(item.getCostPrice()));
-        formLayout.addComponent(costPriceFld);
+        costPriceFld.setValue(String.valueOf(item.getCostPrice()));
+        costPriceFld.setEnabled(isEdit);
+        formLayout2.addComponent(costPriceFld);
 
-        TextField NFCIdField = new TextField(NFC_ID);
-        NFCIdField.setValue(item.getNfcId());
-        NFCIdField.setEnabled(isEdit);
-        formLayout.addComponent(NFCIdField);
-
-        TextField barCodeField = new TextField(BARCODE);
-        barCodeField.setEnabled(isEdit);
-        barCodeField.setValue(item.getBarcode());
-        formLayout.addComponent(barCodeField);
-
-        detailsWindow.setWidth("40%");
-        detailsWindow.setHeight(500,Unit.PIXELS);
+        /*detailsWindow.setWidth("40%");
+        detailsWindow.setHeight(500,Unit.PIXELS);*/
         detailsWindow.center();
-        formLayout.setMargin(true);
+        formLayout1.setMargin(true);
+        formLayout2.setMargin(true);
 
         MyImageUpload previewField = new MyImageUpload();
         previewField.setAcceptFilter("image/*");
         previewField.setValue(item.getImage());
         previewField.setVisibleUploadBtn(false);
-        formLayout.addComponent(previewField);
+        formLayout1.addComponent(previewField);
 
         Button editButton = new Button("Edit");
         Button deleteButton = new Button("Delete");
@@ -274,10 +265,8 @@ public class CreateItemView extends WizardCommonView {
             if(editButton.getCaption().equals("Edit")){
             itemCode.setEnabled(true);
             itemNameFld.setEnabled(true);
-            serviceTypeFld.setEnabled(true);
-            categoryFld.setEnabled(true);
+            availableForCompensation.setEnabled(true);
             catelogFld.setEnabled(true);
-            weightFld.setEnabled(true);
             activateDateFld.setEnabled(true);
             deListed.setEnabled(true);
             baseCurrencyFld.setEnabled(true);
@@ -286,10 +275,9 @@ public class CreateItemView extends WizardCommonView {
             secondPriceFld.setEnabled(true);
             costCurrencyFld.setEnabled(true);
             costPriceFld.setEnabled(true);
-            barCodeField.setEnabled(true);
-            NFCIdField.setEnabled(true);
             previewField.setVisibleUploadBtn(true);
             editButton.setCaption("Save");
+                detailsWindow.setCaption("Edit Item");
             }
             else{
 
@@ -298,10 +286,9 @@ public class CreateItemView extends WizardCommonView {
                 ItemDetails editItem = new ItemDetails();
                 editItem.setItemCode(itemCode.getValue());
                 editItem.setItemName(itemNameFld.getValue());
-                editItem.setServiceType(String.valueOf(serviceTypeFld.getValue()));
+                editItem.setAvailableForCompensation(String.valueOf(availableForCompensation.getValue()));
                 editItem.setCategory(String.valueOf(categoryFld.getValue()));
                 editItem.setCatalogue(catelogFld.getValue());
-                editItem.setWeight(Float.parseFloat(weightFld.getValue()));
                 Date dateVal = Date.from(activateDateFld.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 String effectiveDateStr = BackOfficeUtils.getDateStringFromDate(dateVal);
                 editItem.setActivateDate(effectiveDateStr);
@@ -313,11 +300,10 @@ public class CreateItemView extends WizardCommonView {
                 editItem.setSecondPrice(Float.parseFloat(secondPriceFld.getValue()));
                 editItem.setSecondCurrency(String.valueOf(secondCurrencyFld.getValue()));
                 editItem.setImage(previewField.getValue());
-                editItem.setNfcId(NFCIdField.getValue());
-                editItem.setBarcode(barCodeField.getValue());
                 connection.insertObjectHBM(editItem);
                 updateTable(true,editItem);
                 detailsWindow.close();
+                UserNotification.show("Success","Item updated successfully","success",UI.getCurrent());
 
             }
         });
@@ -328,13 +314,23 @@ public class CreateItemView extends WizardCommonView {
                             if (dialog.isConfirmed()) {
                                 connection.deleteObjectHBM(item);
                                 detailsWindow.close();
+                                UserNotification.show("Success","Item deleted successfully","success",UI.getCurrent());
                             }
                         }
             });
         });
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.addComponents(formLayout1,formLayout2);
 
-        formLayout.addComponents(btnLayout);
-        detailsWindow.setContent(formLayout);
+        formLayout1.addComponents(btnLayout);
+        detailsWindow.setWidth(layout.getWidth()+"px");
+        float popupHeight = layout.getHeight();
+        float windowHeight = getHeight();
+        if(windowHeight > popupHeight ){
+            detailsWindow.setHeight(layout.getHeight()+"px");
+        }
+        detailsWindow.setContent(layout);
+        detailsWindow.setModal(true);
         getUI().addWindow(detailsWindow);
     }
 
