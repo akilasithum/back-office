@@ -312,30 +312,24 @@ public class CommonSelection extends VerticalLayout implements View {
     }
 
     protected void addMenuItems(HorizontalLayout horizontalLayout, Map<String,String> iconNameNavigatorMap, String resourceName){
+        int i = 1;
         for(Map.Entry<String,String>  map : iconNameNavigatorMap.entrySet()){
-
             if(map.getKey().contains("empty")){
                 VerticalLayout emptyLayout = new VerticalLayout();
                 horizontalLayout.addComponents(emptyLayout);
             }
             else {
                 resourceName = map.getKey().replace(" ","-")+".svg";
+                if(i == 5) {
+                    i = 1;
+                }
+                String styleName = "iconWrapper-" + i;
+                i++;
+                CssLayout aircraftTypeLayout = new CssLayout();
                 Image authorizationImage = new Image(null, new ClassResource(resourceName));
-                authorizationImage.setStyleName("imgStyle");
-                authorizationImage.setWidth("50%");
-                authorizationImage.setHeight("50%");
-                VerticalLayout aircraftTypeLayout = new VerticalLayout();
-                aircraftTypeLayout.setMargin(Constants.noMargin);
-                aircraftTypeLayout.addComponent(authorizationImage);
-                Label label = new Label(map.getKey());
-                label.setStyleName("itemLabel");
-                aircraftTypeLayout.addComponent(label);
-                aircraftTypeLayout.addStyleName("my-img-button");
-                aircraftTypeLayout.setComponentAlignment(authorizationImage, Alignment.MIDDLE_CENTER);
-                aircraftTypeLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
-                aircraftTypeLayout.addLayoutClickListener((LayoutEvents.LayoutClickListener) layoutClickEvent ->
-                        getUI().getNavigator().navigateTo(map.getValue())
-                );
+                Button inventoryImage = new Button(map.getKey());
+                aircraftTypeLayout.addComponents(inventoryImage, authorizationImage);
+                aircraftTypeLayout.setStyleName(styleName);
                 horizontalLayout.addComponent(aircraftTypeLayout);
                 horizontalLayout.setComponentAlignment(aircraftTypeLayout, Alignment.MIDDLE_CENTER);
             }
