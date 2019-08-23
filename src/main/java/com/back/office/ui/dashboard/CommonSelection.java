@@ -330,6 +330,9 @@ public class CommonSelection extends VerticalLayout implements View {
                 Button inventoryImage = new Button(map.getKey());
                 aircraftTypeLayout.addComponents(inventoryImage, authorizationImage);
                 aircraftTypeLayout.setStyleName(styleName);
+                inventoryImage.addClickListener(layoutClickEvent ->
+                        getUI().getNavigator().navigateTo(map.getValue())
+                );
                 horizontalLayout.addComponent(aircraftTypeLayout);
                 horizontalLayout.setComponentAlignment(aircraftTypeLayout, Alignment.MIDDLE_CENTER);
             }
