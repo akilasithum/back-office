@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.UserNotification;
+import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -22,14 +24,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class GrossMargine extends UserEntryView implements View{
@@ -47,10 +41,7 @@ public class GrossMargine extends UserEntryView implements View{
     protected File file=new File("grossMargin.xlsx");
     protected FileResource fir=new FileResource(file);
     protected FileDownloader fid=new FileDownloader(fir);
-
-
-
-
+    protected TextField itemNo;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -74,12 +65,22 @@ public class GrossMargine extends UserEntryView implements View{
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
-        serviceTypeC=new ComboBox("Service Type");
-        serviceTypeC.setDescription("Service Type");
-        serviceTypeC.setItems("BOB","DTF","VRT");
+        serviceTypeC=new ComboBox("Item Type");
+        serviceTypeC.setDescription("Item Type");
+        serviceTypeC.setItems("Order Now","Transport","Meals","Hotels","Excursions","Gift Cards");
         serviceTypeC.setEmptySelectionAllowed(false);
         serviceTypeC.setRequiredIndicatorVisible(true);
-        createLayout.addComponent(serviceTypeC);
+
+        itemNo = new TextField("Item No");
+        itemNo.setDescription("Item No");
+        HorizontalLayout fieldLayout = new HorizontalLayout();
+        fieldLayout.setSizeFull();
+        fieldLayout.setWidth("40%");
+        createLayout.addComponent(fieldLayout);
+        serviceTypeC.setSizeFull();
+        itemNo.setSizeFull();
+        fieldLayout.addComponent(serviceTypeC);
+        fieldLayout.addComponent(itemNo);
 
         HorizontalLayout buttonList=new HorizontalLayout();
         createLayout.addComponent(buttonList);
@@ -107,7 +108,7 @@ public class GrossMargine extends UserEntryView implements View{
         print=new Button("Print");
         buttonList.addComponent(print);
         print.setVisible(false);
-        listGrid.setWidth("50%");
+        listGrid.setWidth("80%");
         listGrid.addColumn(ItemGross::getItemId).setCaption("Item #");
         listGrid.addColumn(ItemGross::getItemDescription).setCaption("Description");
         listGrid.addColumn(ItemGross::getBasePrice).setCaption("Selling Price");
@@ -121,13 +122,10 @@ public class GrossMargine extends UserEntryView implements View{
 
     public void processGrid() {
         if(serviceTypeC.getValue()!=null&&!serviceTypeC.getValue().toString().isEmpty()) {
-            itemList=connection.getItemGross(serviceTypeC.getValue().toString());
+
+            itemList=connection.getItemGross(serviceTypeC.getValue().toString(),itemNo.getValue());
             listGrid.setVisible(true);
-
-            // listGrid.removeAllColumns();
             grossarrayList.clear();
-
-
             ItemGross itemgrossDetail;
             for(int i=0;i<itemList.size();i++) {
 
@@ -211,14 +209,14 @@ public class GrossMargine extends UserEntryView implements View{
                 fid.extend(exportToExcell);
 
             } catch (Exception e) {
-                Notification.show("Something wrong", Notification.Type.WARNING_MESSAGE);
+                UserNotification.show("Error","Something wrong", "warning",UI.getCurrent());
 
             }
             exportToExcell.setVisible(true);
             print.setVisible(true);
 
         }else {
-            Notification.show("Error","Please select service type",Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Error","Please select service type", "warning",UI.getCurrent());
 
         }
     }

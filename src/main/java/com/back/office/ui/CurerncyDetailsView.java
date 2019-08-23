@@ -3,6 +3,7 @@ package com.back.office.ui;
 import com.back.office.entity.CurrencyDetails;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.back.office.utils.UserNotification;
 import com.vaadin.contextmenu.GridContextMenu;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -109,11 +110,11 @@ public class CurerncyDetailsView extends CommonPageDetails {
             CurrencyDetails aircraftDetail = (CurrencyDetails) target;
             boolean success = connection.deleteObjectHBM(aircraftDetail.getCurrencyCodeId(), className);
             if (success) {
-                BackOfficeUtils.showNotification("Success", "Currency delete successfully", VaadinIcons.CHECK_CIRCLE_O);
+                UserNotification.show("Success","Currency delete successfully","success",UI.getCurrent());
                 currencyDetails.remove(target);
                 currencyGrid.setItems(currencyDetails);
             } else {
-                BackOfficeUtils.showNotification("Error", "Something wrong, please try again", VaadinIcons.CLOSE);
+                UserNotification.show("Error","Something wrong, please try error","success",UI.getCurrent());
             }
         }
     }
@@ -132,6 +133,8 @@ public class CurerncyDetailsView extends CommonPageDetails {
         currencyGrid.addColumn(CurrencyDetails::getPriorityOrder).setCaption(PRIORITY_ORDER).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         currencyGrid.addColumn(CurrencyDetails::getEffectiveDate).setCaption(EFFECTIVE_DATE).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        currencyGrid.addColumn(bean->BackOfficeUtils.getDateTimeStringFromDate(bean.getLastUpdateDateTime())).setCaption("Last updated").
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
     }
 
@@ -155,6 +158,7 @@ public class CurerncyDetailsView extends CommonPageDetails {
             details.setCurrencyType(currencyTypeFld.getValue().toString());
             details.setPriorityOrder(priorityOrderFld.getValue().toString());
             details.setEffectiveDate(effectiveDateStr);
+            details.setLastUpdateDateTime(new Date());
             addOrUpdateDetails(details,currencyCodeIdVal);
         }
     }

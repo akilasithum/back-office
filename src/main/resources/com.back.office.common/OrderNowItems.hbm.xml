@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.OrderNowItems" table="order_now_items" catalog="">
+        <id name="oedernowitemid" type="java.lang.Integer">
+            <column name="orderNowItemId" />
+            <generator class="identity" />
+        </id>
+        <property name="itemNo" type="java.lang.String">
+            <column name="itemNo" length="100" />
+        </property>
+        <property name="orderId" type="java.lang.String">
+            <column name="orderId" length="50" />
+        </property>
+        <property name="itemDescription" type="java.lang.String">
+            <column name="itemDescription" length="100" />
+        </property>
+        
+        <property name="Quantity" type="java.lang.Integer">
+            <column name="Quantity"  />
+        </property>
+        
+    </class>
+</hibernate-mapping>

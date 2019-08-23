@@ -115,7 +115,7 @@ public class SalesDetailsView extends UserEntryView implements View {
         flightNoComboBox.setDescription(FLIGHT_NO);
         flightNoComboBox.setSizeFull();
         List<String> catList = connection.getFlightsNoList();
-        flightNoComboBox.setItems(catList);
+       // flightNoComboBox.setItems(catList);
         firstRow.addComponent(flightNoComboBox);
         firstRow.setWidth("65%");
         //firstRow.addComponent(searchButton);

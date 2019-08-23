@@ -1653,81 +1653,6 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 16px;
 }
 
-.iconWrapper-1, .iconWrapper-2, .iconWrapper-3, .iconWrapper-4 {
-	color: #fbfbfb;
-	position: relative;
-	text-align: center;
-	margin: 0 auto;
-	width: 170px;
-	height: 170px;
-}
-
-.iconWrapper-1 .v-button, .iconWrapper-2 .v-button, .iconWrapper-3 .v-button, .iconWrapper-4 .v-button {
-	background: none !important;
-	cursor: pointer;
-	font-weight: normal;
-	color: #ff9103 !important;
-	min-width: 85px;
-	border: none !important;
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
-	-ms-border-radius: 0;
-	-o-border-radius: 0;
-	border-radius: 0;
-	position: relative;
-	-webkit-box-shadow: none !important;
-	box-shadow: none !important;
-	z-index: 2;
-	font-size: 32px;
-	position: absolute;
-	left: 0;
-	top: 36%;
-	bottom: 0;
-	right: 0;
-}
-
-.iconWrapper-1 .v-button:hover, .iconWrapper-1 .v-button:focus, .iconWrapper-1 .v-button:active, .iconWrapper-2 .v-button:hover, .iconWrapper-2 .v-button:focus, .iconWrapper-2 .v-button:active, .iconWrapper-3 .v-button:hover, .iconWrapper-3 .v-button:focus, .iconWrapper-3 .v-button:active, .iconWrapper-4 .v-button:hover, .iconWrapper-4 .v-button:focus, .iconWrapper-4 .v-button:active {
-	border: none !important;
-	background: none !important;
-}
-
-.iconWrapper-1 .v-button:hover:after, .iconWrapper-1 .v-button:focus:after, .iconWrapper-1 .v-button:active:after, .iconWrapper-2 .v-button:hover:after, .iconWrapper-2 .v-button:focus:after, .iconWrapper-2 .v-button:active:after, .iconWrapper-3 .v-button:hover:after, .iconWrapper-3 .v-button:focus:after, .iconWrapper-3 .v-button:active:after, .iconWrapper-4 .v-button:hover:after, .iconWrapper-4 .v-button:focus:after, .iconWrapper-4 .v-button:active:after {
-	border: none !important;
-	-webkit-box-shadow: none !important;
-	box-shadow: none !important;
-	color: #ff9103 !important;
-	background: none !important;
-}
-
-.iconWrapper-1 .v-button:hover span, .iconWrapper-1 .v-button:focus span, .iconWrapper-1 .v-button:active span, .iconWrapper-2 .v-button:hover span, .iconWrapper-2 .v-button:focus span, .iconWrapper-2 .v-button:active span, .iconWrapper-3 .v-button:hover span, .iconWrapper-3 .v-button:focus span, .iconWrapper-3 .v-button:active span, .iconWrapper-4 .v-button:hover span, .iconWrapper-4 .v-button:focus span, .iconWrapper-4 .v-button:active span {
-	color: #ff9103 !important;
-}
-
-.iconWrapper-1 .v-button .v-button-caption, .iconWrapper-2 .v-button .v-button-caption, .iconWrapper-3 .v-button .v-button-caption, .iconWrapper-4 .v-button .v-button-caption {
-	display: block;
-	font-size: 16px;
-	margin-top: 45px;
-	text-transform: uppercase;
-	color: #fbfbfb;
-}
-
-.iconWrapper-1 .v-button:hover .v-button-caption, .iconWrapper-1 .v-button:focus .v-button-caption, .iconWrapper-1 .v-button:active .v-button-caption, .iconWrapper-2 .v-button:hover .v-button-caption, .iconWrapper-2 .v-button:focus .v-button-caption, .iconWrapper-2 .v-button:active .v-button-caption, .iconWrapper-3 .v-button:hover .v-button-caption, .iconWrapper-3 .v-button:focus .v-button-caption, .iconWrapper-3 .v-button:active .v-button-caption, .iconWrapper-4 .v-button:hover .v-button-caption, .iconWrapper-4 .v-button:focus .v-button-caption, .iconWrapper-4 .v-button:active .v-button-caption {
-	color: #fbfbfb;
-}
-
-.iconWrapper-1:after, .iconWrapper-2:after, .iconWrapper-3:after, .iconWrapper-4:after {
-	position: absolute;
-	content: "";
-	width: 170px;
-	height: 170px;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 0;
-	margin: 0 auto;
-}
-
 .iconWrapper-11, .iconWrapper-21, .iconWrapper-31, .iconWrapper-41 {
 	color: #fbfbfb;
 	position: relative;
@@ -1795,6 +1720,93 @@ div.v-layout.v-horizontal.v-widget {
 	bottom: 0;
 	z-index: 0;
 	margin: 0 auto;
+}
+
+.iconWrapper-1, .iconWrapper-2, .iconWrapper-3, .iconWrapper-4 {
+	color: #fbfbfb;
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	width: 170px;
+	height: 170px;
+}
+
+.iconWrapper-1 .v-button, .iconWrapper-2 .v-button, .iconWrapper-3 .v-button, .iconWrapper-4 .v-button {
+	background: none !important;
+	cursor: pointer;
+	font-weight: normal;
+	color: #ff9103 !important;
+	min-width: 85px;
+	border: none !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	position: relative;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	z-index: 2;
+	font-size: 32px;
+	position: absolute;
+	left: 0;
+	top: 36%;
+	bottom: 0;
+	right: 0;
+	display: block;
+}
+
+.iconWrapper-1 .v-button:hover, .iconWrapper-1 .v-button:focus, .iconWrapper-1 .v-button:active, .iconWrapper-2 .v-button:hover, .iconWrapper-2 .v-button:focus, .iconWrapper-2 .v-button:active, .iconWrapper-3 .v-button:hover, .iconWrapper-3 .v-button:focus, .iconWrapper-3 .v-button:active, .iconWrapper-4 .v-button:hover, .iconWrapper-4 .v-button:focus, .iconWrapper-4 .v-button:active {
+	border: none !important;
+	background: none !important;
+}
+
+.iconWrapper-1 .v-button:hover:after, .iconWrapper-1 .v-button:focus:after, .iconWrapper-1 .v-button:active:after, .iconWrapper-2 .v-button:hover:after, .iconWrapper-2 .v-button:focus:after, .iconWrapper-2 .v-button:active:after, .iconWrapper-3 .v-button:hover:after, .iconWrapper-3 .v-button:focus:after, .iconWrapper-3 .v-button:active:after, .iconWrapper-4 .v-button:hover:after, .iconWrapper-4 .v-button:focus:after, .iconWrapper-4 .v-button:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: #ff9103 !important;
+	background: none !important;
+}
+
+.iconWrapper-1 .v-button:hover span, .iconWrapper-1 .v-button:focus span, .iconWrapper-1 .v-button:active span, .iconWrapper-2 .v-button:hover span, .iconWrapper-2 .v-button:focus span, .iconWrapper-2 .v-button:active span, .iconWrapper-3 .v-button:hover span, .iconWrapper-3 .v-button:focus span, .iconWrapper-3 .v-button:active span, .iconWrapper-4 .v-button:hover span, .iconWrapper-4 .v-button:focus span, .iconWrapper-4 .v-button:active span {
+	color: #ff9103 !important;
+}
+
+.iconWrapper-1 .v-button .v-button-caption, .iconWrapper-2 .v-button .v-button-caption, .iconWrapper-3 .v-button .v-button-caption, .iconWrapper-4 .v-button .v-button-caption {
+	display: block;
+	font-size: 12px;
+	margin-top: 45px;
+	text-transform: uppercase;
+	color: #fbfbfb;
+}
+
+.iconWrapper-1 .v-button:hover .v-button-caption, .iconWrapper-1 .v-button:focus .v-button-caption, .iconWrapper-1 .v-button:active .v-button-caption, .iconWrapper-2 .v-button:hover .v-button-caption, .iconWrapper-2 .v-button:focus .v-button-caption, .iconWrapper-2 .v-button:active .v-button-caption, .iconWrapper-3 .v-button:hover .v-button-caption, .iconWrapper-3 .v-button:focus .v-button-caption, .iconWrapper-3 .v-button:active .v-button-caption, .iconWrapper-4 .v-button:hover .v-button-caption, .iconWrapper-4 .v-button:focus .v-button-caption, .iconWrapper-4 .v-button:active .v-button-caption {
+	color: #fbfbfb;
+}
+
+.iconWrapper-1:after, .iconWrapper-2:after, .iconWrapper-3:after, .iconWrapper-4:after {
+	position: absolute;
+	content: "";
+	width: 170px;
+	height: 170px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	margin: 0 auto;
+}
+
+.iconWrapper-1 img, .iconWrapper-2 img, .iconWrapper-3 img, .iconWrapper-4 img {
+	position: relative;
+	z-index: 1;
+	left: -2px;
+	width: 32px;
+	top: 32px;
+	right: 0;
+	bottom: 0;
+	filter: invert(0.5) sepia(2) saturate(10);
 }
 
 .selected {
@@ -16523,6 +16535,18 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: rgba(188, 255, 161) !important;
 }
 
+.mytheme .green-style {
+	background: #a8e8a8 !important;
+}
+
+.mytheme .red-style {
+	background: #e49090 !important;
+}
+
+.mytheme .orange-style {
+	background: #ecc47a !important;
+}
+
 .mytheme .fancy-notif-title {
 	font-family: cursive;
 	margin-top: 0px !important;
@@ -16537,12 +16561,20 @@ div.v-layout.v-horizontal.v-widget {
 	padding-left: 15%;
 	padding-right: 15%;
 	padding-top: 0;
-	padding-top: 5%;
+	padding-top: 2%;
 }
 
 .mytheme .icon-image {
 	width: 25%;
 	height: 25%;
+}
+
+.mytheme .flightDetailsTab .v-tabsheet-tabitemcell {
+	vertical-align: bottom;
+	width: 300px;
+	text-align: center;
+	background: #423d3d;
+	margin-left: 5px;
 }
 
 .mytheme .myRootContent > .v-expand {

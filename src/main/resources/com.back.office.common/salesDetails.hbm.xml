@@ -41,9 +41,6 @@
         <property name="serviceType" type="java.lang.String">
             <column name="serviceType" length="30" />
         </property>
-        <property name="sifNo" type="java.lang.Integer">
-            <column name="sifNo" />
-        </property>
 
         <filter name="serviceTypeFilter"
                 condition=":serviceType=serviceType"/>

@@ -36,6 +36,18 @@ public class BackOfficeUtils {
         }
     }
 
+    public static Date getDateFromDateTimeStr(String dateStr){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_TIME_NO_SECONDS_FORMAT);
+
+        try {
+            return simpleDateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+
+
     public static String getDateFromDateTime(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format( date );
@@ -46,6 +58,24 @@ public class BackOfficeUtils {
         return new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
         else return null;
     }
+
+    public static String getDateTimeStringFromDate(Date date){
+        if(date != null)
+            return new SimpleDateFormat(Constants.DATE_TIME_NO_SECONDS_FORMAT).format(date);
+        else return null;
+    }
+
+    public static String getTimeStringFromDate(Date date){
+        if(date != null)
+            return new SimpleDateFormat("HH:mm").format(date);
+        else return null;
+    }
+    public static String getDateTimeFromDate(Date date){
+        if(date != null)
+            return new SimpleDateFormat(Constants.DATE_TIME_NO_SECONDS_FORMAT).format(date);
+        else return null;
+    }
+
 
     public static Map<String, VaadinIcons> getIconMap(){
         Map<String, VaadinIcons> iconMap = new HashMap<>();
@@ -227,7 +257,6 @@ public class BackOfficeUtils {
     }
 
     public static void showNotification(String caption,String content,VaadinIcons icon){
-
         com.vaadin.ui.Notification.show(caption,content, com.vaadin.ui.Notification.Type.WARNING_MESSAGE);
             Notification notification = Notification.get()
                     .withTitle(caption)
@@ -358,23 +387,29 @@ public class BackOfficeUtils {
         backBtn.setIcon(FontAwesome.ARROW_CIRCLE_LEFT);
         backBtnLayout.setStyleName("backBtn");
         backBtn.addClickListener(clickEvent -> {
-           UI.getCurrent().getNavigator().navigateTo("CommonView");
+            SubMenuItem menuItem = (SubMenuItem)UI.getCurrent().getSession().getAttribute("subMenu");
+            if(menuItem.getMenuName() == null || menuItem.getMenuName().isEmpty()){
+                UI.getCurrent().getNavigator().navigateTo("dashboard");
+            }
+            else{
+                UI.getCurrent().getNavigator().navigateTo("CommonView");
+            }
         });
 
         CssLayout iconWrapper1 = getMainLayoutBtn("flight Schedule");
         if(selectedLayout.equalsIgnoreCase("flight kitchen")) iconWrapper1.setStyleName("selected");
         else iconWrapper1.setStyleName("iconWrapper-11");
 
-        CssLayout iconWrapper2 = getMainLayoutBtn("pre order");
-        if(selectedLayout.equalsIgnoreCase("pre order")) iconWrapper2.setStyleName("selected");
+        CssLayout iconWrapper2 = getMainLayoutBtn("Order Now");
+        if(selectedLayout.equalsIgnoreCase("Order Now")) iconWrapper2.setStyleName("selected");
         else iconWrapper2.setStyleName("iconWrapper-21");
 
-        CssLayout iconWrapper3 = getMainLayoutBtn("Reports and Finance");
-        if(selectedLayout.equalsIgnoreCase("Reports and Finance")) iconWrapper3.setStyleName("selected");
+        CssLayout iconWrapper3 = getMainLayoutBtn("Reports");
+        if(selectedLayout.equalsIgnoreCase("Reports")) iconWrapper3.setStyleName("selected");
         else iconWrapper3.setStyleName("iconWrapper-31");
 
-        CssLayout iconWrapper4 = getMainLayoutBtn("Airline Specific");
-        if(selectedLayout.equalsIgnoreCase("Airline Specific")) iconWrapper4.setStyleName("selected");
+        CssLayout iconWrapper4 = getMainLayoutBtn("Messaging");
+        if(selectedLayout.equalsIgnoreCase("Messaging")) iconWrapper4.setStyleName("selected");
         else iconWrapper4.setStyleName("iconWrapper-41");
 
         CssLayout iconWrapper5 = getMainLayoutBtn("Vendor");
@@ -416,51 +451,32 @@ public class BackOfficeUtils {
             flightKitchenImage.setIcon(FontAwesome.PLANE);
             flightKitchenImage.addClickListener(clickEvent -> {
                 UI.getCurrent().getSession().setAttribute("selectedLayout","flight kitchen");
-                SubMenuItem menuItem = new SubMenuItem();
-                menuItem.setMenuImage("flight_kitchen_sub.png");
-                Map<String,String> row1Map = new LinkedHashMap<>();
-                row1Map.put("Flight Schedule","FlightSchedule");
-                /*row1Map.put("Daily Flights","DailyFlights");
-                row1Map.put("Request Inventory","RequestInventory");
-                row1Map.put("Galley Weight","");
-                row1Map.put("SIF","SIFDetails");
-                row1Map.put("HHC and Cart Usage","HHCAndCartUsage");
-                menuItem.setMenuName("flight_kitchen");*/
-                menuItem.setSubMenuImageMap(row1Map);
-                UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
-                UI.getCurrent().getNavigator().navigateTo("CommonView");
+                UI.getCurrent().getSession().setAttribute("subMenu",new SubMenuItem());
+                UI.getCurrent().getNavigator().navigateTo("FlightSchedule");
             });
             return iconWrapper1;
         }
-        else if(btnName.equals("pre order")){
+        else if(btnName.equals("Order Now")){
             CssLayout iconWrapper2 = new CssLayout();
-            Button preOrderImage = new Button("pre order");
+            Button preOrderImage = new Button("Order Now");
             iconWrapper2.addComponents(preOrderImage );
             preOrderImage.setIcon(FontAwesome.CART_ARROW_DOWN);
 
             preOrderImage.addClickListener(clickEvent -> {
-                UI.getCurrent().getSession().setAttribute("selectedLayout","pre order");
-                SubMenuItem menuItem = new SubMenuItem();
-                menuItem.setMenuImage("pre_order_sub.png");
-                Map<String,String> row1Map = new LinkedHashMap<>();
-                row1Map.put("Pre-order status","PreOrders");
-                row1Map.put("List all pre-orders","");
-                row1Map.put("Print Labels","");
-                menuItem.setSubMenuImageMap(row1Map);
-                menuItem.setMenuName("pre_order");
-                UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
-                UI.getCurrent().getNavigator().navigateTo("CommonView");
+                UI.getCurrent().getSession().setAttribute("selectedLayout","Order Now");
+                UI.getCurrent().getSession().setAttribute("subMenu",new SubMenuItem());
+                UI.getCurrent().getNavigator().navigateTo("orderNow");
             });
             return iconWrapper2;
         }
-        else if(btnName.equals("Reports and Finance")){
+        else if(btnName.equals("Reports")){
             CssLayout iconWrapper3 = new CssLayout();
-            Button financeImage = new Button("Report & Finance");
+            Button financeImage = new Button("Reports");
             iconWrapper3.addComponents(financeImage);
             financeImage.setIcon(FontAwesome.USD);
 
             financeImage.addClickListener(clickEvent -> {
-                UI.getCurrent().getSession().setAttribute("selectedLayout","finance");
+                UI.getCurrent().getSession().setAttribute("selectedLayout","Reports");
                 SubMenuItem menuItem = new SubMenuItem();
                 menuItem.setMenuImage("finance_sub.png");
                 Map<String,String> row1Map = new LinkedHashMap<>();
@@ -477,20 +493,15 @@ public class BackOfficeUtils {
             });
             return iconWrapper3;
         }
-        else if(btnName.equals("Airline Specific")){
+        else if(btnName.equals("Messaging")){
             CssLayout iconWrapper4 = new CssLayout();
-            Button bondReportsImage = new Button("Airline Specific");
+            Button bondReportsImage = new Button("Messaging");
             iconWrapper4.addComponents(bondReportsImage);
-            bondReportsImage.setIcon(FontAwesome.PAPER_PLANE_O);
+            bondReportsImage.setIcon(FontAwesome.FILE_TEXT);
             bondReportsImage.addClickListener(clickEvent -> {
-                UI.getCurrent().getSession().setAttribute("selectedLayout","reports");
-                SubMenuItem menuItem = new SubMenuItem();
-                menuItem.setMenuImage("reports_sub.png");
-                Map<String,String> row1Map = new LinkedHashMap<>();
-                menuItem.setSubMenuImageMap(row1Map);
-                menuItem.setMenuName("report");
-                UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
-                UI.getCurrent().getNavigator().navigateTo("CommonView");
+                UI.getCurrent().getSession().setAttribute("selectedLayout","Messaging");
+                UI.getCurrent().getSession().setAttribute("subMenu",new SubMenuItem());
+                UI.getCurrent().getNavigator().navigateTo("MessagingModule");
 
             });
             return iconWrapper4;
@@ -532,8 +543,8 @@ public class BackOfficeUtils {
                 row1Map.put("Pax Purchase History","PassengerPurchases");
                 menuItem.setMenuName("crm");
                 menuItem.setSubMenuImageMap(row1Map);
-                UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
-                UI.getCurrent().getNavigator().navigateTo("CommonView");
+                UI.getCurrent().getSession().setAttribute("subMenu",new SubMenuItem());
+                UI.getCurrent().getNavigator().navigateTo("PassengerPurchases");
             });
             return iconWrapper6;
         }
@@ -582,6 +593,7 @@ public class BackOfficeUtils {
             row1Map.put("Excursions","CreateItems");
             row1Map.put("Gift Cards","CreateItems");
             row1Map.put("Order Now","CreateItems");
+            row1Map.put("Upload Flight Schedule","UploadFlightSchedule");
             row1Map.put("Currency Details","Currency");
             menuItem.setMenuName("setup");
             menuItem.setSubMenuImageMap(row1Map);

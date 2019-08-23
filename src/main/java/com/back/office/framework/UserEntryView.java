@@ -20,18 +20,7 @@ public class UserEntryView extends VerticalLayout {
 
         if(isRequired){
             UI.getCurrent().getCurrent().getSession().setAttribute("selectedLayout","pre order");
-            SubMenuItem menuItem = new SubMenuItem();
-            menuItem.setMenuImage("pre_order_sub.png");
-            Map<String,String> row1Map = new LinkedHashMap<>();
-            row1Map.put("Pre-order","PreOrders");
-            row1Map.put("Pre-order Inventory","");
-            row1Map.put("Inflight Requests","MessagingModule");
-            row1Map.put("Bond Messages","BondMessages");
-            row1Map.put("FA Messages","FAMessages");
-            menuItem.setSubMenuImageMap(row1Map);
-            menuItem.setSubMenuImageMap(row1Map);
-            menuItem.setMenuName("pre_order");
-            UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
+            UI.getCurrent().getSession().setAttribute("subMenu",new SubMenuItem());
             createMenu();
         }
     }

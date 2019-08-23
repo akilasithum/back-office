@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.OrderNow" table="order_now" catalog="">
+        <id name="ordernowid" type="java.lang.Integer">
+            <column name="ordernowid" />
+            <generator class="identity" />
+        </id>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo"/>
+        </property>
+        <property name="time" type="java.lang.String">
+            <column name="time"/>
+        </property>
+        <property name="destination" type="java.lang.String">
+            <column name="destination" />
+        </property>
+        <property name="paxName" type="java.lang.String">
+            <column name="paxName"  />
+        </property>
+        <property name="PNR" type="java.lang.String">
+            <column name="PNR" />
+        </property>
+        <property name="seatNo" type="java.lang.String">
+            <column name="seatNo" length="30" />
+        </property>
+        <property name="orderNo" type="java.lang.String">
+            <column name="orderNo" length="30" />
+        </property>
+        <property name="orderInTime" type="java.util.Date">
+            <column name="orderInTime" length="30" />
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>

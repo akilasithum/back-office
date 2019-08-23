@@ -106,6 +106,18 @@
     background-color: rgba(188, 255, 161) !important;
   }
 
+  .green-style{
+    background: #a8e8a8 !important;
+  }
+
+  .red-style{
+    background: #e49090 !important;
+  }
+
+  .orange-style{
+    background: #ecc47a !important;
+  }
+
   .fancy-notif-title {
     font-family: cursive;
     margin-top: 0px !important;
@@ -120,12 +132,20 @@
     padding-left: 15%;
     padding-right: 15%;
     padding-top: 0;
-    padding-top: 5%;
+    padding-top: 2%;
   }
 
   .icon-image {
     width: 25%;
     height: 25%;
+  }
+
+  .flightDetailsTab .v-tabsheet-tabitemcell {
+    vertical-align: bottom;
+    width: 300px;
+    text-align: center;
+    background: #423d3d;
+    margin-left: 5px;
   }
 
   .myRootContent {

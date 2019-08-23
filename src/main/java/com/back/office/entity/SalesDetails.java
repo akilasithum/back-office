@@ -16,7 +16,6 @@ public class SalesDetails {
     private String flightFrom;
     private String flightTo;
     private String serviceType;
-    private int sifNo;
 
     public String getId() {
         return id;
@@ -114,11 +113,4 @@ public class SalesDetails {
         this.serviceType = serviceType;
     }
 
-    public int getSifNo() {
-        return sifNo;
-    }
-
-    public void setSifNo(int sifNo) {
-        this.sifNo = sifNo;
-    }
 }

@@ -40,11 +40,11 @@ public class MainDashboard extends VerticalLayout implements View {
 
         CssLayout iconWrapper1 =  BackOfficeUtils.getMainLayoutBtn("flight Schedule");
         iconWrapper1.setStyleName("iconWrapper-1");
-        CssLayout iconWrapper2 =  BackOfficeUtils.getMainLayoutBtn("pre order");
+        CssLayout iconWrapper2 =  BackOfficeUtils.getMainLayoutBtn("Order Now");
         iconWrapper2.setStyleName("iconWrapper-2");
-        CssLayout iconWrapper3 =  BackOfficeUtils.getMainLayoutBtn("Reports and Finance");
+        CssLayout iconWrapper3 =  BackOfficeUtils.getMainLayoutBtn("Reports");
         iconWrapper3.setStyleName("iconWrapper-3");
-        CssLayout iconWrapper4 =  BackOfficeUtils.getMainLayoutBtn("Airline Specific");
+        CssLayout iconWrapper4 =  BackOfficeUtils.getMainLayoutBtn("Messaging");
         iconWrapper4.setStyleName("iconWrapper-4");
         CssLayout iconWrapper5 = BackOfficeUtils.getMainLayoutBtn("Vendor");
         iconWrapper5.setStyleName("iconWrapper-4");

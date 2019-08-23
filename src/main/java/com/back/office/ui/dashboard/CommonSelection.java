@@ -44,40 +44,42 @@ public class CommonSelection extends VerticalLayout implements View {
         mainLayout.setMargin(info);
         setComponentAlignment(mainLayout, Alignment.MIDDLE_CENTER);
         SubMenuItem menuItem = (SubMenuItem)UI.getCurrent().getSession().getAttribute("subMenu");
-        Map<String,String> subMenuMap = menuItem.getSubMenuImageMap();
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        Map<String,String> subMap = new LinkedHashMap<>();
-        int i = 0;
-        for(Map.Entry<String,String> map : subMenuMap.entrySet()){
-            if(i%4 == 0){
-                if(i != 0){
+
+            Map<String,String> subMenuMap = menuItem.getSubMenuImageMap();
+            HorizontalLayout horizontalLayout = new HorizontalLayout();
+            Map<String,String> subMap = new LinkedHashMap<>();
+            int i = 0;
+            for(Map.Entry<String,String> map : subMenuMap.entrySet()){
+                if(i%4 == 0){
+                    if(i != 0){
+                        horizontalLayout.setSizeFull();
+                        addMenuItems(horizontalLayout,subMap,menuItem.getMenuImage());
+                        mainLayout.addComponent(horizontalLayout);
+                    }
+                    horizontalLayout = new HorizontalLayout();
+                    subMap = new LinkedHashMap<>();
+                    subMap.put(map.getKey(),map.getValue());
+                }
+                else{
+                    subMap.put(map.getKey(),map.getValue());
+
+                }
+                if(subMenuMap.size() == i+1){
+
                     horizontalLayout.setSizeFull();
+                    if(subMap.size() != 4) {
+                        int count = 4-subMap.size();
+                        for (int j = 0; j < count; j++) {
+                            subMap.put("empty" + j, "");
+                        }
+                    }
                     addMenuItems(horizontalLayout,subMap,menuItem.getMenuImage());
                     mainLayout.addComponent(horizontalLayout);
                 }
-                horizontalLayout = new HorizontalLayout();
-                subMap = new LinkedHashMap<>();
-                subMap.put(map.getKey(),map.getValue());
-            }
-            else{
-                subMap.put(map.getKey(),map.getValue());
+                i++;
 
             }
-            if(subMenuMap.size() == i+1){
 
-                horizontalLayout.setSizeFull();
-                if(subMap.size() != 4) {
-                    int count = 4-subMap.size();
-                    for (int j = 0; j < count; j++) {
-                        subMap.put("empty" + j, "");
-                    }
-                }
-                addMenuItems(horizontalLayout,subMap,menuItem.getMenuImage());
-                mainLayout.addComponent(horizontalLayout);
-            }
-            i++;
-
-        }
     }
 
     private void createIconLayout(String selectedLayout){
@@ -95,16 +97,16 @@ public class CommonSelection extends VerticalLayout implements View {
         if(selectedLayout.equalsIgnoreCase("flight Schedule")) iconWrapper1.setStyleName("selected");
         else iconWrapper1.setStyleName("iconWrapper-11");
 
-        CssLayout iconWrapper2 = BackOfficeUtils.getMainLayoutBtn("pre order");
-        if(selectedLayout.equalsIgnoreCase("pre order")) iconWrapper2.setStyleName("selected");
+        CssLayout iconWrapper2 = BackOfficeUtils.getMainLayoutBtn("Order Now");
+        if(selectedLayout.equalsIgnoreCase("Order Now")) iconWrapper2.setStyleName("selected");
         else iconWrapper2.setStyleName("iconWrapper-21");
 
-        CssLayout iconWrapper3 = BackOfficeUtils.getMainLayoutBtn("Reports and Finance");
-        if(selectedLayout.equalsIgnoreCase("Reports and Finance")) iconWrapper3.setStyleName("selected");
+        CssLayout iconWrapper3 = BackOfficeUtils.getMainLayoutBtn("Reports");
+        if(selectedLayout.equalsIgnoreCase("Reports")) iconWrapper3.setStyleName("selected");
         else iconWrapper3.setStyleName("iconWrapper-31");
 
-        CssLayout iconWrapper4 = BackOfficeUtils.getMainLayoutBtn("Airline Specific");
-        if(selectedLayout.equalsIgnoreCase("Airline Specific")) iconWrapper4.setStyleName("selected");
+        CssLayout iconWrapper4 = BackOfficeUtils.getMainLayoutBtn("Messaging");
+        if(selectedLayout.equalsIgnoreCase("Messaging")) iconWrapper4.setStyleName("selected");
         else iconWrapper4.setStyleName("iconWrapper-41");
 
         CssLayout iconWrapper5 = BackOfficeUtils.getMainLayoutBtn("Vendor");
@@ -138,7 +140,46 @@ public class CommonSelection extends VerticalLayout implements View {
         setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
     }
 
-    protected void addMenuItems(HorizontalLayout horizontalLayout, Map<String,String> iconNameNavigatorMap, String resourceName){
+    protected void addMenuItems(HorizontalLayout horizontalLayout, Map<String,String> iconNameNavigatorMap, String resourceName) {
+        int i = 1;
+        for (Map.Entry<String, String> map : iconNameNavigatorMap.entrySet()) {
+            if (map.getKey().contains("empty")) {
+                VerticalLayout emptyLayout = new VerticalLayout();
+                horizontalLayout.addComponents(emptyLayout);
+            } else {
+                resourceName = map.getKey().replace(" ", "-").toLowerCase() + ".svg";
+                if (i == 5) {
+                    i = 1;
+                }
+                String styleName = "iconWrapper-" + i;
+                i++;
+                CssLayout aircraftTypeLayout = new CssLayout();
+                Image authorizationImage = new Image(null, new ClassResource(resourceName));
+                Button inventoryImage = new Button(map.getKey());
+                aircraftTypeLayout.addComponents(inventoryImage, authorizationImage);
+                aircraftTypeLayout.setStyleName(styleName);
+                List<String> setupList = Arrays.asList("Bags","Upgrades","Credit","Transport","Meals","Hotels","Excursions"
+                        ,"Gif Cards","Order Now");
+                if(setupList.contains(map.getKey())){
+                    aircraftTypeLayout.addLayoutClickListener(layoutClickEvent ->{
+                                UI.getCurrent().getSession().setAttribute("setupSubMenu",map.getKey());
+                                getUI().getNavigator().navigateTo(map.getValue());
+                            }
+                    );
+                }
+                else{
+                    aircraftTypeLayout.addLayoutClickListener(layoutClickEvent ->
+                            getUI().getNavigator().navigateTo(map.getValue())
+                    );
+                }
+
+                horizontalLayout.addComponent(aircraftTypeLayout);
+                horizontalLayout.setComponentAlignment(aircraftTypeLayout, Alignment.MIDDLE_CENTER);
+            }
+        }
+    }
+
+   /* protected void addMenuItems(HorizontalLayout horizontalLayout, Map<String,String> iconNameNavigatorMap, String resourceName){
         for(Map.Entry<String,String>  map : iconNameNavigatorMap.entrySet()){
 
             if(map.getKey().contains("empty")){
@@ -177,5 +218,5 @@ public class CommonSelection extends VerticalLayout implements View {
                 horizontalLayout.setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
             }
         }
-    }
+    }*/
 }

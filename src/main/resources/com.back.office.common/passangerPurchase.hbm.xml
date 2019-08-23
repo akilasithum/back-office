@@ -3,13 +3,13 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.back.office.entity.PassengerPurchases" table="pax_details" catalog="">
-        <id name="paxId" type="java.lang.Integer">
-            <column name="paxId" />
+    <class name="com.back.office.entity.PassengerPurchase" table="pax_details_view" catalog="">
+        <id name="id" type="java.lang.String">
+            <column name="id" />
             <generator class="identity" />
         </id>
-        <property name="PNR" type="java.lang.String">
-            <column name="PNR" length="100"/>
+        <property name="pnr" type="java.lang.String">
+            <column name="pnr" length="100"/>
         </property>
         <property name="paxName" type="java.lang.String">
             <column name="paxName" length="30" />
@@ -17,18 +17,15 @@
         <property name="email" type="java.lang.String">
             <column name="email"  />
         </property>
-        <property name="telephoneNo" type="java.lang.String">
-            <column name="telephoneNo" />
+        <property name="seatNo" type="java.lang.String">
+            <column name="seatNo" />
         </property>
-        <property name="frequentFlyerNo" type="java.lang.String">
-            <column name="frequentFlyerNo" />
-        </property>
-        <property name="deparureDate" type="java.util.Date">
-            <column name="deparureDate" />
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
         </property>
 
-        <property name="flightNo" type="java.lang.String">
-            <column name="flightNo" length="30" />
+        <property name="flightId" type="java.lang.String">
+            <column name="flightId" length="30" />
         </property>
         <property name="orderId" type="java.lang.String">
             <column name="orderId" length="30" />

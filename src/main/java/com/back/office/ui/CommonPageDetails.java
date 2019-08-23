@@ -4,6 +4,7 @@ import com.back.office.db.DBConnection;
 import com.back.office.entity.AircraftDetails;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.UserNotification;
 import com.vaadin.contextmenu.GridContextMenu;
 import com.vaadin.event.dd.acceptcriteria.Not;
 import com.vaadin.icons.VaadinIcons;
@@ -192,17 +193,17 @@ public abstract class CommonPageDetails extends UserEntryView implements View {
         if(addButton.getCaption().equals("Add")) {
             int newId = connection.insertObjectHBM(object);
             if (newId != 0) {
-                Notification.show(pageHeader +" added successfully");
+                UserNotification.show("Success",pageHeader +" added successfully","success",UI.getCurrent());
                 updateTable(false,object,newId);
                 resetFields();
             } else {
-                Notification.show("Error", "Something wrong, please try again", Notification.Type.WARNING_MESSAGE);
+                UserNotification.show("Error","Something wrong, please try again","error",UI.getCurrent());
             }
         }
         else{
             connection.insertObjectHBM(object);
             connection.updateRecordStatus(id,className);
-            BackOfficeUtils.showNotification("Success", pageHeader +" updated successfully", VaadinIcons.CHECK_CIRCLE_O);
+            UserNotification.show("Success",pageHeader +" updated successfully","success",UI.getCurrent());
             updateTable(true,object,0);
             addButton.setCaption("Add");
             resetFields();

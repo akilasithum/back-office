@@ -159,6 +159,20 @@ public class DBConnection {
         }
     }
 
+    public boolean isItemCodeAvailable(String itemCode){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            criteria.add(Restrictions.eq("itemCode", itemCode));
+            List list = criteria.list();
+            session.close();
+            return list != null && !list.isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public List<ItemDetails> getAllItems(String category){
         try
         {
@@ -260,6 +274,20 @@ public class DBConnection {
         }
     }
 
+    public List<?> getAllValuesNoRecordStatus(String className){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try
+        {
+            Criteria criteria = session.createCriteria(Class.forName(className));
+            List list = criteria.list();
+            session.close();
+            return list;
+        } catch (Exception e) {
+            session.close();
+            return null;
+        }
+    }
+
     public List<?> getSectors(String className){
         Session session = HibernateUtil.getSessionFactory().openSession();
         try
@@ -334,23 +362,13 @@ public class DBConnection {
         }
     }
 
-    public List getSalesDetails(Date flightFromDate,Date flightToDate,String category,String serviceType,String flightFrom,
-                                String flightTo,String sifNo){
+    public List getSalesDetails(Date flightFromDate,Date flightToDate,String category,String sifNo){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(SalesDetails.class);
         criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
         criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
         if(category != null && !category.isEmpty()){
             criteria.add(Restrictions.eq("category", category));
-        }
-        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
-            criteria.add(Restrictions.eq("serviceType", serviceType));
-        }
-        if(flightFrom != null && !flightFrom.isEmpty()){
-            criteria.add(Restrictions.eq("flightFrom", flightFrom));
-        }
-        if(flightTo != null && !flightTo.isEmpty()){
-            criteria.add(Restrictions.eq("flightTo", flightTo));
         }
         if(sifNo != null && !sifNo.isEmpty()){
             criteria.add(Restrictions.eq("sifNo", Integer.parseInt(sifNo)));
@@ -644,14 +662,17 @@ public class DBConnection {
         }
     }
 
-    public List<ItemDetails> getItemGross(String serviceTypeList){
+    public List<ItemDetails> getItemGross(String serviceTypeList,String itemNo){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Criteria criteria = session.createCriteria(ItemDetails.class);
-            criteria.add(Restrictions.eq("serviceType", serviceTypeList));
-
+            criteria.add(Restrictions.eq("category", serviceTypeList));
+            if(itemNo != null && !itemNo.isEmpty()){
+                criteria.add(Restrictions.eq("itemCode", itemNo));
+            }
+            criteria.add(Restrictions.eq("recordStatus", 0));
             return criteria.list();
         } catch (Exception e) {
             return null;
@@ -749,14 +770,14 @@ public class DBConnection {
         List<String> flightsList = new ArrayList<>();
         try
         {
-            Criteria criteria = session.createCriteria(Flight.class);
-            criteria.add(Restrictions.eq("recordStatus", 0));
-            List<Flight> list = criteria.list();
+            Criteria criteria = session.createCriteria(DepartureFlight.class);
+            List<DepartureFlight> list = criteria.list();
             session.close();
             if(list != null){
-                for(Flight flight : list){
-                    flightsList.add(flight.getIbFlightNo());
-                    flightsList.add(flight.getObFlightNo());
+                for(DepartureFlight flight : list){
+                    if(!flightsList.contains(flight.getFlightNo())){
+                        flightsList.add(flight.getFlightNo());
+                    }
                 }
             }
             return flightsList;
@@ -874,32 +895,28 @@ public class DBConnection {
         }
     }
 
-    public List<PassengerPurchases> getPassengerPurchase(String filterType,String fliterDate,Date dateFrom,Date dateTo){
+    public List<PassengerPurchase> getPassengerPurchase(String filterType,String fliterDate,Date dateFrom,Date dateTo){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Criteria criteria = session.createCriteria(PassengerPurchases.class);
+            Criteria criteria = session.createCriteria(PassengerPurchase.class);
             if(filterType=="allType") {
-                criteria.add(Restrictions.ge("deparureDate", dateFrom));
-                criteria.add(Restrictions.le("deparureDate", dateTo));
-                criteria.add(Restrictions.eq("flightNo", fliterDate));
+                criteria.add(Restrictions.ge("flightDate", dateFrom));
+                criteria.add(Restrictions.le("flightDate", dateTo));
+                criteria.add(Restrictions.eq("flightId", fliterDate));
                 return criteria.list();
             }else if(filterType=="dateOnly") {
 
-                criteria.add(Restrictions.ge("deparureDate", dateFrom));
-                criteria.add(Restrictions.le("deparureDate", dateTo));
+                criteria.add(Restrictions.ge("flightDate", dateFrom));
+                criteria.add(Restrictions.le("flightDate", dateTo));
                 return criteria.list();
-
-
             }else if(filterType=="typeOnly") {
-                criteria.add(Restrictions.eq("flightNo", fliterDate));
+                criteria.add(Restrictions.eq("flightId", fliterDate));
                 return criteria.list();
-
             }
             else {
                 return criteria.list();
-
             }
 
 
@@ -923,12 +940,12 @@ public class DBConnection {
         }
     }
 
-    public List<ItemDetails> getItemId(int class1){
+    public List<ItemDetails> getItemId(String class1){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(ItemDetails.class);
-            criteria.add(Restrictions.eq("itemId", class1));
+            criteria.add(Restrictions.eq("itemCode", class1));
             return criteria.list();
         } catch (Exception e) {
             return null;
@@ -1042,6 +1059,39 @@ public class DBConnection {
 
             return null;
         }
+    }
+
+    public List getOrderNow(Object flightNo,Object destination,Object status){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            Criteria criteria = session.createCriteria(OrderNow.class);
+            if(flightNo!=null&&!flightNo.toString().isEmpty()) {
+                criteria.add(Restrictions.eq("flightNo", flightNo.toString()));
+            }
+            if(destination!=null&&!destination.toString().isEmpty()) {
+                criteria.add(Restrictions.eq("destination", destination.toString()));
+
+            }
+            if(status!=null&&!status.toString().isEmpty()) {
+                criteria.add(Restrictions.eq("status", status.toString()));
+            }
+            List list = criteria.list();
+            session.close();
+            return list;
+        }catch(Exception ex) {
+            return null;
+        }
+
+
+    }
+
+    public List getOrderNowItem(String orderNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(OrderNowItems.class);
+        criteria.add(Restrictions.eq("orderId", orderNo));
+        List list = criteria.list();
+        session.close();
+        return list;
     }
 
 

@@ -11,7 +11,7 @@
         <property name="orderId" type="java.lang.String">
             <column name="orderId" length="30" />
         </property>
-        <property name="itemId" type="java.lang.Integer">
+        <property name="itemId" type="java.lang.String">
             <column name="itemId" length="100" />
         </property>
         <property name="quantity" type="java.lang.Integer">

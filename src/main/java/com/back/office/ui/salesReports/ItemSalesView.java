@@ -35,10 +35,9 @@ public class ItemSalesView extends UserEntryView implements View {
     protected DateField flightDateToDateField;
     protected TextField sifNoField;
     protected ComboBox categoryComboBox;
-    protected ComboBox sectorComboBox;
-    protected ComboBox serviceTypeComboBox;
     protected Grid<SalesDetails> detailsTable;
     protected Label filterCriteriaText;
+    protected TextField itemNo;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
@@ -104,13 +103,6 @@ public class ItemSalesView extends UserEntryView implements View {
         firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
 
-        HorizontalLayout secondRow = new HorizontalLayout();
-        secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        secondRow.setSpacing(true);
-        secondRow.setSizeFull();
-        secondRow.setMargin(Constants.noMargin);
-        mainUserInputLayout.addComponent(secondRow);
-
         Date date = new Date();
         LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
@@ -131,19 +123,14 @@ public class ItemSalesView extends UserEntryView implements View {
         categoryComboBox.setItems(catList);
         firstRow.addComponent(categoryComboBox);
 
-        sectorComboBox = new ComboBox(SECTOR);
-        sectorComboBox.setDescription(SECTOR);
-        sectorComboBox.setItems(getSectors());
-        secondRow.addComponent(sectorComboBox);
-
-        serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
-        serviceTypeComboBox.setDescription(SERVICE_TYPE);
-        serviceTypeComboBox.setItems("All","Duty Free","Duty Paid","Buy on Board");
-        serviceTypeComboBox.setSelectedItem("All");
-        serviceTypeComboBox.setEmptySelectionAllowed(false);
-        secondRow.addComponent(serviceTypeComboBox);
-
-        secondRow.addComponent(new Label());
+        itemNo = new TextField(ITEM_ID);
+        itemNo.setDescription(ITEM_ID);
+        firstRow.addComponent(itemNo);
+        firstRow.setSizeFull();
+        firstRow.setWidth("70%");
+        flightDateFromDateField.setSizeFull();
+        flightDateToDateField.setSizeFull();
+        categoryComboBox.setSizeFull();itemNo.setSizeFull();
 
         buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
@@ -201,7 +188,6 @@ public class ItemSalesView extends UserEntryView implements View {
         detailsTable.addColumn(SalesDetails::getFlightNo).setCaption(FLIGHT_NAME).setId("flightNo");
         detailsTable.addColumn(SalesDetails::getFlightFrom).setCaption(FLIGHT_FROM).setId("flightFrom");
         detailsTable.addColumn(SalesDetails::getFlightTo).setCaption(FLIGHT_TO).setId("flightTo");
-        detailsTable.addColumn(SalesDetails::getSifNo).setCaption(SIF_NO).setId("sifNo");
     }
 
     private List<String> getSectors(){
@@ -220,22 +206,17 @@ public class ItemSalesView extends UserEntryView implements View {
     protected void showFilterData(){
         mainTableLayout.setVisible(true);
         String category = categoryComboBox.getValue() != null ? categoryComboBox.getValue().toString() : null;
-        String serviceType = BackOfficeUtils.getServiceTypeFromServiceType( serviceTypeComboBox.getValue().toString());
         String sifNo = sifNoField.getValue() != null ? sifNoField.getValue().toString() : null;
-        String flightFrom = null;
-        String flightTo = null;
-        if(sectorComboBox.getValue() != null && !sectorComboBox.getValue().toString().isEmpty()){
-            flightFrom = sectorComboBox.getValue().toString().split("-")[0];
-            flightTo = sectorComboBox.getValue().toString().split("-")[1];
-        }
+
+
         Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         List<SalesDetails> list = connection.getSalesDetails(dateFrom,dateTo,
-                category,serviceType,flightFrom,flightTo,sifNo);
+                category,sifNo);
 
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
-                " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Service Type = " + serviceTypeComboBox.getValue().toString() + ((category == null || category.isEmpty()) ? "" : " category = " + category)
+                " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , "
+                + ((category == null || category.isEmpty()) ? "" : " category = " + category)
                 + (sifNo == null || sifNo.isEmpty() ? "" :" SIF No" + sifNo);
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);

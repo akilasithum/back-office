@@ -6,7 +6,7 @@ public class PosItemSaleDetail {
 
     private String 	orderId;
 
-    private int itemId;
+    private String itemId;
 
     private int quantity;
 
@@ -31,11 +31,11 @@ public class PosItemSaleDetail {
         this.orderId = orderId;
     }
 
-    public int getitemId() {
+    public String getitemId() {
         return itemId;
     }
 
-    public void setitemId(int itemId) {
+    public void setitemId(String itemId) {
         this.itemId = itemId;
     }
 

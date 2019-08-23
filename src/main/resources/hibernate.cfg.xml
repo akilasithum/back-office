@@ -61,5 +61,9 @@ connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop
         <mapping resource="com.back.office.common/wastage.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/cartNumber.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/HHCMaster.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/DepartureFlight.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/ArrivalFlight.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/OrderNow.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/OrderNowItems.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

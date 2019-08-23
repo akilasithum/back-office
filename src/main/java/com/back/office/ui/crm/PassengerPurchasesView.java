@@ -4,7 +4,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import com.back.office.entity.PassengerPurchases;
+import com.back.office.entity.PassengerPurchase;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
@@ -32,7 +32,7 @@ public class PassengerPurchasesView extends UserEntryView implements View{
     protected Button submitList;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
-    protected Grid<PassengerPurchases> passengerPurchasesGrid;
+    protected Grid<PassengerPurchase> PassengerPurchaseGrid;
     protected Button clearButton;
     protected DateField fromDateText;
     protected DateField toDateText;
@@ -42,7 +42,6 @@ public class PassengerPurchasesView extends UserEntryView implements View{
     protected Label posItem;
     protected Label posLabel;
     protected float priceAll;
-    Window windowdatatable=new Window();
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -69,7 +68,6 @@ public class PassengerPurchasesView extends UserEntryView implements View{
 
         HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
         HorizontalLayout dateText=new HorizontalLayout();
-        HorizontalLayout dateTextListDetails=new HorizontalLayout();
 
 
         submitList=new Button("Submit");
@@ -95,8 +93,8 @@ public class PassengerPurchasesView extends UserEntryView implements View{
 
         dateText.addComponent(fromDateText);
         dateText.addComponent(toDateText);
+        dateText.addComponent(flightNumberText);
 
-        dateTextListDetails.addComponent(flightNumberText);
 
         buttonLayoutSubmit.addComponent(submitList);
 
@@ -104,24 +102,23 @@ public class PassengerPurchasesView extends UserEntryView implements View{
 
         addComponent(createLayout);
 
-        passengerPurchasesGrid =new Grid();
+        PassengerPurchaseGrid =new Grid();
 
         createLayout.addComponent(dateText);
-        createLayout.addComponent(dateTextListDetails);
         createLayout.addComponent(buttonLayoutSubmit);
-        createLayout.addComponent(passengerPurchasesGrid);
+        createLayout.addComponent(PassengerPurchaseGrid);
 
-        passengerPurchasesGrid.setSizeFull();
-        passengerPurchasesGrid.setWidth("60%");
+        PassengerPurchaseGrid.setSizeFull();
+        PassengerPurchaseGrid.setWidth("90%");
 
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getpaxName).setCaption("Pax Name");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getfrequentFlyerNo).setCaption("Frequent flyer No");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getemail).setCaption("Email");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::gettelephoneNo).setCaption("Tel No");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getflightNo).setCaption("Flight No");
-        passengerPurchasesGrid.addColumn(bean-> BackOfficeUtils.getDateStringFromDate(bean.getdeparureDate())).setCaption("Departure Date");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getPNR).setCaption("PNR");
-        passengerPurchasesGrid.addColumn(PassengerPurchases::getorderId).setCaption("Order");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getPaxName).setCaption("Pax Name");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getFrequentFlyerNo).setCaption("Frequent flyer No");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getEmail).setCaption("Email");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getTelephoneNumber).setCaption("Tel No");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getFlightId).setCaption("Flight No");
+        PassengerPurchaseGrid.addColumn(bean-> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Departure Date");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getPnr).setCaption("PNR");
+        PassengerPurchaseGrid.addColumn(PassengerPurchase::getOrderId).setCaption("Order");
     }
 
     public void processList() {
@@ -130,96 +127,82 @@ public class PassengerPurchasesView extends UserEntryView implements View{
 
         if(flightNumberText.getValue()!=null&&!flightNumberText.getValue().toString().isEmpty()&&fromDateText.getValue()!=null&&!fromDateText.getValue().toString().isEmpty()&&toDateText.getValue()!=null&&!toDateText.getValue().toString().isEmpty()) {
 
-            List<com.back.office.entity.PassengerPurchases> flightDetailListdatelis=connection.getPassengerPurchase("allType",flightNumberText.getValue().toString(),Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            passengerPurchasesGrid.setItems(flightDetailListdatelis);
+            List<com.back.office.entity.PassengerPurchase> flightDetailListdatelis=connection.getPassengerPurchase("allType",flightNumberText.getValue().toString(),Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            PassengerPurchaseGrid.setItems(flightDetailListdatelis);
 
         }else if(fromDateText.getValue()!=null&&!fromDateText.getValue().toString().isEmpty()&&toDateText.getValue()!=null&&!toDateText.getValue().toString().isEmpty()) {
 
-            List<com.back.office.entity.PassengerPurchases> flightDetailListdatelis=connection.getPassengerPurchase("dateOnly","flightText",Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            passengerPurchasesGrid.setItems(flightDetailListdatelis);
+            List<com.back.office.entity.PassengerPurchase> flightDetailListdatelis=connection.getPassengerPurchase("dateOnly","flightText",Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            PassengerPurchaseGrid.setItems(flightDetailListdatelis);
 
         }else if(flightNumberText.getValue()!=null&&!flightNumberText.getValue().toString().isEmpty()) {
 
-            List<com.back.office.entity.PassengerPurchases> flightDetailListdatelis=connection.getPassengerPurchase("typeOnly",flightNumberText.getValue().toString(),new Date(),new Date());
-            passengerPurchasesGrid.setItems(flightDetailListdatelis);
+            List<com.back.office.entity.PassengerPurchase> flightDetailListdatelis=connection.getPassengerPurchase("typeOnly",flightNumberText.getValue().toString(),new Date(),new Date());
+            PassengerPurchaseGrid.setItems(flightDetailListdatelis);
 
         }else  {
 
-            List<com.back.office.entity.PassengerPurchases> flightDetailListdatelis=connection.getPassengerPurchase("paxType","flightText",new Date(),new Date());
-            passengerPurchasesGrid.setItems(flightDetailListdatelis);
+            List<com.back.office.entity.PassengerPurchase> flightDetailListdatelis=connection.getPassengerPurchase("paxType","flightText",new Date(),new Date());
+            PassengerPurchaseGrid.setItems(flightDetailListdatelis);
 
         }
 
-        passengerPurchasesGrid.addItemClickListener(new ItemClickListener<com.back.office.entity.PassengerPurchases>() {
+        PassengerPurchaseGrid.addItemClickListener((ItemClickListener<PassengerPurchase>) itemClick -> {
+            itemClick.getRowIndex();
+            String orderText=itemClick.getItem().getOrderId();
+            Window windowdatatable=new Window("Passenger Order Details");
+            getUI().removeWindow(windowdatatable);
 
-            public void itemClick(Grid.ItemClick<com.back.office.entity.PassengerPurchases> itemClick) {
-                itemClick.getRowIndex();
-                int rowItem=itemClick.getRowIndex();
+            posItemList=connection.getPosItemSale(orderText);
 
+            Label itemHedderLabel=new Label("Item Name");
+            Label labelHedder=new Label("Quantity");
+            Label priceLabel=new Label("Price");
 
-                String orderText=itemClick.getItem().getorderId();
+            VerticalLayout itemLayoutList=new VerticalLayout();
+            VerticalLayout quntityLayoutList=new VerticalLayout();
+            VerticalLayout priceLayoutText=new VerticalLayout();
 
-                getUI().removeWindow(windowdatatable);
+            itemLayoutList.addComponent(itemHedderLabel);
+            quntityLayoutList.addComponent(labelHedder);
+            priceLayoutText.addComponent(priceLabel);
 
-                posItemList=connection.getPosItemSale(orderText);
+            priceAll=0;
 
-                Label itemHedderLabel=new Label("Item Name");
-                Label labelHedder=new Label("Quantity");
-                Label priceLabel=new Label("Price");
+            for(int i=0;i<posItemList.size();i++) {
+                List<ItemDetails> itemGrid=connection.getItemId(posItemList.get(i).getitemId());
 
-                VerticalLayout itemLayoutList=new VerticalLayout();
-                VerticalLayout quntityLayoutList=new VerticalLayout();
-                VerticalLayout priceLayoutText=new VerticalLayout();
-
-                itemLayoutList.addComponent(itemHedderLabel);
-                quntityLayoutList.addComponent(labelHedder);
-                priceLayoutText.addComponent(priceLabel);
-
-                priceAll=0;
-
-
-                for(int i=0;i<posItemList.size();i++) {
-                    int itemText=posItemList.get(i).getitemId();
-                    List<ItemDetails> itemGrid=connection.getItemId(posItemList.get(i).getitemId());
-
-
-                    itemLabel=new Label(itemGrid.get(0).getItemName());
-
-                    itemLayoutList.addComponent(itemLabel);
-
-                    String posItemsec=Integer.toString(posItemList.get(i).getquantity());
-                    String posItemLabel=Float.toString(posItemList.get(i).getprice());
-                    posItem=new Label(posItemsec);
-                    posLabel=new Label(posItemLabel);
-
-                    quntityLayoutList.addComponent(posItem);
-                    priceLayoutText.addComponent(posLabel);
-
-                    priceAll=posItemList.get(i).getprice()+priceAll;
-
-                }
-
-                VerticalLayout windowContent = new VerticalLayout();
-                HorizontalLayout horizonLayout=new HorizontalLayout();
-                windowContent.setMargin(true);
-                windowdatatable.setContent(windowContent);
-                windowContent.addComponent(horizonLayout);
-                Button buttonclose=new Button("Ok");
-                buttonclose.addClickListener((Button.ClickListener) clickEvent->closedatawindowh(windowdatatable));
-                Label priceLabelText=new Label("Total : $ "+Float.toString(priceAll));
-                horizonLayout.addComponent(itemLayoutList);
-                horizonLayout.addComponent(quntityLayoutList);
-                horizonLayout.addComponent(priceLayoutText);
-                windowContent.addComponent(priceLabelText);
-                windowContent.setComponentAlignment(priceLabelText,Alignment.BOTTOM_CENTER);
-                windowdatatable.center();
-                windowContent.addComponent(buttonclose);
-                windowContent.setComponentAlignment(buttonclose,Alignment.BOTTOM_CENTER);
-
-                windowdatatable.addStyleName("mywindowstyle");
-                getUI().addWindow(windowdatatable);
-
+                itemLabel=new Label(itemGrid.get(0).getItemName());
+                itemLayoutList.addComponent(itemLabel);
+                String posItemsec=Integer.toString(posItemList.get(i).getquantity());
+                String posItemLabel=Float.toString(posItemList.get(i).getprice());
+                posItem=new Label(posItemsec);
+                posLabel=new Label(posItemLabel);
+                quntityLayoutList.addComponent(posItem);
+                priceLayoutText.addComponent(posLabel);
+                priceAll=posItemList.get(i).getprice()+priceAll;
             }
+
+            VerticalLayout windowContent = new VerticalLayout();
+            HorizontalLayout horizonLayout=new HorizontalLayout();
+            windowContent.setMargin(true);
+            windowdatatable.setContent(windowContent);
+            windowContent.addComponent(horizonLayout);
+            Button buttonclose=new Button("Ok");
+            buttonclose.addClickListener((Button.ClickListener) clickEvent->closedatawindowh(windowdatatable));
+            Label priceLabelText=new Label("Total : $ "+Float.toString(priceAll));
+            horizonLayout.addComponent(itemLayoutList);
+            horizonLayout.addComponent(quntityLayoutList);
+            horizonLayout.addComponent(priceLayoutText);
+            windowContent.addComponent(priceLabelText);
+            windowContent.setComponentAlignment(priceLabelText,Alignment.BOTTOM_CENTER);
+            windowdatatable.center();
+            windowContent.addComponent(buttonclose);
+            windowContent.setComponentAlignment(buttonclose,Alignment.BOTTOM_CENTER);
+
+            windowdatatable.addStyleName("mywindowstyle");
+            getUI().addWindow(windowdatatable);
+
         });
 
 

@@ -17,11 +17,13 @@ import com.back.office.ui.finance.GrossMargine;
 import com.back.office.ui.flightKitchen.FlightScheduleView;
 import com.back.office.ui.flightKitchen.FlightShedule;
 import com.back.office.ui.flightKitchen.RequestInventory;
+import com.back.office.ui.flightKitchen.TodayFlightDetailView;
 import com.back.office.ui.inventory.EquipmentMasterView;
 import com.back.office.ui.inventory.SoldOutDetails;
 import com.back.office.ui.message.BondMessagesView;
 import com.back.office.ui.message.FAMessagesView;
 import com.back.office.ui.message.MessagingModuleView;
+import com.back.office.ui.preOrder.OrderNowView;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
@@ -113,13 +115,13 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
         navigator.addView("TenderSummary",TenderSummaryView.class);
         navigator.addView("Downloads", DownloadView.class);
-        navigator.addView("PreOrders", PreOrders.class);
+        navigator.addView("orderNow", OrderNowView.class);
         navigator.addView("MessagingModule", MessagingModuleView.class);
         navigator.addView("CurrencyHistory", CurruncyDetailHistory.class);
         navigator.addView("RequestInventory", RequestInventory.class);
         navigator.addView("GrossMargins", GrossMargine.class);
         navigator.addView("Budget", BudgetView.class);
-        navigator.addView("FlightSchedule", FlightShedule.class);
+        navigator.addView("UploadFlightSchedule", FlightShedule.class);
         navigator.addView("DailyFlights", FlightScheduleView.class);
         navigator.addView("BondMessages", BondMessagesView.class);
         navigator.addView("FAMessages", FAMessagesView.class);
@@ -131,6 +133,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("SoldOut", SoldOutDetails.class);
         navigator.addView("HHCAndCartUsage", EquipmentMasterView.class);
         navigator.addView("CommonView",CommonSelection.class);
+        navigator.addView("FlightSchedule", TodayFlightDetailView.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();

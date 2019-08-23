@@ -100,12 +100,18 @@ public class CreateItemView extends WizardCommonView {
                                 ItemDetails item;
                                 if(obj != null && obj instanceof ItemDetails) {
                                     item = (ItemDetails) obj;
-                                    connection.insertObjectHBM(item);
-                                    updateTable(false,item);
-                                    UserNotification.show("Success","Item added successfully","success",UI.getCurrent());
+                                    if(connection.isItemCodeAvailable(item.getItemCode())){
+                                        UserNotification.show("error","Item code already in use. Please choose another code",
+                                                "error",UI.getCurrent());
+                                    }
+                                    else{
+                                        connection.insertObjectHBM(item);
+                                        updateTable(false,item);
+                                        UserNotification.show("Success","Item added successfully","success",UI.getCurrent());
+                                        UI.getCurrent().getSession().setAttribute("item",null);
+                                        window.close();
+                                    }
                                 }
-                                UI.getCurrent().getSession().setAttribute("item",null);
-                                window.close();
                             }
                         }
                     });
@@ -263,7 +269,7 @@ public class CreateItemView extends WizardCommonView {
         editButton.addClickListener(clickEvent -> {
 
             if(editButton.getCaption().equals("Edit")){
-            itemCode.setEnabled(true);
+            //itemCode.setEnabled(true);
             itemNameFld.setEnabled(true);
             availableForCompensation.setEnabled(true);
             catelogFld.setEnabled(true);
