@@ -161,14 +161,14 @@ public class CommonSelection extends VerticalLayout implements View {
                 List<String> setupList = Arrays.asList("Bags","Upgrades","Credit","Transport","Meals","Hotels","Excursions"
                         ,"Gif Cards","Order Now");
                 if(setupList.contains(map.getKey())){
-                    aircraftTypeLayout.addLayoutClickListener(layoutClickEvent ->{
+                    inventoryImage.addClickListener(layoutClickEvent ->{
                                 UI.getCurrent().getSession().setAttribute("setupSubMenu",map.getKey());
                                 getUI().getNavigator().navigateTo(map.getValue());
                             }
                     );
                 }
                 else{
-                    aircraftTypeLayout.addLayoutClickListener(layoutClickEvent ->
+                    inventoryImage.addClickListener(layoutClickEvent ->
                             getUI().getNavigator().navigateTo(map.getValue())
                     );
                 }

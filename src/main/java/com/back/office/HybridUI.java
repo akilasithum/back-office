@@ -28,6 +28,7 @@ import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
+import com.back.office.ui.vendor.VendorView;
 import com.back.office.ui.wizard.AircraftDetailsView;
 import com.back.office.ui.wizard.CreateFlightView;
 import com.back.office.ui.wizard.CreateItemView;
@@ -102,7 +103,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("Vouchers", VoucherView.class);
         navigator.addView("MonthlySales", SalesDetailsView.class);
         navigator.addView("FlightSales", FlightPaymentDetailsView.class);
-        navigator.addView("SalebyCategory", CategorySalesView.class);
+        navigator.addView("SalesByCategory", CategorySalesView.class);
         navigator.addView("ManageUserRoles", ManageRolesView.class);
         navigator.addView("ManageUsers", UserDetailsView.class);
         navigator.addView("Uploads", UploadView.class);
@@ -134,6 +135,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("HHCAndCartUsage", EquipmentMasterView.class);
         navigator.addView("CommonView",CommonSelection.class);
         navigator.addView("FlightSchedule", TodayFlightDetailView.class);
+        navigator.addView("Vendor", VendorView.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();

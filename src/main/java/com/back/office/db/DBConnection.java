@@ -362,7 +362,7 @@ public class DBConnection {
         }
     }
 
-    public List getSalesDetails(Date flightFromDate,Date flightToDate,String category,String sifNo){
+    public List getSalesDetails(Date flightFromDate,Date flightToDate,String category,String itemNo){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(SalesDetails.class);
         criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
@@ -370,8 +370,8 @@ public class DBConnection {
         if(category != null && !category.isEmpty()){
             criteria.add(Restrictions.eq("category", category));
         }
-        if(sifNo != null && !sifNo.isEmpty()){
-            criteria.add(Restrictions.eq("sifNo", Integer.parseInt(sifNo)));
+        if(itemNo != null && !itemNo.isEmpty()){
+            criteria.add(Restrictions.eq("itemId", itemNo));
         }
         List list = criteria.list();
         session.close();
@@ -447,16 +447,17 @@ public class DBConnection {
 
     public List getCategorySalesDetails(Date flightFromDate,Date flightToDate,String serviceType){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(CategorySalesDetails.class);
+        Criteria criteria = session.createCriteria(SalesDetails.class);
         criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
         criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
-        if(serviceType != null && !serviceType.isEmpty()){
-            criteria.add(Restrictions.eq("serviceType", serviceType));
+        if(serviceType != null && !serviceType.isEmpty() && !serviceType.equalsIgnoreCase("null")){
+            criteria.add(Restrictions.eq("category", serviceType));
         }
         ProjectionList projList = Projections.projectionList();
-        projList.add(Projections.sum("quantity"),"quantity");
-        projList.add(Projections.sum("price"),"price");
-        projList.add(Projections.groupProperty("category"),"category");
+        projList.add(Projections.sum("quantity"));
+        projList.add(Projections.sum("price"));
+        projList.add(Projections.groupProperty("category"));
+        projList.add(Projections.property("category"));
         criteria.setProjection(projList);
         List list = criteria.list();
         session.close();

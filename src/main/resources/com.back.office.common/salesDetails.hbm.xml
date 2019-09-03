@@ -8,20 +8,14 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <property name="itemName" type="java.lang.String">
-            <column name="itemName" length="100"/>
-        </property>
         <property name="category" type="java.lang.String">
             <column name="category" length="30" />
         </property>
-        <property name="itemId" type="java.lang.Integer">
-            <column name="itemId"  />
+        <property name="itemId" type="java.lang.String">
+            <column name="itemId"  length="30"/>
         </property>
         <property name="quantity" type="java.lang.Integer">
             <column name="quantity" />
-        </property>
-        <property name="costPrice" type="java.lang.Float">
-        <column name="costPrice" />
         </property>
         <property name="price" type="java.lang.Float">
             <column name="price" />
@@ -30,17 +24,9 @@
             <column name="flightDate" />
         </property>
         <property name="flightNo" type="java.lang.String">
-            <column name="flightNo" length="30" />
+            <column name="flightId" length="30" />
         </property>
-        <property name="flightFrom" type="java.lang.String">
-            <column name="flightFrom" length="30" />
-        </property>
-        <property name="flightTo" type="java.lang.String">
-            <column name="flightTo" length="30" />
-        </property>
-        <property name="serviceType" type="java.lang.String">
-            <column name="serviceType" length="30" />
-        </property>
+
 
         <filter name="serviceTypeFilter"
                 condition=":serviceType=serviceType"/>

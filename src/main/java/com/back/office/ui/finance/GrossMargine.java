@@ -7,8 +7,11 @@ import java.util.List;
 
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.Constants;
 import com.back.office.utils.UserNotification;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -24,17 +27,14 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
-import com.vaadin.ui.themes.ValoTheme;
 
 public class GrossMargine extends UserEntryView implements View{
     protected ComboBox serviceTypeC;
-    protected Button process;
+    protected Button submitButton;
     protected List<ItemDetails> itemList;
     protected Grid<ItemGross> listGrid;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
-    protected List<ItemGross> chakedList;
-    protected ItemGross itemgrossDetail;
     protected List<ItemGross> grossarrayList=new ArrayList();
     protected Button exportToExcell;
     protected Button print;
@@ -54,8 +54,7 @@ public class GrossMargine extends UserEntryView implements View{
         super();
         createMainLayout();
         connection=DBConnection.getInstance();
-        setMargin(true);
-
+        setMargin(false);
     }
 
     public void createMainLayout() {
@@ -82,33 +81,40 @@ public class GrossMargine extends UserEntryView implements View{
         fieldLayout.addComponent(serviceTypeC);
         fieldLayout.addComponent(itemNo);
 
-        HorizontalLayout buttonList=new HorizontalLayout();
-        createLayout.addComponent(buttonList);
-
-        process=new Button("Submit");
-        buttonList.addComponent(process);
-
-        process.addClickListener((Button.ClickListener) ClickEvent->
+        HorizontalLayout buttonRow = new HorizontalLayout();
+        buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        buttonRow.setStyleName("searchButton");
+        submitButton =new Button("Submit");
+        buttonRow.addComponent(submitButton);
+        fieldLayout.addComponent(buttonRow);
+        fieldLayout.addStyleName("report-filter-panel");
+        submitButton.addClickListener((Button.ClickListener) ClickEvent->
                 processGrid());
 
 
         listGrid=new Grid();
-        createLayout.addComponent(listGrid);
-        createLayout.addComponent(listGrid);
+
         listGrid.setSizeFull();
-        listGrid.setWidth("80%");
 
         //listGrid.setVisible(false);
 
-        exportToExcell=new Button("Export To Excel");
-        buttonList.addComponent(exportToExcell);
-        exportToExcell.setVisible(false);
+        exportToExcell=new Button();
+        exportToExcell.setIcon(FontAwesome.FILE_EXCEL_O);
 
+        print=new Button();
+        print.setIcon(FontAwesome.PRINT);
 
-        print=new Button("Print");
-        buttonList.addComponent(print);
-        print.setVisible(false);
-        listGrid.setWidth("80%");
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcell,print);
+        createLayout.addComponent(optionButtonRow);
+        createLayout.setComponentAlignment(optionButtonRow,Alignment.MIDDLE_RIGHT);
+        createLayout.addComponent(listGrid);
+        createLayout.setWidth("90%");
+        createLayout.setMargin(false);
+
         listGrid.addColumn(ItemGross::getItemId).setCaption("Item #");
         listGrid.addColumn(ItemGross::getItemDescription).setCaption("Description");
         listGrid.addColumn(ItemGross::getBasePrice).setCaption("Selling Price");

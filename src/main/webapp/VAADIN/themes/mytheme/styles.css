@@ -16497,6 +16497,26 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: grey;
 }
 
+.mytheme .tabsheetStyle {
+	margin-top: 16px;
+}
+
+.mytheme .report-filter-panel {
+	background: #03028C;
+	padding-left: 20px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-radius: 10px;
+}
+
+.mytheme .gwt-PopupPanel .popupContent {
+	background-color: blue;
+}
+
+.mytheme .datePickerStyle .popupContent {
+	background-color: white;
+}
+
 .mytheme .searchButton {
 	padding-top: 26px;
 	padding-left: 40px;

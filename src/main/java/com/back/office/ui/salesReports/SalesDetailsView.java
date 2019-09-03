@@ -1,6 +1,7 @@
 package com.back.office.ui.salesReports;
 
 import com.back.office.db.DBConnection;
+import com.back.office.entity.ItemDetails;
 import com.back.office.entity.SalesDetails;
 import com.back.office.entity.Sector;
 import com.back.office.framework.UserEntryView;
@@ -9,6 +10,7 @@ import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -23,7 +25,6 @@ public class SalesDetailsView extends UserEntryView implements View {
     DBConnection connection;
     protected String pageHeader = "Monthly Sales";
     protected VerticalLayout headerLayout;
-    protected VerticalLayout userFormLayout;
     protected VerticalLayout mainTableLayout;
     protected HorizontalLayout tableLayout;
     protected VerticalLayout mainUserInputLayout;
@@ -41,12 +42,14 @@ public class SalesDetailsView extends UserEntryView implements View {
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String FLIGHT_NO = "Flight No";
     private static final String QUANTITY = "Quantity";
+    Map<String, ItemDetails> itemIdNameMap;
 
     public SalesDetailsView(){
         super();
         connection = DBConnection.getInstance();
         setMargin(true);
         createMainLayout();
+        itemIdNameMap = connection.getItemCodeDetailsMap();
     }
 
     @Override
@@ -58,7 +61,6 @@ public class SalesDetailsView extends UserEntryView implements View {
     }
 
     private void createMainLayout() {
-        //setSpacing(true);
         setMargin(false);
         headerLayout = new VerticalLayout();
         headerLayout.setSizeFull();
@@ -68,62 +70,48 @@ public class SalesDetailsView extends UserEntryView implements View {
         h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
 
-        userFormLayout = new VerticalLayout();
-        userFormLayout.setMargin(Constants.noMargin);
-        addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         mainTableLayout.setMargin(Constants.noMargin);
         addComponent(mainTableLayout);
-        //mainTableLayout.setVisible(false);
         tableLayout = new HorizontalLayout();
         tableLayout.setMargin(Constants.noMargin);
         tableLayout.setSizeFull();
 
         mainUserInputLayout = new VerticalLayout();
         mainUserInputLayout.setMargin(Constants.noMargin);
-        userFormLayout.addComponent(mainUserInputLayout);
-        userFormLayout.setWidth("70%");
 
         HorizontalLayout firstRow = new HorizontalLayout();
-        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.addStyleName("report-filter-panel");
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
         firstRow.setMargin(Constants.noMargin);
-        mainUserInputLayout.addComponent(firstRow);
-
-        HorizontalLayout secondRow = new HorizontalLayout();
-        secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        secondRow.setSpacing(true);
-        secondRow.setSizeFull();
-        secondRow.setMargin(Constants.noMargin);
-        mainUserInputLayout.addComponent(secondRow);
 
         Date date = new Date();
         LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
         flightDateFromDateField.setSizeFull();
+        flightDateFromDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
         flightDateToDateField.setSizeFull();
+        flightDateToDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateToDateField);
 
 
         flightNoComboBox = new ComboBox(FLIGHT_NO);
         flightNoComboBox.setDescription(FLIGHT_NO);
         flightNoComboBox.setSizeFull();
-        List<String> catList = connection.getFlightsNoList();
-       // flightNoComboBox.setItems(catList);
+        List<String> flightsNoList = connection.getFlightsNoList();
+        flightNoComboBox.setItems(flightsNoList);
         firstRow.addComponent(flightNoComboBox);
         firstRow.setWidth("65%");
-        //firstRow.addComponent(searchButton);
 
         buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
        buttonRow.setStyleName("searchButton");
-       userFormLayout.addComponent(buttonRow);
 
         searchButton = new Button("Search");
         searchButton.addClickListener((Button.ClickListener) clickEvent -> showFilterData());
@@ -135,8 +123,10 @@ public class SalesDetailsView extends UserEntryView implements View {
         optionButtonRow.setSpacing(true);
         optionButtonRow.setMargin(Constants.noMargin);
 
-        printBtn = new Button("Print");
-        Button downloadExcelBtn = new Button("Download as Excel");
+        printBtn = new Button();
+        printBtn.setIcon(FontAwesome.PRINT);
+        Button downloadExcelBtn = new Button();
+        downloadExcelBtn.setIcon(FontAwesome.FILE_EXCEL_O);
         /*downloadExcelBtn.addClickListener((Button.ClickListener) clickEvent -> {
             ExcelExport excelExport = new ExcelExport(detailsTable);
             excelExport.excludeCollapsedColumns();
@@ -146,8 +136,14 @@ public class SalesDetailsView extends UserEntryView implements View {
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);
         filterCriteriaText = new Label("");
         filterCriteriaText.addStyleName(ValoTheme.LABEL_H3);
-        mainTableLayout.addComponent(optionButtonRow);
-        mainTableLayout.addComponent(filterCriteriaText);
+
+        HorizontalLayout buttonAndFilterLayout = new HorizontalLayout();
+        buttonAndFilterLayout.setSizeFull();
+        buttonAndFilterLayout.addComponents(filterCriteriaText,optionButtonRow);
+        buttonAndFilterLayout.setComponentAlignment(optionButtonRow,Alignment.MIDDLE_RIGHT);
+
+        mainTableLayout.addComponent(firstRow);
+        mainTableLayout.addComponent(buttonAndFilterLayout);
         mainTableLayout.addComponent(tableLayout);
 
         detailsTable = new Grid<>();
@@ -155,7 +151,6 @@ public class SalesDetailsView extends UserEntryView implements View {
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
         setComponentAlignment(mainTableLayout,Alignment.MIDDLE_LEFT);
-        setComponentAlignment(userFormLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
         createShowTableHeader();
 
@@ -167,13 +162,13 @@ public class SalesDetailsView extends UserEntryView implements View {
 
     private void createShowTableHeader(){
         detailsTable.addColumn(SalesDetails::getItemId).setCaption("Item No").setId("Item No");
-        detailsTable.addColumn(SalesDetails::getItemName).setCaption("Description").setId("Description");
-        detailsTable.addColumn(bean-> bean.getPrice()/bean.getQuantity()).setCaption("Price").setId("Price");
-        detailsTable.addColumn(bean-> bean.getCostPrice()/bean.getQuantity()).setCaption("Cost").setId("Cost");
+        detailsTable.addColumn(bean-> getItemNameFromId(bean.getItemId())).setCaption("Description").setId("Description");
+        detailsTable.addColumn(SalesDetails::getPrice).setCaption("Price").setId("Price");
+        detailsTable.addColumn(bean-> getCostFromId(bean.getItemId())).setCaption("Cost").setId("Cost");
         detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY).setId("quantity");
-        detailsTable.addColumn(bean-> bean.getPrice()).setCaption("Gross Sale").setId("Gross Sale");
-        detailsTable.addColumn(bean-> bean.getPrice()).setCaption("Net Sale").setId("Net Sale");
-        detailsTable.addColumn(SalesDetails::getCostPrice).setCaption("Net Cost").setId("Net Cost");
+        detailsTable.addColumn(bean-> bean.getPrice()*bean.getQuantity()).setCaption("Gross Sale").setId("Gross Sale");
+        detailsTable.addColumn(bean-> bean.getPrice()*bean.getQuantity()).setCaption("Net Sale").setId("Net Sale");
+        detailsTable.addColumn(bean -> getNeCost(bean.getItemId(),bean.getQuantity())).setCaption("Net Cost").setId("Net Cost");
 
     }
 
@@ -190,5 +185,26 @@ public class SalesDetailsView extends UserEntryView implements View {
                  ((flightNo == null || flightNo.isEmpty()) ? "" : " Flight Number = " + flightNo);
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);
+    }
+
+    private String getItemNameFromId(String itemId){
+
+        ItemDetails item = itemIdNameMap.get(itemId);
+        if(item != null) return item.getItemName();
+        else return "";
+    }
+
+    private float getCostFromId(String itemId){
+
+        ItemDetails item = itemIdNameMap.get(itemId);
+        if(item != null) return item.getCostPrice();
+        else return 0;
+    }
+
+    private float getNeCost(String itemId,int qty){
+
+        ItemDetails item = itemIdNameMap.get(itemId);
+        if(item != null) return item.getCostPrice()*qty;
+        else return 0;
     }
 }

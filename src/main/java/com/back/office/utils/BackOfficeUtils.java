@@ -484,7 +484,7 @@ public class BackOfficeUtils {
                 row1Map.put("Gross Margins","GrossMargins");
                 row1Map.put("Bank Settlements","");
                 row1Map.put("Monthly Sales","MonthlySales");
-                row1Map.put("Category Sales","");
+                row1Map.put("Category Sales","SalesByCategory");
                 row1Map.put("Item Sales","ItemSales");
                 menuItem.setSubMenuImageMap(row1Map);
                 menuItem.setMenuName("finance");
@@ -512,20 +512,9 @@ public class BackOfficeUtils {
             iconWrapper5.addComponents(inventoryImage);
             inventoryImage.setIcon(FontAwesome.BUYSELLADS);
             inventoryImage.addClickListener(clickEvent -> {
-                UI.getCurrent().getSession().setAttribute("selectedLayout","inventory");
-                SubMenuItem menuItem = new SubMenuItem();
-                menuItem.setMenuImage("inventory_sub.png");
-                Map<String,String> row1Map = new LinkedHashMap<>();
-                /*row1Map.put("Equipment Master","EquipmentMaster");
-                row1Map.put("Month End  Inventory","");
-                row1Map.put("Unaccounted Carts","");
-                row1Map.put("Inventory Valuation","");
-                row1Map.put("Sold-out by Flight","SoldOut");
-                row1Map.put("Custom Reports","");
-                menuItem.setMenuName("inventory");*/
-                menuItem.setSubMenuImageMap(row1Map);
-                UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
-                UI.getCurrent().getNavigator().navigateTo("CommonView");
+                UI.getCurrent().getSession().setAttribute("selectedLayout","Vendor");
+                UI.getCurrent().getSession().setAttribute("subMenu",new SubMenuItem());
+                UI.getCurrent().getNavigator().navigateTo("Vendor");
 
             });
             return iconWrapper5;

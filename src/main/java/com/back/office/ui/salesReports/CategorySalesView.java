@@ -1,10 +1,8 @@
 package com.back.office.ui.salesReports;
 
-import com.back.office.entity.CategorySalesDetails;
 import com.back.office.entity.SalesByCategoryObj;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
@@ -21,12 +19,12 @@ public class CategorySalesView extends ReportCommonView {
 
     protected DateField flightDateFromDateField;
     protected DateField flightDateToDateField;
-    protected ComboBox serviceTypeComboBox;
+    protected ComboBox categorycombo;
     protected Grid<SalesByCategoryObj> detailsTable;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
-    private final String SERVICE_TYPE = "Service Type";
+    private final String SERVICE_TYPE = "Category";
 
     private final String CATEGORY = "Category";
     private final String QUANTITY = "Quantity";
@@ -50,25 +48,35 @@ public class CategorySalesView extends ReportCommonView {
         firstRow.setSizeFull();
         firstRow.setMargin(Constants.noMargin);
         mainUserInputLayout.addComponent(firstRow);
-
+        firstRow.addStyleName("report-filter-panel");
 
         Date date = new Date();
         LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setSizeFull();
+        flightDateFromDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
+        flightDateToDateField.setStyleName("datePickerStyle");
         flightDateToDateField.setValue(today);
+        flightDateToDateField.setSizeFull();
         firstRow.addComponent(flightDateToDateField);
 
-        serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
-        serviceTypeComboBox.setDescription(SERVICE_TYPE);
-        serviceTypeComboBox.setItems("Duty Free","Duty Paid","Buy on Board");
-        serviceTypeComboBox.setSelectedItem("Duty Free");
-        serviceTypeComboBox.setEmptySelectionAllowed(false);
-        firstRow.addComponent(serviceTypeComboBox);
+        categorycombo = new ComboBox(SERVICE_TYPE);
+        categorycombo.setDescription(SERVICE_TYPE);
+        categorycombo.setItems((List<String>) connection.getCategories());
+        categorycombo.setSizeFull();
+        firstRow.addComponent(categorycombo);
+
+        HorizontalLayout buttonRow = new HorizontalLayout();
+        buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        buttonRow.setStyleName("searchButton");
+        buttonRow.addComponent(searchButton);
+        firstRow.addComponent(buttonRow);
+
         detailsTable = new Grid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();
@@ -102,7 +110,7 @@ public class CategorySalesView extends ReportCommonView {
     protected void showFilterData() {
         mainTableLayout.setVisible(true);
 
-        String serviceType = BackOfficeUtils.getServiceTypeFromServiceType( serviceTypeComboBox.getValue().toString());
+        String serviceType = String.valueOf(categorycombo.getValue());
         Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         List<Object[]> payments = connection.getCategorySalesDetails(dateFrom,dateTo,
@@ -144,7 +152,7 @@ public class CategorySalesView extends ReportCommonView {
         detailsTable.setItems(salesByCategoryObjList);
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Service Type = " + serviceTypeComboBox.getValue().toString();
+                "Category = " + categorycombo.getValue().toString();
         filterCriteriaText.setValue(outputStr);
         /*float totalQty = 0;
         int totalPrice = 0;

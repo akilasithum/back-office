@@ -6,10 +6,7 @@ import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.Page;
-import com.vaadin.server.Resource;
-import com.vaadin.server.StreamResource;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -35,6 +32,7 @@ public abstract class ReportCommonView extends UserEntryView implements View {
     OnDemandFileDownloader onDemandFileDownloader = null;
     OnDemandFileDownloader.OnDemandStreamResource onDemandStreamResource;
     protected HorizontalLayout optionButtonRow;
+    protected HorizontalLayout btnAndQueryLayout;
 
     protected CellStyle dateCellStyle;
     @Override
@@ -65,7 +63,7 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();
-        userFormLayout.setMargin(Constants.bottomMarginInfo);
+        userFormLayout.setMargin(false);
         addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         addComponent(mainTableLayout);
@@ -91,14 +89,19 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         optionButtonRow.setSpacing(true);
 
-        printBtn = new Button("Print");
-        downloadExcelBtn = new Button("Download as Excel");
+        printBtn = new Button();
+        printBtn.setIcon(FontAwesome.PRINT);
+        downloadExcelBtn = new Button();
+        downloadExcelBtn.setIcon(FontAwesome.FILE_EXCEL_O);
         downloadExcelBtn.setId("DownloadButtonID");
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);
         filterCriteriaText = new Label("");
         filterCriteriaText.addStyleName(ValoTheme.LABEL_H4);
-        mainTableLayout.addComponent(optionButtonRow);
-        mainTableLayout.addComponent(filterCriteriaText);
+        btnAndQueryLayout = new HorizontalLayout();
+        btnAndQueryLayout.setSizeFull();
+        btnAndQueryLayout.addComponents(filterCriteriaText,optionButtonRow);
+        btnAndQueryLayout.setComponentAlignment(optionButtonRow,Alignment.MIDDLE_RIGHT);
+        mainTableLayout.addComponent(btnAndQueryLayout);
         mainTableLayout.addComponent(tableLayout);
 
         setComponentAlignment(mainTableLayout,Alignment.MIDDLE_LEFT);

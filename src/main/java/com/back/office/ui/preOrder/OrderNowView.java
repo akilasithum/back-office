@@ -9,6 +9,7 @@ import com.vaadin.contextmenu.GridContextMenu;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -16,6 +17,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class OrderNowView extends UserEntryView implements View {
 
@@ -43,6 +45,7 @@ public class OrderNowView extends UserEntryView implements View {
     Window windowData;
     FilterGrid<OrderNowItems> orderNowItemsFilterGrid;
     List<OrderNowItems> orderNowDataItem;
+    Map<String, ItemDetails> itemIdNameMap;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -53,6 +56,8 @@ public class OrderNowView extends UserEntryView implements View {
         super();
         connection = DBConnection.getInstance();
         createMainLayout();
+        setMargin(false);
+        itemIdNameMap = connection.getItemCodeDetailsMap();
     }
 
     private void createMainLayout(){
@@ -64,10 +69,9 @@ public class OrderNowView extends UserEntryView implements View {
         headerLayout.setMargin(Constants.noMargin);
         userFormLayout = new VerticalLayout();
         addComponent(userFormLayout);
-        userFormLayout.setMargin(Constants.bottomMarginInfo);
+        userFormLayout.setMargin(false);
         tableLayout = new VerticalLayout();
         tableLayout.setSizeFull();
-        addComponent(tableLayout);
         tableLayout.setMargin(Constants.noMargin);
         Label h1 = new Label("Order Now");
         h1.addStyleName("headerText");
@@ -77,9 +81,9 @@ public class OrderNowView extends UserEntryView implements View {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
-        firstRow.setWidth("50%");
+        firstRow.setWidth("60%");
         firstRow.setMargin(Constants.noMargin);
-        userFormLayout.addComponent(firstRow);
+        firstRow.addStyleName("report-filter-panel");
 
         flightNoCombo = new ComboBox("Flight No");
         flightNoCombo.setItems(connection.getFlightsNoList());
@@ -109,11 +113,28 @@ public class OrderNowView extends UserEntryView implements View {
 
         });
 
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponent(search);
+        firstRow.addComponent(submitBtnLayout);
+
         tableLayout.setWidth("90%");
         tableLayout.setMargin(false);
-        search.setWidth("10%");
-        userFormLayout.addComponent(search);
-        addComponent(userFormLayout);
+
+        Button exportToExcell=new Button();
+        exportToExcell.setIcon(FontAwesome.FILE_EXCEL_O);
+
+        Button print=new Button();
+        print.setIcon(FontAwesome.PRINT);
+
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcell,print);
+        userFormLayout.addComponent(optionButtonRow);
+        userFormLayout.setComponentAlignment(optionButtonRow,Alignment.MIDDLE_RIGHT);
 
         VerticalLayout tableLayout=new VerticalLayout();
         tableLayout.setMargin(false);
@@ -174,7 +195,13 @@ public class OrderNowView extends UserEntryView implements View {
         int index = orderNowList.indexOf(orderNow);
         orderNowList.remove(orderNow);
         orderNow.setStatus(type);
-        orderNowList.set(index,orderNow);
+        if(index >= orderNowList.size()){
+            orderNowList.add(orderNow);
+        }
+        else{
+            orderNowList.set(index,orderNow);
+        }
+        connection.updateObjectHBM(orderNow);
         orderNowFilterGrid.setItems(orderNowList);
     }
 
@@ -195,13 +222,20 @@ public class OrderNowView extends UserEntryView implements View {
 
         VerticalLayout table=new VerticalLayout();
         orderNowItemsFilterGrid.addColumn(OrderNowItems::getItemNo).setCaption("Item No");
-        orderNowItemsFilterGrid.addColumn(OrderNowItems::getItemDescription).setCaption("Item Description");
+        orderNowItemsFilterGrid.addColumn(bean -> getItemNameFromId(bean.getItemNo())).setCaption("Item Description");
         orderNowItemsFilterGrid.addColumn(OrderNowItems::getQuantity).setCaption("Quantity");
         windowData.setContent(table);
         table.addComponent(orderNowItemsFilterGrid);
         orderNowItemsFilterGrid.setItems(orderNowDataItem);
         UI.getCurrent().addWindow(windowData);
 
+    }
+
+    private String getItemNameFromId(String itemId){
+
+        ItemDetails item = itemIdNameMap.get(itemId);
+        if(item != null) return item.getItemName();
+        else return "";
     }
 
     private void resetFields(){

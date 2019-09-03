@@ -7,7 +7,7 @@ public class SalesDetails {
     private String id;
     private String itemName;
     private String category;
-    private int itemId;
+    private String itemId;
     private int quantity;
     private float costPrice;
     private float price;
@@ -41,11 +41,11 @@ public class SalesDetails {
         this.category = category;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 
