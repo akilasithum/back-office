@@ -4,11 +4,14 @@ import com.back.office.db.DBConnection;
 import com.back.office.entity.ItemDetails;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
+import com.back.office.utils.UserNotification;
 import com.vaadin.event.selection.SingleSelectionListener;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.*;
@@ -57,9 +60,10 @@ public class RequestInventory extends UserEntryView implements View{
     }
 
     public void createMainLayout() {
-        FormLayout formLayoutList = new FormLayout();
-        formLayoutList .setSizeFull();
-        formLayoutList .setMargin(Constants.leftMargin);
+        HorizontalLayout formLayout = new HorizontalLayout();
+        formLayout .setSizeFull();
+        formLayout.addStyleName("report-filter-panel");
+        formLayout .setMargin(false);
 
         HorizontalLayout firstRow = new HorizontalLayout();
         Label h1=new Label("Request Inventory");
@@ -69,8 +73,9 @@ public class RequestInventory extends UserEntryView implements View{
         baseStationCB=new ComboBox("Base Station");
         baseStationCB.setDescription("Base Station");
         baseStationCB.setItems("YYZ","YYL");
-        String baseStation = UI.getCurrent().getSession().getAttribute("baseStation").toString();
+        String baseStation = "YYZ";//UI.getCurrent().getSession().getAttribute("baseStation").toString();
         baseStationCB.setValue(baseStation);
+        baseStationCB.setSizeFull();
         baseStationCB.setEmptySelectionAllowed(false);
         baseStationCB.setRequiredIndicatorVisible(true);
         addComponent(firstRow);
@@ -94,6 +99,7 @@ public class RequestInventory extends UserEntryView implements View{
         itemNumberCB.setItems(arrayListDetailNumber);
         itemNumberCB.setEmptySelectionAllowed(false);
         itemNumberCB.setRequiredIndicatorVisible(true);
+        itemNumberCB.setSizeFull();
         itemNumberCB.addSelectionListener((SingleSelectionListener) ClickEvent->itemNumberSelect(itemNumberCB.getValue().toString()));
 
         itemNameCB=new ComboBox("Item Name");
@@ -101,16 +107,19 @@ public class RequestInventory extends UserEntryView implements View{
         itemNameCB.setItems(arrayListDetailName);
         itemNameCB.setEmptySelectionAllowed(false);
         itemNameCB.setRequiredIndicatorVisible(true);
+        itemNameCB.setSizeFull();
         itemNameCB.addSelectionListener((SingleSelectionListener) ClickEvent->itemNameSelect(itemNameCB.getValue().toString()));
 
         orderQuntity=new TextField("Order Qty");
         orderQuntity.setDescription("Order Qty");
         orderQuntity.setRequiredIndicatorVisible(true);
+        orderQuntity.setSizeFull();
 
         submitButton=new Button("Add");
         submitButton.addClickListener((Button.ClickListener) ClickEvent->
                 detailsItemList());
-        deleteButton = new Button("Delete");
+        deleteButton = new Button();
+        deleteButton.setIcon(VaadinIcons.FILE_REMOVE);
         deleteButton.addClickListener((Button.ClickListener) clickEvent -> deleteItem());
 
         itemDetailsFilterGrid =new FilterGrid();
@@ -119,26 +128,38 @@ public class RequestInventory extends UserEntryView implements View{
         itemDetailsFilterGrid.addColumn(ItemDetails::getItemName).setCaption("Item Name");
         itemDetailsFilterGrid.addColumn(ItemDetails::getorderQuntity).setCaption("Order Qty");
 
-        addComponent(formLayoutList);
+        addComponent(formLayout);
         firstRow.addComponent(h1);
-        formLayoutList.addComponent(baseStationCB);
-        formLayoutList.addComponent(itemNumberCB);
-        formLayoutList.addComponent(itemNameCB);
-        formLayoutList.addComponent(orderQuntity);
+        formLayout.addComponent(baseStationCB);
+        formLayout.addComponent(itemNumberCB);
+        formLayout.addComponent(itemNameCB);
+        formLayout.addComponent(orderQuntity);
         HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.addComponents(submitButton,deleteButton);
-        formLayoutList.addComponent(buttonLayout);
-        formLayoutList.addComponent(itemDetailsFilterGrid);
+        buttonLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        buttonLayout.setStyleName("searchButton");
+        buttonLayout.addComponents(submitButton);
+        formLayout.setWidth("80%");
+        formLayout.addComponent(buttonLayout);
+
+        VerticalLayout tableLayout = new VerticalLayout();
+        tableLayout.setSizeFull();
+        tableLayout.setMargin(Constants.topMarginInfo);
+        tableLayout.setWidth("80%");
+
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(Constants.noMargin);
+        addComponent(tableLayout);
+        tableLayout.addComponents(optionButtonRow,itemDetailsFilterGrid);
+        tableLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
         itemDetailsFilterGrid.setSizeFull();
-        itemDetailsFilterGrid.setWidth("70%");
 
-        downloadPdfButton=new Button("Download to Excel");
-
-        printButton = new Button("Print");
-        footerBtnLayout = new HorizontalLayout();
-        footerBtnLayout.addComponents(downloadPdfButton,printButton);
-        formLayoutList.addComponent(footerBtnLayout);
-        footerBtnLayout.setVisible(false);
+        downloadPdfButton=new Button();
+        downloadPdfButton.setIcon(FontAwesome.FILE_EXCEL_O);
+        printButton = new Button();
+        printButton.setIcon(VaadinIcons.PRINT);
+        optionButtonRow.addComponents(deleteButton,downloadPdfButton,printButton);
 
     }
 
@@ -146,7 +167,7 @@ public class RequestInventory extends UserEntryView implements View{
 
         Set<ItemDetails> selectedItems = itemDetailsFilterGrid.getSelectedItems();
         if(selectedItems == null || selectedItems.isEmpty()){
-            Notification.show("Select items to delete",Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Error","Select items to delete","warning",UI.getCurrent());
             return;
         }
         setList.removeAll(selectedItems);
@@ -237,17 +258,17 @@ public class RequestInventory extends UserEntryView implements View{
                         fid.extend(downloadPdfButton);
 
                     } catch (Exception e) {
-                        Notification.show("Something wrong", Notification.Type.WARNING_MESSAGE);
+                        UserNotification.show("Error","Something wrong","error",UI.getCurrent());
 
 
                     }
             }catch(Exception e) {
-                Notification.show("Error","Pleas Enter Numb in order",Notification.Type.WARNING_MESSAGE);
+                UserNotification.show("Error","Please Enter Number in order","warning",UI.getCurrent());
             }
 
 
         }else {
-            Notification.show("Error","Pleas Enter All Details",Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Error","Pleas Enter All Details","warning",UI.getCurrent());
         }
 
 

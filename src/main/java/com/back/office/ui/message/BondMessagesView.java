@@ -63,7 +63,7 @@ public class BondMessagesView extends UserEntryView implements View{
         setSizeFull();
         createLayout.setMargin(Constants.noMargin);
 
-        Label h1=new Label("Bond Messages");
+        Label h1=new Label("Messages to HHC");
 
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);

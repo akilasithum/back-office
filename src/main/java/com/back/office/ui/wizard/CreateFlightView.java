@@ -30,6 +30,7 @@ public class CreateFlightView extends WizardCommonView {
     private final String SECTOR_TYPE = "Sector Type";
     private final String COUNTRY = "Country";
     private final String FLIGHT_TYPE = "Flight Type";
+    private final String AIRCRAFT_REG_NO = "Aircraft Reg No";
 
     public CreateFlightView(){
         super();
@@ -110,6 +111,8 @@ public class CreateFlightView extends WizardCommonView {
     private void setDataInGrid(){
 
         flightsGrid.addColumn(Flight::getCountry).setCaption(COUNTRY).
+                setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightsGrid.addColumn(Flight::getAircraftRegNo).setCaption(AIRCRAFT_REG_NO).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         flightsGrid.addColumn(Flight::getObFlightNo).setCaption("OB " + FLIGHT_NAME).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());

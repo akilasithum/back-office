@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +35,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.themes.ValoTheme;
 
 public class FlightShedule extends UserEntryView implements View{
 
@@ -45,7 +43,7 @@ public class FlightShedule extends UserEntryView implements View{
     protected DBConnection connection;
     protected Button ExportToExcel;
     protected Button print;
-    protected Grid<FlightSheduleDetail> flightList;
+    protected Grid<FlightSheduleDetail> dailyFlightsGrid;
     protected Button clearButton;
     protected Button exportToExcel;
     protected Button printDetail;
@@ -136,17 +134,17 @@ public class FlightShedule extends UserEntryView implements View{
 
         addComponent(createLayout);
 
-        flightList=new Grid();
-        flightList.setSizeFull();
+        dailyFlightsGrid = new Grid();
+        dailyFlightsGrid.setSizeFull();
 
-        flightList.addColumn(FlightSheduleDetail::getflightDateTime).setCaption("Date");
-        flightList.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
-        flightList.addColumn(FlightSheduleDetail::getaircraftRegistration).setCaption("ACFT Reg");
-        flightList.addColumn(FlightSheduleDetail::getaircraftType).setCaption("Type");
-        flightList.addColumn(FlightSheduleDetail::getflightNumber).setCaption("Flight Number");
-        flightList.addColumn(FlightSheduleDetail::getFrom).setCaption("From");
-        flightList.addColumn(FlightSheduleDetail::getTo).setCaption("To");
-        flightList.addColumn(FlightSheduleDetail::getservices).setCaption("Services");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getFlightDateTime).setCaption("Date");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getFlightTime).setCaption("Time");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getAircraftRegistration).setCaption("ACFT Reg");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getAircraftType).setCaption("Type");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getFlightNumber).setCaption("Flight Number");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getFrom).setCaption("From");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getTo).setCaption("To");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getServices).setCaption("Services");
 
 
         List<String> allowedMimeTypes = new ArrayList<>();
@@ -187,7 +185,7 @@ public class FlightShedule extends UserEntryView implements View{
         });
 
         uploadButton.addFinishedListener((Upload.FinishedListener) finishedEvent -> {
-            flightList.setVisible(true);
+            dailyFlightsGrid.setVisible(true);
             dataList();
             processButton.setVisible(true);
 
@@ -205,13 +203,13 @@ public class FlightShedule extends UserEntryView implements View{
         createLayout.addComponents(btnLayout);
         uploadButton.setButtonCaption("Upload Excel");
         createLayout.addComponent(buttonLayoutExportExcel);
-        createLayout.addComponent(flightList);
+        createLayout.addComponent(dailyFlightsGrid);
         createLayout.addComponent(dataLayout);
     }
 
     public void processList() {
 
-        flightList.setVisible(true);
+        dailyFlightsGrid.setVisible(true);
 
         exportToExcel.setVisible(true);
         printDetail.setVisible(true);
@@ -220,7 +218,7 @@ public class FlightShedule extends UserEntryView implements View{
         if(fromDateText.getValue()!=null&&!toDateText.getValue().toString().isEmpty()) {
 
             List<FlightSheduleDetail> flightDetailListdatelis=connection.getFlightShedule("datethisgre",Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            flightList.setItems(flightDetailListdatelis);
+            dailyFlightsGrid.setItems(flightDetailListdatelis);
             try {
                 XSSFWorkbook workbook = new XSSFWorkbook();
                 FileOutputStream out = new FileOutputStream(file);
@@ -248,14 +246,14 @@ public class FlightShedule extends UserEntryView implements View{
                 for (int i = 0; i < flightDetailListdatelis.size(); i++) {
                     Row r = Spreadsheet.createRow(i + 1);
 
-                    Date s1 = flightDetailListdatelis.get(i).getflightDateTime();
-                    String s2 = flightDetailListdatelis.get(i).getflightTime();
-                    String s3 = flightDetailListdatelis.get(i).getaircraftRegistration();
-                    String s4 = flightDetailListdatelis.get(i).getaircraftType();
-                    String s5 = flightDetailListdatelis.get(i).getflightNumber();
+                    Date s1 = flightDetailListdatelis.get(i).getFlightDateTime();
+                    String s2 = flightDetailListdatelis.get(i).getFlightTime();
+                    String s3 = flightDetailListdatelis.get(i).getAircraftRegistration();
+                    String s4 = flightDetailListdatelis.get(i).getAircraftType();
+                    String s5 = flightDetailListdatelis.get(i).getFlightNumber();
                     String s6 = flightDetailListdatelis.get(i).getFrom();
                     String s7 = flightDetailListdatelis.get(i).getTo();
-                    String s8 = flightDetailListdatelis.get(i).getservices();
+                    String s8 = flightDetailListdatelis.get(i).getServices();
 
                     Cell c = r.createCell(0);
                     c.setCellValue(s1);
@@ -288,7 +286,7 @@ public class FlightShedule extends UserEntryView implements View{
             }
         }else {
             List<FlightSheduleDetail> flightDetailListdatelis=connection.getFlightShedule("datethis",new Date(),new Date());
-            flightList.setItems(flightDetailListdatelis);
+            dailyFlightsGrid.setItems(flightDetailListdatelis);
 
             try {
                 XSSFWorkbook workbook = new XSSFWorkbook();
@@ -316,14 +314,14 @@ public class FlightShedule extends UserEntryView implements View{
                 for (int i = 0; i < flightDetailListdatelis.size(); i++) {
                     Row r = Spreadsheet.createRow(i + 1);
 
-                    String s1 = flightDetailListdatelis.get(i).getflightDateTime().toString();
-                    String s2 = flightDetailListdatelis.get(i).getflightTime();
-                    String s3 = flightDetailListdatelis.get(i).getaircraftRegistration();
-                    String s4 = flightDetailListdatelis.get(i).getaircraftType();
-                    String s5 = flightDetailListdatelis.get(i).getflightNumber();
+                    String s1 = flightDetailListdatelis.get(i).getFlightDateTime().toString();
+                    String s2 = flightDetailListdatelis.get(i).getFlightTime();
+                    String s3 = flightDetailListdatelis.get(i).getAircraftRegistration();
+                    String s4 = flightDetailListdatelis.get(i).getAircraftType();
+                    String s5 = flightDetailListdatelis.get(i).getFlightNumber();
                     String s6 = flightDetailListdatelis.get(i).getFrom();
                     String s7 = flightDetailListdatelis.get(i).getTo();
-                    String s8 = flightDetailListdatelis.get(i).getservices();
+                    String s8 = flightDetailListdatelis.get(i).getServices();
 
                     Cell c = r.createCell(0);
                     c.setCellValue(s1);
@@ -362,7 +360,7 @@ public class FlightShedule extends UserEntryView implements View{
             }
             Notification.show("Successfully updated.");
             uploadedFlightList = new ArrayList();
-            flightList.setItems(uploadedFlightList);
+            dailyFlightsGrid.setItems(uploadedFlightList);
             fileData.delete();
         }
         catch (Exception e){
@@ -373,7 +371,7 @@ public class FlightShedule extends UserEntryView implements View{
 
     public void dataList() {
             uploadedFlightList = Poiji.fromExcel(fileData, FlightSheduleDetail.class);
-            flightList.setItems(uploadedFlightList);
+            dailyFlightsGrid.setItems(uploadedFlightList);
     }
 
     public void clearText() {

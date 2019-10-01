@@ -6,9 +6,11 @@ import com.back.office.entity.Sector;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -21,7 +23,7 @@ import java.util.*;
 public class SalesDetailsView extends UserEntryView implements View {
 
     DBConnection connection;
-    protected String pageHeader = "Monthly Sales";
+    protected String pageHeader = "Sales Summary";
     protected VerticalLayout headerLayout;
     protected VerticalLayout userFormLayout;
     protected VerticalLayout mainTableLayout;
@@ -82,32 +84,28 @@ public class SalesDetailsView extends UserEntryView implements View {
         mainUserInputLayout = new VerticalLayout();
         mainUserInputLayout.setMargin(Constants.noMargin);
         userFormLayout.addComponent(mainUserInputLayout);
-        userFormLayout.setWidth("70%");
 
         HorizontalLayout firstRow = new HorizontalLayout();
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("60%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
         mainUserInputLayout.addComponent(firstRow);
-
-        HorizontalLayout secondRow = new HorizontalLayout();
-        secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        secondRow.setSpacing(true);
-        secondRow.setSizeFull();
-        secondRow.setMargin(Constants.noMargin);
-        mainUserInputLayout.addComponent(secondRow);
 
         Date date = new Date();
         LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
         flightDateFromDateField.setSizeFull();
+        flightDateFromDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
         flightDateToDateField.setSizeFull();
+        flightDateToDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateToDateField);
 
 
@@ -117,7 +115,6 @@ public class SalesDetailsView extends UserEntryView implements View {
         List<String> catList = connection.getFlightsNoList();
         flightNoComboBox.setItems(catList);
         firstRow.addComponent(flightNoComboBox);
-        firstRow.setWidth("65%");
         //firstRow.addComponent(searchButton);
 
         buttonRow = new HorizontalLayout();
@@ -135,8 +132,10 @@ public class SalesDetailsView extends UserEntryView implements View {
         optionButtonRow.setSpacing(true);
         optionButtonRow.setMargin(Constants.noMargin);
 
-        printBtn = new Button("Print");
-        Button downloadExcelBtn = new Button("Download as Excel");
+        printBtn = new Button();
+        printBtn.setIcon(VaadinIcons.PRINT);
+        Button downloadExcelBtn = new Button();
+        downloadExcelBtn.setIcon(FontAwesome.FILE_EXCEL_O);
         /*downloadExcelBtn.addClickListener((Button.ClickListener) clickEvent -> {
             ExcelExport excelExport = new ExcelExport(detailsTable);
             excelExport.excludeCollapsedColumns();
@@ -146,9 +145,11 @@ public class SalesDetailsView extends UserEntryView implements View {
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);
         filterCriteriaText = new Label("");
         filterCriteriaText.addStyleName(ValoTheme.LABEL_H3);
-        mainTableLayout.addComponent(optionButtonRow);
         mainTableLayout.addComponent(filterCriteriaText);
+        mainTableLayout.addComponent(optionButtonRow);
         mainTableLayout.addComponent(tableLayout);
+
+        mainTableLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
 
         detailsTable = new Grid<>();
         detailsTable.setColumnReorderingAllowed(true);

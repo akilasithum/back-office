@@ -57,7 +57,7 @@ public class FAMessagesView extends UserEntryView implements View{
         setMargin(Constants.leftMargin);
         setSizeFull();
 
-        Label h1=new Label("FA Messages");
+        Label h1=new Label("HHC FA");
 
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);

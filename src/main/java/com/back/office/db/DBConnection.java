@@ -245,6 +245,20 @@ public class DBConnection {
         }
     }
 
+    public List<?> getAllValuesNoRecrdStatus(String className){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try
+        {
+            Criteria criteria = session.createCriteria(Class.forName(className));
+            List list = criteria.list();
+            session.close();
+            return list;
+        } catch (Exception e) {
+            session.close();
+            return null;
+        }
+    }
+
     public List<?> getSectors(String className){
         Session session = HibernateUtil.getSessionFactory().openSession();
         try
@@ -283,6 +297,19 @@ public class DBConnection {
         List list = criteria.list();
         session.close();
         return list;
+    }
+
+    public void updateFACommissionRecordStatus(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(FACommissionSetup.class);
+        criteria.add(Restrictions.eq("recordStatus", 0));
+        List list = criteria.list();
+        session.close();
+        if(list != null && !list.isEmpty()){
+            FACommissionSetup setup = (FACommissionSetup) (list.get(0));
+            setup.setRecordStatus(1);
+            updateObjectHBM(setup);
+        }
     }
 
     public List getUserRoleIds(String filterName,String fieldName,Integer fieldValue,String className){
@@ -386,6 +413,20 @@ public class DBConnection {
         return list;
     }
 
+    public List getFACommission(Date flightFromDate,Date flightToDate,String flightNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(FACommission.class);
+        criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
+        if(flightNo != null && !flightNo.isEmpty() && !flightNo.equalsIgnoreCase("null")){
+            criteria.add(Restrictions.eq("flightNo", flightNo));
+        }
+
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
     public List getCCbyFlight(Date flightDate,String sifNo,Object flightNo){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(CCByFlightObj.class);
@@ -441,6 +482,36 @@ public class DBConnection {
         return list;
     }
 
+    public List getSifDetailsForDailyFlights(Date flightFromDate,Date flightToDate){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(SIFDetails.class);
+        criteria.add(Restrictions.ge("downloaded", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("downloaded", tommorow(flightToDate)));
+        criteria.add(Restrictions.isNotNull("packedFor"));
+        //criteria.setProjection(projList);
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
+    public List<SealNo> getSealNumbersFromSifNo(String sifNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(SealNo.class);
+        criteria.add(Restrictions.eq("sifNo", sifNo));
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
+    public List<Cart> getCartNoFromSifNo(String sifNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(Cart.class);
+        criteria.add(Restrictions.eq("sifNo", sifNo));
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
     public User getCurrentUser(String userName){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(User.class);
@@ -477,6 +548,20 @@ public class DBConnection {
         session.close();
         if(roleList != null && !roleList.isEmpty()){
             return ((User) roleList.get(0)).getUserRoleId();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public float getFACommissionPercentage(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(FACommissionSetup.class);
+        criteria.add(Restrictions.eq("recordStatus", 0));
+        List roleList = criteria.list();
+        session.close();
+        if(roleList != null && !roleList.isEmpty()){
+            return ((FACommissionSetup) roleList.get(0)).getFaCommission();
         }
         else {
             return 0;
@@ -629,13 +714,14 @@ public class DBConnection {
         }
     }
 
-    public List<ItemDetails> getItemGross(String serviceTypeList){
+    public List<ItemDetails> getItemGross(String serviceTypeList,String category){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Criteria criteria = session.createCriteria(ItemDetails.class);
             criteria.add(Restrictions.eq("serviceType", serviceTypeList));
+            if(category != null && !category.isEmpty()) criteria.add(Restrictions.eq("category", category));
 
             return criteria.list();
         } catch (Exception e) {
@@ -915,6 +1001,25 @@ public class DBConnection {
             Criteria criteria = session.createCriteria(ItemDetails.class);
             criteria.add(Restrictions.eq("itemId", class1));
             return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<String> getAircraftRegNos(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Criteria criteria = session.createCriteria(AircraftDetails.class);
+            criteria.add(Restrictions.eq("recordStatus", 0));
+            List aircarftList = criteria.list();
+            List<String> regNoList = new ArrayList<>();
+            if(aircarftList != null && !aircarftList.isEmpty()){
+                for(AircraftDetails aircraft : (List<AircraftDetails>)aircarftList){
+                    regNoList.add(aircraft.getRegistrationNumber());
+                }
+            }
+            return regNoList;
         } catch (Exception e) {
             return null;
         }

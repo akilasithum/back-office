@@ -10,7 +10,10 @@ import java.util.List;
 import com.back.office.entity.EquipmentMasterDetail;
 import com.back.office.entity.HHCMaster;
 import com.back.office.framework.UserEntryView;
+import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -29,7 +32,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 public class EquipmentMasterView extends UserEntryView implements View {
 
-    protected Button submitList;
+    protected Button submitBrn;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
     protected Grid<EquipmentMasterDetail> equipmentMasterDetailGrid;
@@ -70,82 +73,93 @@ public class EquipmentMasterView extends UserEntryView implements View {
         createLayout.addComponent(h1);
 
         HorizontalLayout buttonLayoutSubmit = new HorizontalLayout();
-        HorizontalLayout buttonLayoutExportExcel = new HorizontalLayout();
-        HorizontalLayout dateText = new HorizontalLayout();
-        HorizontalLayout dateTextListDetails = new HorizontalLayout();
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("60%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
 
-
-        submitList = new Button("Submit");
-        createLayout.addComponent(submitList);
-        submitList.addClickListener((Button.ClickListener) ClickEvent ->
+        submitBrn = new Button("Submit");
+        createLayout.addComponent(submitBrn);
+        submitBrn.addClickListener((Button.ClickListener) ClickEvent ->
                 processList());
 
         clearButton = new Button("Clear");
         clearButton.addClickListener((Button.ClickListener) ClickEvent ->
                 clearText());
 
-        exportToExcel = new Button("Export To Excel");
-        exportToExcel.setVisible(false);
+        exportToExcel = new Button();
+        exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
 
-        printDetail = new Button("Print");
-        printDetail.setVisible(false);
-
+        printDetail = new Button();
+        printDetail.setIcon(VaadinIcons.PRINT);
 
         fromDateText = new DateField("Last Used Date From");
         fromDateText.setDescription("Last Used Date From");
         fromDateText.setRequiredIndicatorVisible(true);
+        fromDateText.setSizeFull();
+        fromDateText.setStyleName("datePickerStyle");
 
         toDateText = new DateField("Last Used Date To");
         toDateText.setDescription("Late Used Date To");
         toDateText.setRequiredIndicatorVisible(true);
+        toDateText.setSizeFull();
+        toDateText.setStyleName("datePickerStyle");
 
         masterType = new ComboBox("Type");
         masterType.setItems(Arrays.asList("Equipment", "HHC"));
         masterType.setValue("Equipment");
+        masterType.setSizeFull();
         masterType.setEmptySelectionAllowed(false);
 
-        dateText.addComponent(fromDateText);
-        dateText.addComponent(toDateText);
+        firstRow.addComponent(fromDateText);
+        firstRow.addComponent(toDateText);
+        firstRow.addComponent(masterType);
 
-        dateTextListDetails.addComponent(masterType);
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponents(submitBrn,clearButton);
 
-        buttonLayoutSubmit.addComponent(submitList);
+        firstRow.addComponent(submitBtnLayout);
 
-        buttonLayoutSubmit.addComponent(clearButton);
-
-        buttonLayoutExportExcel.addComponent(exportToExcel);
-        buttonLayoutExportExcel.addComponent(printDetail);
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcel,printDetail);
 
         addComponent(createLayout);
 
         equipmentMasterDetailGrid = new Grid();
         equipmentMasterDetailGrid.setSizeFull();
-        equipmentMasterDetailGrid.setWidth("60%");
 
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getEquipmentId).setCaption("Equipment ID");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getType).setCaption("Type");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getStatus).setCaption("Status");
         equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getFlightNumber).setCaption("Flight Number");
-        equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getLastUsedDate).setCaption("Last Used Date");
+        equipmentMasterDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getLastUsedDate())).setCaption("Last Used Date");
 
 
         hhcMasterDetailGrid = new Grid();
         hhcMasterDetailGrid.setSizeFull();
-        hhcMasterDetailGrid.setWidth("60%");
 
         hhcMasterDetailGrid.addColumn(HHCMaster::getHhcId).setCaption("HHC ID");
         hhcMasterDetailGrid.addColumn(HHCMaster::getType).setCaption("Type");
         hhcMasterDetailGrid.addColumn(HHCMaster::getStatus).setCaption("Status");
         hhcMasterDetailGrid.addColumn(HHCMaster::getFlightNo).setCaption("Flight Number");
-        hhcMasterDetailGrid.addColumn(HHCMaster::getLastUsedDate).setCaption("Last Used Date");
+        hhcMasterDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getLastUsedDate())).setCaption("Last Used Date");
 
-        createLayout.addComponent(dateText);
-        createLayout.addComponent(dateTextListDetails);
+        createLayout.addComponent(firstRow);
         createLayout.addComponent(buttonLayoutSubmit);
+        createLayout.addComponent(optionButtonRow);
+        createLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
         createLayout.addComponent(equipmentMasterDetailGrid);
         createLayout.addComponent(hhcMasterDetailGrid);
         hhcMasterDetailGrid.setVisible(false);
-        createLayout.addComponent(buttonLayoutExportExcel);
+
     }
 
     public void processList() {

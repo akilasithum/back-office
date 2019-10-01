@@ -9,6 +9,9 @@ import java.util.List;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -23,16 +26,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class WastageDetailsView extends UserEntryView implements View{
@@ -40,7 +33,6 @@ public class WastageDetailsView extends UserEntryView implements View{
     protected Button submitList;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
-    protected Button print;
     protected Grid<WastageDetail> wastageDetailGrid;
     protected Button clearButton;
     protected Button exportToExcel;
@@ -50,7 +42,7 @@ public class WastageDetailsView extends UserEntryView implements View{
     protected File file=new File("Wastage.xlsx");
     protected FileResource fir=new FileResource(file);
     protected FileDownloader fid=new FileDownloader(fir);
-    protected TextField listText;
+    protected TextField sifNumberFld;
     protected ComboBox flightText;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -78,13 +70,17 @@ public class WastageDetailsView extends UserEntryView implements View{
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
-        HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
-        HorizontalLayout buttonLayoutExportExcel=new HorizontalLayout();
-        HorizontalLayout dateText=new HorizontalLayout();
-        HorizontalLayout flightListDetail=new HorizontalLayout();
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("80%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
 
         flightText=new ComboBox("Flight Number");
         flightText.setDescription("Flight Number");
+        flightText.setSizeFull();
         flightText.setItems(connection.getFlightsNoList());
 
         submitList=new Button("Submit");
@@ -93,51 +89,55 @@ public class WastageDetailsView extends UserEntryView implements View{
                 processList());
 
         clearButton=new Button("Clear");
-        buttonLayoutSubmit.addComponent(clearButton);
         clearButton.addClickListener((Button.ClickListener) ClickEvent->
                 clearText());
 
-        exportToExcel=new Button("Export To");
-        exportToExcel.setVisible(false);
+        exportToExcel=new Button();
+        exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
 
-        printDetail=new Button("Print");
-        printDetail.setVisible(false);
+        printDetail=new Button();
+        printDetail.setIcon(VaadinIcons.PRINT);
 
-        listText=new TextField("Sif Number");
-        listText.setDescription("Sif Number");
+        sifNumberFld =new TextField("Sif Number");
+        sifNumberFld.setDescription("Sif Number");
+        sifNumberFld.setSizeFull();
 
         fromDateText=new DateField("From");
         fromDateText.setDescription("From");
+        fromDateText.setSizeFull();
         fromDateText.setRequiredIndicatorVisible(true);
 
         toDateText=new DateField("To");
         toDateText.setDescription("To");
+        toDateText.setSizeFull();
         toDateText.setRequiredIndicatorVisible(true);
 
-        dateText.addComponent(fromDateText);
-        dateText.addComponent(toDateText);
+        firstRow.addComponent(fromDateText);
+        firstRow.addComponent(toDateText);
 
-        flightListDetail.addComponent(listText);
-        flightListDetail.addComponent(flightText);
+        firstRow.addComponent(sifNumberFld);
+        firstRow.addComponent(flightText);
 
-        buttonLayoutSubmit.addComponent(submitList);
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponents(submitList,clearButton);
+        firstRow.addComponent(submitBtnLayout);
 
-        buttonLayoutSubmit.addComponent(clearButton);
-
-        buttonLayoutExportExcel.addComponent(exportToExcel);
-        buttonLayoutExportExcel.addComponent(printDetail);
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcel,printDetail);
 
         addComponent(createLayout);
 
         wastageDetailGrid =new Grid();
         wastageDetailGrid.setSizeFull();
-        wastageDetailGrid.setWidth("70%");
 
-        createLayout.addComponent(dateText);
-        createLayout.addComponent(flightListDetail);
-        createLayout.addComponent(buttonLayoutSubmit);
+        createLayout.addComponent(firstRow);
+        createLayout.addComponent(optionButtonRow);
         createLayout.addComponent(wastageDetailGrid);
-        createLayout.addComponent(buttonLayoutExportExcel);
+        createLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
 
         wastageDetailGrid.addColumn(WastageDetail::getitemId).setCaption("Item No");
         wastageDetailGrid.addColumn(WastageDetail::getquantity).setCaption("Quantity");
@@ -152,7 +152,7 @@ public class WastageDetailsView extends UserEntryView implements View{
 
 
 
-        Object sifList=listText.getValue();
+        Object sifList= sifNumberFld.getValue();
         Object flightList=flightText.getValue();
         Object fromDate=fromDateText.getValue();
         Object toDate=toDateText.getValue();
@@ -243,7 +243,7 @@ public class WastageDetailsView extends UserEntryView implements View{
     public void clearText() {
         fromDateText.clear();
         toDateText.clear();
-        listText.clear();
+        sifNumberFld.clear();
         flightText.clear();
 
 

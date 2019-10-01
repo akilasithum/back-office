@@ -1,6 +1,7 @@
 package com.back.office.entity;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class SIFDetails {
 
@@ -15,6 +16,9 @@ public class SIFDetails {
     private String status;
     private String programs;
     private String packedUser;
+    private String totalBuildTime;
+    private String flightFrom;
+    private String flightTo;
 
     public int getSIFNo() {
         return SIFNo;
@@ -102,5 +106,36 @@ public class SIFDetails {
 
     public void setPackedUser(String packedUser) {
         this.packedUser = packedUser;
+    }
+
+    public String getTotalBuildTime() {
+
+        if(downloaded != null && packedTime != null){
+            long diff = packedTime.getTime() - downloaded.getTime();//as given
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
+            return String.valueOf(minutes) + " Min";
+        }
+
+        return totalBuildTime;
+    }
+
+    public void setTotalBuildTime(String totalBuildTime) {
+        this.totalBuildTime = totalBuildTime;
+    }
+
+    public String getFlightFrom() {
+        return flightFrom;
+    }
+
+    public void setFlightFrom(String flightFrom) {
+        this.flightFrom = flightFrom;
+    }
+
+    public String getFlightTo() {
+        return flightTo;
+    }
+
+    public void setFlightTo(String flightTo) {
+        this.flightTo = flightTo;
     }
 }

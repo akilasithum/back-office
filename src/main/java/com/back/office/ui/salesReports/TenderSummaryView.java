@@ -47,7 +47,9 @@ public class TenderSummaryView extends ReportCommonView {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("60%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
         mainUserInputLayout.addComponent(firstRow);
 
 
@@ -56,10 +58,14 @@ public class TenderSummaryView extends ReportCommonView {
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setStyleName("datePickerStyle");
+        flightDateFromDateField.setSizeFull();
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
+        flightDateToDateField.setStyleName("datePickerStyle");
+        flightDateToDateField.setSizeFull();
         firstRow.addComponent(flightDateToDateField);
 
         serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
@@ -67,13 +73,13 @@ public class TenderSummaryView extends ReportCommonView {
         serviceTypeComboBox.setItems("All","Duty Free","Duty Paid","Buy on Board");
         serviceTypeComboBox.setSelectedItem("All");
         serviceTypeComboBox.setEmptySelectionAllowed(false);
-        firstRow.addComponent(serviceTypeComboBox);
+        serviceTypeComboBox.setSizeFull();
+        firstRow.addComponents(serviceTypeComboBox,buttonRow);
 
         detailsTable = new Grid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
-        userFormLayout.setWidth("60%");
         createShowTableHeader();
     }
 
@@ -110,7 +116,7 @@ public class TenderSummaryView extends ReportCommonView {
 
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Service Type = " + serviceType;
+                "Service Type = " + serviceType == null ? "All" : serviceType;
         filterCriteriaText.setValue(outputStr);
 
         List<TenderSummaryObj> list = connection.getTenderSummary(dateFrom,dateTo,

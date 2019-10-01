@@ -41,7 +41,7 @@ public class PreOrders extends ReportCommonView {
 
     protected DateField flightDateFromDateField;
     protected DateField flightDateToDateField;
-    protected ComboBox service;
+    protected ComboBox sourceComboBox;
     FilterGrid<PreOrderDetails> detailsTable;
     protected Grid<PreOrderItem> preOrderItemGrid;
 
@@ -157,13 +157,13 @@ public class PreOrders extends ReportCommonView {
     protected void showFilterData() {
         mainTableLayout.setVisible(true);
 
-        String serviceh = BackOfficeUtils.getServicehFromServiceh( service.getValue().toString());
+        String serviceh = BackOfficeUtils.getServicehFromServiceh( sourceComboBox.getValue().toString());
         Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         List<PreOrderDetails> list = connection.getPreOrderDetails(dateFrom, dateTo, serviceh);
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Order Type = " + service.getValue().toString();
+                "Order Type = " + sourceComboBox.getValue().toString();
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);
         optionButtonRow.removeComponent(optionButtonRow.getComponent(1));
@@ -219,7 +219,9 @@ public class PreOrders extends ReportCommonView {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("60%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
         mainUserInputLayout.addComponent(firstRow);
 
 
@@ -228,23 +230,30 @@ public class PreOrders extends ReportCommonView {
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setSizeFull();
+        flightDateFromDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
+        flightDateToDateField.setSizeFull();
+        flightDateToDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateToDateField);
 
-        service = new ComboBox(ORDER_TYPE);
-        service.setDescription(ORDER_TYPE);
-        service.setItems("HHC Order","Call Center Order","Web Order","All");
-        service.setSelectedItem("All");
-        service.setEmptySelectionAllowed(false);
-        firstRow.addComponent(service);
+        sourceComboBox = new ComboBox(ORDER_TYPE);
+        sourceComboBox.setDescription(ORDER_TYPE);
+        sourceComboBox.setItems("HHC Order","Call Center Order","Web Order","All");
+        sourceComboBox.setSelectedItem("All");
+        sourceComboBox.setEmptySelectionAllowed(false);
+        sourceComboBox.setSizeFull();
+        firstRow.addComponents(sourceComboBox,buttonRow);
+
+
         detailsTable = new FilterGrid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
-        userFormLayout.setWidth("70%");
+        //userFormLayout.setWidth("70%");
 
         detailsTable.addItemClickListener((ItemClickListener<PreOrderDetails>) itemClick -> {
             itemClick.getRowIndex();

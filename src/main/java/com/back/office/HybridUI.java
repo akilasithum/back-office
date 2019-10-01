@@ -13,10 +13,12 @@ import com.back.office.ui.dashboard.MainDashboard;
 import com.back.office.ui.dashboard.MainMenu;
 import com.back.office.ui.download.DownloadView;
 import com.back.office.ui.finance.CurruncyDetailHistory;
+import com.back.office.ui.finance.FACommisionsView;
 import com.back.office.ui.finance.GrossMargine;
 import com.back.office.ui.flightKitchen.FlightScheduleView;
 import com.back.office.ui.flightKitchen.FlightShedule;
 import com.back.office.ui.flightKitchen.RequestInventory;
+import com.back.office.ui.flightKitchen.TodayFlightDetailView;
 import com.back.office.ui.inventory.EquipmentMasterView;
 import com.back.office.ui.inventory.SoldOutDetails;
 import com.back.office.ui.message.BondMessagesView;
@@ -24,6 +26,7 @@ import com.back.office.ui.message.FAMessagesView;
 import com.back.office.ui.message.MessagingModuleView;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
+import com.back.office.ui.setup.FACommissionSetupView;
 import com.back.office.ui.uploads.ErrorView;
 import com.back.office.ui.uploads.UploadView;
 import com.back.office.ui.wizard.AircraftDetailsView;
@@ -119,7 +122,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("RequestInventory", RequestInventory.class);
         navigator.addView("GrossMargins", GrossMargine.class);
         navigator.addView("Budget", BudgetView.class);
-        navigator.addView("FlightSchedule", FlightShedule.class);
+        navigator.addView("FlightSchedule", TodayFlightDetailView.class);
         navigator.addView("DailyFlights", FlightScheduleView.class);
         navigator.addView("BondMessages", BondMessagesView.class);
         navigator.addView("FAMessages", FAMessagesView.class);
@@ -131,6 +134,8 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("SoldOut", SoldOutDetails.class);
         navigator.addView("HHCAndCartUsage", EquipmentMasterView.class);
         navigator.addView("CommonView",CommonSelection.class);
+        navigator.addView("FACommissions", FACommisionsView.class);
+        navigator.addView("FACommissionSetup", FACommissionSetupView.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();

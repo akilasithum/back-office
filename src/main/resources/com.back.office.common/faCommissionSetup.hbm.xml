@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.FACommissionSetup" table="fa_commission_setup" catalog="">
+        <id name="faCommisionId" type="java.lang.Integer">
+            <column name="faCommisionId" />
+            <generator class="identity" />
+        </id>
+        <property name="updatedDateTime" type="java.util.Date">
+            <column name="updatedDateTime"  />
+        </property>
+        <property name="faCommission" type="java.lang.Float">
+            <column name="faCommission" />
+        </property>
+        <property name="recordStatus" type="java.lang.Integer">
+            <column name="recordStatus" />
+        </property>
+    </class>
+</hibernate-mapping>

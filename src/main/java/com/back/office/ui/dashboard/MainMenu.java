@@ -76,8 +76,8 @@ public class MainMenu extends VerticalLayout {
             }
 
             notifications = new FancyNotifications();
-            addComponent(notifications);
             notifications.setClickClose(true);
+            setSizeFull();
 
             HorizontalLayout layout = new HorizontalLayout();
             layout.setMargin(Constants.leftMargin);
@@ -94,6 +94,7 @@ public class MainMenu extends VerticalLayout {
             content.setStyleName("myRootContent");
             //addComponent(tab_wrpapper);
             addComponent(content);
+            addComponent(notifications);
             setExpandRatio(content, 1f);
             content.setSpacing(false);
 

@@ -16578,8 +16578,36 @@ div.v-layout.v-horizontal.v-widget {
 	pointer-events: auto !important;
 }
 
+.mytheme .report-filter-panel {
+	background: #03028C;
+	padding-left: 20px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-radius: 10px;
+}
+
 .mytheme .popupContent {
 	background-color: grey;
+}
+
+.mytheme .gwt-PopupPanel .popupContent {
+	background-color: blue;
+}
+
+.mytheme .datePickerStyle .popupContent {
+	background-color: white;
+}
+
+.mytheme .green-style {
+	background: #a8e8a8 !important;
+}
+
+.mytheme .red-style {
+	background: #e49090 !important;
+}
+
+.mytheme .orange-style {
+	background: #ecc47a !important;
 }
 
 .mytheme .searchButton {

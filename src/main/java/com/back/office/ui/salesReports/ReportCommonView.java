@@ -4,12 +4,10 @@ import com.back.office.db.DBConnection;
 import com.back.office.framework.OnDemandFileDownloader;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.Page;
-import com.vaadin.server.Resource;
-import com.vaadin.server.StreamResource;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -65,7 +63,7 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();
-        userFormLayout.setMargin(Constants.bottomMarginInfo);
+        userFormLayout.setMargin(false);
         addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         addComponent(mainTableLayout);
@@ -76,12 +74,14 @@ public abstract class ReportCommonView extends UserEntryView implements View {
 
         mainUserInputLayout = new VerticalLayout();
         mainUserInputLayout.setMargin(Constants.noMargin);
+        mainUserInputLayout.setSizeFull();
         userFormLayout.addComponent(mainUserInputLayout);
 
         buttonRow = new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        buttonRow.setStyleName("searchButton");
         buttonRow.setSpacing(true);
-        userFormLayout.addComponent(buttonRow);
+        //userFormLayout.addComponent(buttonRow);
 
         searchButton = new Button("Search");
         searchButton.addClickListener((Button.ClickListener) clickEvent -> showFilterData());
@@ -90,17 +90,20 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         optionButtonRow = new HorizontalLayout();
         optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(false);
 
-        printBtn = new Button("Print");
-        downloadExcelBtn = new Button("Download as Excel");
+        printBtn = new Button();
+        printBtn.setIcon(VaadinIcons.PRINT);
+        downloadExcelBtn = new Button();
+        downloadExcelBtn.setIcon(FontAwesome.FILE_EXCEL_O);
         downloadExcelBtn.setId("DownloadButtonID");
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);
         filterCriteriaText = new Label("");
         filterCriteriaText.addStyleName(ValoTheme.LABEL_H4);
-        mainTableLayout.addComponent(optionButtonRow);
         mainTableLayout.addComponent(filterCriteriaText);
+        mainTableLayout.addComponent(optionButtonRow);
         mainTableLayout.addComponent(tableLayout);
-
+        mainTableLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
         setComponentAlignment(mainTableLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(userFormLayout,Alignment.MIDDLE_LEFT);
         setComponentAlignment(headerLayout,Alignment.MIDDLE_LEFT);
@@ -163,7 +166,8 @@ public abstract class ReportCommonView extends UserEntryView implements View {
     }
 
     public Button getDownloadExcelBtn(String sheetName,File file){
-        Button dwnButton = new Button("Export to Excel");
+        Button dwnButton = new Button();
+        dwnButton.setIcon(FontAwesome.FILE_EXCEL_O);
         onDemandStreamResource = new  OnDemandFileDownloader.OnDemandStreamResource()
         {
             @Override

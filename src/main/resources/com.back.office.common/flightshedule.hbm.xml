@@ -35,5 +35,17 @@
         <property name="baseStation" type="java.lang.String">
             <column name="baseStation"  />
         </property>
+        <property name="status" type="java.lang.String">
+            <column name="status"  />
+        </property>
+        <property name="totalBuildTime" type="java.lang.String">
+            <column name="totalBuildTime"  />
+        </property>
+        <property name="buildStartTime" type="java.util.Date">
+            <column name="buildStartTime"/>
+        </property>
+        <property name="buildEndTime" type="java.util.Date">
+            <column name="buildEndTime"/>
+        </property>
     </class>
 </hibernate-mapping>

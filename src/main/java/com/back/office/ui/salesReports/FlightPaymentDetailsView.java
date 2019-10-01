@@ -46,7 +46,9 @@ public class FlightPaymentDetailsView extends ReportCommonView {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("60%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
         mainUserInputLayout.addComponent(firstRow);
 
         Date date = new Date();
@@ -54,26 +56,27 @@ public class FlightPaymentDetailsView extends ReportCommonView {
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setStyleName("datePickerStyle");
         flightDateFromDateField.setSizeFull();
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
         flightDateToDateField.setSizeFull();
+        flightDateToDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateToDateField);
 
         flightNoComboBox = new ComboBox(FLIGHT_NO);
         flightNoComboBox.setDescription(FLIGHT_NO);
         flightNoComboBox.setItems(connection.getFlightsNoList());
         flightNoComboBox.setSizeFull();
-        firstRow.addComponent(flightNoComboBox);
+        firstRow.addComponents(flightNoComboBox,buttonRow);
 
         detailsTable = new Grid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
         firstRow.setWidth("60%");
-        userFormLayout.setWidth("80%");
         createShowTableHeader();
     }
 

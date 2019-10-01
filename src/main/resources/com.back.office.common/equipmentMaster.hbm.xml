@@ -17,9 +17,9 @@
         <property name="status" type="java.lang.String">
             <column name="status"/>
         </property>
-        <property name="lastUsed" type="java.lang.String">
+        <!--<property name="lastUsed" type="java.lang.String">
             <column name="lastUsed" length="50"/>
-        </property>
+        </property>-->
         <property name="flightNumber" type="java.lang.String">
             <column name="flightNumber"  />
         </property>

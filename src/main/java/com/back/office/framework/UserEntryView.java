@@ -23,11 +23,11 @@ public class UserEntryView extends VerticalLayout {
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("pre_order_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
-            row1Map.put("Pre-order","PreOrders");
+            row1Map.put("Pre-order Summary","PreOrders");
             row1Map.put("Pre-order Inventory","");
-            row1Map.put("Inflight Requests","MessagingModule");
-            row1Map.put("Bond Messages","BondMessages");
-            row1Map.put("FA Messages","FAMessages");
+            row1Map.put("Messaging","MessagingModule");
+            row1Map.put("Messages to HHC","BondMessages");
+            row1Map.put("HHC FA","FAMessages");
             menuItem.setSubMenuImageMap(row1Map);
             menuItem.setSubMenuImageMap(row1Map);
             menuItem.setMenuName("pre_order");

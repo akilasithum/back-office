@@ -9,6 +9,9 @@ import java.util.List;
 import com.back.office.entity.BuildTime;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -22,16 +25,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class BuildTimesView extends UserEntryView implements View{
@@ -50,7 +43,7 @@ public class BuildTimesView extends UserEntryView implements View{
     protected File file=new File("BuildTimes.xlsx");
     protected FileResource fir=new FileResource(file);
     protected FileDownloader fid=new FileDownloader(fir);
-    protected TextField listText;
+    protected TextField sifNoText;
     protected ComboBox flightText;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -78,11 +71,13 @@ public class BuildTimesView extends UserEntryView implements View{
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
-        HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
-        HorizontalLayout buttonLayoutExportExcel=new HorizontalLayout();
-        HorizontalLayout dateText=new HorizontalLayout();
-        dateText.setMargin(Constants.noMargin);
-        HorizontalLayout flightLayout=new HorizontalLayout();
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("80%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
 
 
         submitList=new Button("Submit");
@@ -91,54 +86,58 @@ public class BuildTimesView extends UserEntryView implements View{
                 processList());
 
         clearButton=new Button("Clear");
-        buttonLayoutSubmit.addComponent(clearButton);
         clearButton.addClickListener((Button.ClickListener) ClickEvent->
                 clearText());
 
-        exportToExcel=new Button("Export To Excel");
-        exportToExcel.setVisible(false);
+        exportToExcel=new Button();
+        exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
 
-        printDetail=new Button("Print");
-        printDetail.setVisible(false);
+        printDetail=new Button();
+        printDetail.setIcon(VaadinIcons.PRINT);
 
-        listText=new TextField("SIF No");
-        listText.setDescription("Equipment Name");
+        sifNoText =new TextField("SIF No");
+        sifNoText.setDescription("SIF No");
+        sifNoText.setSizeFull();
 
         flightText=new ComboBox("Flight Number");
         flightText.setItems(connection.getFlightsNoList());
+        flightText.setSizeFull();
 
         fromDateText=new DateField("Last Used Date From");
         fromDateText.setDescription("Last Used Date From");
         fromDateText.setRequiredIndicatorVisible(true);
+        fromDateText.setSizeFull();
 
         toDateText=new DateField("Last Used Date To");
         toDateText.setDescription("Late Used Date To");
         toDateText.setRequiredIndicatorVisible(true);
+        toDateText.setSizeFull();
 
-        dateText.addComponent(fromDateText);
-        dateText.addComponent(toDateText);
+        firstRow.addComponent(fromDateText);
+        firstRow.addComponent(toDateText);
+        firstRow.addComponent(flightText);
+        firstRow.addComponent(sifNoText);
 
-        buttonLayoutSubmit.addComponent(submitList);
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponents(submitList,clearButton);
+        firstRow.addComponent(submitBtnLayout);
 
-        buttonLayoutSubmit.addComponent(clearButton);
-        dateText.addComponent(flightText);
-
-        dateText.addComponent(listText);
-
-        buttonLayoutExportExcel.addComponent(exportToExcel);
-        buttonLayoutExportExcel.addComponent(printDetail);
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcel,printDetail);
 
         addComponent(createLayout);
 
         buildTimeGrid =new Grid();
         buildTimeGrid.setSizeFull();
-        buildTimeGrid.setWidth("70%");
 
-        createLayout.addComponent(dateText);
-        //createLayout.addComponent(flightLayout);
-        createLayout.addComponent(buttonLayoutSubmit);
+        createLayout.addComponent(firstRow);
+        createLayout.addComponent(optionButtonRow);
         createLayout.addComponent(buildTimeGrid);
-        createLayout.addComponent(buttonLayoutExportExcel);
+        createLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
 
        // buildTimeGrid.setVisible(false);
 
@@ -156,7 +155,7 @@ public class BuildTimesView extends UserEntryView implements View{
     public void processList() {
 
 
-        String sifList=listText.getValue();
+        String sifList= sifNoText.getValue();
         Object flightName=flightText.getValue();
 
             int baseList=(sifList != null && !sifList.isEmpty()) ? Integer.parseInt(sifList) : 0;
@@ -237,7 +236,7 @@ public class BuildTimesView extends UserEntryView implements View{
     public void clearText() {
         fromDateText.clear();
         toDateText.clear();
-        listText.clear();
+        sifNoText.clear();
         flightText.clear();
 
 

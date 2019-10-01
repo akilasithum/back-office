@@ -25,7 +25,7 @@ public abstract class CommonPageDetails extends UserEntryView implements View {
     protected VerticalLayout mainTableLayout;
     protected HorizontalLayout tableLayout;
     protected VerticalLayout mainUserInputLayout;
-    VerticalLayout headerLayout;
+    protected VerticalLayout headerLayout;
     protected Button addButton;
     protected Button resetButton;
     protected String filterFieldStr;

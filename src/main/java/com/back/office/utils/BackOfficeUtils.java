@@ -41,9 +41,20 @@ public class BackOfficeUtils {
         return format.format( date );
     }
 
+    public static String getDateTimeFromDateTime(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return format.format( date );
+    }
+
     public static String getDateStringFromDate(Date date){
         if(date != null)
         return new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
+        else return null;
+    }
+
+    public static String getDateStringFromDateTime(Date date){
+        if(date != null)
+            return new SimpleDateFormat(Constants.DATE_TIME_FORMAT_NO_SECONDS).format(date);
         else return null;
     }
 
@@ -308,6 +319,12 @@ public class BackOfficeUtils {
         }
     }
 
+    public static String getTimeStringFromDate(Date date){
+        if(date != null)
+            return new SimpleDateFormat("HH:mm").format(date);
+        else return null;
+    }
+
     public static FormLayout getSectorFormLayout(int i){
         FormLayout formLayout = new FormLayout();
         formLayout.setSizeFull();
@@ -338,6 +355,16 @@ public class BackOfficeUtils {
     public static float formatDecimals(float val){
         NumberFormat formatter = new DecimalFormat("#0.00");
         return Float.parseFloat(formatter.format(val));
+    }
+
+    public static Date getDateFromDateTimeStr(String dateStr){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_TIME_FORMAT_NO_SECONDS);
+
+        try {
+            return simpleDateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public static VerticalLayout getHeaderLayout(){
@@ -377,7 +404,7 @@ public class BackOfficeUtils {
             row1Map.put("Daily Flights","DailyFlights");
             row1Map.put("Request Inventory","RequestInventory");
             row1Map.put("Galley Weight","");
-            row1Map.put("SIF","SIFDetails");
+            row1Map.put("SIF Details","SIFDetails");
             row1Map.put("HHC and Cart Usage","HHCAndCartUsage");
             menuItem.setMenuName("flight_kitchen");
             menuItem.setSubMenuImageMap(row1Map);
@@ -398,11 +425,11 @@ public class BackOfficeUtils {
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("pre_order_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
-            row1Map.put("Pre-order","PreOrders");
+            row1Map.put("Pre-order Summary","PreOrders");
             row1Map.put("Pre-order Inventory","");
-            row1Map.put("Inflight Requests","MessagingModule");
-            row1Map.put("Bond Messages","BondMessages");
-            row1Map.put("FA Messages","FAMessages");
+            row1Map.put("Messaging","MessagingModule");
+            row1Map.put("Messages to HHC","BondMessages");
+            row1Map.put("HHC FA","FAMessages");
             menuItem.setSubMenuImageMap(row1Map);
             menuItem.setMenuName("pre_order");
             UI.getCurrent().getSession().setAttribute("subMenu",menuItem);
@@ -426,7 +453,7 @@ public class BackOfficeUtils {
             row1Map.put("Currency History","CurrencyHistory");
             row1Map.put("Bank Settlements","");
             row1Map.put("CC Batch Summary","");
-            row1Map.put("FA Commissions","");
+            row1Map.put("FA Commissions","FACommissions");
             row1Map.put("Gross Margins","GrossMargins");
             row1Map.put("Sales Tender Discrepancy","");
             menuItem.setSubMenuImageMap(row1Map);
@@ -476,7 +503,7 @@ public class BackOfficeUtils {
             menuItem.setMenuImage("inventory_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Equipment Master","EquipmentMaster");
-            row1Map.put("Month End  Inventory","");
+            row1Map.put("Month End Inventory","");
             row1Map.put("Unaccounted Carts","");
             row1Map.put("Inventory Valuation","");
             row1Map.put("Sold-out by Flight","SoldOut");
@@ -558,7 +585,7 @@ public class BackOfficeUtils {
             row1Map.put("CC Blacklist","CCBlackList");
             row1Map.put("Promotions","Promotions");
             row1Map.put("Vouchers","Vouchers");
-            row1Map.put("FA Commission Table","error");
+            row1Map.put("FA Commission Table","FACommissionSetup");
             row1Map.put("Budget","Budget");
             menuItem.setMenuName("setup");
             menuItem.setSubMenuImageMap(row1Map);

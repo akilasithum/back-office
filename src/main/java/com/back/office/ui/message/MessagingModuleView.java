@@ -59,7 +59,7 @@ public class MessagingModuleView extends UserEntryView implements View{
         hedderLayout =new VerticalLayout();
         hedderLayout.setSizeFull();
         hedderLayout.setMargin(Constants.noMargin);
-        Label h1 = new Label("Bond Messages");
+        Label h1 = new Label("Messaging");
         h1.addStyleName("headerText");
         hedderLayout.addComponent(h1);
         addComponent(hedderLayout);

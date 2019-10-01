@@ -14,6 +14,7 @@ public class Flight {
     private int ibNoOfSectors;
     private int recordStatus;
     private String country;
+    private String aircraftRegNo;
 
     public int getFlightId() {
         return flightId;
@@ -109,5 +110,13 @@ public class Flight {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getAircraftRegNo() {
+        return aircraftRegNo;
+    }
+
+    public void setAircraftRegNo(String aircraftRegNo) {
+        this.aircraftRegNo = aircraftRegNo;
     }
 }

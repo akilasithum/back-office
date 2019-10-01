@@ -63,10 +63,38 @@
     }
   }
 
+  .report-filter-panel{
+    background: #03028C;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+  }
+
   .popupContent{
     background-color: grey;
   }
 
+  .gwt-PopupPanel .popupContent{
+    background-color: blue;
+  }
+
+
+  .datePickerStyle .popupContent{
+    background-color: white;
+  }
+
+  .green-style {
+    background: #a8e8a8 !important;
+  }
+
+  .red-style {
+    background: #e49090 !important;
+  }
+
+  .orange-style {
+    background: #ecc47a !important;
+  }
 
   .searchButton{
     padding-top: 26px;

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.Cart" table="cart_numbers" catalog="">
+        <id name="cartNumberId" type="java.lang.Integer">
+            <column name="cartNumberId" />
+            <generator class="identity" />
+        </id>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" length="50" />
+        </property>
+        <property name="sifNo" type="java.lang.String">
+            <column name="sifNo"  length="50"/>
+        </property>
+        <property name="cartNumber" type="java.lang.String">
+            <column name="cartNumber"  length="50"/>
+        </property>
+        <property name="packType" type="java.lang.String">
+            <column name="packType"  length="50"/>
+        </property>
+    </class>
+</hibernate-mapping>

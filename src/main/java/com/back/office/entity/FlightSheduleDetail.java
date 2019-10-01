@@ -32,16 +32,12 @@ public class FlightSheduleDetail {
     private String from;
     @ExcelCellName("To")
     private String to;
+    private String status;
+    private Date buildStartTime;
+    private Date buildEndTime;
+    private String totalBuildTime;
 
-    public int getflightId() {
-        return flightId;
-    }
-
-    public void setflightId(int flightId) {
-        this.flightId = flightId;
-    }
-
-    public Date getflightDateTime() {
+    public Date getFlightDateTime() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
@@ -51,7 +47,7 @@ public class FlightSheduleDetail {
         }
     }
 
-    public void setflightDateTime(Date flightDateTime) {
+    public void setFlightDateTime(Date flightDateTime) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
@@ -62,51 +58,59 @@ public class FlightSheduleDetail {
 
     }
 
-    public String getflightTime() {
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(int flightId) {
+        this.flightId = flightId;
+    }
+
+    public String getFlightTime() {
         return flightTime;
     }
 
-    public void setflightTime(String flightTime) {
+    public void setFlightTime(String flightTime) {
         this.flightTime = flightTime;
     }
 
-    public String getaircraftRegistration() {
+    public String getAircraftRegistration() {
         return aircraftRegistration;
     }
 
-    public void setaircraftRegistration(String aircraftRegistration) {
+    public void setAircraftRegistration(String aircraftRegistration) {
         this.aircraftRegistration = aircraftRegistration;
     }
 
-    public String getaircraftType() {
+    public String getAircraftType() {
         return aircraftType;
     }
 
-    public void setaircraftType(String aircraftType) {
+    public void setAircraftType(String aircraftType) {
         this.aircraftType = aircraftType;
     }
 
-    public String getflightNumber() {
+    public String getFlightNumber() {
         return flightNumber;
     }
 
-    public void setflightNumber(String flightNumber) {
+    public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
     }
 
-    public String getservices() {
+    public String getServices() {
         return services;
     }
 
-    public void setservices(String services) {
+    public void setServices(String services) {
         this.services = services;
     }
 
-    public String getbaseStation() {
+    public String getBaseStation() {
         return baseStation;
     }
 
-    public void setbaseStation(String baseStation) {
+    public void setBaseStation(String baseStation) {
         this.baseStation = baseStation;
     }
 
@@ -124,6 +128,38 @@ public class FlightSheduleDetail {
 
     public void setTo(String to) {
         this.to = to;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getBuildStartTime() {
+        return buildStartTime;
+    }
+
+    public void setBuildStartTime(Date buildStartTime) {
+        this.buildStartTime = buildStartTime;
+    }
+
+    public Date getBuildEndTime() {
+        return buildEndTime;
+    }
+
+    public void setBuildEndTime(Date buildEndTime) {
+        this.buildEndTime = buildEndTime;
+    }
+
+    public String getTotalBuildTime() {
+        return totalBuildTime;
+    }
+
+    public void setTotalBuildTime(String totalBuildTime) {
+        this.totalBuildTime = totalBuildTime;
     }
 }
 

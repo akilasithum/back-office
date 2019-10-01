@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 
@@ -20,8 +23,6 @@ public class CurruncyDetailHistory extends UserEntryView implements View {
     ComboBox currencyDetail;
     FilterGrid<CurrencyDetails> currencyGrid;
     private Button submitButton;
-    private Button printButton;
-    FormLayout layoutVertical;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -37,25 +38,48 @@ public class CurruncyDetailHistory extends UserEntryView implements View {
     }
 
     public void createMainLayout() {
-        layoutVertical=new FormLayout();
         Label h1=new Label("Currency History");
         h1.addStyleName("headerText");
-        layoutVertical.addComponent(h1);
+
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("40%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
+
         currencyDetail=new ComboBox("Currency");
         currencyDetail.setItems(BackOfficeUtils.getCurrencyDropDownValues(false));
         currencyDetail.setRequiredIndicatorVisible(true);
-        layoutVertical.addComponent(currencyDetail);
+        currencyDetail.setSizeFull();
+        firstRow.addComponent(currencyDetail);
         currencyGrid=new FilterGrid();
-        //currencyGrid.setVisible(false);
         submitButton =new Button("Submit");
         submitButton.addClickListener((Button.ClickListener) ClickEvent->process());
-        printButton = new Button("Print");
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.addComponents(submitButton,printButton);
-        layoutVertical.addComponent(buttonLayout);
-        currencyGrid.setWidth("50%");
-        layoutVertical.addComponent(currencyGrid);
-        addComponent(layoutVertical);
+
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponents(submitButton);
+
+        firstRow.addComponent(submitBtnLayout);
+        currencyGrid.setWidth("100%");
+
+        Button exportToExcel=new Button();
+        exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
+
+        Button exportPdf=new Button();
+        exportPdf.setIcon(VaadinIcons.PRINT);
+
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcel,exportPdf);
+
+        addComponents(h1,firstRow,optionButtonRow,currencyGrid);
+        setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
 
         currencyGrid.addColumn(CurrencyDetails::getCurrencyCode).setCaption("Currency Code");
         currencyGrid.addColumn(CurrencyDetails::getCurrencyDesc).setCaption("Description");
@@ -64,23 +88,12 @@ public class CurruncyDetailHistory extends UserEntryView implements View {
 
     }
     public void process() {
-
-        //currencyGrid.removeAllColumns();
-
-
         if(currencyDetail.getValue()!=null&&!currencyDetail.getValue().toString().isEmpty()) {
             List<CurrencyDetails> currecyDetailsList=connection.getCurrencyDetail(currencyDetail.getValue().toString());
-
-
             currencyGrid.setItems(currecyDetailsList);
             currencyGrid.setVisible(true);
-
-
         }else {
-
             Notification.show("Error","Pleas input Currency Code",Type.WARNING_MESSAGE);
-
-
         }
     }
 }

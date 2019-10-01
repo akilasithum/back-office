@@ -7,6 +7,10 @@ import java.util.List;
 
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -22,34 +26,22 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class GrossMargine extends UserEntryView implements View{
-    protected ComboBox serviceTypeC;
+    protected ComboBox serviceTypeFld;
+    protected ComboBox categoryCombo;
     protected Button process;
     protected List<ItemDetails> itemList;
     protected Grid<ItemGross> listGrid;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
-    protected List<ItemGross> chakedList;
-    protected ItemGross itemgrossDetail;
     protected List<ItemGross> grossarrayList=new ArrayList();
     protected Button exportToExcell;
     protected Button print;
     protected File file=new File("grossMargin.xlsx");
     protected FileResource fir=new FileResource(file);
     protected FileDownloader fid=new FileDownloader(fir);
-
-
-
 
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -73,41 +65,62 @@ public class GrossMargine extends UserEntryView implements View{
         Label h1=new Label("Gross Margin");
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);
+        createLayout.setMargin(Constants.leftMargin);
 
-        serviceTypeC=new ComboBox("Service Type");
-        serviceTypeC.setDescription("Service Type");
-        serviceTypeC.setItems("BOB","DTF","VRT");
-        serviceTypeC.setEmptySelectionAllowed(false);
-        serviceTypeC.setRequiredIndicatorVisible(true);
-        createLayout.addComponent(serviceTypeC);
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("40%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
 
-        HorizontalLayout buttonList=new HorizontalLayout();
-        createLayout.addComponent(buttonList);
+        serviceTypeFld =new ComboBox("Service Type");
+        serviceTypeFld.setDescription("Service Type");
+        serviceTypeFld.setItems("BOB","DTF","VRT");
+        serviceTypeFld.setEmptySelectionAllowed(false);
+        serviceTypeFld.setRequiredIndicatorVisible(true);
+        serviceTypeFld.setSizeFull();
 
+        categoryCombo = new ComboBox("Category");
+        categoryCombo.setDescription("Category");
+        categoryCombo.setSizeFull();
+
+        serviceTypeFld.addValueChangeListener( valueChangeEvent -> {
+            if(serviceTypeFld.getValue() != null && !serviceTypeFld.getValue().toString().isEmpty()){
+                categoryCombo.setItems(BackOfficeUtils.getCategoryFromServiceType(serviceTypeFld.getValue().toString()));
+            }
+        });
+
+        createLayout.addComponents(firstRow);
         process=new Button("Submit");
-        buttonList.addComponent(process);
 
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponents(process);
+        firstRow.addComponents(serviceTypeFld,categoryCombo,submitBtnLayout);
         process.addClickListener((Button.ClickListener) ClickEvent->
                 processGrid());
 
-
         listGrid=new Grid();
-        createLayout.addComponent(listGrid);
-        createLayout.addComponent(listGrid);
         listGrid.setSizeFull();
-        listGrid.setWidth("80%");
 
-        //listGrid.setVisible(false);
+        exportToExcell=new Button();
+        exportToExcell.setIcon(FontAwesome.FILE_EXCEL_O);
 
-        exportToExcell=new Button("Export To Excel");
-        buttonList.addComponent(exportToExcell);
-        exportToExcell.setVisible(false);
+        print=new Button();
+        print.setIcon(VaadinIcons.PRINT);
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setSpacing(true);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcell,print);
+        createLayout.addComponent(optionButtonRow);
+        createLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
+        createLayout.addComponent(listGrid);
 
-
-        print=new Button("Print");
-        buttonList.addComponent(print);
-        print.setVisible(false);
-        listGrid.setWidth("50%");
+        listGrid.setWidth("100%");
         listGrid.addColumn(ItemGross::getItemId).setCaption("Item #");
         listGrid.addColumn(ItemGross::getItemDescription).setCaption("Description");
         listGrid.addColumn(ItemGross::getBasePrice).setCaption("Selling Price");
@@ -120,8 +133,11 @@ public class GrossMargine extends UserEntryView implements View{
     }
 
     public void processGrid() {
-        if(serviceTypeC.getValue()!=null&&!serviceTypeC.getValue().toString().isEmpty()) {
-            itemList=connection.getItemGross(serviceTypeC.getValue().toString());
+        if(serviceTypeFld.getValue()!=null&&!serviceTypeFld.getValue().toString().isEmpty()) {
+            String category = "";
+            Object categoryObj = categoryCombo.getValue();
+            if(categoryObj != null) category = categoryObj.toString();
+            itemList=connection.getItemGross(serviceTypeFld.getValue().toString(),category);
             listGrid.setVisible(true);
 
             // listGrid.removeAllColumns();
@@ -218,7 +234,7 @@ public class GrossMargine extends UserEntryView implements View{
             print.setVisible(true);
 
         }else {
-            Notification.show("Error","Please select service type",Notification.Type.WARNING_MESSAGE);
+            Notification.show("Error","Please select sourceComboBox type",Notification.Type.WARNING_MESSAGE);
 
         }
     }

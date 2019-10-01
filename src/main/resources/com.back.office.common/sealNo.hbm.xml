@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.SealNo" table="seal_details" catalog="">
+        <id name="sealId" type="java.lang.Integer">
+            <column name="sealId" />
+            <generator class="identity" />
+        </id>
+        <property name="sealNumber" type="java.lang.String">
+            <column name="sealNumber" length="50" />
+        </property>
+        <property name="sifNo" type="java.lang.String">
+            <column name="sifNo"  length="50"/>
+        </property>
+        <property name="cartNumber" type="java.lang.String">
+            <column name="cartNumber"  length="50"/>
+        </property>
+    </class>
+</hibernate-mapping>

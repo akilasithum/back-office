@@ -12,8 +12,10 @@ import com.back.office.utils.Constants;
 import com.back.office.db.DBConnection;
 import com.back.office.entity.ItemDetails;
 import com.back.office.entity.PosItemSaleDetail;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -43,6 +45,8 @@ public class PassengerPurchasesView extends UserEntryView implements View{
     protected Label posLabel;
     protected float priceAll;
     Window windowdatatable=new Window();
+    protected Button exportToExcel;
+    protected Button print;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -67,10 +71,13 @@ public class PassengerPurchasesView extends UserEntryView implements View{
         h1.addStyleName("headerText");
         createLayout.addComponent(h1);
 
-        HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
-        HorizontalLayout dateText=new HorizontalLayout();
-        HorizontalLayout dateTextListDetails=new HorizontalLayout();
-
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("70%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
 
         submitList=new Button("Submit");
         createLayout.addComponent(submitList);
@@ -78,7 +85,6 @@ public class PassengerPurchasesView extends UserEntryView implements View{
                 processList());
 
         clearButton=new Button("Clear");
-        buttonLayoutSubmit.addComponent(clearButton);
         clearButton.addClickListener((Button.ClickListener) ClickEvent->
                 clearText());
 
@@ -87,32 +93,47 @@ public class PassengerPurchasesView extends UserEntryView implements View{
 
         fromDateText=new DateField("Date From");
         fromDateText.setDescription("Date From");
+        fromDateText.setStyleName("datePickerStyle");
         fromDateText.setRequiredIndicatorVisible(true);
+        fromDateText.setSizeFull();
 
         toDateText=new DateField("Date To");
         toDateText.setDescription("Date To");
+        toDateText.setStyleName("datePickerStyle");
         toDateText.setRequiredIndicatorVisible(true);
+        toDateText.setSizeFull();
 
-        dateText.addComponent(fromDateText);
-        dateText.addComponent(toDateText);
+        firstRow.addComponent(fromDateText);
+        firstRow.addComponent(toDateText);
 
-        dateTextListDetails.addComponent(flightNumberText);
+        firstRow.addComponent(flightNumberText);
 
-        buttonLayoutSubmit.addComponent(submitList);
-
-        buttonLayoutSubmit.addComponent(clearButton);
+        HorizontalLayout submitBtnLayout=new HorizontalLayout();
+        submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setStyleName("searchButton");
+        submitBtnLayout.addComponents(submitList,clearButton);
+        firstRow.addComponent(submitBtnLayout);
 
         addComponent(createLayout);
 
-        passengerPurchasesGrid =new Grid();
+        exportToExcel=new Button();
+        exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
 
-        createLayout.addComponent(dateText);
-        createLayout.addComponent(dateTextListDetails);
-        createLayout.addComponent(buttonLayoutSubmit);
+        print=new Button();
+        print.setIcon(VaadinIcons.PRINT);
+
+        HorizontalLayout optionButtonRow = new HorizontalLayout();
+        optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        optionButtonRow.setMargin(Constants.noMargin);
+        optionButtonRow.addComponents(exportToExcel,print);
+
+        passengerPurchasesGrid =new Grid();
+        createLayout.addComponent(firstRow);
+        createLayout.addComponent(optionButtonRow);
         createLayout.addComponent(passengerPurchasesGrid);
+        createLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
 
         passengerPurchasesGrid.setSizeFull();
-        passengerPurchasesGrid.setWidth("60%");
 
         passengerPurchasesGrid.addColumn(PassengerPurchases::getpaxName).setCaption("Pax Name");
         passengerPurchasesGrid.addColumn(PassengerPurchases::getfrequentFlyerNo).setCaption("Frequent flyer No");

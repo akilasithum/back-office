@@ -72,8 +72,8 @@ public class AircraftDetailsView extends WizardCommonView {
     }
 
     private void setDataInGrid(){
-        // aircraftDetailsList = connection.getAllFlights();
-        // aircraftDetailsGrid.setItems(aircraftDetailsList);
+         aircraftDetailsList = connection.getAllFlights();
+         aircraftDetailsGrid.setItems(aircraftDetailsList);
         aircraftDetailsGrid.addColumn(AircraftDetails::getRegistrationNumber).setCaption(REG_NO).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         aircraftDetailsGrid.addColumn(AircraftDetails::getAircraftName).setCaption(AIRCRAFT_NAME).
@@ -88,11 +88,11 @@ public class AircraftDetailsView extends WizardCommonView {
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         aircraftDetailsGrid.addColumn(AircraftDetails::getFrontContainers).setCaption("Front "+CONTAINERS).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        aircraftDetailsGrid.addColumn(AircraftDetails::getMiddleFullCarts).setCaption("Half " + FULL_CARTS).
+        aircraftDetailsGrid.addColumn(AircraftDetails::getMiddleFullCarts).setCaption("Center " + FULL_CARTS).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        aircraftDetailsGrid.addColumn(AircraftDetails::getMiddleHalfCarts).setCaption("Half "+HALF_CARTS).
+        aircraftDetailsGrid.addColumn(AircraftDetails::getMiddleHalfCarts).setCaption("Center "+HALF_CARTS).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        aircraftDetailsGrid.addColumn(AircraftDetails::getMiddleContainers).setCaption("Half "+CONTAINERS).
+        aircraftDetailsGrid.addColumn(AircraftDetails::getMiddleContainers).setCaption("Center "+CONTAINERS).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         aircraftDetailsGrid.addColumn(AircraftDetails::getRearFullCarts).setCaption("Rear " + FULL_CARTS).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());

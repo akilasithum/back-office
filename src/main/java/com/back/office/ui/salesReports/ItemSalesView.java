@@ -6,9 +6,11 @@ import com.back.office.entity.Sector;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -83,7 +85,7 @@ public class ItemSalesView extends UserEntryView implements View {
         headerLayout.addComponent(h1);
 
         userFormLayout = new VerticalLayout();
-        userFormLayout.setMargin(Constants.bottomMarginInfo);
+        userFormLayout.setMargin(false);
         addComponent(userFormLayout);
         mainTableLayout = new VerticalLayout();
         mainTableLayout.setMargin(Constants.noMargin);
@@ -95,61 +97,60 @@ public class ItemSalesView extends UserEntryView implements View {
         mainUserInputLayout = new VerticalLayout();
         mainUserInputLayout.setMargin(Constants.noMargin);
         userFormLayout.addComponent(mainUserInputLayout);
-        userFormLayout.setWidth("70%");
 
         HorizontalLayout firstRow = new HorizontalLayout();
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("80%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
         mainUserInputLayout.addComponent(firstRow);
-
-        HorizontalLayout secondRow = new HorizontalLayout();
-        secondRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        secondRow.setSpacing(true);
-        secondRow.setSizeFull();
-        secondRow.setMargin(Constants.noMargin);
-        mainUserInputLayout.addComponent(secondRow);
 
         Date date = new Date();
         LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setStyleName("datePickerStyle");
+        flightDateFromDateField.setSizeFull();
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
+        flightDateToDateField.setStyleName("datePickerStyle");
+        flightDateToDateField.setSizeFull();
         firstRow.addComponent(flightDateToDateField);
 
         sifNoField = new TextField(SIF_NO);
         sifNoField.setDescription(SIF_NO);
+        sifNoField.setSizeFull();
         //firstRow.addComponent(sifNoField);
 
         categoryComboBox = new ComboBox(CATEGORY);
         categoryComboBox.setDescription(CATEGORY);
         List<String> catList = (List<String>) connection.getCategories();
         categoryComboBox.setItems(catList);
+        categoryComboBox.setSizeFull();
         firstRow.addComponent(categoryComboBox);
 
         sectorComboBox = new ComboBox(SECTOR);
         sectorComboBox.setDescription(SECTOR);
         sectorComboBox.setItems(getSectors());
-        secondRow.addComponent(sectorComboBox);
+        sectorComboBox.setSizeFull();
+        firstRow.addComponent(sectorComboBox);
 
         serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
         serviceTypeComboBox.setDescription(SERVICE_TYPE);
         serviceTypeComboBox.setItems("All","Duty Free","Duty Paid","Buy on Board");
         serviceTypeComboBox.setSelectedItem("All");
         serviceTypeComboBox.setEmptySelectionAllowed(false);
-        secondRow.addComponent(serviceTypeComboBox);
+        serviceTypeComboBox.setSizeFull();
+        firstRow.addComponent(serviceTypeComboBox);
 
-        secondRow.addComponent(new Label());
-
-        buttonRow = new HorizontalLayout();
+        buttonRow=new HorizontalLayout();
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
-        buttonRow.setSpacing(true);
-        buttonRow.setMargin(Constants.noMargin);
-        userFormLayout.addComponent(buttonRow);
+        buttonRow.setStyleName("searchButton");
+        firstRow.addComponent(buttonRow);
 
         searchButton = new Button("Search");
         searchButton.addClickListener((Button.ClickListener) clickEvent -> showFilterData());
@@ -160,8 +161,11 @@ public class ItemSalesView extends UserEntryView implements View {
         optionButtonRow.setSpacing(true);
         optionButtonRow.setMargin(Constants.noMargin);
 
-        printBtn = new Button("Print");
-        Button downloadExcelBtn = new Button("Download as Excel");
+
+        printBtn = new Button();
+        printBtn.setIcon(VaadinIcons.PRINT);
+        Button downloadExcelBtn = new Button();
+        downloadExcelBtn.setIcon(FontAwesome.FILE_EXCEL_O);
         /*downloadExcelBtn.addClickListener((Button.ClickListener) clickEvent -> {
             ExcelExport excelExport = new ExcelExport(detailsTable);
             excelExport.excludeCollapsedColumns();
@@ -171,8 +175,9 @@ public class ItemSalesView extends UserEntryView implements View {
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);
         filterCriteriaText = new Label("");
         filterCriteriaText.addStyleName(ValoTheme.LABEL_H3);
-        mainTableLayout.addComponent(optionButtonRow);
         mainTableLayout.addComponent(filterCriteriaText);
+        mainTableLayout.addComponent(optionButtonRow);
+        mainTableLayout.setComponentAlignment(optionButtonRow, Alignment.MIDDLE_RIGHT);
         mainTableLayout.addComponent(tableLayout);
 
         detailsTable = new Grid<>();

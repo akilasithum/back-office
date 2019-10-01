@@ -25,8 +25,6 @@ public class DailyFlightsView extends UserEntryView implements View{
     protected DBConnection connection;
     protected Grid<FlightSheduleDetail> dailyFlightsGrid;
 
-
-
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
         if(userName == null|| userName.toString().isEmpty()){
@@ -66,13 +64,13 @@ public class DailyFlightsView extends UserEntryView implements View{
         dailyFlightsGrid.setWidth("60%");
         createLayout.addComponent(dailyFlightsGrid);
 
-        dailyFlightsGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDateTime())).setCaption("Date");
-        dailyFlightsGrid.addColumn(FlightSheduleDetail::getflightTime).setCaption("Time");
-        dailyFlightsGrid.addColumn(FlightSheduleDetail::getaircraftRegistration).setCaption("ACFT Reg");
-        dailyFlightsGrid.addColumn(FlightSheduleDetail::getaircraftType).setCaption("Type");
-        dailyFlightsGrid.addColumn(FlightSheduleDetail::getflightNumber).setCaption("Flight Number");
+        dailyFlightsGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDateTime())).setCaption("Date");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getFlightTime).setCaption("Time");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getAircraftRegistration).setCaption("ACFT Reg");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getAircraftType).setCaption("Type");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getFlightNumber).setCaption("Flight Number");
         dailyFlightsGrid.addColumn(FlightSheduleDetail::getFrom).setCaption("From");
-        dailyFlightsGrid.addColumn(FlightSheduleDetail::getservices).setCaption("Services");
+        dailyFlightsGrid.addColumn(FlightSheduleDetail::getServices).setCaption("Services");
 
 
 

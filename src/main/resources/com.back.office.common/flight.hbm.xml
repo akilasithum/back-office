@@ -41,5 +41,8 @@
         <property name="country" type="java.lang.String">
             <column name="country" length="50" />
         </property>
+        <property name="aircraftRegNo" type="java.lang.String">
+            <column name="aircraftRegNo" length="50" />
+        </property>
     </class>
 </hibernate-mapping>

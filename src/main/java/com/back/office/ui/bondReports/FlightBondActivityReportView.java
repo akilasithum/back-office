@@ -14,6 +14,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
@@ -43,7 +44,7 @@ public class FlightBondActivityReportView extends ReportCommonView {
     private final String CREW_CLOSE_TIME = "Crew Closed";
     private final String DEPARTURE_DATE = "Departure Date";
     private final String STATUS = "Status";
-    private final String PROGRAM = "Program";
+    private final String PROGRAM = "Service";
     Button downloadPdfBtn;
 
     public FlightBondActivityReportView(){
@@ -54,8 +55,13 @@ public class FlightBondActivityReportView extends ReportCommonView {
     protected void createMainLayout() {
         super.createMainLayout();
         HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("60%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
+
         mainUserInputLayout.addComponent(firstRow);
         downloadPdfBtn = new Button();
         Date date = new Date();
@@ -63,17 +69,21 @@ public class FlightBondActivityReportView extends ReportCommonView {
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setSizeFull();
+        flightDateFromDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
-        firstRow.addComponent(flightDateToDateField);
+        flightDateToDateField.setSizeFull();
+        flightDateToDateField.setStyleName("datePickerStyle");
+        firstRow.addComponents(flightDateToDateField,buttonRow);
 
         detailsTable = new FilterGrid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();
         tableLayout.addComponent(detailsTable);
-        userFormLayout.setWidth("40%");
+        //userFormLayout.setWidth("40%");
         createShowTableHeader();
         GridContextMenu<SIFDetails> gridMenu = new GridContextMenu<>(detailsTable);
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
@@ -359,8 +369,8 @@ public class FlightBondActivityReportView extends ReportCommonView {
     }
     @Override
     protected void defineStringFields() {
-        this.pageHeader = "Flight/Bond Activity";
-        this.reportExcelHeader = "Flight/Bond Activity";
+        this.pageHeader = "SIF Details";
+        this.reportExcelHeader = "SIF Details";
     }
 
     @Override
