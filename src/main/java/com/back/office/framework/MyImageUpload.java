@@ -1,5 +1,6 @@
 package com.back.office.framework;
 
+import com.back.office.utils.UserNotification;
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Constants;
@@ -60,7 +61,7 @@ public class MyImageUpload extends CustomField<byte[]> implements Upload.Receive
         });
         upload.addProgressListener((long readBytes, long contentLength) -> {
             if(contentLength > 65535){
-                Notification.show("Image size should be less than 64KB");
+                UserNotification.show("Warning","Image size should be less than 64KB","warning",UI.getCurrent());
                 upload.interruptUpload();
                 data = null;
                 fireValueChange();

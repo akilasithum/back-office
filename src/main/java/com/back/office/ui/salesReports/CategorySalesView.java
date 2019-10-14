@@ -148,11 +148,12 @@ public class CategorySalesView extends ReportCommonView {
             totalObj.setQuantity(qtyTotal);
             salesByCategoryObjList.add(totalObj);
         }
+        String category = (categorycombo.getValue() != null) ? String.valueOf(categorycombo.getValue()) : null;
 
         detailsTable.setItems(salesByCategoryObjList);
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
-                " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Category = " + categorycombo.getValue().toString();
+                " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + ((category != null) ? (" , " +
+                "Category = " + categorycombo.getValue().toString()) : "");
         filterCriteriaText.setValue(outputStr);
         /*float totalQty = 0;
         int totalPrice = 0;

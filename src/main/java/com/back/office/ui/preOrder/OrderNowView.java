@@ -16,6 +16,7 @@ import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class OrderNowView extends UserEntryView implements View {
     private final String ORDER_NO = "Order No";
     private final String ORDER_IN_TIME = "Order in Time";
     private final String STATUS = "Status";
+    private Map<String,DepartureFlight> fightNameDepFlightMap = new HashMap<>();
 
     FilterGrid<OrderNow> orderNowFilterGrid;
     List<OrderNow> orderNowList;
@@ -58,6 +60,7 @@ public class OrderNowView extends UserEntryView implements View {
         createMainLayout();
         setMargin(false);
         itemIdNameMap = connection.getItemCodeDetailsMap();
+        fightNameDepFlightMap = connection.getFlightNameDepFlightMap();
     }
 
     private void createMainLayout(){
@@ -151,7 +154,7 @@ public class OrderNowView extends UserEntryView implements View {
         orderNowFilterGrid.addColumn(OrderNow::getPNR).setCaption(PNR);
         orderNowFilterGrid.addColumn(OrderNow::getSeatNo).setCaption(SEAT_NO);
         orderNowFilterGrid.addColumn(OrderNow::getOrderNo).setCaption(ORDER_NO);
-        orderNowFilterGrid.addColumn(bean-> BackOfficeUtils.getDateStringFromDate(bean.getOrderInTime())).setCaption(ORDER_IN_TIME);
+        orderNowFilterGrid.addColumn(bean-> BackOfficeUtils.getDateTimeStringFromDate(bean.getOrderInTime())).setCaption(ORDER_IN_TIME);
         orderNowFilterGrid.addColumn(OrderNow::getStatus).setCaption(STATUS);
         GridContextMenu<OrderNow> gridMenu = new GridContextMenu<>(orderNowFilterGrid);
         gridMenu.addGridBodyContextMenuListener(this::updateGridBodyMenu);
@@ -173,7 +176,7 @@ public class OrderNowView extends UserEntryView implements View {
                         "Yes", "No", new ConfirmDialog.Listener() {
                             public void onClose(ConfirmDialog dialog) {
                                 if (dialog.isConfirmed()) {
-                                    packOrRejectOrder((OrderNow) event.getItem(),"pack");
+                                    packOrRejectOrder((OrderNow) event.getItem(),"packed");
                                 }
                             }
                         });
@@ -183,7 +186,7 @@ public class OrderNowView extends UserEntryView implements View {
                         "Yes", "No", new ConfirmDialog.Listener() {
                             public void onClose(ConfirmDialog dialog) {
                                 if (dialog.isConfirmed()) {
-                                    packOrRejectOrder((OrderNow)event.getItem(),"reject");
+                                    packOrRejectOrder((OrderNow)event.getItem(),"Rejected");
                                 }
                             }
                         });
@@ -208,6 +211,13 @@ public class OrderNowView extends UserEntryView implements View {
     private void setData(Object flightNo,Object destination,Object status){
 
         orderNowList =(List<OrderNow>)connection.getOrderNow(flightNo, destination, status);
+        /*for(OrderNow orderNow : orderNowList){
+            DepartureFlight flight = fightNameDepFlightMap.get(orderNow.getFlightNo());
+            if(flight != null){
+                orderNow.setDestination(flight.getDestination());
+                orderNow.setTime(BackOfficeUtils.getTimeStringFromDate(flight.getFlightTime()));
+            }
+        }*/
         orderNowFilterGrid.setItems(orderNowList);
 
     }

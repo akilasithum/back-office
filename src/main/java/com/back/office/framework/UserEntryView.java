@@ -6,12 +6,14 @@ import com.back.office.utils.Constants;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.vaadin.alump.fancylayouts.FancyNotifications;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class UserEntryView extends VerticalLayout {
 
+    protected FancyNotifications notifications;
     public UserEntryView(){
         createMenu();
     }
@@ -26,6 +28,9 @@ public class UserEntryView extends VerticalLayout {
     }
 
     private void createMenu(){
+        notifications = new FancyNotifications();
+        addComponent(notifications);
+        notifications.setClickClose(true);
         VerticalLayout header = BackOfficeUtils.getHeaderLayout();
         addComponent(header);
         setComponentAlignment(header, Alignment.MIDDLE_CENTER);

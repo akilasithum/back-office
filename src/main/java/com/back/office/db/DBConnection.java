@@ -807,6 +807,24 @@ public class DBConnection {
         }
     }
 
+    public Map<String,DepartureFlight> getFlightNameDepFlightMap(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(DepartureFlight.class);
+
+            List<DepartureFlight> itemDetails = criteria.list();
+            Map<String,DepartureFlight> map = new HashMap<>();
+            itemDetails.stream().forEach((k)-> map.put(k.getFlightNo(),k));
+            return map;
+        } catch (Exception e) {
+
+
+            return null;
+        }
+    }
+
     public List<CartNumber> getCartNumbersFromSIF(String sifNo){
         try
         {

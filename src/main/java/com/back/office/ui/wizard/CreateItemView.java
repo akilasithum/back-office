@@ -130,6 +130,10 @@ public class CreateItemView extends WizardCommonView {
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(ItemDetails::getCatalogue).setCaption(CATELOGUE).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        if(setupType.equalsIgnoreCase("Order Now")){
+            itemDetailsFilterGrid.addColumn(ItemDetails::getBobCategory).setCaption(CATEGORY).
+                    setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        }
         itemDetailsFilterGrid.addColumn(ItemDetails::getCostCurrency).setCaption(COST_CURRENCY).
                 setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         itemDetailsFilterGrid.addColumn(bean->(String.valueOf(bean.getCostPrice())).equals("0.0") ? "" : bean.getCostPrice()).setCaption(COST_PRICE).
@@ -182,6 +186,14 @@ public class CreateItemView extends WizardCommonView {
         itemNameFld.setValue(item.getItemName());
         itemNameFld.setEnabled(isEdit);
         formLayout1.addComponent(itemNameFld);
+
+        ComboBox bobCategoryFld = new ComboBox(CATEGORY);
+        if(setupType.equalsIgnoreCase("Order Now")){
+            bobCategoryFld.setItems(BackOfficeUtils.getCategoryFromServiceType("BOB"));
+            bobCategoryFld.setValue(item.getBobCategory());
+            bobCategoryFld.setEnabled(false);
+            formLayout1.addComponent(bobCategoryFld);
+        }
 
         ComboBox availableForCompensation = new ComboBox(AVAILABLE_FOR_COMPENSATION);
         availableForCompensation.setItems(Arrays.asList("Sales & Compensation","Sales only","Compensation only"));
@@ -271,6 +283,7 @@ public class CreateItemView extends WizardCommonView {
             if(editButton.getCaption().equals("Edit")){
             //itemCode.setEnabled(true);
             itemNameFld.setEnabled(true);
+            bobCategoryFld.setEnabled(true);
             availableForCompensation.setEnabled(true);
             catelogFld.setEnabled(true);
             activateDateFld.setEnabled(true);
@@ -306,6 +319,9 @@ public class CreateItemView extends WizardCommonView {
                 editItem.setSecondPrice(Float.parseFloat(secondPriceFld.getValue()));
                 editItem.setSecondCurrency(String.valueOf(secondCurrencyFld.getValue()));
                 editItem.setImage(previewField.getValue());
+                if(setupType.equalsIgnoreCase("Order Now")) {
+                    editItem.setBobCategory(String.valueOf(bobCategoryFld.getValue()));
+                }
                 connection.insertObjectHBM(editItem);
                 updateTable(true,editItem);
                 detailsWindow.close();
