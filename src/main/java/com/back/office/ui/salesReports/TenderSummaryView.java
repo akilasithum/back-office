@@ -1,23 +1,22 @@
 package com.back.office.ui.salesReports;
 
-import com.back.office.entity.CCSummaryObj;
 import com.back.office.entity.TenderSummaryDisplayObj;
 import com.back.office.entity.TenderSummaryObj;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.vaadin.haijian.Exporter;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.back.office.utils.BackOfficeUtils.showWithDollarSign;
 
 public class TenderSummaryView extends ReportCommonView {
 
@@ -29,14 +28,14 @@ public class TenderSummaryView extends ReportCommonView {
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String SERVICE_TYPE = "Service Type";
     private final String SIF_NO = "SIF No";
-    private final String FLIGHT_DATE = "Flight Date";
-    private final String FLIGHT_FROM = "Flight From";
+    private final String FLIGHT_DATE = "Dep Date";
+    private final String FLIGHT_FROM = "From";
     private final String FLIGHT_NO = "Flight No";
-    private final String FLIGHT_TO = "Flight To";
-    private final String GROSS_SALE = "USD Gross Sales";
-    private final String CASH_SALE = "USD Cash";
-    private final String VOUCHER_SALE = "USD Voucher";
-    private final String CC_SALE = "USD Credit Card";
+    private final String FLIGHT_TO = "To";
+    private final String GROSS_SALE = "Gross Sales";
+    private final String CASH_SALE = "Cash";
+    private final String VOUCHER_SALE = "Voucher";
+    private final String CC_SALE = "Credit Card";
 
     protected Grid<TenderSummaryDisplayObj> detailsTable;
 
@@ -85,14 +84,14 @@ public class TenderSummaryView extends ReportCommonView {
 
     private void createShowTableHeader(){
         detailsTable.addColumn(TenderSummaryDisplayObj::getSifNo).setCaption(SIF_NO);
-        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
         detailsTable.addColumn(TenderSummaryDisplayObj::getFlightNo).setCaption(FLIGHT_NO);
+        detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
         detailsTable.addColumn(TenderSummaryDisplayObj::getFlightFrom).setCaption(FLIGHT_FROM);
         detailsTable.addColumn(TenderSummaryDisplayObj::getFlightTo).setCaption(FLIGHT_TO);
-        detailsTable.addColumn(TenderSummaryDisplayObj::getGrossSale).setCaption(GROSS_SALE);
-        detailsTable.addColumn(TenderSummaryDisplayObj::getCashSale).setCaption(CASH_SALE);
-        detailsTable.addColumn(TenderSummaryDisplayObj::getVoucherSale).setCaption(VOUCHER_SALE);
-        detailsTable.addColumn(TenderSummaryDisplayObj::getCreditCardSale).setCaption(CC_SALE);
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getGrossSale())).setCaption(GROSS_SALE);
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getCashSale())).setCaption(CASH_SALE);
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getCreditCardSale())).setCaption(CC_SALE);
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getVoucherSale())).setCaption(VOUCHER_SALE);
         detailsTable.addColumn(TenderSummaryDisplayObj::getServiceType).setCaption(SERVICE_TYPE);
     }
 
@@ -128,8 +127,8 @@ public class TenderSummaryView extends ReportCommonView {
                 TenderSummaryDisplayObj displayObj = displayObjMap.get(obj.getServiceType()+obj.getFlightId());
                 grossAmount += obj.getAmount();
                 displayObj.setGrossSale(grossAmount);
-                if(obj.getPaymentType().equals("Cash USD")) displayObj.setCashSale(obj.getAmount());
-                else if(obj.getPaymentType().equals("Credit Card USD")) displayObj.setCreditCardSale(obj.getAmount());
+                if(obj.getPaymentType().equals("Cash CAD")) displayObj.setCashSale(obj.getAmount());
+                else if(obj.getPaymentType().equals("Credit Card CAD")) displayObj.setCreditCardSale(obj.getAmount());
                 else displayObj.setVoucherSale(obj.getAmount());
                 displayObjMap.put(obj.getServiceType()+obj.getFlightId(),displayObj);
             }
@@ -143,8 +142,8 @@ public class TenderSummaryView extends ReportCommonView {
                 displayObj.setServiceType(obj.getServiceType());
                 grossAmount = obj.getAmount();
                 displayObj.setGrossSale(grossAmount);
-                if(obj.getPaymentType().equals("Cash USD")) displayObj.setCashSale(obj.getAmount());
-                else if(obj.getPaymentType().equals("Credit Card USD")) displayObj.setCreditCardSale(obj.getAmount());
+                if(obj.getPaymentType().equals("Cash CAD")) displayObj.setCashSale(obj.getAmount());
+                else if(obj.getPaymentType().equals("Credit Card CAD")) displayObj.setCreditCardSale(obj.getAmount());
                 else displayObj.setVoucherSale(obj.getAmount());
                 displayObjMap.put(obj.getServiceType()+obj.getFlightId(),displayObj);
             }

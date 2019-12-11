@@ -37,9 +37,7 @@ public class BondMessagesView extends UserEntryView implements View{
     protected DateField craftDateText;
     protected ComboBox flightNumberList;
     protected com.vaadin.ui.TextArea bondMessage;
-    private DateField flightFromDate;
-    private DateField flightToDate;
-    private ComboBox flightNumberCombo;
+
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -79,9 +77,10 @@ public class BondMessagesView extends UserEntryView implements View{
                 clearText());
 
         craftDateText=new DateField("Flight Date");
+        craftDateText.setStyleName("datePickerStyle");
 
-        flightNumberList=new ComboBox("Flight Number");
-        flightNumberList.setDescription("Flight Number");
+        flightNumberList=new ComboBox("Flight No");
+        flightNumberList.setDescription("Flight No");
         flightNumberList.setItems(connection.getFlightsNoList());
         flightNumberList.setEmptySelectionAllowed(false);
         flightNumberList.setRequiredIndicatorVisible(true);
@@ -100,7 +99,7 @@ public class BondMessagesView extends UserEntryView implements View{
 
         flightList=new FilterGrid();
         flightList.setSizeFull();
-        flightList.setWidth("50%");
+        flightList.setWidth("70%");
         buttonLayotText.addComponent(flightNumberList);
         buttonLayotText.addComponent(craftDateText);
         buttonLayotText.addComponent(bondMessage);
@@ -114,9 +113,12 @@ public class BondMessagesView extends UserEntryView implements View{
 
     public void dataInGrid() {
         flightDetList=connection.getBondMessageDetail();
-        flightList.addColumn(BondMessageDetail::getFlightNo).setCaption("Flight Number").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        flightList.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Flight Date").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        flightList.addColumn(BondMessageDetail::getMessageBody).setCaption("Message").setFilter(getColumnFilterField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        flightList.addColumn(BondMessageDetail::getFlightNo).setCaption("Flight No").setFilter(getColumnFilterField(),
+                InMemoryFilter.StringComparator.containsIgnoreCase()).setExpandRatio(1);
+        flightList.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Dep Date").setFilter(getColumnFilterField(),
+                InMemoryFilter.StringComparator.containsIgnoreCase()).setExpandRatio(1);
+        flightList.addColumn(BondMessageDetail::getMessageBody).setCaption("Message").setFilter(getColumnFilterField(),
+                InMemoryFilter.StringComparator.containsIgnoreCase()).setExpandRatio(4);
         flightList.setItems(flightDetList);
     }
 

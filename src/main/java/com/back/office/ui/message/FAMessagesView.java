@@ -68,12 +68,14 @@ public class FAMessagesView extends UserEntryView implements View{
 
         fromDateText=new DateField("From");
         fromDateText.setRequiredIndicatorVisible(true);
+        fromDateText.setStyleName("datePickerStyle");
         toDateText=new DateField("To");
+        toDateText.setStyleName("datePickerStyle");
         toDateText.setRequiredIndicatorVisible(true);
 
 
-        flightNumberList=new ComboBox("Flight Number");
-        flightNumberList.setDescription("Flight Number");
+        flightNumberList=new ComboBox("Flight No");
+        flightNumberList.setDescription("Flight No");
         flightNumberList.setItems(connection.getFlightsNoList());
         flightNumberList.setEmptySelectionAllowed(false);
 
@@ -84,17 +86,18 @@ public class FAMessagesView extends UserEntryView implements View{
         buttonLayoutSubmit.addComponent(fromDateText);
         buttonLayoutSubmit.addComponents(toDateText,flightNumberList);
         faMessageFilterGrid.setSizeFull();
-        faMessageFilterGrid.setWidth("50%");
+        faMessageFilterGrid.setWidth("70%");
 
         createLayout.addComponent(buttonLayoutSubmit);
         //createLayout.addComponent(flightNumberList);
         createLayout.addComponent(submitButton);
         createLayout.addComponent(faMessageFilterGrid);
 
-        faMessageFilterGrid.addColumn(FaMessage::getflightNumber).setCaption("Flight Number");
-        faMessageFilterGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDate())).setCaption("Flight Date");
-        faMessageFilterGrid.addColumn(FaMessage::getfaName).setCaption("FA Name");
-        faMessageFilterGrid.addColumn(FaMessage::getcomment).setCaption("Comment").setWidth(400);
+        faMessageFilterGrid.addColumn(FaMessage::getflightNumber).setCaption("Flight No").setExpandRatio(1);
+        faMessageFilterGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDate())).setCaption("Dep Date")
+        .setExpandRatio(1);
+        faMessageFilterGrid.addColumn(FaMessage::getfaName).setCaption("FA Name").setExpandRatio(1);
+        faMessageFilterGrid.addColumn(FaMessage::getcomment).setCaption("Message").setWidth(400).setExpandRatio(4);
     }
 
     private TextField getColumnFilterField() {

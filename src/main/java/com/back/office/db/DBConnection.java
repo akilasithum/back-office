@@ -3,6 +3,7 @@ package com.back.office.db;
 import com.back.office.entity.*;
 import com.back.office.persistence.HibernateUtil;
 import com.back.office.ui.salesReports.CategorySalesView;
+import com.itextpdf.text.pdf.AcroFields;
 import org.apache.commons.collections.map.HashedMap;
 import org.hibernate.Criteria;
 import org.hibernate.Filter;
@@ -346,30 +347,36 @@ public class DBConnection {
         }
     }
 
-    public List getSalesDetails(Date flightFromDate,Date flightToDate,String category,String serviceType,String flightFrom,
-                                String flightTo,String sifNo){
+    public List getSalesDetails(Date flightFromDate,Date flightToDate,String itemId,String serviceType){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(SalesDetails.class);
         criteria.add(Restrictions.gt("flightDate", yesterday(flightFromDate)));
         criteria.add(Restrictions.lt("flightDate", tommorow(flightToDate)));
-        if(category != null && !category.isEmpty()){
-            criteria.add(Restrictions.eq("category", category));
+        if(itemId != null && !itemId.isEmpty()){
+            int itemIdInt = getItemIdFromItemCode(itemId);
+            criteria.add(Restrictions.eq("itemId", itemIdInt));
         }
         if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
             criteria.add(Restrictions.eq("serviceType", serviceType));
         }
-        if(flightFrom != null && !flightFrom.isEmpty()){
-            criteria.add(Restrictions.eq("flightFrom", flightFrom));
-        }
-        if(flightTo != null && !flightTo.isEmpty()){
-            criteria.add(Restrictions.eq("flightTo", flightTo));
-        }
-        if(sifNo != null && !sifNo.isEmpty()){
-            criteria.add(Restrictions.eq("sifNo", Integer.parseInt(sifNo)));
-        }
+
         List list = criteria.list();
         session.close();
         return list;
+    }
+
+    public int getItemIdFromItemCode(String itemCode){
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(ItemDetails.class);
+        criteria.add(Restrictions.eq("itemCode", itemCode));
+        List list = criteria.list();
+        if(list != null && list.size()> 0){
+            ItemDetails item = (ItemDetails) list.get(0);
+            return item.getItemId();
+        }
+        session.close();
+        return 0;
     }
 
     public List getMonthlySales(Date flightFromDate,Date flightToDate,String flightNo){
@@ -422,6 +429,16 @@ public class DBConnection {
             criteria.add(Restrictions.eq("flightNo", flightNo));
         }
 
+        List list = criteria.list();
+        session.close();
+        return list;
+    }
+
+    public List getRequestInventory(Date flightFromDate,Date flightToDate){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(RequestInventory.class);
+        criteria.add(Restrictions.gt("requestedDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.lt("requestedDate", tommorow(flightToDate)));
         List list = criteria.list();
         session.close();
         return list;
@@ -526,6 +543,21 @@ public class DBConnection {
         }
     }
 
+    public MonthEndInventory getMonthEndInventory(int year,String month){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(MonthEndInventory.class);
+        criteria.add(Restrictions.eq("year", year));
+        criteria.add(Restrictions.eq("month", month));
+        List userList = criteria.list();
+        session.close();
+        if(userList != null && !userList.isEmpty()){
+            return (MonthEndInventory) userList.get(0);
+        }
+        else {
+            return null;
+        }
+    }
+
     public String getRoleNameFromRoleId(int roleId){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(UserRole.class);
@@ -610,6 +642,13 @@ public class DBConnection {
         return list;
     }
 
+    public List getRequestItems(int inventoryId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(RequestInventoryItem.class);
+        criteria.add(Restrictions.eq("reqInventoryId", inventoryId));
+        return criteria.list();
+    }
+
     private Date yesterday(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -627,13 +666,43 @@ public class DBConnection {
     public List getPreOrderDetails(Date flightFromDate,Date flightToDate,String serviceType){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(PreOrderDetails.class);
-        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
-        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        criteria.add(Restrictions.ge("flightDate", flightFromDate));
+        criteria.add(Restrictions.le("flightDate", flightToDate));
         if(serviceType != null && !serviceType.isEmpty() && !serviceType.equals("All")){
             criteria.add(Restrictions.eq("typeOfOrder", serviceType));
         }
-
         return criteria.list();
+    }
+
+    public List getPreOrderItemList(Date flightFromDate,Date flightToDate,String flightNo){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Criteria criteria = session.createCriteria(PreOrderDetails.class);
+        criteria.add(Restrictions.ge("flightDate", yesterday(flightFromDate)));
+        criteria.add(Restrictions.le("flightDate", tommorow(flightToDate)));
+        if(flightNo != null && !flightNo.isEmpty() && !flightNo.equals("null")){
+            criteria.add(Restrictions.eq("flightNumber", flightNo));
+        }
+        criteria.setProjection(Projections.property("preOrderId"));
+        List<Integer> preOrderIdList = criteria.list();
+        if(preOrderIdList == null || preOrderIdList.isEmpty()) return null;
+        Criteria criteria1 = session.createCriteria(PreOrderItem.class);
+        criteria1.add(Restrictions.in("preOrderId",preOrderIdList));
+
+        ProjectionList projectionList = Projections.projectionList();
+        projectionList.add(Projections.groupProperty("itemNo"));
+        projectionList.add(Projections.sum("quantity"));
+        criteria1.setProjection(projectionList);
+
+        List<Object[]> results = criteria1.list();
+        List<PreOrderItem> items = new ArrayList<>();
+        for (Object[] obj : results) {
+            PreOrderItem item = new PreOrderItem();
+            item.setItemNo(String.valueOf(obj[0]));
+            item.setQuantity(Integer.parseInt(String.valueOf(obj[1])));
+            items.add(item);
+        }
+
+        return items;
     }
 
     public List getPreOrderItemDetails(int serviceType){
@@ -737,6 +806,20 @@ public class DBConnection {
             Criteria criteria = session.createCriteria(OpeningInventory.class);
             criteria.add(Restrictions.eq("sifNo", sifNO));
 
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<SIFSheet> getSigSheetList(int sifNO,String serviceType){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(SIFSheet.class);
+            criteria.add(Restrictions.eq("sifNo", sifNO));
+            criteria.add(Restrictions.eq("serviceType", serviceType));
             return criteria.list();
         } catch (Exception e) {
             return null;
@@ -850,8 +933,23 @@ public class DBConnection {
             itemDetails.stream().forEach((k)-> map.put(k.getItemCode(),k));
             return map;
         } catch (Exception e) {
+            return null;
+        }
+    }
 
+    public Map<Integer,String> getItemIdCodeMap(){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(ItemDetails.class);
+            criteria.add(Restrictions.ge("recordStatus", 0));
 
+            List<ItemDetails> itemDetails = criteria.list();
+            Map<Integer,String> map = new HashMap<>();
+            itemDetails.stream().forEach((k)-> map.put(k.getItemId(),k.getItemCode()));
+            return map;
+        } catch (Exception e) {
             return null;
         }
     }
@@ -863,6 +961,19 @@ public class DBConnection {
             session.beginTransaction();
             Criteria criteria = session.createCriteria(CartNumber.class);
             criteria.add(Restrictions.eq("sifNo", sifNo));
+            return criteria.list();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<MonthEndInventoryItem> getMonthEndItems(int inventoryId){
+        try
+        {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(MonthEndInventoryItem.class);
+            criteria.add(Restrictions.eq("monthEndInventoryId", inventoryId));
             return criteria.list();
         } catch (Exception e) {
             return null;
@@ -999,7 +1110,7 @@ public class DBConnection {
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             Criteria criteria = session.createCriteria(ItemDetails.class);
-            criteria.add(Restrictions.eq("itemId", class1));
+            criteria.add(Restrictions.eq("itemCode", class1));
             return criteria.list();
         } catch (Exception e) {
             return null;
@@ -1025,7 +1136,7 @@ public class DBConnection {
         }
     }
 
-    public List<BuildTime> getBuildTimeList(Object flightName,Date fromPaked,Date toPaked,int sifBase){
+    public List<BuildTime> getBuildTimeList(Object flightName,Date fromPaked,Date toPaked){
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(BuildTime.class);
@@ -1035,9 +1146,6 @@ public class DBConnection {
         if(fromPaked != null && toPaked != null){
             criteria.add(Restrictions.ge("downloaded", fromPaked));
             criteria.add(Restrictions.le("downloaded", toPaked));
-        }
-        if(sifBase != 0){
-            criteria.add(Restrictions.eq("SIFNo", sifBase));
         }
         criteria.add(Restrictions.isNotNull("packedFor"));
         return criteria.list();

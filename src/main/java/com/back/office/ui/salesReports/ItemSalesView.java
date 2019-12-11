@@ -2,7 +2,6 @@ package com.back.office.ui.salesReports;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.SalesDetails;
-import com.back.office.entity.Sector;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
@@ -23,7 +22,7 @@ import java.util.*;
 public class ItemSalesView extends UserEntryView implements View {
 
     DBConnection connection;
-    protected String pageHeader = "Item Sales";
+    protected String pageHeader = "Item Sales by Flight";
     protected VerticalLayout headerLayout;
     protected VerticalLayout userFormLayout;
     protected VerticalLayout mainTableLayout;
@@ -37,21 +36,22 @@ public class ItemSalesView extends UserEntryView implements View {
     protected DateField flightDateToDateField;
     protected TextField sifNoField;
     protected ComboBox categoryComboBox;
-    protected ComboBox sectorComboBox;
+    protected ComboBox itemNoCombo;
     protected ComboBox serviceTypeComboBox;
     protected Grid<SalesDetails> detailsTable;
     protected Label filterCriteriaText;
+    private Map<Integer,String> itemIdItemCodeMap;
 
     private final String FLIGHT_DATE_FROM = "Flight Date(From)";
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String SIF_NO = "SIF no";
     private final String CATEGORY = "Category";
-    private final String SECTOR = "Sector";
+    private final String ITEM_NO = "Item No";
     private final String SERVICE_TYPE = "Service Type";
-    private static final String ITEM_NAME = "Item Description";
+    private static final String ITEM_NAME = "Description";
     private static final String ITEM_ID = "Item No";
     private static final String QUANTITY = "Quantity";
-    private static final String GROSS_AMOUNT = "Gross Sales";
+    private static final String GROSS_AMOUNT = "Gross Sale";
     private static final String TOTAL = "Total";
     private static final String FLIGHT_DATE = "Flight Date";
     private static final String FLIGHT_NAME = "Flight";
@@ -83,6 +83,7 @@ public class ItemSalesView extends UserEntryView implements View {
         Label h1 = new Label(pageHeader);
         h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
+        itemIdItemCodeMap = connection.getItemIdCodeMap();
 
         userFormLayout = new VerticalLayout();
         userFormLayout.setMargin(false);
@@ -131,13 +132,13 @@ public class ItemSalesView extends UserEntryView implements View {
         List<String> catList = (List<String>) connection.getCategories();
         categoryComboBox.setItems(catList);
         categoryComboBox.setSizeFull();
-        firstRow.addComponent(categoryComboBox);
+        //firstRow.addComponent(categoryComboBox);
 
-        sectorComboBox = new ComboBox(SECTOR);
-        sectorComboBox.setDescription(SECTOR);
-        sectorComboBox.setItems(getSectors());
-        sectorComboBox.setSizeFull();
-        firstRow.addComponent(sectorComboBox);
+        itemNoCombo = new ComboBox(ITEM_NO);
+        itemNoCombo.setDescription(ITEM_NO);
+        itemNoCombo.setItems((List<String>)connection.getItemCodesList());
+        itemNoCombo.setSizeFull();
+        firstRow.addComponent(itemNoCombo);
 
         serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
         serviceTypeComboBox.setDescription(SERVICE_TYPE);
@@ -196,10 +197,10 @@ public class ItemSalesView extends UserEntryView implements View {
     }
 
     private void createShowTableHeader(){
-        detailsTable.addColumn(SalesDetails::getItemId).setCaption(ITEM_ID).setId("itemId");
+        detailsTable.addColumn(bean -> itemIdItemCodeMap.get(bean.getItemId())).setCaption(ITEM_ID).setId("itemId");
         detailsTable.addColumn(SalesDetails::getItemName).setCaption(ITEM_NAME).setId("itemName");
         detailsTable.addColumn(SalesDetails::getCategory).setCaption(CATEGORY).setId("category");
-        detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY).setId("quantity");
+        detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY).setId("Qty");
         detailsTable.addColumn(SalesDetails::getPrice).setCaption(GROSS_AMOUNT).setId("price");
         //detailsTable.addColumn(SalesDetails::getPrice).setCaption(TOTAL).setId("price");
         detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE).setId("flightDate");
@@ -209,39 +210,19 @@ public class ItemSalesView extends UserEntryView implements View {
         detailsTable.addColumn(SalesDetails::getSifNo).setCaption(SIF_NO).setId("sifNo");
     }
 
-    private List<String> getSectors(){
-
-        List<Sector> sectors = (List<Sector>)connection.getSectors("com.back.office.entity.Sector");
-        List<String> sectorsStrList  = new ArrayList<>();
-        for(Sector sector : sectors){
-            String sectorStr = sector.getSectorFrom() + "-" + sector.getSectorTo();
-            if(!sectorsStrList.contains(sectorStr)){
-                sectorsStrList.add(sectorStr);
-            }
-        }
-        return sectorsStrList;
-    }
-
     protected void showFilterData(){
         mainTableLayout.setVisible(true);
-        String category = categoryComboBox.getValue() != null ? categoryComboBox.getValue().toString() : null;
+        String itemDesc = itemNoCombo.getValue() != null ? itemNoCombo.getValue().toString() : null;
         String serviceType = BackOfficeUtils.getServiceTypeFromServiceType( serviceTypeComboBox.getValue().toString());
-        String sifNo = sifNoField.getValue() != null ? sifNoField.getValue().toString() : null;
-        String flightFrom = null;
-        String flightTo = null;
-        if(sectorComboBox.getValue() != null && !sectorComboBox.getValue().toString().isEmpty()){
-            flightFrom = sectorComboBox.getValue().toString().split("-")[0];
-            flightTo = sectorComboBox.getValue().toString().split("-")[1];
-        }
+
         Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         List<SalesDetails> list = connection.getSalesDetails(dateFrom,dateTo,
-                category,serviceType,flightFrom,flightTo,sifNo);
+                itemDesc,serviceType);
 
         String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Service Type = " + serviceTypeComboBox.getValue().toString() + ((category == null || category.isEmpty()) ? "" : " category = " + category)
-                + (sifNo == null || sifNo.isEmpty() ? "" :" SIF No" + sifNo);
+                "Service Type = " + serviceTypeComboBox.getValue().toString() + ((itemDesc == null || itemDesc.isEmpty()) ? "" : " Item No = " + itemDesc);
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);
     }

@@ -35,7 +35,6 @@ public class BuildTimesView extends UserEntryView implements View{
     protected Button ExportToExcel;
     protected Button print;
     protected Grid<com.back.office.entity.BuildTime> buildTimeGrid;
-    protected Button clearButton;
     protected Button exportToExcel;
     protected Button printDetail;
     protected DateField fromDateText;
@@ -43,7 +42,6 @@ public class BuildTimesView extends UserEntryView implements View{
     protected File file=new File("BuildTimes.xlsx");
     protected FileResource fir=new FileResource(file);
     protected FileDownloader fid=new FileDownloader(fir);
-    protected TextField sifNoText;
     protected ComboBox flightText;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -85,19 +83,11 @@ public class BuildTimesView extends UserEntryView implements View{
         submitList.addClickListener((Button.ClickListener) ClickEvent->
                 processList());
 
-        clearButton=new Button("Clear");
-        clearButton.addClickListener((Button.ClickListener) ClickEvent->
-                clearText());
-
         exportToExcel=new Button();
         exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
 
         printDetail=new Button();
         printDetail.setIcon(VaadinIcons.PRINT);
-
-        sifNoText =new TextField("SIF No");
-        sifNoText.setDescription("SIF No");
-        sifNoText.setSizeFull();
 
         flightText=new ComboBox("Flight Number");
         flightText.setItems(connection.getFlightsNoList());
@@ -116,12 +106,11 @@ public class BuildTimesView extends UserEntryView implements View{
         firstRow.addComponent(fromDateText);
         firstRow.addComponent(toDateText);
         firstRow.addComponent(flightText);
-        firstRow.addComponent(sifNoText);
 
         HorizontalLayout submitBtnLayout=new HorizontalLayout();
         submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         submitBtnLayout.setStyleName("searchButton");
-        submitBtnLayout.addComponents(submitList,clearButton);
+        submitBtnLayout.addComponents(submitList);
         firstRow.addComponent(submitBtnLayout);
 
         HorizontalLayout optionButtonRow = new HorizontalLayout();
@@ -148,23 +137,22 @@ public class BuildTimesView extends UserEntryView implements View{
         buildTimeGrid.addColumn(com.back.office.entity.BuildTime::getcrewOpenedTime).setCaption("Crew Opened Time");
         buildTimeGrid.addColumn(com.back.office.entity.BuildTime::getcrewClosedTime).setCaption("Crew Closed Time");
         buildTimeGrid.addColumn(com.back.office.entity.BuildTime::getbuildTime).setCaption("Build Time (minutes)");
-
+        buildTimeGrid.addColumn(com.back.office.entity.BuildTime::getAircraftType).setCaption("Aircraft Type");
 
     }
 
     public void processList() {
 
 
-        String sifList= sifNoText.getValue();
         Object flightName=flightText.getValue();
-
-            int baseList=(sifList != null && !sifList.isEmpty()) ? Integer.parseInt(sifList) : 0;
 
                 if(fromDateText.getValue() == null || toDateText.getValue() == null){
                     Notification.show("Enter flight date from and to field values", Notification.Type.WARNING_MESSAGE);
                     return;
                 }
-                List<BuildTime> flightDetList=connection.getBuildTimeList(flightName,Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),baseList);
+                List<BuildTime> flightDetList=connection.getBuildTimeList(flightName,
+                        Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                        Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 exportToExcel.setVisible(true);
                 printDetail.setVisible(true);
                 buildTimeGrid.setItems(flightDetList);
@@ -236,7 +224,6 @@ public class BuildTimesView extends UserEntryView implements View{
     public void clearText() {
         fromDateText.clear();
         toDateText.clear();
-        sifNoText.clear();
         flightText.clear();
 
 

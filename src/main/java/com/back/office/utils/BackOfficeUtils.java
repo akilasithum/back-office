@@ -332,7 +332,7 @@ public class BackOfficeUtils {
 
         Label h1 = new Label("Sector " + i);
         h1.setSizeFull();
-        h1.addStyleName(ValoTheme.LABEL_H3);
+        h1.addStyleName("textBlackColor");
         formLayout.addComponent(h1);
 
         TextField sectorFromFld = new TextField("Sector From");
@@ -390,20 +390,20 @@ public class BackOfficeUtils {
         });
 
         CssLayout iconWrapper1 = new CssLayout();
-        Button flightKitchenImage = new Button("flight kitchen");
+        Button flightKitchenImage = new Button("Flight Kitchen");
         iconWrapper1.addComponents(flightKitchenImage);
-        if(selectedLayout.equalsIgnoreCase("flight kitchen")) iconWrapper1.setStyleName("selected");
+        if(selectedLayout.equalsIgnoreCase("Flight Kitchen")) iconWrapper1.setStyleName("selected");
         else iconWrapper1.setStyleName("iconWrapper-11");
         flightKitchenImage.setIcon(FontAwesome.PLANE);
         flightKitchenImage.addClickListener(clickEvent -> {
-            UI.getCurrent().getSession().setAttribute("selectedLayout","flight kitchen");
+            UI.getCurrent().getSession().setAttribute("selectedLayout","Flight Kitchen");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("flight_kitchen_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Flight Schedule","FlightSchedule");
             row1Map.put("Daily Flights","DailyFlights");
-            row1Map.put("Request Inventory","RequestInventory");
-            row1Map.put("Galley Weight","");
+            row1Map.put("Request Inventory","RequestInventoryView");
+            row1Map.put("Galley Weight","GalleyWeight");
             row1Map.put("SIF Details","SIFDetails");
             row1Map.put("HHC and Cart Usage","HHCAndCartUsage");
             menuItem.setMenuName("flight_kitchen");
@@ -426,7 +426,7 @@ public class BackOfficeUtils {
             menuItem.setMenuImage("pre_order_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Pre-order Summary","PreOrders");
-            row1Map.put("Pre-order Inventory","");
+            row1Map.put("Pre-order Inventory","PreOrderInventory");
             row1Map.put("Messaging","MessagingModule");
             row1Map.put("Messages to HHC","BondMessages");
             row1Map.put("HHC FA","FAMessages");
@@ -476,10 +476,10 @@ public class BackOfficeUtils {
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("reports_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
-            row1Map.put("Monthly Sales","MonthlySales");
-            row1Map.put("Flight Sales","FlightSales");
-            row1Map.put("Category Sales","");
-            row1Map.put("Item Sales","ItemSales");
+            row1Map.put("Item Sales Summary","MonthlySales");
+            row1Map.put("Flight Sales Summary","FlightSales");
+            row1Map.put("Category Sales","SaleByCategory");
+            row1Map.put("Item Sales by Flight","ItemSales");
             row1Map.put("FA Performance","");
             row1Map.put("Tender Summary","TenderSummary");
             menuItem.setSubMenuImageMap(row1Map);
@@ -503,7 +503,7 @@ public class BackOfficeUtils {
             menuItem.setMenuImage("inventory_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Equipment Master","EquipmentMaster");
-            row1Map.put("Month End Inventory","");
+            row1Map.put("Month End Inventory","MonthEndInventoryView");
             row1Map.put("Unaccounted Carts","");
             row1Map.put("Inventory Valuation","");
             row1Map.put("Sold-out by Flight","SoldOut");
@@ -607,6 +607,20 @@ public class BackOfficeUtils {
         btnLayout1.setComponentAlignment(iconWrapper8,Alignment.MIDDLE_CENTER);
 
         return verticalLayout;
+    }
+
+    public static String showWithDollarSign(Float val){
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        String floatVal = df.format(val);
+        if(floatVal.contains(".")){
+            String[] arr = floatVal.split("\\.");
+            if(arr[1].length() == 1) return "$ " + df.format(val)+"0";
+            else return "$ " + df.format(val);
+        }
+        else{
+            return "$ " + df.format(val)+".00";
+        }
     }
 }
 

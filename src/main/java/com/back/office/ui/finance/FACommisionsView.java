@@ -6,10 +6,7 @@ import com.back.office.entity.TenderSummaryObj;
 import com.back.office.ui.salesReports.ReportCommonView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -17,6 +14,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +40,16 @@ public class FACommisionsView extends ReportCommonView {
     protected void createMainLayout() {
         super.createMainLayout();
         faCommissionPercentage = connection.getFACommissionPercentage();
+        if(faCommissionPercentage == 0){
+            faCommissionPercentage = 7;
+            errorLayout.setSizeFull();
+            errorLayout.setWidth("500px");
+            errorLayout.setStyleName("warning");
+            Label specialCareLabel = new Label("FA commission ratio not specified. Considered default ratio as 7%.");
+            errorLayout.addComponent(specialCareLabel);
+            errorLayout.setVisible(true);
+            setComponentAlignment(errorLayout,Alignment.MIDDLE_CENTER);
+        }
         HorizontalLayout firstRow = new HorizontalLayout();
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
@@ -81,16 +90,22 @@ public class FACommisionsView extends ReportCommonView {
 
     private void createShowTableHeader(){
         detailsTable.addColumn(FACommission::getFlightNo).setCaption(FLIGHT_NO);
-        detailsTable.addColumn(FACommission::getSector).setCaption("Sector");
         detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Flight Date");
-        detailsTable.addColumn(bean-> formatter.format(bean.getTotalSale())).setCaption("Total Sales");
+        detailsTable.addColumn(FACommission::getSector).setCaption("Sector");
         detailsTable.addColumn(FACommission::getSifNo).setCaption("SIF Numbers");
-        detailsTable.addColumn( FACommission::getFaCount).setCaption("No of Flight Attendants");
-        detailsTable.addColumn(bean -> getCommissionPerAttendant(bean)).setCaption("Commission per Attendants");
+        detailsTable.addColumn(bean-> formatter.format(bean.getTotalSale())).setCaption("Total Sales");
+        detailsTable.addColumn( FACommission::getFaCount).setCaption("FA's");
+        detailsTable.addColumn(bean -> getCommissionPerAttendant(bean)).setCaption("Comm per FA");
+        detailsTable.addColumn(bean -> getTotalCommission(bean)).setCaption("Total Comm");
     }
 
     private String getCommissionPerAttendant(FACommission commission){
         float commissionFloat = (commission.getTotalSale() * (faCommissionPercentage/100))/commission.getFaCount();
+        return formatter.format(commissionFloat);
+    }
+
+    private String getTotalCommission(FACommission commission){
+        float commissionFloat = (commission.getTotalSale() * (faCommissionPercentage/100));
         return formatter.format(commissionFloat);
     }
 
@@ -103,6 +118,27 @@ public class FACommisionsView extends ReportCommonView {
     protected void defineStringFields() {
         this.pageHeader = "FA Commissions";
         this.reportExcelHeader = "FA Commissions";
+    }
+
+    private List<FACommission> getList(){
+        List<FACommission> commissionList = new ArrayList<>();
+        List<String> flights = Arrays.asList("WS 1210","WS 1216","WS 3517","WS 1680","WS 1400","WS 670","WS 676");
+        List<Integer> dates = Arrays.asList(1,1,2,2,3,3,3);
+        List<String> sales =  Arrays.asList("1340.5","1560.5","1340.6","1100","1202","1236.6","1450");
+        List<String> sectors = Arrays.asList("YYZ to LGA","YYZ to LGA","YYZ to YXU","YYC to JFK","YYC to LAS","YYC to YYZ","YYC to YYZ ");
+        for(int i = 0 ; i < 7 ;i++){
+            FACommission commission = new FACommission();
+            commission.setFlightNo(flights.get(i));
+            long DAY_IN_MS = 1000 * 60 * 60 * 24;
+            commission.setFlightDate(new Date(System.currentTimeMillis() - (dates.get(i) * DAY_IN_MS)));
+            commission.setSifNo(123 + i);
+            commission.setFaCount(2);
+            commission.setTotalSale(Float.parseFloat(sales.get(i)));
+            commission.setSector(sectors.get(i));
+            commissionList.add(commission);
+        }
+
+        return commissionList;
     }
 
     @Override
@@ -118,6 +154,7 @@ public class FACommisionsView extends ReportCommonView {
 
         List<FACommission> list = connection.getFACommission(dateFrom,dateTo,
                 flightNo);
+
         detailsTable.setItems(list);
     }
 }

@@ -35,11 +35,10 @@ import com.vaadin.ui.themes.ValoTheme;
 
 public class FlightScheduleView extends UserEntryView implements View{
 
-    protected Button flightShedul;
+    protected Button getScheduleBtn;
     protected VerticalLayout createLayout;
     protected DBConnection connection;
     protected Grid<SIFDetails> flightSheduleDetailGrid;
-    protected Button clearButton;
     protected Button exportToExcel;
     protected Button exportPdf;
     protected DateField fromDateText;
@@ -88,18 +87,14 @@ public class FlightScheduleView extends UserEntryView implements View{
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
-        firstRow.setWidth("60%");
+        firstRow.setWidth("70%");
         firstRow.setMargin(Constants.noMargin);
         firstRow.addStyleName("report-filter-panel");
 
 
-        flightShedul=new Button("Get Schedule");
-        flightShedul.addClickListener((Button.ClickListener) ClickEvent->
+        getScheduleBtn =new Button("Get Schedule");
+        getScheduleBtn.addClickListener((Button.ClickListener) ClickEvent->
                 processList());
-
-        clearButton=new Button("Clear");
-        clearButton.addClickListener((Button.ClickListener) ClickEvent->
-                clearText());
 
         exportToExcel=new Button();
         exportToExcel.setIcon(FontAwesome.FILE_EXCEL_O);
@@ -121,8 +116,9 @@ public class FlightScheduleView extends UserEntryView implements View{
 
         HorizontalLayout submitBtnLayout=new HorizontalLayout();
         submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        submitBtnLayout.setSizeFull();
         submitBtnLayout.setStyleName("searchButton");
-        submitBtnLayout.addComponents(flightShedul,clearButton);
+        submitBtnLayout.addComponents(getScheduleBtn);
 
         HorizontalLayout optionButtonRow = new HorizontalLayout();
         optionButtonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
@@ -141,20 +137,26 @@ public class FlightScheduleView extends UserEntryView implements View{
 
         flightSheduleDetailGrid.setSizeFull();
 
-        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Flight Date");
-        flightSheduleDetailGrid.addColumn(SIFDetails::getPackedFor).setCaption("Flight No");
-        flightSheduleDetailGrid.addColumn(SIFDetails::getStatus).setCaption("Status");
-        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDateTime(bean.getDownloaded())).setCaption("Build Start time");
-        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDateTime(bean.getPackedTime())).setCaption("Build End Time");
-        flightSheduleDetailGrid.addColumn(SIFDetails::getTotalBuildTime).setCaption("Total Build Time");
-        flightSheduleDetailGrid.addColumn(SIFDetails::getPrograms).setCaption("Services");
-        flightSheduleDetailGrid.addColumn(SIFDetails::getFlightFrom).setCaption("From");
-        flightSheduleDetailGrid.addColumn(SIFDetails::getFlightTo).setCaption("To");
+        flightSheduleDetailGrid.addColumn(SIFDetails::getPackedFor).setCaption("Flight No").setExpandRatio(2);
+        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Dep Date").setExpandRatio(2);
+        flightSheduleDetailGrid.addColumn(SIFDetails::getFlightFrom).setCaption("From").setExpandRatio(1);
+        flightSheduleDetailGrid.addColumn(SIFDetails::getFlightTo).setCaption("To").setExpandRatio(1);
+        flightSheduleDetailGrid.addColumn(SIFDetails::getPrograms).setCaption("Services").setExpandRatio(2);
+        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDateTime(bean.getDownloaded())).setCaption("Start").setExpandRatio(4);
+        flightSheduleDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDateTime(bean.getPackedTime())).setCaption("End").setExpandRatio(4);
+        flightSheduleDetailGrid.addColumn(SIFDetails::getTotalBuildTime).setCaption("Total Time").setExpandRatio(1);
+        flightSheduleDetailGrid.addColumn(bean -> getStatus(bean)).setCaption("Status").setExpandRatio(2);
 
         flightSheduleDetailGrid.addItemClickListener(itemClick -> {
             showSealAndCartDetails(itemClick.getItem());
         });
     }
+
+    private String getStatus(SIFDetails sif){
+        if(sif.getDownloaded() != null && sif.getPackedTime() != null) return "Completed";
+        else if(sif.getDownloaded() != null && sif.getPackedTime() == null) return "Open";
+        else return "In Progress";
+     }
 
     private void showSealAndCartDetails(SIFDetails item){
         Window window = new Window("Seal and Cart Details");

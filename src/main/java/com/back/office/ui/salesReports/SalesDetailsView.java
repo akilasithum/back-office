@@ -20,10 +20,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
+import static com.back.office.utils.BackOfficeUtils.showWithDollarSign;
+
 public class SalesDetailsView extends UserEntryView implements View {
 
     DBConnection connection;
-    protected String pageHeader = "Sales Summary";
+    protected String pageHeader = "Item Sales Summary";
     protected VerticalLayout headerLayout;
     protected VerticalLayout userFormLayout;
     protected VerticalLayout mainTableLayout;
@@ -169,12 +171,12 @@ public class SalesDetailsView extends UserEntryView implements View {
     private void createShowTableHeader(){
         detailsTable.addColumn(SalesDetails::getItemId).setCaption("Item No").setId("Item No");
         detailsTable.addColumn(SalesDetails::getItemName).setCaption("Description").setId("Description");
-        detailsTable.addColumn(bean-> bean.getPrice()/bean.getQuantity()).setCaption("Price").setId("Price");
-        detailsTable.addColumn(bean-> bean.getCostPrice()/bean.getQuantity()).setCaption("Cost").setId("Cost");
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getPrice()/bean.getQuantity())).setCaption("Price").setId("Price");
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getCostPrice()/bean.getQuantity())).setCaption("Cost").setId("Cost");
         detailsTable.addColumn(SalesDetails::getQuantity).setCaption(QUANTITY).setId("quantity");
-        detailsTable.addColumn(bean-> bean.getPrice()).setCaption("Gross Sale").setId("Gross Sale");
-        detailsTable.addColumn(bean-> bean.getPrice()).setCaption("Net Sale").setId("Net Sale");
-        detailsTable.addColumn(SalesDetails::getCostPrice).setCaption("Net Cost").setId("Net Cost");
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getPrice())).setCaption("Gross Sale").setId("Gross Sale");
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getPrice())).setCaption("Net Sale").setId("Net Sale");
+        detailsTable.addColumn(bean-> showWithDollarSign(bean.getCostPrice())).setCaption("Net Cost").setId("Net Cost");
 
     }
 

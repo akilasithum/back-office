@@ -39,7 +39,7 @@ public class CommonSelection extends VerticalLayout implements View {
         addComponent(mainLayout);
         mainLayout.setStyleName("main-layout");
         mainLayout.setSizeFull();
-        mainLayout.setWidth("80%");
+        //mainLayout.setWidth("80%");
         MarginInfo info = new MarginInfo(true);
         info.setMargins(true,false,false,false);
         mainLayout.setMargin(info);
@@ -92,20 +92,20 @@ public class CommonSelection extends VerticalLayout implements View {
         verticalLayout.addComponent(btnLayout1);
 
         CssLayout iconWrapper1 = new CssLayout();
-        Button flightKitchenImage = new Button("flight kitchen");
+        Button flightKitchenImage = new Button("Flight Kitchen");
         iconWrapper1.addComponents(flightKitchenImage);
-        if(selectedLayout.equalsIgnoreCase("flight kitchen")) iconWrapper1.setStyleName("selected");
+        if(selectedLayout.equalsIgnoreCase("Flight Kitchen")) iconWrapper1.setStyleName("selected");
         else iconWrapper1.setStyleName("iconWrapper-11");
         flightKitchenImage.setIcon(FontAwesome.PLANE);
         flightKitchenImage.addClickListener(clickEvent -> {
-            UI.getCurrent().getSession().setAttribute("selectedLayout","flight kitchen");
+            UI.getCurrent().getSession().setAttribute("selectedLayout","business intelligence");
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("flight_kitchen_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Flight Schedule","FlightSchedule");
             row1Map.put("Daily Flights","DailyFlights");
-            row1Map.put("Request Inventory","RequestInventory");
-            row1Map.put("Galley Weight","");
+            row1Map.put("Request Inventory","RequestInventoryView");
+            row1Map.put("Galley Weight","GalleyWeight");
             row1Map.put("SIF Details","SIFDetails");
             row1Map.put("HHC and Cart Usage","HHCAndCartUsage");
             menuItem.setMenuName("flight_kitchen");
@@ -128,7 +128,7 @@ public class CommonSelection extends VerticalLayout implements View {
             menuItem.setMenuImage("pre_order_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Pre-order Summary","PreOrders");
-            row1Map.put("Pre-order Inventory","");
+            row1Map.put("Pre-order Inventory","PreOrderInventory");
             row1Map.put("Messaging","MessagingModule");
             row1Map.put("Messages to HHC","BondMessages");
             row1Map.put("HHC FA","FAMessages");
@@ -178,10 +178,10 @@ public class CommonSelection extends VerticalLayout implements View {
             SubMenuItem menuItem = new SubMenuItem();
             menuItem.setMenuImage("reports_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
-            row1Map.put("Monthly Sales","MonthlySales");
-            row1Map.put("Flight Sales","FlightSales");
-            row1Map.put("Category Sales","");
-            row1Map.put("Item Sales","ItemSales");
+            row1Map.put("Item Sales Summary","MonthlySales");
+            row1Map.put("Flight Sales Summary","FlightSales");
+            row1Map.put("Category Sales","SaleByCategory");
+            row1Map.put("Item Sales by Flight","ItemSales");
             row1Map.put("FA Performance","");
             row1Map.put("Tender Summary","TenderSummary");
             menuItem.setSubMenuImageMap(row1Map);
@@ -205,7 +205,7 @@ public class CommonSelection extends VerticalLayout implements View {
             menuItem.setMenuImage("inventory_sub.png");
             Map<String,String> row1Map = new LinkedHashMap<>();
             row1Map.put("Equipment Master","EquipmentMaster");
-            row1Map.put("Month End Inventory","");
+            row1Map.put("Month End Inventory","MonthEndInventoryView");
             row1Map.put("Unaccounted Carts","");
             row1Map.put("Inventory Valuation","");
             row1Map.put("Sold-out by Flight","SoldOut");

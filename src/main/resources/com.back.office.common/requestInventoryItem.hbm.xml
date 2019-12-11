@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.RequestInventoryItem" table="request_inventory_items" catalog="">
+        <id name="reqItemId" type="java.lang.Integer">
+            <column name="reqItemId" />
+            <generator class="identity" />
+        </id>
+        <property name="itemCode" type="java.lang.String">
+            <column name="itemCode" length="30" />
+        </property>
+        <property name="itemName" type="java.lang.String">
+            <column name="itemName" length="50" />
+        </property>
+        <property name="reqInventoryId" type="java.lang.Integer">
+            <column name="reqInventoryId"  />
+        </property>
+        <property name="qty" type="java.lang.Integer">
+            <column name="qty"  />
+        </property>
+    </class>
+</hibernate-mapping>

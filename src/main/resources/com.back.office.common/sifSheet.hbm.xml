@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.SIFSheet" table="sif_sheet" catalog="">
+        <id name="sifSheetId" type="java.lang.Integer">
+            <column name="sifSheetId" />
+            <generator class="identity" />
+        </id>
+        <property name="sifNo" type="java.lang.Integer">
+            <column name="sifNo" />
+        </property>
+        <property name="itemNo" type="java.lang.String">
+            <column name="itemNo" length="50" />
+        </property>
+        <property name="itemDesc" type="java.lang.String">
+            <column name="itemDesc"  />
+        </property>
+        <property name="price" type="java.lang.Float">
+            <column name="price" />
+        </property>
+        <property name="cart" type="java.lang.String">
+            <column name="cart"  />
+        </property>
+        <property name="drawer" type="java.lang.String">
+            <column name="drawer"  />
+        </property>
+        <property name="obOpenQty" type="java.lang.Integer">
+            <column name="obOpenQty" />
+        </property>
+        <property name="obSoldQty" type="java.lang.Integer">
+            <column name="obSoldQty" />
+        </property>
+        <property name="obClosingQty" type="java.lang.Integer">
+            <column name="obClosingQty" />
+        </property>
+        <property name="ibOpenQty" type="java.lang.Integer">
+            <column name="ibOpenQty" />
+        </property>
+        <property name="ibSoldQty" type="java.lang.Integer">
+            <column name="ibSoldQty" />
+        </property>
+        <property name="ibClosingQty" type="java.lang.Integer">
+            <column name="ibClosingQty" />
+        </property>
+        <property name="serviceType" type="java.lang.String">
+            <column name="serviceType" />
+        </property>
+
+    </class>
+</hibernate-mapping>

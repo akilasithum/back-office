@@ -3,6 +3,7 @@ package com.back.office.ui.crm;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.back.office.entity.PassengerPurchases;
 import com.back.office.framework.UserEntryView;
@@ -35,7 +36,6 @@ public class PassengerPurchasesView extends UserEntryView implements View{
     protected VerticalLayout createLayout;
     protected DBConnection connection;
     protected Grid<PassengerPurchases> passengerPurchasesGrid;
-    protected Button clearButton;
     protected DateField fromDateText;
     protected DateField toDateText;
     protected ComboBox flightNumberText;
@@ -44,7 +44,7 @@ public class PassengerPurchasesView extends UserEntryView implements View{
     protected Label posItem;
     protected Label posLabel;
     protected float priceAll;
-    Window windowdatatable=new Window();
+    Window windowdatatable=new Window("View Items");
     protected Button exportToExcel;
     protected Button print;
 
@@ -84,10 +84,6 @@ public class PassengerPurchasesView extends UserEntryView implements View{
         submitList.addClickListener((Button.ClickListener) ClickEvent->
                 processList());
 
-        clearButton=new Button("Clear");
-        clearButton.addClickListener((Button.ClickListener) ClickEvent->
-                clearText());
-
         flightNumberText=new ComboBox("Flight Number");
         flightNumberText.setItems(connection.getFlightsNoList());
 
@@ -111,7 +107,7 @@ public class PassengerPurchasesView extends UserEntryView implements View{
         HorizontalLayout submitBtnLayout=new HorizontalLayout();
         submitBtnLayout.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         submitBtnLayout.setStyleName("searchButton");
-        submitBtnLayout.addComponents(submitList,clearButton);
+        submitBtnLayout.addComponents(submitList);
         firstRow.addComponent(submitBtnLayout);
 
         addComponent(createLayout);
@@ -198,13 +194,10 @@ public class PassengerPurchasesView extends UserEntryView implements View{
 
                 priceAll=0;
 
-
+                Map<String,ItemDetails> itemCodeMap = connection.getItemCodeDetailsMap();
                 for(int i=0;i<posItemList.size();i++) {
-                    int itemText=posItemList.get(i).getitemId();
-                    List<ItemDetails> itemGrid=connection.getItemId(posItemList.get(i).getitemId());
 
-
-                    itemLabel=new Label(itemGrid.get(0).getItemName());
+                    itemLabel=new Label(itemCodeMap.get(String.valueOf(posItemList.get(i).getitemId())).getItemName());
 
                     itemLayoutList.addComponent(itemLabel);
 

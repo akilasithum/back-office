@@ -7,6 +7,7 @@ import com.back.office.ui.analysis.WastageDetailsView;
 import com.back.office.ui.authorization.ManageRolesView;
 import com.back.office.ui.authorization.ViewAndEditCurrentUserDetailsView;
 import com.back.office.ui.bondReports.FlightBondActivityReportView;
+import com.back.office.ui.bondReports.GalleyWeightReportView;
 import com.back.office.ui.crm.PassengerPurchasesView;
 import com.back.office.ui.dashboard.CommonSelection;
 import com.back.office.ui.dashboard.MainDashboard;
@@ -16,14 +17,15 @@ import com.back.office.ui.finance.CurruncyDetailHistory;
 import com.back.office.ui.finance.FACommisionsView;
 import com.back.office.ui.finance.GrossMargine;
 import com.back.office.ui.flightKitchen.FlightScheduleView;
-import com.back.office.ui.flightKitchen.FlightShedule;
-import com.back.office.ui.flightKitchen.RequestInventory;
+import com.back.office.ui.flightKitchen.RequestInventoryView;
 import com.back.office.ui.flightKitchen.TodayFlightDetailView;
 import com.back.office.ui.inventory.EquipmentMasterView;
+import com.back.office.ui.inventory.MonthEndInventoryView;
 import com.back.office.ui.inventory.SoldOutDetails;
 import com.back.office.ui.message.BondMessagesView;
 import com.back.office.ui.message.FAMessagesView;
 import com.back.office.ui.message.MessagingModuleView;
+import com.back.office.ui.preOrder.PreOrderInventoryView;
 import com.back.office.ui.preOrder.PreOrders;
 import com.back.office.ui.salesReports.*;
 import com.back.office.ui.setup.FACommissionSetupView;
@@ -56,7 +58,7 @@ import java.util.List;
 
 @Theme("mytheme")
 @Widgetset("com.back.office.MyAppWidgetset")
-@Title("Porter - Back Office")
+@Title("AeroClub - Back Office")
 @Push
 @PushStateNavigation
 public class HybridUI extends UI implements ClientConnector.DetachListener {
@@ -103,7 +105,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("Vouchers", VoucherView.class);
         navigator.addView("MonthlySales", SalesDetailsView.class);
         navigator.addView("FlightSales", FlightPaymentDetailsView.class);
-        navigator.addView("SalebyCategory", CategorySalesView.class);
+        navigator.addView("SaleByCategory", CategorySalesView.class);
         navigator.addView("ManageUserRoles", ManageRolesView.class);
         navigator.addView("ManageUsers", UserDetailsView.class);
         navigator.addView("Uploads", UploadView.class);
@@ -119,7 +121,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("PreOrders", PreOrders.class);
         navigator.addView("MessagingModule", MessagingModuleView.class);
         navigator.addView("CurrencyHistory", CurruncyDetailHistory.class);
-        navigator.addView("RequestInventory", RequestInventory.class);
+        navigator.addView("RequestInventoryView", RequestInventoryView.class);
         navigator.addView("GrossMargins", GrossMargine.class);
         navigator.addView("Budget", BudgetView.class);
         navigator.addView("FlightSchedule", TodayFlightDetailView.class);
@@ -136,6 +138,9 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("CommonView",CommonSelection.class);
         navigator.addView("FACommissions", FACommisionsView.class);
         navigator.addView("FACommissionSetup", FACommissionSetupView.class);
+        navigator.addView("GalleyWeight", GalleyWeightReportView.class);
+        navigator.addView("PreOrderInventory", PreOrderInventoryView.class);
+        navigator.addView("MonthEndInventoryView", MonthEndInventoryView.class);
 
         String f = Page.getCurrent().getUriFragment();
         String query = Page.getCurrent().getLocation().getQuery();

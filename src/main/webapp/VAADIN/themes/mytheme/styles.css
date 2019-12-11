@@ -16578,6 +16578,31 @@ div.v-layout.v-horizontal.v-widget {
 	pointer-events: auto !important;
 }
 
+.mytheme .warning {
+	color: #555;
+	border-radius: 10px;
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 11px;
+	padding: 10px 36px;
+	margin: 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+	background: #e44949 url('images/warning.png') no-repeat 10px 50%;
+	border: 1px solid #555;
+	cursor: pointer;
+}
+
+.mytheme .textBlackColor {
+	color: black !important;
+}
+
+.mytheme .warning:hover {
+	text-shadow: 0px 0px 6px white;
+	-webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+	-moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+	transition: all 0.4s ease 0s;
+}
+
 .mytheme .report-filter-panel {
 	background: #03028C;
 	padding-left: 20px;
@@ -16638,6 +16663,15 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .notification-warning:hover {
 	background-color: rgba(247, 158, 38) !important;
+}
+
+.mytheme .downloadBtn {
+	border: none !important;
+	cursor: pointer;
+	background-color: Transparent;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	outline: none;
 }
 
 .mytheme .fancy-notif-title {

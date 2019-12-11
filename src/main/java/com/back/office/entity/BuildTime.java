@@ -15,6 +15,7 @@ public class BuildTime {
     private Date crewOpenedTime;
     private Date crewClosedTime;
     private long buildTime;
+    private String aircraftType;
 
     public int getSIFNo() {
         return SIFNo;
@@ -85,5 +86,11 @@ public class BuildTime {
         this.buildTime = buildTime;
     }
 
+    public String getAircraftType() {
+        return "A320";
+    }
 
+    public void setAircraftType(String aircraftType) {
+        this.aircraftType = aircraftType;
+    }
 }

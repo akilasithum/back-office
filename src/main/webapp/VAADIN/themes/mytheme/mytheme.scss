@@ -63,6 +63,30 @@
     }
   }
 
+  .warning{
+    color:#555;
+    border-radius:10px;
+    font-family:Tahoma,Geneva,Arial,sans-serif;font-size:11px;
+    padding:10px 36px;
+    margin:10px;
+    font-weight:bold;
+    text-transform:uppercase;
+    background:#e44949 url('images/warning.png') no-repeat 10px 50%;
+    border:1px solid #555;
+    cursor: pointer;
+  }
+
+.textBlackColor{
+  color: black !important;
+}
+
+  .warning:hover {
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    transition: all 0.4s ease 0s;
+  }
+
   .report-filter-panel{
     background: #03028C;
     padding-left: 20px;
@@ -124,6 +148,15 @@
 
   .notification-warning:hover {
     background-color: rgba(247, 158, 38) !important;
+  }
+
+  .downloadBtn{
+    border: none !important;
+    cursor: pointer;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    overflow: hidden;
+    outline:none;
   }
 
   .fancy-notif-title {

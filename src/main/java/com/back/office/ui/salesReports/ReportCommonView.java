@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.vaadin.haijian.Exporter;
 
 import java.io.*;
+import java.text.DecimalFormat;
 
 public abstract class ReportCommonView extends UserEntryView implements View {
     protected DBConnection connection;
@@ -33,6 +34,8 @@ public abstract class ReportCommonView extends UserEntryView implements View {
     OnDemandFileDownloader onDemandFileDownloader = null;
     OnDemandFileDownloader.OnDemandStreamResource onDemandStreamResource;
     protected HorizontalLayout optionButtonRow;
+    protected HorizontalLayout errorLayout;
+    protected HorizontalLayout additionalBtnLayout;
 
     protected CellStyle dateCellStyle;
     @Override
@@ -61,10 +64,16 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         Label h1 = new Label(pageHeader);
         h1.addStyleName("headerText");
         headerLayout.addComponent(h1);
+        additionalBtnLayout = new HorizontalLayout();
+        additionalBtnLayout.setMargin(false);
+        addComponent(additionalBtnLayout);
 
         userFormLayout = new VerticalLayout();
         userFormLayout.setMargin(false);
         addComponent(userFormLayout);
+        errorLayout = new HorizontalLayout();
+        addComponent(errorLayout);
+        errorLayout.setVisible(false);
         mainTableLayout = new VerticalLayout();
         addComponent(mainTableLayout);
         mainTableLayout.setMargin(Constants.noMargin);
@@ -81,7 +90,6 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         buttonRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         buttonRow.setStyleName("searchButton");
         buttonRow.setSpacing(true);
-        //userFormLayout.addComponent(buttonRow);
 
         searchButton = new Button("Search");
         searchButton.addClickListener((Button.ClickListener) clickEvent -> showFilterData());
@@ -193,10 +201,30 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         return dwnButton;
     }
 
+    public StreamResource getExistingFile(String destinationFileName, String sourceFilePath) {
+        if (sourceFilePath == null || sourceFilePath.equals("")) return null;
+        File file = new File(sourceFilePath);
+        String filename = file.getName();
+        String fileType = filename.substring(filename.lastIndexOf(".") + 1);
+        StreamResource resource = new StreamResource(new StreamResource.StreamSource() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public InputStream getStream() {
+                try {
+                    return new FileInputStream(new File(sourceFilePath));
+                } catch (FileNotFoundException e) {
+                    return null;
+                }
+            }
+        }, (destinationFileName));
+        resource.setMIMEType("application/" + fileType);
+        resource.getStream().setParameter("Content-Disposition", "attachment; filename=" + (destinationFileName));
+        return resource;
+    }
+
     protected abstract Sheet getWorkbook(Sheet sheet);
 
     protected abstract void defineStringFields();
 
     protected abstract void showFilterData();
-
 }

@@ -49,12 +49,12 @@ public class PreOrders extends ReportCommonView {
     private final String FLIGHT_DATE_TO = "Flight Date(To)";
     private final String ORDER_TYPE = "Source";
 
-    private final String preOrderId = "Pre Order No";
+    private final String preOrderId = "Pre Order #";
     private final String PNR = "PNR";
-    private final String customerName = "Customer Name";
+    private final String customerName = "Pax Name";
     private final String serviceType = "Service Type";
-    private final String flightNumber = "Flight Number";
-    private final String FlightDate = "Flight Date";
+    private final String flightNumber = "Flight #";
+    private final String FlightDate = "Dep Date";
     private final String preOrderStatus = "Pre Order Status";
     private final String typeOfOrder = "Source";
     private Map<String, ItemDetails> itemNoNameMap;
@@ -62,8 +62,8 @@ public class PreOrders extends ReportCommonView {
 
     @Override
     protected void defineStringFields() {
-        this.pageHeader = "Pre Order";
-        this.reportExcelHeader = "Pre Order";
+        this.pageHeader = "Pre Order Summary";
+        this.reportExcelHeader = "Pre Order Summary";
 
     }
 
@@ -199,7 +199,7 @@ public class PreOrders extends ReportCommonView {
         preOrderItemWindow.setWidth("50%");
         preOrderItemWindow.setResizable(false);
         preOrderItemWindow.setResponsive(true);
-        windowContent.addComponent(new Label("Per Order Item"));
+        windowContent.addComponent(new Label("Pre Order Item"));
         preOrderItemWindow.center();
         windowContent.addComponent(preOrderItemGrid);
         windowContent.addComponent(buttonclose);
@@ -270,7 +270,7 @@ public class PreOrders extends ReportCommonView {
     private void createShowTableHeader(){
         detailsTable.addColumn(PreOrderDetails::getServiceType).setCaption(serviceType);
         detailsTable.addColumn(PreOrderDetails::getTypeOfOrder).setCaption(typeOfOrder);
-        detailsTable.addColumn(PreOrderDetails::getPreOrderId).setCaption(preOrderId);
+        detailsTable.addColumn(PreOrderDetails::getOrderNumber).setCaption(preOrderId);
         detailsTable.addColumn(PreOrderDetails::getPNR).setCaption(PNR);
         detailsTable.addColumn(PreOrderDetails::getCustomerName).setCaption(customerName);
         detailsTable.addColumn(PreOrderDetails::getFlightNumber).setCaption(flightNumber);

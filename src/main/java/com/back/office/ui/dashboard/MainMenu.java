@@ -136,9 +136,9 @@ public class MainMenu extends VerticalLayout {
     public void addLogo(){
         if(logoLayout.getComponentCount() == 0) {
             Image logo = new Image();
-            logo.setSource(new ClassResource("logo.svg"));
-            logo.setWidth(170, Unit.PIXELS);
-            logo.setHeight(36, Unit.PIXELS);
+            logo.setSource(new ClassResource("logo.png"));
+            //logo.setWidth(170, Unit.PIXELS);
+            logo.setHeight(40, Unit.PIXELS);
             logo.setStyleName("imageMargin logo");
             logo.addClickListener((MouseEvents.ClickListener) clickEvent -> {
                 getUI().getNavigator().navigateTo("dashboard");

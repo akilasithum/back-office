@@ -77,7 +77,7 @@ public class EquipmentMasterView extends UserEntryView implements View {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
-        firstRow.setWidth("60%");
+        firstRow.setWidth("80%");
         firstRow.setMargin(Constants.noMargin);
         firstRow.addStyleName("report-filter-panel");
 
@@ -136,12 +136,11 @@ public class EquipmentMasterView extends UserEntryView implements View {
         equipmentMasterDetailGrid = new Grid();
         equipmentMasterDetailGrid.setSizeFull();
 
-        equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getEquipmentId).setCaption("Equipment ID");
-        equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getType).setCaption("Type");
-        equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getStatus).setCaption("Status");
-        equipmentMasterDetailGrid.addColumn(com.back.office.entity.EquipmentMasterDetail::getFlightNumber).setCaption("Flight Number");
-        equipmentMasterDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getLastUsedDate())).setCaption("Last Used Date");
-
+        equipmentMasterDetailGrid.addColumn(EquipmentMasterDetail::getEquipmentId).setCaption("Equipment ID");
+        equipmentMasterDetailGrid.addColumn(EquipmentMasterDetail::getType).setCaption("Type");
+        equipmentMasterDetailGrid.addColumn(EquipmentMasterDetail::getStatus).setCaption("Status");
+        equipmentMasterDetailGrid.addColumn(EquipmentMasterDetail::getFlightNumber).setCaption("Last Flight");
+        equipmentMasterDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getLastUsedDate())).setCaption("Date");
 
         hhcMasterDetailGrid = new Grid();
         hhcMasterDetailGrid.setSizeFull();
@@ -149,8 +148,8 @@ public class EquipmentMasterView extends UserEntryView implements View {
         hhcMasterDetailGrid.addColumn(HHCMaster::getHhcId).setCaption("HHC ID");
         hhcMasterDetailGrid.addColumn(HHCMaster::getType).setCaption("Type");
         hhcMasterDetailGrid.addColumn(HHCMaster::getStatus).setCaption("Status");
-        hhcMasterDetailGrid.addColumn(HHCMaster::getFlightNo).setCaption("Flight Number");
-        hhcMasterDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getLastUsedDate())).setCaption("Last Used Date");
+        hhcMasterDetailGrid.addColumn(HHCMaster::getFlightNo).setCaption("Last Flight");
+        hhcMasterDetailGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getLastUsedDate())).setCaption("Date");
 
         createLayout.addComponent(firstRow);
         createLayout.addComponent(buttonLayoutSubmit);
@@ -159,7 +158,6 @@ public class EquipmentMasterView extends UserEntryView implements View {
         createLayout.addComponent(equipmentMasterDetailGrid);
         createLayout.addComponent(hhcMasterDetailGrid);
         hhcMasterDetailGrid.setVisible(false);
-
     }
 
     public void processList() {
@@ -173,11 +171,12 @@ public class EquipmentMasterView extends UserEntryView implements View {
                 !toDateText.getValue().toString().isEmpty()) {
 
             if (masterTypeText != null && masterTypeText.equals("Equipment")) {
-                List<com.back.office.entity.EquipmentMasterDetail> flightDetailListdatelis = connection.getEquipmentMasterDetails(Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                List<com.back.office.entity.EquipmentMasterDetail> flightDetailListdatelis = connection.getEquipmentMasterDetails
+                        (Date.from(fromDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                                Date.from(toDateText.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 hhcMasterDetailGrid.setVisible(false);
                 equipmentMasterDetailGrid.setVisible(true);
                 equipmentMasterDetailGrid.setItems(flightDetailListdatelis);
-
 
                 try {
                     XSSFWorkbook workbook = new XSSFWorkbook();

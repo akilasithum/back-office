@@ -234,7 +234,7 @@ public class GrossMargine extends UserEntryView implements View{
             print.setVisible(true);
 
         }else {
-            Notification.show("Error","Please select sourceComboBox type",Notification.Type.WARNING_MESSAGE);
+            Notification.show("Error","Please select flightNoCombo type",Notification.Type.WARNING_MESSAGE);
 
         }
     }

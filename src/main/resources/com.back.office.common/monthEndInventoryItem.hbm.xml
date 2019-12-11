@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.MonthEndInventoryItem" table="month_end_inventory_items" catalog="">
+        <id name="inventoryItemId" type="java.lang.Integer">
+            <column name="inventoryItemId" />
+            <generator class="identity" />
+        </id>
+        <property name="monthEndInventoryId" type="java.lang.Integer">
+            <column name="monthEndInventoryId"  />
+        </property>
+        <property name="shelfCartNo" type="java.lang.String">
+            <column name="shelfCartNo" />
+        </property>
+        <property name="itemDesc" type="java.lang.String">
+            <column name="itemDesc" />
+        </property>
+        <property name="qty" type="java.lang.Integer">
+            <column name="qty"  />
+        </property>
+        <property name="itemCode" type="java.lang.String">
+            <column name="itemCode" />
+        </property>
+        <property name="type" type="java.lang.String">
+            <column name="type" />
+        </property>
+    </class>
+</hibernate-mapping>

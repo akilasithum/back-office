@@ -67,5 +67,10 @@ connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop
         <mapping resource="com.back.office.common/ArrivalFlight.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/FACommission.hbm.xml"></mapping>
         <mapping resource="com.back.office.common/faCommissionSetup.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/requestInventory.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/requestInventoryItem.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/monthEndInventory.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/monthEndInventoryItem.hbm.xml"></mapping>
+        <mapping resource="com.back.office.common/sifSheet.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

@@ -48,7 +48,9 @@ public class CategorySalesView extends ReportCommonView {
         firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
         firstRow.setSpacing(true);
         firstRow.setSizeFull();
+        firstRow.setWidth("80%");
         firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
         mainUserInputLayout.addComponent(firstRow);
 
 
@@ -57,10 +59,14 @@ public class CategorySalesView extends ReportCommonView {
 
         flightDateFromDateField = new DateField(FLIGHT_DATE_FROM);
         flightDateFromDateField.setValue(today);
+        flightDateFromDateField.setStyleName("datePickerStyle");
+        flightDateFromDateField.setSizeFull();
         firstRow.addComponent(flightDateFromDateField);
 
         flightDateToDateField = new DateField(FLIGHT_DATE_TO);
         flightDateToDateField.setValue(today);
+        flightDateToDateField.setSizeFull();
+        flightDateToDateField.setStyleName("datePickerStyle");
         firstRow.addComponent(flightDateToDateField);
 
         serviceTypeComboBox = new ComboBox(SERVICE_TYPE);
@@ -68,7 +74,8 @@ public class CategorySalesView extends ReportCommonView {
         serviceTypeComboBox.setItems("Duty Free","Duty Paid","Buy on Board");
         serviceTypeComboBox.setSelectedItem("Duty Free");
         serviceTypeComboBox.setEmptySelectionAllowed(false);
-        firstRow.addComponent(serviceTypeComboBox);
+        serviceTypeComboBox.setSizeFull();
+        firstRow.addComponents(serviceTypeComboBox,buttonRow);
         detailsTable = new Grid<>();
         detailsTable.setColumnReorderingAllowed(true);
         detailsTable.setSizeFull();

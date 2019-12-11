@@ -19,6 +19,8 @@ public class SIFDetails {
     private String totalBuildTime;
     private String flightFrom;
     private String flightTo;
+    private String downloadType;
+    private String kitCodes;
 
     public int getSIFNo() {
         return SIFNo;
@@ -137,5 +139,21 @@ public class SIFDetails {
 
     public void setFlightTo(String flightTo) {
         this.flightTo = flightTo;
+    }
+
+    public String getDownloadType() {
+        return downloadType;
+    }
+
+    public void setDownloadType(String downloadType) {
+        this.downloadType = downloadType;
+    }
+
+    public String getKitCodes() {
+        return kitCodes;
+    }
+
+    public void setKitCodes(String kitCodes) {
+        this.kitCodes = kitCodes;
     }
 }
