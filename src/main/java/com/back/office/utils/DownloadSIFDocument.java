@@ -43,17 +43,14 @@ public class DownloadSIFDocument implements Runnable {
 
     private void downloadPDF(){
         Document document = new Document();
-        Date date = new Date();
-
-
         try {
             File pdfFile = File.createTempFile("tmp","pdf");
 
             Font redFont = FontFactory.getFont(FontFactory.TIMES, 10);
             Font yellowFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 14, Font.BOLD);
-
             Font tableHeader = FontFactory.getFont(FontFactory.TIMES_BOLD, 8, Font.BOLD);
             Font tableContent = FontFactory.getFont(FontFactory.TIMES, 8, Font.BOLD);
+
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
             document.open();
             document.setPageSize(PageSize.A4);
@@ -278,8 +275,6 @@ public class DownloadSIFDocument implements Runnable {
             Document document = new Document();
             File pdfFile = File.createTempFile("tmp","pdf");
             //File pdfFile = new File(sifDetails.getSIFNo()+"_galley_weight.pdf");
-            FileResource fileResoce = new FileResource(pdfFile);
-            FileDownloader pdfFileDownloader = new FileDownloader(fileResoce);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
             document.open();
             document.setPageSize(PageSize.A4);

@@ -28,7 +28,7 @@ public abstract class CommonTableFormView extends VerticalLayout implements View
 
     /*public CommonTableFormView(){
 
-        createLayout();
+        mainLayout();
     }*/
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

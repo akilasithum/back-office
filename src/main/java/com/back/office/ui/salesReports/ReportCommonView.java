@@ -1,9 +1,13 @@
 package com.back.office.ui.salesReports;
 
 import com.back.office.db.DBConnection;
+import com.back.office.entity.SIFDetails;
 import com.back.office.framework.OnDemandFileDownloader;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.Constants;
+import com.back.office.utils.DownloadHelper;
+import com.back.office.utils.DownloadHelperImpl;
+import com.itextpdf.text.Document;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -12,10 +16,12 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.vaadin.haijian.Exporter;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.poi.ss.usermodel.Font;
 
 import java.io.*;
-import java.text.DecimalFormat;
 
 public abstract class ReportCommonView extends UserEntryView implements View {
     protected DBConnection connection;
@@ -36,6 +42,9 @@ public abstract class ReportCommonView extends UserEntryView implements View {
     protected HorizontalLayout optionButtonRow;
     protected HorizontalLayout errorLayout;
     protected HorizontalLayout additionalBtnLayout;
+    protected String[] excelColumnArr;
+    protected float[] pdfTableWithArr;
+
 
     protected CellStyle dateCellStyle;
     @Override
@@ -105,6 +114,14 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         downloadExcelBtn = new Button();
         downloadExcelBtn.setIcon(FontAwesome.FILE_EXCEL_O);
         downloadExcelBtn.setId("DownloadButtonID");
+
+        downloadExcelBtn.addClickListener(event -> {
+            exportToExcel();
+        });
+        printBtn.addClickListener(event -> {
+           exportToPDF();
+        });
+
         optionButtonRow.addComponents(printBtn,downloadExcelBtn);
         filterCriteriaText = new Label("");
         filterCriteriaText.addStyleName(ValoTheme.LABEL_H4);
@@ -124,12 +141,12 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         return filter;
     }
 
-    public File exportToExcel(String sheetName, String[] columns){
+    public void exportToExcel(){
         Workbook workbook = new HSSFWorkbook();
         CreationHelper createHelper = workbook.getCreationHelper();
 
         // Create a Sheet
-        Sheet sheet = workbook.createSheet(sheetName);
+        Sheet sheet = workbook.createSheet(reportExcelHeader);
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeightInPoints((short) 12);
@@ -141,9 +158,9 @@ public abstract class ReportCommonView extends UserEntryView implements View {
 
         // Create a Row
         Row headerRow = sheet.createRow(0);
-        for(int i = 0; i < columns.length; i++) {
+        for(int i = 0; i < excelColumnArr.length; i++) {
             Cell cell = headerRow.createCell(i);
-            cell.setCellValue(columns[i]);
+            cell.setCellValue(excelColumnArr[i]);
             cell.setCellStyle(headerCellStyle);
         }
 
@@ -151,54 +168,114 @@ public abstract class ReportCommonView extends UserEntryView implements View {
         dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
 
         sheet = getWorkbook(sheet);
-        for(int i = 0; i < columns.length; i++) {
+        for(int i = 0; i < excelColumnArr.length; i++) {
             sheet.autoSizeColumn(i);
         }
+        downloadFile(workbook);
+    }
+
+    private void downloadFile(Workbook workbook){
+        DownloadHelper helper = new DownloadHelperImpl();
+        helper.createExcelFile(new DownloadHelper.DownloadServiceListener() {
+            @Override
+            public void onComplete(String path) {
+                if (path != null && !path.equals("")) {
+                    try {
+                        File file = new File(path);
+                        StreamResource resource = getExistingFile(reportExcelHeader.
+                                replace(" ","_")+".xls", path);
+                        getUI().getPage().open(resource, "_blank", false);
+                        file.deleteOnExit();
+                    } catch (Exception e) {
+                        Notification.show("Something went wrong", Notification.Type.WARNING_MESSAGE);
+                    }
+                }
+            }
+            @Override
+            public void onFail() {
+
+            }
+        },workbook);
+    }
+
+    private void downloadPdfFile(PdfPTable table){
+        DownloadHelper helper = new DownloadHelperImpl();
+        helper.createPDFFile(new DownloadHelper.DownloadServiceListener() {
+            @Override
+            public void onComplete(String path) {
+                if (path != null && !path.equals("")) {
+                    try {
+                        File file = new File(path);
+                        StreamResource resource = getExistingFile(reportExcelHeader.
+                                replace(" ","_")+".pdf", path);
+                        getUI().getPage().open(resource, "_blank", false);
+                        file.deleteOnExit();
+                    } catch (Exception e) {
+                        Notification.show("Something went wrong", Notification.Type.WARNING_MESSAGE);
+                    }
+                }
+            }
+            @Override
+            public void onFail() {
+
+            }
+        },table,reportExcelHeader);
+    }
+
+    public File exportToPDF(String sheetName, String[] columns,float[] widthArr){
+        com.itextpdf.text.Font redFont = FontFactory.getFont(FontFactory.TIMES, 10);
+        com.itextpdf.text.Font greenFont = FontFactory.getFont(FontFactory.TIMES, 12);
+        com.itextpdf.text.Font yellowFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 14, com.itextpdf.text.Font.BOLD);
 
         try {
-            File oldFile = new File(sheetName+".xls");
-            oldFile.delete();
-            File file = new File(sheetName+".xls");
+            Document document = new Document();
+            /*File oldFile = new File(sheetName+".pdf");
+            oldFile.delete();*/
+            File pdfFile = File.createTempFile("tmp","pdf");
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+            document.open();
+            document.setPageSize(PageSize.A4);
+            Paragraph header = new Paragraph(sheetName, yellowFont);
+            header.setAlignment(1);
+            document.add(header);
+            document.add(Chunk.NEWLINE);
 
-            FileOutputStream fileOut = new FileOutputStream(file,true);
-            workbook.write(fileOut);
+            PdfPTable itemTable = new PdfPTable(widthArr);
+            itemTable.setWidthPercentage(100);
+            for(int i = 0 ; i< widthArr.length;i++){
+                itemTable.addCell(new Paragraph(columns[i],greenFont));
+            }
 
-            fileOut.close();
-            workbook.close();
-            return file;
+            itemTable = getPdfTable(itemTable,redFont);
+
+            document.add(itemTable);
+            document.add( Chunk.NEWLINE );
+            document.close();
+            writer.close();
+            return pdfFile;
         }
         catch (Exception e){
-            Notification.show("Something wrong", Notification.Type.WARNING_MESSAGE);
+            e.printStackTrace();
             return null;
         }
     }
 
-    public Button getDownloadExcelBtn(String sheetName,File file){
-        Button dwnButton = new Button();
-        dwnButton.setIcon(FontAwesome.FILE_EXCEL_O);
-        onDemandStreamResource = new  OnDemandFileDownloader.OnDemandStreamResource()
-        {
-            @Override
-            public String getFilename()
-            {
-                return  sheetName+".xls";
-            }
+    public void exportToPDF(){
+        com.itextpdf.text.Font redFont = FontFactory.getFont(FontFactory.TIMES, 10);
+        com.itextpdf.text.Font greenFont = FontFactory.getFont(FontFactory.TIMES, 12);
+        try {
 
-            @Override
-            public InputStream getStream()
-            {
-                try {
-                    return new FileInputStream(file);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                return null;
+            PdfPTable itemTable = new PdfPTable(pdfTableWithArr);
+            itemTable.setWidthPercentage(100);
+            for(int i = 0 ; i< pdfTableWithArr.length;i++){
+                itemTable.addCell(new Paragraph(excelColumnArr[i],greenFont));
             }
-        };
-        onDemandFileDownloader = new OnDemandFileDownloader(
-                onDemandStreamResource);
-        onDemandFileDownloader.extend(dwnButton);
-        return dwnButton;
+            itemTable = getPdfTable(itemTable,redFont);
+            downloadPdfFile(itemTable);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public StreamResource getExistingFile(String destinationFileName, String sourceFilePath) {
@@ -227,4 +304,6 @@ public abstract class ReportCommonView extends UserEntryView implements View {
     protected abstract void defineStringFields();
 
     protected abstract void showFilterData();
+
+    protected abstract PdfPTable getPdfTable(PdfPTable sheet,com.itextpdf.text.Font redFont);
 }

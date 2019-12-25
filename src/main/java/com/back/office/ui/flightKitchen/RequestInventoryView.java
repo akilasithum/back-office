@@ -7,6 +7,8 @@ import com.back.office.ui.salesReports.ReportCommonView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.back.office.utils.UserNotification;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.event.selection.SingleSelectionListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -153,6 +155,11 @@ public class RequestInventoryView extends ReportCommonView implements View{
 
         List<RequestInventory> list = connection.getRequestInventory(dateFrom,dateTo);
         detailsTable.setItems(list);
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 
     private void openViewItemsWindow(RequestInventory inventory){

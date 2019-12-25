@@ -1,5 +1,7 @@
 package com.back.office.entity;
 
+import java.util.Date;
+
 public class Message {
 
     private int message_id;
@@ -7,6 +9,7 @@ public class Message {
     private String message_to;
     private String message;
     private boolean read_un;
+    private Date sentTime;
 
     public int getMessage_id() {
         return message_id;
@@ -46,5 +49,13 @@ public class Message {
 
     public void setRead_un(boolean read_un) {
         this.read_un = read_un;
+    }
+
+    public Date getSentTime() {
+        return sentTime;
+    }
+
+    public void setSentTime(Date sentTime) {
+        this.sentTime = sentTime;
     }
 }

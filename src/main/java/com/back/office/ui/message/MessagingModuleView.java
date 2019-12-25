@@ -1,13 +1,17 @@
 package com.back.office.ui.message;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import com.back.office.entity.User;
 import com.back.office.framework.UserEntryView;
+import com.back.office.utils.BackOfficeUtils;
+import com.back.office.utils.UserNotification;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ClassResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import org.vaadin.addons.ComboBoxMultiselect;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -19,6 +23,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.teemu.wizards.Wizard;
 
 import javax.jws.soap.SOAPBinding;
 
@@ -36,6 +41,7 @@ public class MessagingModuleView extends UserEntryView implements View{
     protected FilterGrid<Message> sentMessage;
     protected String userName;
     protected TabSheet messageTab;
+    private Window createMsgWindow;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
@@ -51,7 +57,7 @@ public class MessagingModuleView extends UserEntryView implements View{
         createMainLayout();
         userName =UI.getCurrent().getSession().getAttribute("userName").toString();
         mssageread(userName);
-
+        createMsgWindow = new Window("Create New Message");
     }
 
     protected void createMainLayout() {
@@ -64,22 +70,19 @@ public class MessagingModuleView extends UserEntryView implements View{
         hedderLayout.addComponent(h1);
         addComponent(hedderLayout);
 
-        userFormLayout = new VerticalLayout();
-        userFormLayout.setSpacing(true);
-        userFormLayout.setMargin(Constants.noMargin);
-        addComponent(userFormLayout);
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        MarginInfo marginInfo = new MarginInfo(false,false,false,false);
+        buttonLayout.setMargin(marginInfo);
+        buttonLayout.setSizeFull();
+        addComponent(buttonLayout);
 
-        messageTo =new ComboBoxMultiselect ("Message To");
-        messageTo.showSelectAllButton(true);
-        messageTo.setItems(connection.getStaffIdUserNameMap());
-        messageTo.setRequiredIndicatorVisible(true);
-        messageTo.setWidth("70%");
-        messageTo.setSizeFull();
+        Button addNewButton = new Button();
+        addNewButton.setIcon(FontAwesome.PLUS);
+        addNewButton.setStyleName("add_button");
+        addNewButton.setSizeFull();
+        addNewButton.addClickListener((Button.ClickListener) clickEvent -> openCreateMsgWindow());
 
-        message=new TextArea("Message");
-        message.setCaption("Message");
-        message.setSizeFull();
-        message.setRequiredIndicatorVisible(true);
+        buttonLayout.addComponents(addNewButton);
 
         tableLayout =new VerticalLayout();
         tableLayout.setSpacing(true);
@@ -87,23 +90,12 @@ public class MessagingModuleView extends UserEntryView implements View{
         tableLayout.setSizeFull();
         addComponent(tableLayout);
 
-
-        sendButton =new Button("Send");
-        sendButton.setCaption("Send");
-
-        userFormLayout.setWidth("50%");
-        userFormLayout.addComponent(messageTo);
-        userFormLayout.addComponent(message);
-        userFormLayout.addComponent(sendButton);
-
         messageTab = new TabSheet();
-
 
         readMessage = new FilterGrid<>();
         readMessage.setColumnReorderingAllowed(false);
         readMessage.setWidth("60%");
         readMessage.setSizeFull();
-
 
         newMessage = new FilterGrid<>();
         newMessage.setColumnReorderingAllowed(false);
@@ -123,11 +115,8 @@ public class MessagingModuleView extends UserEntryView implements View{
         messageTab.addTab(sentMessage,"Sent Messages",VaadinIcons.ENVELOPE_OPEN_O);
         messageTab.setStyleName("blackFont");
 
-        sendButton.addClickListener(clickListener->messagdilivr());
-
         tableLayout.setWidth("70%");
         tableLayout.addComponents(messageTab);
-
 
         showTableHeader();
 
@@ -165,10 +154,53 @@ public class MessagingModuleView extends UserEntryView implements View{
         });
     }
 
+    public void openCreateMsgWindow(){
+
+        if(!createMsgWindow.isAttached()) {
+            createMsgWindow.setWidth("40%");
+            createMsgWindow.setHeight(350, Unit.PIXELS);
+            final FormLayout content = new FormLayout();
+            content.setMargin(true);
+
+            userFormLayout = new VerticalLayout();
+            userFormLayout.setSpacing(true);
+            userFormLayout.setMargin(true);
+            addComponent(userFormLayout);
+
+            messageTo = new ComboBoxMultiselect("Message To");
+            messageTo.showSelectAllButton(true);
+            messageTo.setItems(connection.getStaffIdUserNameMap());
+            messageTo.setRequiredIndicatorVisible(true);
+            messageTo.setWidth("70%");
+            messageTo.setSizeFull();
+
+            message = new TextArea("Message");
+            message.setCaption("Message");
+            message.setSizeFull();
+            message.setRequiredIndicatorVisible(true);
+
+            sendButton = new Button("Send");
+            sendButton.setCaption("Send");
+            sendButton.addClickListener(clickListener->messagdilivr());
+
+            userFormLayout.setWidth("80%");
+            userFormLayout.addComponent(messageTo);
+            userFormLayout.addComponent(message);
+            userFormLayout.addComponent(sendButton);
+
+            createMsgWindow.center();
+            createMsgWindow.setContent(userFormLayout);
+            createMsgWindow.addStyleName("mywindowstyle");
+            createMsgWindow.setModal(true);
+            getUI().addWindow(createMsgWindow);
+        }
+
+    }
+
 
     public void selectDetailsh(String from_message_data,String recive_message_data) {
 
-        Window messageWindow = new Window();
+        Window messageWindow = new Window("Message");
         messageWindow.setSizeFull();
         messageWindow.setWidth("40%");
         messageWindow.setHeight("40%");
@@ -208,20 +240,26 @@ public class MessagingModuleView extends UserEntryView implements View{
     public void messagdilivr() {
 
         Set<String> receiverList = messageTo.getSelectedItems();
-        userName =UI.getCurrent().getSession().getAttribute("userName").toString();
-        for(String user : receiverList){
-            String messageContent = String.valueOf(message.getValue());
-            Message messageDetails = new Message();
-            messageDetails.setMessage_from(userName);
-            messageDetails.setRead_un(false);
-            messageDetails.setMessage(messageContent);
-            messageDetails.setMessage_to(user);
-            connection.insertObjectHBM(messageDetails);
+        if(receiverList != null && message.getValue() != null && !message.getValue().isEmpty()){
+            userName =UI.getCurrent().getSession().getAttribute("userName").toString();
+            for(String user : receiverList){
+                String messageContent = String.valueOf(message.getValue());
+                Message messageDetails = new Message();
+                messageDetails.setMessage_from(userName);
+                messageDetails.setRead_un(false);
+                messageDetails.setMessage(messageContent);
+                messageDetails.setMessage_to(user);
+                messageDetails.setSentTime(new Date());
+                connection.insertObjectHBM(messageDetails);
+            }
+            UserNotification.show("Success","Message sent successfully","success", UI.getCurrent());
+            this.messageTo.clear();
+            message.clear();
+            createMsgWindow.close();
         }
-
-        Notification.show("Message sent successfully", Notification.Type.HUMANIZED_MESSAGE);
-        this.messageTo.clear();
-        message.clear();
+        else{
+            UserNotification.show("Warning","Please add sender and message details","warning", UI.getCurrent());
+        }
     }
 
     public void mssageread(String user_name_data) {
@@ -248,10 +286,13 @@ public class MessagingModuleView extends UserEntryView implements View{
     public void showTableHeader() {
         readMessage.addColumn(Message::getMessage_from).setCaption("Message From").setWidth(200);
         readMessage.addColumn(Message::getMessage).setCaption("Message");
+        readMessage.addColumn(bean -> BackOfficeUtils.getDateTimeFromDateTime(bean.getSentTime())).setCaption("Sent Time").setWidth(200);
         newMessage.addColumn(Message::getMessage_from).setCaption("Message From").setWidth(200);
         newMessage.addColumn(Message::getMessage).setCaption("Message");
+        newMessage.addColumn(bean -> BackOfficeUtils.getDateTimeFromDateTime(bean.getSentTime())).setCaption("Sent Time").setWidth(200);
         sentMessage.addColumn(Message::getMessage_to).setCaption("Message To").setWidth(200);
         sentMessage.addColumn(Message::getMessage).setCaption("Message");
+        sentMessage.addColumn(bean -> BackOfficeUtils.getDateTimeFromDateTime(bean.getSentTime())).setCaption("Sent Time").setWidth(200);
     }
 
 }

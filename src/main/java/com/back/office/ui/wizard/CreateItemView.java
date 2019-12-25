@@ -240,7 +240,8 @@ public class CreateItemView extends WizardCommonView {
 
         TextField costPriceFld = new TextField(COST_PRICE);
         costPriceFld.setEnabled(isEnabled());
-        secondPriceFld.setValue(String.valueOf(item.getCostPrice()));
+        costPriceFld.setValue(String.valueOf(item.getCostPrice()));
+        costPriceFld.setEnabled(isEdit);
         formLayout.addComponent(costPriceFld);
 
         TextField NFCIdField = new TextField(NFC_ID);

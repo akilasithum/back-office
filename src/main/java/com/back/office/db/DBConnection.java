@@ -2,12 +2,8 @@ package com.back.office.db;
 
 import com.back.office.entity.*;
 import com.back.office.persistence.HibernateUtil;
-import com.back.office.ui.salesReports.CategorySalesView;
-import com.itextpdf.text.pdf.AcroFields;
-import org.apache.commons.collections.map.HashedMap;
 import org.hibernate.Criteria;
-import org.hibernate.Filter;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -15,7 +11,6 @@ import org.hibernate.criterion.Restrictions;
 
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DBConnection {
 
@@ -1007,16 +1002,16 @@ public class DBConnection {
         }
     }
 
-    public List<FaMessage> getFaMessages(String flightNo,Date dateListh,Date dateListhTo){
+    public List<UserComment> getFaMessages(String flightNo,Date dateListh,Date dateListhTo){
         try
         {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Criteria criteria = session.createCriteria(FaMessage.class);
+            Criteria criteria = session.createCriteria(UserComment.class);
             criteria.add(Restrictions.ge("flightDate", dateListh));
             criteria.add(Restrictions.le("flightDate", dateListhTo));
             if(flightNo != null) {
-                criteria.add(Restrictions.eq("flightNumber", flightNo));
+                criteria.add(Restrictions.eq("flightNo", flightNo));
             }
 
 

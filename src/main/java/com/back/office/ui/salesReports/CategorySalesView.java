@@ -4,6 +4,8 @@ import com.back.office.entity.CategorySalesDetails;
 import com.back.office.entity.SalesByCategoryObj;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -200,5 +202,10 @@ public class CategorySalesView extends ReportCommonView {
         item.getItemProperty(NET_AMOUNT_PERCENTAGE).setValue("100");*/
 
 
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 }

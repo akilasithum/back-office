@@ -26,6 +26,34 @@
   }
 }
 
+.porter-app-login {
+  position: relative;
+  &:after {
+    background: $blue-color;
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 25%;
+    z-index: 0;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  &:before {
+    background: $blue-color;
+    content: "";
+    position: fixed;
+    right: 50px;
+    bottom: 0;
+    height: 100%;
+    z-index: 0;
+    width: 220px;
+  }
+}
+
 ///////// Menu componet override styles
 @mixin overridehybridMenu{
 .hybridMenu {

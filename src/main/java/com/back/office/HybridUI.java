@@ -86,12 +86,13 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                 .build();
         connection = DBConnection.getInstance();
         setContent(hybridMenu);
-        hybridMenu.setStyleName("porter-app");
+        hybridMenu.setStyleName("porter-app-login");
         Responsive.makeResponsive(hybridMenu);
+        hybridMenu.setHybridHeaderLayoutVisible(false);
 
         getSession().setAttribute("notification", hybridMenu.getNotifications());
         navigator = new Navigator(this, hybridMenu.getNaviContent());
-        navigator.addView("login", LoginPage.class);
+        navigator.addView("login", Login.class);
         navigator.addView("dashboard", MainDashboard.class);
         navigator.addView("AircraftType", AircraftDetailsView.class);
         navigator.addView("Currency", CurerncyDetailsView.class);
@@ -115,7 +116,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         navigator.addView("SIFDetails", FlightBondActivityReportView.class);
         navigator.addView("ViewandEditUser", ViewAndEditCurrentUserDetailsView.class);
         navigator.addView("CreditCardSummary", CreditCardSummaryView.class);
-        navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
+        //navigator.addView("CreditCardbyFlight", CreditCardSummaryByFlightView.class);
         navigator.addView("TenderSummary",TenderSummaryView.class);
         navigator.addView("Downloads", DownloadView.class);
         navigator.addView("PreOrders", PreOrders.class);
@@ -153,14 +154,11 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
             }
         }
 
-
-        getPage().addUriFragmentChangedListener(uriFragmentChangedEvent -> {
-            String currentPage = uriFragmentChangedEvent.getUriFragment();
-             if(previousPage != null && previousPage.equals("login")){
-                getUI().getNavigator().navigateTo("login");
-            }
-            else {
-                previousPage = currentPage;
+        Page.getCurrent().addPopStateListener(event -> {
+            String[] arr = event.getUri().split("/");
+            String page = arr[arr.length-1];
+            if(page != null && page.equals("login")){
+                getUI().getNavigator().navigateTo("dashboard");
             }
         });
 
@@ -169,7 +167,9 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
         }
         else {
             if (f == null || f.equals("") || !f.equals("login")) {
+                hybridMenu.setStyleName("porter-app");
                 buildTopOnlyMenu();
+                hybridMenu.setHybridHeaderLayoutVisible(true);
                 hybridMenu.addLogo();
             }
         }
@@ -187,8 +187,9 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     }
 
     public void navigate(){
-        //getPermissionCodes();
+        hybridMenu.setStyleName("porter-app");
         buildTopOnlyMenu();
+        hybridMenu.setHybridHeaderLayoutVisible(true);
         hybridMenu.addLogo();
         previousPage = "login ok";
         navigator.navigateTo("dashboard");
@@ -203,7 +204,7 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
     private void removeMenus(){
         hybridMenu.getTopMenu().removeAllComponents();
         hybridMenu.getLogoLayout().removeAllComponents();
-
+        hybridMenu.setHybridHeaderLayoutVisible(false);
     }
 
     private void buildTopOnlyMenu() {
@@ -241,8 +242,9 @@ public class HybridUI extends UI implements ClientConnector.DetachListener {
                         if (dialog.isConfirmed()) {
                             getSession().setAttribute("userName","");
                             removeMenus();
-                            //getUI().getNavigator().navigateTo("login");
-                            getUI().getPage().setLocation("http://163.172.156.224:8080/login/");
+                            hybridMenu.setStyleName("porter-app-login");
+                            getUI().getNavigator().navigateTo("login");
+                            //getUI().getPage().setLocation("http://163.172.156.224:8080/login/");
                         }
                     }
                 });

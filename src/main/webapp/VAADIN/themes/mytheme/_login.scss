@@ -17,7 +17,7 @@
       content: "";
       position: absolute;
       left: 0;
-      top: -1px;
+      top: -50px;
       right: 0;
       bottom: 0;
       height: 60%;
@@ -47,10 +47,10 @@
     margin-top: -80px;
   }
   input.v-textfield {
-    @include inputBorderColor($orange);
+    //@include inputBorderColor($orange);
   }
 
-  @include inputBorderColorParentClass($orange);
+  //@include inputBorderColorParentClass($orange);
   .v-textfield-error {
     @include inputBordererrorColor(red, white);
   }
@@ -128,7 +128,7 @@
   }
 
   img.flight_cn {
-    max-width: 40%;
+    max-width: 25%;
   }
 
   .cloud {
@@ -150,5 +150,15 @@
   }
   .v-slot-cloud2 {
     height: 5% !important;
+  }
+
+  .dropdownStyle .v-filterselect-input{
+    background: transparent;
+    color: white !important;
+  }
+
+  .loginButton {
+    @include buttonColor($orange, $white , 2rem);
+    @include buttonfocusAnimation ($orange);
   }
 }

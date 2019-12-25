@@ -7,6 +7,10 @@ import java.util.List;
 import com.back.office.framework.UserEntryView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.back.office.utils.UserNotification;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 
@@ -14,22 +18,12 @@ import com.back.office.db.DBConnection;
 import com.back.office.entity.BondMessageDetail;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class BondMessagesView extends UserEntryView implements View{
 
     protected Button submitButton;
-    protected VerticalLayout createLayout;
+    protected VerticalLayout mainLayout;
     protected DBConnection connection;
     protected FilterGrid<BondMessageDetail> flightList;
     protected List<BondMessageDetail> flightDetList;
@@ -37,7 +31,7 @@ public class BondMessagesView extends UserEntryView implements View{
     protected DateField craftDateText;
     protected ComboBox flightNumberList;
     protected com.vaadin.ui.TextArea bondMessage;
-
+    private Window createMsgWindow;
 
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         Object userName = UI.getCurrent().getSession().getAttribute("userName");
@@ -46,69 +40,85 @@ public class BondMessagesView extends UserEntryView implements View{
         }
     }
 
-
     public BondMessagesView() {
         super();
         connection=DBConnection.getInstance();
         createMainLayout();
-
+        createMsgWindow = new Window("Create New Message");
     }
 
     public void createMainLayout() {
 
-        createLayout=new VerticalLayout();
+        mainLayout = new VerticalLayout();
         setMargin(Constants.noTopMargin);
         setSizeFull();
-        createLayout.setMargin(Constants.noMargin);
+        mainLayout.setMargin(Constants.noMargin);
 
         Label h1=new Label("Messages to HHC");
-
         h1.addStyleName("headerText");
-        createLayout.addComponent(h1);
+        mainLayout.addComponent(h1);
 
-        submitButton=new Button("Submit");
-        createLayout.addComponent(submitButton);
-        submitButton.addClickListener((Button.ClickListener) ClickEvent->
-                processList());
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        MarginInfo marginInfo = new MarginInfo(false,false,false,false);
+        buttonLayout.setMargin(marginInfo);
+        buttonLayout.setSizeFull();
+        mainLayout.addComponent(buttonLayout);
 
-        clear=new Button("Clear");
-        createLayout.addComponent(clear);
-        clear.addClickListener((Button.ClickListener) ClickEvent->
-                clearText());
+        Button addNewButton = new Button();
+        addNewButton.setIcon(FontAwesome.PLUS);
+        addNewButton.setStyleName("add_button");
+        addNewButton.setSizeFull();
+        addNewButton.addClickListener((Button.ClickListener) clickEvent -> openCreateMsgWindow());
+        buttonLayout.addComponents(addNewButton);
 
-        craftDateText=new DateField("Flight Date");
-        craftDateText.setStyleName("datePickerStyle");
-
-        flightNumberList=new ComboBox("Flight No");
-        flightNumberList.setDescription("Flight No");
-        flightNumberList.setItems(connection.getFlightsNoList());
-        flightNumberList.setEmptySelectionAllowed(false);
-        flightNumberList.setRequiredIndicatorVisible(true);
-
-        bondMessage=new com.vaadin.ui.TextArea("Message");
-        bondMessage.setSizeFull();
-        bondMessage.setWidth("30%");
-
-
-        FormLayout buttonLayotText=new FormLayout();
-        HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
-        buttonLayoutSubmit.setMargin(Constants.noMargin);
-
-        addComponent(createLayout);
-
-
+        addComponent(mainLayout);
         flightList=new FilterGrid();
         flightList.setSizeFull();
         flightList.setWidth("70%");
-        buttonLayotText.addComponent(flightNumberList);
-        buttonLayotText.addComponent(craftDateText);
-        buttonLayotText.addComponent(bondMessage);
-        buttonLayoutSubmit.addComponent(submitButton);
-        buttonLayoutSubmit.addComponent(clear);
-        createLayout.addComponent(buttonLayotText);
-        createLayout.addComponent(buttonLayoutSubmit);
-        createLayout.addComponent(flightList);
+
+        mainLayout.addComponent(flightList);
         dataInGrid();
+    }
+
+    public void openCreateMsgWindow() {
+
+        if (!createMsgWindow.isAttached()) {
+            createMsgWindow.setWidth("40%");
+            createMsgWindow.setHeight(400, Unit.PIXELS);
+
+            craftDateText=new DateField("Flight Date");
+            craftDateText.setStyleName("datePickerStyle");
+
+            flightNumberList=new ComboBox("Flight No");
+            flightNumberList.setDescription("Flight No");
+            flightNumberList.setItems(connection.getFlightsNoList());
+            flightNumberList.setEmptySelectionAllowed(false);
+            flightNumberList.setRequiredIndicatorVisible(true);
+
+            bondMessage=new com.vaadin.ui.TextArea("Message");
+            bondMessage.setSizeFull();
+            bondMessage.setWidth("70%");
+
+            submitButton=new Button("Submit");
+            mainLayout.addComponent(submitButton);
+            submitButton.addClickListener((Button.ClickListener) ClickEvent->
+                    sendBondMessage());
+
+            FormLayout formLayout =new FormLayout();
+            formLayout.setSizeFull();
+            formLayout.setMargin(true);
+
+            formLayout.addComponent(flightNumberList);
+            formLayout.addComponent(craftDateText);
+            formLayout.addComponent(bondMessage);
+            formLayout.addComponent(submitButton);
+
+            createMsgWindow.center();
+            createMsgWindow.setContent(formLayout);
+            createMsgWindow.addStyleName("mywindowstyle");
+            createMsgWindow.setModal(true);
+            getUI().addWindow(createMsgWindow);
+        }
     }
 
     public void dataInGrid() {
@@ -122,12 +132,6 @@ public class BondMessagesView extends UserEntryView implements View{
         flightList.setItems(flightDetList);
     }
 
-    private void clearText() {
-        flightNumberList.clear();
-        craftDateText.clear();
-        bondMessage.clear();
-    }
-
     private TextField getColumnFilterField() {
         TextField filter = new TextField();
         filter.setWidth("100%");
@@ -137,7 +141,7 @@ public class BondMessagesView extends UserEntryView implements View{
     }
 
 
-    public void processList() {
+    public void sendBondMessage() {
 
         if(flightNumberList.getValue()!=null&&!flightNumberList.getValue().toString().isEmpty()&&craftDateText.getValue()!=null&&!craftDateText.getValue().toString().isEmpty()&&bondMessage.getValue()!=null&&!bondMessage.getValue().toString().isEmpty()) {
             BondMessageDetail bondMessageText=new BondMessageDetail();
@@ -149,13 +153,12 @@ public class BondMessagesView extends UserEntryView implements View{
             bondMessageText.setBondMessageId(messageDetails);
             flightDetList=connection.getBondMessageDetail();
             flightList.setItems(flightDetList);
-
+            UserNotification.show("Success","Message saved successfully","success",UI.getCurrent());
+            createMsgWindow.close();
 
         }else {
-            Notification.show("Error","Pleas Insert All field details",Notification.Type.WARNING_MESSAGE);
+            UserNotification.show("Error","Pleas Insert All field details","warning",UI.getCurrent());
         }
-
-
     }
 }
 

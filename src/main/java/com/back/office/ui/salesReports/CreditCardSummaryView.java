@@ -3,6 +3,8 @@ package com.back.office.ui.salesReports;
 import com.back.office.entity.CCSummaryObj;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -70,7 +72,7 @@ public class CreditCardSummaryView extends ReportCommonView{
         detailsTable.addColumn(CCSummaryObj::getFlightTo).setCaption(FLIGHT_TO);
         detailsTable.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption(FLIGHT_DATE);
     }
-    
+
     @Override
     protected Sheet getWorkbook(Sheet sheet) {
         return null;
@@ -93,5 +95,10 @@ public class CreditCardSummaryView extends ReportCommonView{
                 " , To " + BackOfficeUtils.getDateFromDateTime(dateTo);
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 }

@@ -136,14 +136,16 @@ public class FlightBondActivityReportView extends ReportCommonView {
         },sifDetails);
     }
 
-    private void exportToExcel(){
+    /*private void exportToExcel(){
         String[] arr = {SIF_NO,PACKED_FOR,DEVICE_ID,PACKED_TIME,CREW_OPEN_TIME,CREW_CLOSE_TIME,DOWNLOADED};
         exportToExcel("SIF Details",arr);
-    }
+    }*/
     @Override
     protected void defineStringFields() {
         this.pageHeader = "SIF Details";
         this.reportExcelHeader = "SIF Details";
+        String[] arr = {SIF_NO,PACKED_FOR,DEVICE_ID,PACKED_TIME,CREW_OPEN_TIME,CREW_CLOSE_TIME,DOWNLOADED};
+        this.excelColumnArr = arr;
     }
 
     @Override
@@ -157,12 +159,17 @@ public class FlightBondActivityReportView extends ReportCommonView {
                 " , To: " + BackOfficeUtils.getDateFromDateTime(dateTo);
         filterCriteriaText.setValue(outputStr);
         detailsTable.setItems(list);
-        String[] arr = {SIF_NO,PACKED_FOR,DEVICE_ID,PACKED_TIME,CREW_OPEN_TIME,CREW_CLOSE_TIME,DOWNLOADED};
-        optionButtonRow.removeComponent(optionButtonRow.getComponent(1));
-        File file = exportToExcel("SIF Details",arr);
-        downloadExcelBtn = getDownloadExcelBtn("SIF Details",file);
-        optionButtonRow.addComponent(downloadExcelBtn);
+        ;
+        //optionButtonRow.removeComponent(optionButtonRow.getComponent(1));
+        //File file = exportToExcel("SIF Details",arr);
+        //downloadExcelBtn = getDownloadExcelBtn("SIF Details",file);
+        //optionButtonRow.addComponent(downloadExcelBtn);
 
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 
     private void createShowTableHeader(){
@@ -198,18 +205,25 @@ public class FlightBondActivityReportView extends ReportCommonView {
             Window serviceTypeSelectionWindow = new Window();
             serviceTypeSelectionWindow.setCaption("Select Service Type");
             serviceTypeSelectionWindow.setWidth(330,Unit.PIXELS);
-            serviceTypeSelectionWindow.setHeight(200,Unit.PIXELS);
+            serviceTypeSelectionWindow.setHeight(260,Unit.PIXELS);
             serviceTypeSelectionWindow.center();
             serviceTypeSelectionWindow.setModal(true);
             VerticalLayout windowContent = new VerticalLayout();
             windowContent.setMargin(true);
             ComboBox serviceTypeCombo = new ComboBox("Service Type");
+            serviceTypeCombo.setWidth(250,Unit.PIXELS);
             List<String> serviceTypes = Arrays.asList(sifDetails.getPrograms().split(","));
             serviceTypeCombo.setItems(serviceTypes);
             serviceTypeSelectionWindow.setContent(windowContent);
-            Button okBtn = new Button("Ok");
-            TextField errorTextFld = new TextField("");
-            windowContent.addComponents(serviceTypeCombo,okBtn);
+            Button okBtn = new Button("Download SIF Form");
+            HorizontalLayout errorLayout = new HorizontalLayout();
+            errorLayout.setSizeFull();
+            errorLayout.setWidth("250px");
+            errorLayout.setStyleName("warning");
+            Label specialCareLabel = new Label("Please Select a service type.");
+            errorLayout.addComponent(specialCareLabel);
+            errorLayout.setVisible(false);
+            windowContent.addComponents(serviceTypeCombo,okBtn,errorLayout);
             okBtn.addClickListener((Button.ClickListener) clickEvent-> {
                 Object serviceType = serviceTypeCombo.getValue();
                 if(serviceType != null && !serviceType.toString().isEmpty()){
@@ -217,7 +231,7 @@ public class FlightBondActivityReportView extends ReportCommonView {
                     serviceTypeSelectionWindow.close();
                 }
                 else {
-                    UserNotification.show("Error","Please Select a service type.","error",UI.getCurrent());
+                    errorLayout.setVisible(true);
                 }
             });
             getUI().getUI().addWindow(serviceTypeSelectionWindow);

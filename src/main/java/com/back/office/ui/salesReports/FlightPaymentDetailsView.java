@@ -4,6 +4,8 @@ import com.back.office.entity.FlightAmountSummary;
 import com.back.office.entity.FlightPaymentDetails;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -187,6 +189,11 @@ public class FlightPaymentDetailsView extends ReportCommonView {
         detailsTable.setItems(summaries.values());
         // if(list != null && !list.isEmpty())
         //showDataInTheTable("1",flightDate,flightNoStr,cashAmount,creditCardAmount,voucherAmount,total,0,total);
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 
     /*private void showDataInTheTable(String id,Date flightDate,String flightNoStr,float cashAmount,

@@ -40,6 +40,7 @@ public class MainMenu extends VerticalLayout {
     private VerticalLayout rootContent = new VerticalLayout();
     private TopMenu topMenu = new TopMenu();
     private CssLayout logoLayout = new CssLayout();
+    HorizontalLayout hybridHeaderLayout = new HorizontalLayout();
 
     private Label css = new Label("", ContentMode.HTML);
     private Label tab_css = new Label("New Tab");
@@ -79,16 +80,15 @@ public class MainMenu extends VerticalLayout {
             notifications.setClickClose(true);
             setSizeFull();
 
-            HorizontalLayout layout = new HorizontalLayout();
-            layout.setMargin(Constants.leftMargin);
-            addComponent(layout);
-            layout.addComponent(logoLayout);
-            layout.addComponent(topMenu);
+            hybridHeaderLayout.setMargin(Constants.leftMargin);
+            addComponent(hybridHeaderLayout);
+            hybridHeaderLayout.addComponent(logoLayout);
+            hybridHeaderLayout.addComponent(topMenu);
 
             content.setSizeFull();
            tab_content.setSizeFull();
            tab_content.setWidthUndefined();
-            layout.setStyleName("hybridMenu");
+            hybridHeaderLayout.setStyleName("hybridMenu");
             content.setMargin(false);
             content.setSpacing(false);
             content.setStyleName("myRootContent");
@@ -207,5 +207,9 @@ public class MainMenu extends VerticalLayout {
 
     public void setViewChangeManager(ViewChangeManager viewChangeManager) {
         this.viewChangeManager = viewChangeManager;
+    }
+
+    public void setHybridHeaderLayoutVisible(boolean isVisible){
+        hybridHeaderLayout.setVisible(isVisible);
     }
 }

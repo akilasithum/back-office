@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.back.office.entity.ItemDetails;
+import com.back.office.utils.UserNotification;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.vaadin.ui.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -24,16 +28,6 @@ import com.back.office.ui.salesReports.ReportCommonView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
 import com.vaadin.server.FileDownloader;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -58,13 +52,15 @@ public class PreOrders extends ReportCommonView {
     private final String preOrderStatus = "Pre Order Status";
     private final String typeOfOrder = "Source";
     private Map<String, ItemDetails> itemNoNameMap;
-
+    List<PreOrderDetails> preOrderDetailsList;
 
     @Override
     protected void defineStringFields() {
         this.pageHeader = "Pre Order Summary";
         this.reportExcelHeader = "Pre Order Summary";
-
+        String[] arr = { "Service Type","Source","Pre Order #","PNR","Pax Name","Flight #","Dep Date","Pre Order Status" };
+        this.excelColumnArr = arr;
+        this.pdfTableWithArr = new float[]{1,1,1,1,1,1,1,1};
     }
 
     @Override
@@ -73,15 +69,14 @@ public class PreOrders extends ReportCommonView {
         return null;
     }
 
-    public void fileexcelh(Date fromdateh, Date todateh,String serviceh) {
-        List<PreOrderDetails> lista = connection.getPreOrderDetails(fromdateh, todateh, serviceh);
+    public void fileexcelh(List<PreOrderDetails> lista,String serviceh) {
 
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
             File file = new File(serviceh+" pre Order"+".xlsx");
             FileOutputStream out = new FileOutputStream(file);
 
-            XSSFSheet Spreadsheet = workbook.createSheet("PreOrderDetail");
+            XSSFSheet spreadsheet = workbook.createSheet("Pre Order Summary");
             Font headerFont = workbook.createFont();
             headerFont.setBold(true);
             headerFont.setFontHeightInPoints((short) 12);
@@ -91,30 +86,29 @@ public class PreOrders extends ReportCommonView {
             headerCellStyle.setWrapText(true);
             headerCellStyle.setShrinkToFit(true);
 
-            String[] array1 = { "Pre Order Id","PNR","Customer Name","Service Type","Flight Number","Flight Date","Pre Order Status",
-                    "Total Amount","Source" };
-            Row r1 = Spreadsheet.createRow(0);
+            String[] array1 = { "Service Type","Source","Pre Order #","PNR","Pax Name","Flight #","Dep Date","Pre Order Status" };
+            Row r1 = spreadsheet.createRow(0);
 
             for (int k = 0; k < array1.length; k++) {
 
                 Cell c = r1.createCell(k);
-                c.setCellValue(array1[k].toString());
+                c.setCellValue(array1[k]);
                 c.setCellStyle(headerCellStyle);
 
             }
 
             for (int i = 0; i < lista.size(); i++) {
-                Row r = Spreadsheet.createRow(i + 1);
+                Row r = spreadsheet.createRow(i + 1);
 
-                int s1 = lista.get(i).getPreOrderId();
-                String s2 = lista.get(i).getPNR();
-                String s3 = lista.get(i).getCustomerName();
-                String s4 = lista.get(i).getServiceType();
-                String s5 = lista.get(i).getFlightNumber();
-                Date s6 = lista.get(i).getFlightDate();
-                String s7 = lista.get(i).getPreOrderStatus();
-                Float s8 = lista.get(i).getTotalAmount();
-                String s9 = lista.get(i).getTypeOfOrder();
+                String s1 = lista.get(i).getServiceType();
+                String s2 = lista.get(i).getTypeOfOrder();
+                int s3 = lista.get(i).getPreOrderId();
+                String s4 = lista.get(i).getPNR();
+                String s5 = lista.get(i).getCustomerName();
+                String s6 = lista.get(i).getFlightNumber();
+                Date s7 = lista.get(i).getFlightDate();
+                String s8 = lista.get(i).getPreOrderStatus();
+
                 Cell c = r.createCell(0);
                 c.setCellValue(s1);
                 Cell c1 = r.createCell(1);
@@ -131,13 +125,10 @@ public class PreOrders extends ReportCommonView {
                 c6.setCellValue(s7);
                 Cell c7 = r.createCell(7);
                 c7.setCellValue(s8);
-                Cell c8 = r.createCell(8);
-                c8.setCellValue(s9);
-                Cell c9 = r.createCell(9);
-
-
             }
-
+            for (int i = 0; i < lista.size(); i++) {
+                spreadsheet.autoSizeColumn(i);
+            }
             workbook.write(out);
             out.close();
 
@@ -155,21 +146,44 @@ public class PreOrders extends ReportCommonView {
 
     @Override
     protected void showFilterData() {
-        mainTableLayout.setVisible(true);
 
-        String serviceh = BackOfficeUtils.getServicehFromServiceh( sourceComboBox.getValue().toString());
-        Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        List<PreOrderDetails> list = connection.getPreOrderDetails(dateFrom, dateTo, serviceh);
-        String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
-                " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
-                "Order Type = " + sourceComboBox.getValue().toString();
-        filterCriteriaText.setValue(outputStr);
-        detailsTable.setItems(list);
-        optionButtonRow.removeComponent(optionButtonRow.getComponent(1));
-        fileexcelh(dateFrom, dateTo, serviceh);
-        optionButtonRow.addComponent(downloadExcelBtn);
+        if(flightDateFromDateField.getValue() != null && flightDateToDateField.getValue() != null){
+            String serviceh = BackOfficeUtils.getServicehFromServiceh( sourceComboBox.getValue().toString());
+            Date dateFrom = Date.from(flightDateFromDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date dateTo = Date.from(flightDateToDateField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            preOrderDetailsList = connection.getPreOrderDetails(dateFrom, dateTo, serviceh);
+            String outputStr = "Flight Date From " + BackOfficeUtils.getDateFromDateTime(dateFrom) +
+                    " , To " + BackOfficeUtils.getDateFromDateTime(dateTo) + " , " +
+                    "Order Type = " + sourceComboBox.getValue().toString();
+            filterCriteriaText.setValue(outputStr);
+            detailsTable.setItems(preOrderDetailsList);
+            //fileexcelh(preOrderDetailsList, serviceh);
 
+            //File pdfFile = exportToPDF("Pre Order Summary", arr, new float[]{1,1,1,1,1,1,1,1});
+            //printBtn = getDownloadPDFBtn("Pre Order Summary", pdfFile);
+            //optionButtonRow.removeAllComponents();
+            //optionButtonRow.addComponents(printBtn, downloadExcelBtn);
+        }
+        else{
+            UserNotification.show("Warning","Please add flight from and to dates","warning", UI.getCurrent());
+        }
+
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable itemTable, com.itextpdf.text.Font redFont) {
+
+        for (PreOrderDetails preOrderItem : preOrderDetailsList) {
+            itemTable.addCell(new Paragraph(preOrderItem.getServiceType(), redFont));
+            itemTable.addCell(new Paragraph(preOrderItem.getTypeOfOrder(), redFont));
+            itemTable.addCell(new Paragraph(String.valueOf(preOrderItem.getPreOrderId()), redFont));
+            itemTable.addCell(new Paragraph(preOrderItem.getPNR(), redFont));
+            itemTable.addCell(new Paragraph(preOrderItem.getCustomerName(), redFont));
+            itemTable.addCell(new Paragraph(preOrderItem.getFlightNumber(), redFont));
+            itemTable.addCell(new Paragraph(BackOfficeUtils.getDateStringFromDate(preOrderItem.getFlightDate()), redFont));
+            itemTable.addCell(new Paragraph(preOrderItem.getPreOrderStatus(), redFont));
+        }
+        return itemTable;
     }
 
     private void selectDetailsh(int datalistid) {
@@ -242,7 +256,7 @@ public class PreOrders extends ReportCommonView {
 
         sourceComboBox = new ComboBox(ORDER_TYPE);
         sourceComboBox.setDescription(ORDER_TYPE);
-        sourceComboBox.setItems("HHC Order","Call Center Order","Web Order","All");
+        sourceComboBox.setItems("In Flight","Call Center Order","Web Order","All");
         sourceComboBox.setSelectedItem("All");
         sourceComboBox.setEmptySelectionAllowed(false);
         sourceComboBox.setSizeFull();
@@ -267,10 +281,11 @@ public class PreOrders extends ReportCommonView {
     private void closedatawindowh(Window windowdata) {
         windowdata.close();
     }
+
     private void createShowTableHeader(){
         detailsTable.addColumn(PreOrderDetails::getServiceType).setCaption(serviceType);
         detailsTable.addColumn(PreOrderDetails::getTypeOfOrder).setCaption(typeOfOrder);
-        detailsTable.addColumn(PreOrderDetails::getOrderNumber).setCaption(preOrderId);
+        detailsTable.addColumn(PreOrderDetails::getPreOrderId).setCaption(preOrderId);
         detailsTable.addColumn(PreOrderDetails::getPNR).setCaption(PNR);
         detailsTable.addColumn(PreOrderDetails::getCustomerName).setCaption(customerName);
         detailsTable.addColumn(PreOrderDetails::getFlightNumber).setCaption(flightNumber);
@@ -278,5 +293,4 @@ public class PreOrders extends ReportCommonView {
         detailsTable.addColumn(PreOrderDetails::getPreOrderStatus).setCaption(preOrderStatus);
 
     }
-
 }

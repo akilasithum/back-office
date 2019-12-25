@@ -1,115 +1,98 @@
 package com.back.office.ui.message;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.back.office.entity.PreOrderItem;
+import com.back.office.entity.UserComment;
 import com.back.office.framework.UserEntryView;
+import com.back.office.ui.salesReports.ReportCommonView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.vaadin.ui.*;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 
 import com.back.office.db.DBConnection;
 import com.back.office.entity.FaMessage;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class FAMessagesView extends UserEntryView implements View{
+public class FAMessagesView extends ReportCommonView {
 
-    protected Button submitButton;
     protected VerticalLayout createLayout;
-    protected DBConnection connection;
-    protected FilterGrid<FaMessage> faMessageFilterGrid;
-    protected List<FaMessage> flightDetList;
+    protected FilterGrid<UserComment> faMessageFilterGrid;
+    protected List<UserComment> flightDetList;
     protected Button clear;
     protected DateField fromDateText;
     protected DateField toDateText;
     protected ComboBox flightNumberList;
 
 
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        Object userName = UI.getCurrent().getSession().getAttribute("userName");
-        if(userName == null|| userName.toString().isEmpty()){
-            getUI().getNavigator().navigateTo("login");
-        }
-    }
+    @Override
+    protected void createMainLayout() {
+        super.createMainLayout();
+        HorizontalLayout firstRow = new HorizontalLayout();
+        firstRow.addStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+        firstRow.setSpacing(true);
+        firstRow.setSizeFull();
+        firstRow.setWidth("60%");
+        firstRow.setMargin(Constants.noMargin);
+        firstRow.addStyleName("report-filter-panel");
+        mainUserInputLayout.addComponent(firstRow);
 
-    public FAMessagesView() {
-        super();
-        connection=DBConnection.getInstance();
-        createMainLayout();
 
-    }
-
-    public void createMainLayout() {
-
-        createLayout=new VerticalLayout();
-        setMargin(Constants.leftMargin);
-        setSizeFull();
-
-        Label h1=new Label("HHC FA");
-
-        h1.addStyleName("headerText");
-        createLayout.addComponent(h1);
-
-        submitButton=new Button("Submit");
-        submitButton.addClickListener((Button.ClickListener) ClickEvent->
-                processList());
+        Date date = new Date();
+        LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         fromDateText=new DateField("From");
         fromDateText.setRequiredIndicatorVisible(true);
         fromDateText.setStyleName("datePickerStyle");
+        fromDateText.setSizeFull();
+        fromDateText.setValue(today);
+
         toDateText=new DateField("To");
         toDateText.setStyleName("datePickerStyle");
         toDateText.setRequiredIndicatorVisible(true);
-
+        toDateText.setSizeFull();
+        toDateText.setValue(today);
 
         flightNumberList=new ComboBox("Flight No");
         flightNumberList.setDescription("Flight No");
         flightNumberList.setItems(connection.getFlightsNoList());
         flightNumberList.setEmptySelectionAllowed(false);
+        flightNumberList.setSizeFull();
 
-        HorizontalLayout buttonLayoutSubmit=new HorizontalLayout();
-        addComponent(createLayout);
+        firstRow.addComponents(fromDateText,toDateText,flightNumberList,buttonRow);
+
 
         faMessageFilterGrid =new FilterGrid();
-        buttonLayoutSubmit.addComponent(fromDateText);
-        buttonLayoutSubmit.addComponents(toDateText,flightNumberList);
         faMessageFilterGrid.setSizeFull();
-        faMessageFilterGrid.setWidth("70%");
-
-        createLayout.addComponent(buttonLayoutSubmit);
-        //createLayout.addComponent(flightNumberList);
-        createLayout.addComponent(submitButton);
-        createLayout.addComponent(faMessageFilterGrid);
-
-        faMessageFilterGrid.addColumn(FaMessage::getflightNumber).setCaption("Flight No").setExpandRatio(1);
-        faMessageFilterGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getflightDate())).setCaption("Dep Date")
-        .setExpandRatio(1);
-        faMessageFilterGrid.addColumn(FaMessage::getfaName).setCaption("FA Name").setExpandRatio(1);
-        faMessageFilterGrid.addColumn(FaMessage::getcomment).setCaption("Message").setWidth(400).setExpandRatio(4);
+        faMessageFilterGrid.setWidth("90%");
+        tableLayout.addComponent(faMessageFilterGrid);
+        createShowTableHeader();
+        optionButtonRow.setVisible(false);
     }
 
-    private TextField getColumnFilterField() {
-        TextField filter = new TextField();
-        filter.setWidth("100%");
-        filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
-        return filter;
-
+    private void createShowTableHeader(){
+        faMessageFilterGrid.addColumn(UserComment::getFlightNo).setCaption("Flight No").setExpandRatio(1);
+        faMessageFilterGrid.addColumn(bean -> BackOfficeUtils.getDateStringFromDate(bean.getFlightDate())).setCaption("Dep Date")
+                .setExpandRatio(1);
+        faMessageFilterGrid.addColumn(UserComment::getUserId).setCaption("FA Name").setExpandRatio(1);
+        faMessageFilterGrid.addColumn(UserComment::getArea).setCaption("Functional Area").setExpandRatio(1);
+        faMessageFilterGrid.addColumn(UserComment::getComment).setCaption("Message").setWidth(400).setExpandRatio(4);
     }
 
 
-    public void processList() {
+
+    @Override
+    protected void showFilterData() {
 
         if(fromDateText.getValue()!=null&&!fromDateText.getValue().toString().isEmpty()&&toDateText.getValue()!=null&&!toDateText.getValue().toString().isEmpty()) {
 
@@ -131,5 +114,22 @@ public class FAMessagesView extends UserEntryView implements View{
 
 
     }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
+    }
+
+    @Override
+    protected Sheet getWorkbook(Sheet sheet) {
+        return null;
+    }
+
+    @Override
+    protected void defineStringFields() {
+        this.pageHeader = "HHC FA";
+        this.reportExcelHeader = "HHC FA";
+    }
+
 }
 

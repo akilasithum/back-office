@@ -1,10 +1,10 @@
 package com.back.office.ui.salesReports;
 
 import com.back.office.entity.CCByFlightObj;
-import com.back.office.entity.CCSummaryObj;
-import com.back.office.entity.Flights;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,7 +14,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CreditCardSummaryByFlightView extends ReportCommonView{
 
@@ -53,7 +52,7 @@ public class CreditCardSummaryByFlightView extends ReportCommonView{
         firstRow.addComponent(sifNoFld);
 
         flightIdComboBox = new ComboBox(FLIGHT_ID);
-        flightIdComboBox.setItems(getFlightList());
+        flightIdComboBox.setItems(connection.getFlightsNoList());
         firstRow.addComponents(flightIdComboBox);
 
         detailsTable = new Grid<>();
@@ -97,8 +96,8 @@ public class CreditCardSummaryByFlightView extends ReportCommonView{
         detailsTable.setItems(list);
     }
 
-    private List<String> getFlightList(){
-        List<Flights> flights = (List<Flights>)connection.getAllValues("com.back.office.entity.Flights");
-        return flights.stream().map(flight-> flight.getFlightName()).collect(Collectors.toList());
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 }

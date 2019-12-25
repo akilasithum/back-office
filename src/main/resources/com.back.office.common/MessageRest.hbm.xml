@@ -20,6 +20,9 @@
         <property name="read_un" type="java.lang.Boolean">
             <column name="read_un" length="50"/>
         </property>
+        <property name="sentTime" type="java.util.Date">
+            <column name="sentTime" />
+        </property>
 
         <filter name="message_from_filter"
                 condition=":message_from=message_from"/>

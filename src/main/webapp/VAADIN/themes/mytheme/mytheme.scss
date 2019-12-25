@@ -150,6 +150,14 @@
     background-color: rgba(247, 158, 38) !important;
   }
 
+  .notification-success {
+    background-color: rgb(155, 247, 77) !important;
+  }
+
+  .notification-success:hover {
+    background-color: rgb(59, 247, 94) !important;
+  }
+
   .downloadBtn{
     border: none !important;
     cursor: pointer;
@@ -180,6 +188,66 @@
     width: 25%;
     height: 25%;
   }
+
+  .login-textbox {
+    @include inputBorderColor($orange);
+    color: $white !important;
+  }
+
+
+  .login-textbox .gwt-TextBox {
+      border-left: transparent;
+      border-right: transparent;
+      border-top: transparent;
+      border: 0;
+      background: transparent no-repeat;
+      background-image: -moz-linear-gradient(top, $orange, $orange), -moz-linear-gradient(top, silver, silver);
+      background-image: -webkit-linear-gradient(top, $orange, $orange), -webkit-linear-gradient(top, silver, silver);
+      background-image: -o-linear-gradient(top, $orange, $orange), -o-linear-gradient(top, silver, silver); /* Opera 11.10+ */
+      background-image: -ms-linear-gradient(top, $orange, $orange), -ms-linear-gradient(top, silver, silver); /* IE10+ */
+      background-image: linear-gradient(to bottom, $orange, $orange), linear-gradient(to bottom, silver, silver);
+      background-size: 0 2px, 100% 1px;
+      background-position: 50% 100%, 50% 100%;
+      -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      -webkit-box-shadow: none;
+      color: $white !important;
+      box-shadow: none;
+      &:focus, &:active {
+        border: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background-size: 100% 2px, 100% 1px;
+        outline: none;
+        -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+        -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+        transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      }
+    }
+
+  .login-textbox [class*="input"]:focus, [class*="textfield"]:focus {
+      background-size: 100% 2px, 100% 1px;
+      outline: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border: transparent;
+      -webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      -ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+      transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+
+    }
+  .login-textbox .v-filterselect-button {
+      border-left: none;
+      color: $white;
+      &:hover, &:focus {
+        &:after {
+          background: transparent;
+        }
+      }
+    }
+
+
 
   .myRootContent {
     & > .v-expand {

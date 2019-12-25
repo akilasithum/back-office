@@ -191,8 +191,8 @@ public class FlightShedule extends UserEntryView implements View{
 
         });
 
-        //createLayout.addComponent(dateText);
-        //createLayout.addComponent(buttonLayoutSubmit);
+        //mainLayout.addComponent(dateText);
+        //mainLayout.addComponent(buttonLayoutSubmit);
         VerticalLayout btnLayout = new VerticalLayout();
         btnLayout.setMargin(Constants.noMargin);
 

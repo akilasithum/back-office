@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.back.office.entity.UserComment" table="pos_user_comments" catalog="">
+        <id name="commentId" type="java.lang.Integer">
+            <column name="commentId" />
+            <generator class="identity" />
+        </id>
+        <property name="userId" type="java.lang.String">
+            <column name="userId"  />
+        </property>
+        <property name="flightNo" type="java.lang.String">
+            <column name="flightNo" />
+        </property>
+        <property name="flightDate" type="java.util.Date">
+            <column name="flightDate" />
+        </property>
+        <property name="area" type="java.lang.String">
+            <column name="area" />
+        </property>
+        <property name="comment" type="java.lang.String">
+            <column name="comment"  />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -2342,6 +2342,36 @@ div.v-layout.v-horizontal.v-widget {
 	width: 220px;
 }
 
+.porter-app-login {
+	position: relative;
+}
+
+.porter-app-login:after {
+	background: #00125a;
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 25%;
+	z-index: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.porter-app-login:before {
+	background: #00125a;
+	content: "";
+	position: fixed;
+	right: 50px;
+	bottom: 0;
+	height: 100%;
+	z-index: 0;
+	width: 220px;
+}
+
 .v-label, .v-captiontext {
 	color: #fbfbfb !important;
 }
@@ -16665,6 +16695,14 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: rgba(247, 158, 38) !important;
 }
 
+.mytheme .notification-success {
+	background-color: #9bf74d !important;
+}
+
+.mytheme .notification-success:hover {
+	background-color: #3bf75e !important;
+}
+
 .mytheme .downloadBtn {
 	border: none !important;
 	cursor: pointer;
@@ -16694,6 +16732,88 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .icon-image {
 	width: 25%;
 	height: 25%;
+}
+
+.mytheme .login-textbox {
+	border-left: transparent;
+	border-right: transparent;
+	border-top: transparent;
+	border: 0;
+	background: transparent no-repeat;
+	background-image: -moz-linear-gradient(top, #ff9103, #ff9103), -moz-linear-gradient(top, silver, silver);
+	background-image: -webkit-linear-gradient(top, #ff9103, #ff9103), -webkit-linear-gradient(top, silver, silver);
+	background-image: -o-linear-gradient(top, #ff9103, #ff9103), -o-linear-gradient(top, silver, silver);
+	background-image: -ms-linear-gradient(top, #ff9103, #ff9103), -ms-linear-gradient(top, silver, silver);
+	background-image: linear, to bottom, #ff9103, #ff9103, linear, to bottom, silver, silver;
+	background-size: 0 2px, 100% 1px;
+	background-position: 50% 100%, 50% 100%;
+	-webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	color: #fbfbfb !important;
+}
+
+.mytheme .login-textbox:focus, .mytheme .login-textbox:active {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background-size: 100% 2px, 100% 1px;
+	outline: none;
+	border: transparent;
+	-webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+
+.mytheme .login-textbox .gwt-TextBox {
+	border-left: transparent;
+	border-right: transparent;
+	border-top: transparent;
+	border: 0;
+	background: transparent no-repeat;
+	background-image: -moz-linear-gradient(top, #ff9103, #ff9103), -moz-linear-gradient(top, silver, silver);
+	background-image: -webkit-linear-gradient(top, #ff9103, #ff9103), -webkit-linear-gradient(top, silver, silver);
+	background-image: -o-linear-gradient(top, #ff9103, #ff9103), -o-linear-gradient(top, silver, silver);
+	background-image: -ms-linear-gradient(top, #ff9103, #ff9103), -ms-linear-gradient(top, silver, silver);
+	background-image: linear, to bottom, #ff9103, #ff9103, linear, to bottom, silver, silver;
+	background-size: 0 2px, 100% 1px;
+	background-position: 50% 100%, 50% 100%;
+	-webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-webkit-box-shadow: none;
+	color: #fbfbfb !important;
+	box-shadow: none;
+}
+
+.mytheme .login-textbox .gwt-TextBox:focus, .mytheme .login-textbox .gwt-TextBox:active {
+	border: transparent;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background-size: 100% 2px, 100% 1px;
+	outline: none;
+	-webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+
+.mytheme .login-textbox [class*="input"]:focus, .mytheme [class*="textfield"]:focus {
+	background-size: 100% 2px, 100% 1px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border: transparent;
+	-webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+
+.mytheme .login-textbox .v-filterselect-button {
+	border-left: none;
+	color: #fbfbfb;
+}
+
+.mytheme .login-textbox .v-filterselect-button:hover:after, .mytheme .login-textbox .v-filterselect-button:focus:after {
+	background: transparent;
 }
 
 .mytheme .myRootContent > .v-expand {
@@ -16957,6 +17077,10 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .porter-app {
+	background: #00125a;
+}
+
+.mytheme .porter-app-login {
 	background: #00125a;
 }
 
@@ -17956,4 +18080,281 @@ div.v-layout.v-horizontal.v-widget {
 	background: none !important;
 	border-color: #ff9103 !important;
 	color: #fbfbfb !important;
+}
+
+.mytheme .login-wrapper {
+	width: 100%;
+}
+
+.mytheme .login-wrapper .v-slot .v-widget {
+	width: 100%;
+}
+
+.mytheme .login-form {
+	color: #fbfbfb;
+}
+
+.mytheme .login-form:after {
+	background: url("images/login-banner.svg") no-repeat;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: -50px;
+	right: 0;
+	bottom: 0;
+	height: 60%;
+	z-index: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.mytheme .login-form .v-button {
+	text-transform: uppercase;
+	padding: 0.8rem 0;
+	margin-top: 2rem;
+}
+
+.mytheme .v-slot-login-wrapper {
+	position: relative;
+	z-index: 1;
+	min-width: 24.3rem;
+}
+
+.mytheme .porter-logo {
+	margin-bottom: 9rem;
+	margin-top: -80px;
+}
+
+.mytheme .v-textfield-error {
+	background-image: -moz-linear-gradient(top, #cc0000, #cc0000), -moz-linear-gradient(top, red, red) !important;
+	background-image: -webkit-linear-gradient(top, #cc0000, #cc0000), -webkit-linear-gradient(top, red, red) !important;
+	background-image: -o-linear-gradient(top, #cc0000, #cc0000), -o-linear-gradient(top, red, red) !important;
+	background-image: -ms-linear-gradient(top, #cc0000, #cc0000), -ms-linear-gradient(top, red, red) !important;
+	background-image: linear, to bottom, #cc0000, #cc0000, linear, to bottom, red, red !important;
+	color: #fbfbfb !important;
+}
+
+.mytheme .v-textfield-error [class*="input"]:focus, .mytheme .v-textfield-error [class*="textfield"]:focus {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background: #fafcfc;
+	border: transparent;
+	-webkit-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	-ms-transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+	transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+
+.mytheme .bg_banner {
+	position: relative;
+}
+
+.mytheme .bg_banner:after {
+	background: url("images/bg-01.svg") no-repeat;
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 60%;
+	z-index: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.mytheme .bg_banner:before {
+	background: url("images/icon_draw.svg") no-repeat;
+	content: "";
+	position: fixed;
+	right: 50px;
+	bottom: 0;
+	height: 100%;
+	z-index: 0;
+	width: 150px;
+}
+
+.mytheme .wrappwr-button {
+	position: relative;
+	z-index: 2;
+}
+
+.mytheme .wrappwr-button .v-expand {
+	padding: 0 !important;
+}
+
+.mytheme .common-logo {
+	position: relative;
+	top: 20%;
+}
+
+.mytheme .IconWrapper {
+	text-align: center;
+}
+
+.mytheme .IconWrapper .icon-text {
+	font-size: 16px;
+	position: relative;
+	color: #00125a;
+	text-transform: uppercase;
+	font-weight: bold;
+	margin-top: 20px;
+}
+
+.mytheme .IconWrapper .icon-text:before {
+	content: "\f0a9";
+	font-family: FontAwesome;
+	position: absolute;
+	right: -20px;
+}
+
+.mytheme .IconWrapper:hover {
+	cursor: pointer;
+}
+
+.mytheme .IconWrapper img {
+	max-width: 70%;
+}
+
+.mytheme .v-slot-boarder-icon {
+	border-left: 1px solid #00125a;
+	border-right: 1px solid #00125a;
+	height: 105px !important;
+}
+
+.mytheme img.flight_cn {
+	max-width: 25%;
+}
+
+.mytheme .cloud {
+	position: absolute;
+	top: 60px;
+	width: 100px;
+}
+
+.mytheme .cloud1 {
+	position: absolute;
+	top: 60px;
+	width: 60px;
+	right: 100px;
+}
+
+.mytheme .cloud2 {
+	position: absolute;
+	margin-top: -140px;
+	width: 40px;
+	right: 30px;
+}
+
+.mytheme .v-slot-cloud2 {
+	height: 5% !important;
+}
+
+.mytheme .dropdownStyle .v-filterselect-input {
+	background: transparent;
+	color: white !important;
+}
+
+.mytheme .loginButton {
+	background: #ff9103;
+	cursor: pointer;
+	font-weight: normal;
+	color: #fbfbfb;
+	height: 4em;
+	min-width: 85px;
+	-webkit-border-radius: 2rem;
+	-moz-border-radius: 2rem;
+	-ms-border-radius: 2rem;
+	-o-border-radius: 2rem;
+	border-radius: 2rem;
+	position: relative;
+	border: 1px solid #ffac40;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+.mytheme .loginButton:before {
+	content: "";
+	width: 31px;
+	height: 29px !important;
+	background: #c56f00;
+	transition-delay: 0.1s;
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	-o-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+	opacity: 0;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	-ms-border-radius: 30px;
+	-o-border-radius: 30px;
+	border-radius: 30px;
+	position: absolute;
+	left: 32%;
+}
+
+.mytheme .loginButton:active:before {
+	width: 100%;
+	opacity: 0.5;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	left: 0;
+}
+
+.mytheme .loginButton:hover, .mytheme .loginButton:focus, .mytheme .loginButton:active {
+	background: #d97a00;
+}
+
+.mytheme .loginButton:hover:after, .mytheme .loginButton:focus:after, .mytheme .loginButton:active:after {
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	color: #fbfbfb !important;
+}
+
+.mytheme .loginButton:hover span, .mytheme .loginButton:focus span, .mytheme .loginButton:active span {
+	color: #fbfbfb !important;
+}
+
+.mytheme .loginButton .v-button-wrap {
+	position: relative;
+	top: 7px;
+}
+
+.mytheme .loginButton:before {
+	content: "";
+	width: 31px;
+	height: 29px !important;
+	background: #c56f00;
+	transition-delay: 0.1s;
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	-o-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+	opacity: 0;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	-ms-border-radius: 30px;
+	-o-border-radius: 30px;
+	border-radius: 30px;
+	position: absolute;
+	left: 32%;
+}
+
+.mytheme .loginButton:active:before {
+	width: 100%;
+	opacity: 0.5;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	left: 0;
 }

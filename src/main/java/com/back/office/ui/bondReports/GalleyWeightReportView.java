@@ -3,6 +3,8 @@ package com.back.office.ui.bondReports;
 import com.back.office.entity.SIFDetails;
 import com.back.office.ui.salesReports.ReportCommonView;
 import com.back.office.utils.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.contextmenu.GridContextMenu;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -143,11 +145,17 @@ public class GalleyWeightReportView extends ReportCommonView {
         detailsTable.setItems(list);
         String[] arr = {SIF_NO,PACKED_FOR,DEVICE_ID,PACKED_TIME,CREW_OPEN_TIME,CREW_CLOSE_TIME,DOWNLOADED};
         //optionButtonRow.removeComponent(optionButtonRow.getComponent(1));
-        File file = exportToExcel("SIF Details",arr);
+        //File file = exportToExcel("SIF Details",arr);
         //downloadExcelBtn = getDownloadExcelBtn("SIF Details",file);
         //optionButtonRow.addComponent(downloadExcelBtn);
 
     }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
+    }
+
     private void downloadFile(SIFDetails sifDetails){
         DownloadHelper helper = new DownloadHelperImpl();
         helper.createFile(new DownloadHelper.DownloadServiceListener() {

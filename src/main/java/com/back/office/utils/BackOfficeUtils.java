@@ -267,7 +267,7 @@ public class BackOfficeUtils {
 
     public static String getServicehFromServiceh(String serviceh){
         switch (serviceh){
-            case "HHC Order": return "HCC";
+            case "In Flight": return "In Flight";
             case "Call Center Order" : return "CallCenter";
             case "Web Order" : return "Web";
             case "All":return "All";

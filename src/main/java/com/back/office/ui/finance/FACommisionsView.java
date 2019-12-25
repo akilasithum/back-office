@@ -6,6 +6,8 @@ import com.back.office.entity.TenderSummaryObj;
 import com.back.office.ui.salesReports.ReportCommonView;
 import com.back.office.utils.BackOfficeUtils;
 import com.back.office.utils.Constants;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -156,5 +158,10 @@ public class FACommisionsView extends ReportCommonView {
                 flightNo);
 
         detailsTable.setItems(list);
+    }
+
+    @Override
+    protected PdfPTable getPdfTable(PdfPTable sheet, Font redFont) {
+        return null;
     }
 }
